@@ -1,0 +1,16 @@
+[general]
+name=EIS Wizard
+description=
+about=
+version=0.1.0
+qgisMinimumVersion=3.16
+author=
+email=
+changelog=
+tags=
+repository=https://github.com/GispoCoding/eis_wizard
+tracker=https://github.com/GispoCoding/eis_wizard/issues
+homepage=https://github.com/GispoCoding/eis_wizard
+category=Plugins
+experimental=True
+deprecated=False

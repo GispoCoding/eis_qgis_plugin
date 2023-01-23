@@ -1,0 +1,21 @@
+# Dependency maintenance
+pip-tools
+
+# Testing
+pytest
+pytest-cov
+pytest-qgis
+
+# Linting and formatting
+pre-commit
+black
+isort
+mypy
+flake8
+flake8-bugbear
+pep8-naming
+flake8-annotations
+flake8-qgis
+
+# Stubs
+PyQt5-stubs
