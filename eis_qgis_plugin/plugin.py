@@ -4,13 +4,19 @@ from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QWidget
 from qgis.utils import iface
+from qgis.core import QgsApplication
 
-from eis_wizard.qgis_plugin_tools.tools.custom_logging import (
+from eis_qgis_plugin.qgis_plugin_tools.tools.custom_logging import (
     setup_logger,
     teardown_logger,
 )
-from eis_wizard.qgis_plugin_tools.tools.i18n import setup_translation
-from eis_wizard.qgis_plugin_tools.tools.resources import plugin_name
+from eis_qgis_plugin.qgis_plugin_tools.tools.i18n import setup_translation
+from eis_qgis_plugin.qgis_plugin_tools.tools.resources import plugin_name
+
+from eis_qgis_plugin.wizard.eis_wizard_dialog import EISWizardDialog
+from eis_qgis_plugin.processing.eis_provider import EISProvider
+
+#pluginPath = os.path.dirname(__file__)
 
 
 class Plugin:
@@ -33,6 +39,16 @@ class Plugin:
 
         self.actions: List[QAction] = []
         self.menu = Plugin.name
+        self.iface = iface
+
+        # locale = QgsApplication.locale()
+        # qmPath = '{}/i18n/wbt_for_qgis_{}.qm'.format(pluginPath, locale)
+
+        # if os.path.exists(qmPath):
+        #     self.translator = QTranslator()
+        #     self.translator.load(qmPath)
+        #     QCoreApplication.installTranslator(self.translator)
+        self.provider = EISProvider()
 
     def add_action(
         self,
@@ -110,6 +126,11 @@ class Plugin:
             add_to_toolbar=False,
         )
 
+        self.initProcessing()
+
+    def initProcessing(self):
+        QgsApplication.processingRegistry().addProvider(self.provider)
+
     def onClosePlugin(self) -> None:  # noqa N802
         """Cleanup necessary items here when plugin dockwidget is closed"""
         pass
@@ -120,6 +141,8 @@ class Plugin:
             iface.removePluginMenu(Plugin.name, action)
             iface.removeToolBarIcon(action)
         teardown_logger(Plugin.name)
+
+        QgsApplication.processingRegistry().removeProvider(self.provider)
 
     def set_python_path(self) -> None:
         """Sets path to Python with EIS Toolkit installed."""
@@ -137,14 +160,14 @@ class Plugin:
 
     def run(self):
         """Run method that performs all the real work"""
-
+        self.first_start = True
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
             self.dlg = EISWizardDialog(plugin=self)
-            self.interface = EISWizardInterface(dlg=self.dlg, iface=self.iface, plugin=self)
-            self.dlg.set_interface(self.interface)
+            # self.interface = EISWizardInterface(dlg=self.dlg, iface=self.iface, plugin=self)
+            # self.dlg.set_interface(self.interface)
             self.set_python_path()
             self.set_toolkit_interface_path()
 

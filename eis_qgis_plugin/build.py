@@ -18,7 +18,7 @@ py_files = [
     if "test/" not in fil and "test\\" not in fil
 ]
 locales = ["fi"]
-profile = "default"
+profile = "EIS"
 ui_files = list(glob.glob("**/*.ui", recursive=True))
 resources = list(glob.glob("**/*.qrc", recursive=True))
 extra_dirs = ["resources"]

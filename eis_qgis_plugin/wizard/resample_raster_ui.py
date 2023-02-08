@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QDialog
 from qgis.gui import QgisInterface, QgsFileWidget
 from qgis.PyQt import QtWidgets
 
-from ...qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 FORM_CLASS: QDialog = load_ui("eis_wizard_dialog_resample.ui")
 

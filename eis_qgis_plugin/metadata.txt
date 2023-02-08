@@ -1,5 +1,5 @@
 [general]
-name=EIS Wizard
+name=EIS QGIS plugin
 description=
 about=
 version=0.1.0
