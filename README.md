@@ -1,12 +1,18 @@
-# EIS Wizard
-![tests](https://github.com/Gispo/eis_wizard/workflows/Tests/badge.svg)
-[![codecov.io](https://codecov.io/github/Gispo/eis_wizard/coverage.svg?branch=main)](https://codecov.io/github/Gispo/eis_wizard?branch=main)
-![release](https://github.com/Gispo/eis_wizard/workflows/Release/badge.svg)
+# EIS Wizard - A QGIS plugin for EIS Toolkit
+Introduction
+EIS (Exploration Information Systems) Wizard will serve as a graphical user interface for the EIS Toolkit.
 
-[![GPLv2 license](https://img.shields.io/badge/License-GPLv2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+EIS Wizard is part of EIS Horizon EU project, which seeks to implement a modern and comprehensive collection of digital mineral exploration tools. EIS Toolkit will be implemented as a Python library, and EIS Wizard as a QGIS plugin written in Python.
+
+Implementation of EIS Wizard
+Since EIS Toolkit utilizes multiple other Python libraries and using external libraries in a QGIS plugin is in many cases difficult or impossible, EIS Toolkit must run outside QGIS. The current implementation plan is to execute EIS Toolkit as an external Python program. This is accomplished by using a Python library called subprocess that can be directed to call a virtual environment Python with EIS Toolkit installation. Communication between EIS Wizard and EIS Toolkit will be handled via stdin/stdout. Below are some diagrams of the initial architechture plans.
+
+![concept_diagram_v0 3](https://user-images.githubusercontent.com/113038549/217557033-6d447f46-27fa-4412-92d7-c2df88c8457b.png)
+
+
+![process_diagram_v0 1](https://user-images.githubusercontent.com/113038549/217557133-3da8d5a8-515d-4b7a-bef4-98aacc2e5da7.png)
+
+![plugin_architecture_v0 2](https://user-images.githubusercontent.com/113038549/217557250-0631334d-47ea-4c0b-8886-0921d84d066c.png)
 
 ## Development
 
