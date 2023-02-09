@@ -6,4 +6,4 @@ profile = "black"
 addopts = "-v"
 
 [tool.coverage.report]
-omit = ["eis_wizard/qgis_plugin_tools/*"]
+omit = ["eis_qgis_plugin/qgis_plugin_tools/*"]

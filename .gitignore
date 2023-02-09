@@ -1,4 +1,4 @@
-eis_wizard/i18n
+eis_qgis_plugin/i18n
 venv/
 .venv/
 start_ide.bat
