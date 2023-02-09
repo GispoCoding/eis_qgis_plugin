@@ -1,76 +1,36 @@
-Development of eis_wizard plugin
+Development of EIS QGIS plugin
 ===========================
 
-This project uses [qgis_plugin_tools](https://github.com/Gispo/qgis_plugin_tools) submodule,
-so set git setting value: `git config --global submodule.recurse true`.
+This project uses [qgis_plugin_tools](https://github.com/Gispo/qgis_plugin_tools) submodule. When cloning, remember to use `--recurse-submodules` like so:
 
-When cloning use `--recurse-submodules` like so:
 `git clone --recurse-submodules https://github.com/GispoCoding/eis_wizard.git`
 
-When pulling from existing repo:
-```sh
-git submodule init
-git submodule update
+
+## Developing the plugin
+
+When developing this plugin, it is recommended to use the build.py script to streamline updating the plugin. To transfer modifications in your code directly to QGIS's plugin folder, run:
+
+```shell script
+python build.py deploy
 ```
 
+An important note is that the deployment will target a QGIS profile named specifically as "EIS" (this is defined in the build.py script and can be modified locally). After deploying and reloading the plugin (or restarting QGIS) the plugin will be updated. Deployment script works also when the plugin hasn't been installed before, but in this case it needs to be activated after deploying in the QGIS plugin menu.
 
-The code for the plugin is in the [eis_wizard](../eis_wizard) folder. Make sure you have required tools, such as
-Qt with Qt Editor and Qt Linquist installed by following this
-[tutorial](https://www.qgistutorials.com/en/docs/3/building_a_python_plugin.html#get-the-tools).
+You might need to edit [build.py](../eis_qgis_plugin/build.py) to contain working values for *profile*, *lrelease* and *pyrcc*. If you are
+running on Windows, make sure the value *QGIS_INSTALLATION_DIR* points to right folder.
 
-For building the plugin use platform independent [build.py](../eis_wizard/build.py) script.
-
-## Setting up development environment
-
-To get started with the development, follow these steps:
-
-1. Go to the  [eis_wizard](../eis_wizard) directory with a terminal
-1. Create a new Python virtual environment with pre-commit using Python aware of QGIS libraries:
-   ```shell
-    python build.py venv
-    ```
-   In Windows it would be best to use python-qgis.bat or python-qgis-ltr.bat:
-   ```shell
-    C:\OSGeo4W64\bin\python-qgis.bat build.py venv
-   ```
-1. **Note: This part is  only for developers that are using QGIS < 3.16.8.** If you want to use IDE for development, it is best to start it with the
-   following way on Windows:
-   ```shell
-    :: Check out the arguments with python build.py start_ide -h
-    set QGIS_DEV_IDE=<path-to-your-ide.exe>
-    set QGIS_DEV_OSGEO4W_ROOT=C:\OSGeo4W64
-    set QGIS_DEV_PREFIX_PATH=C:\OSGeo4W64\apps\qgis-ltr
-    C:\OSGeo4W64\bin\python-qgis.bat build.py start_ide
-    :: If you want to create a bat script for starting the ide, you can do it with:
-    C:\OSGeo4W64\bin\python-qgis.bat build.py start_ide --save_to_disk
-   ```
-
-Now the development environment should be all-set.
-
-If you want to edit or disable some quite strict pre-commit scripts, edit .pre-commit-config.yaml.
-For example to disable typing, remove mypy hook and flake8-annotations from the file.
-
-## Keeping dependencies up to date
-
-1. Activate the virtual environment.
-2. `pip install pip-tools`
-3. `pip-compile --upgrade requirements-dev.in`
-4. `pip install -r requirements-dev.txt` or `pip-sync requirements-dev.txt`
 
 ## Adding or editing  source files
 
-If you create or edit source files make sure that:
+If you create or edit source files make sure that they contain absolute imports:
 
-* they contain absolute imports:
-    ```python
-    from eis_wizard.utils.exceptions import TestException # Good
+```python
+from eis_qgis_plugin.processing.eis_provider import EISProvider # Good
 
-    from ..utils.exceptions import TestException # Bad
+from ..processing.eis_provider import EISProvider # Bad
+```
 
-    ```
-* they will be found by [build.py](../eis_wizard/build.py) script (`py_files` and `ui_files` values)
 
-* you consider adding test files for the new functionality
 ## Deployment
 
 Edit [build.py](../eis_wizard/build.py) to contain working values for *profile*, *lrelease* and *pyrcc*. If you are
@@ -94,59 +54,6 @@ and run tests with:
 ```shell script
 pytest
 ```
-
-## Translating
-
-### Translating with Transifex
-
-Fill in `transifex_coordinator` (Transifex username) and `transifex_organization`
-in [.qgis-plugin-ci](../.qgis-plugin-ci) to use Transifex translation.
-
-If you want to see the translations during development, add `i18n` to the `extra_dirs` in `build.py`:
-
-```python
-extra_dirs = ["resources", "i18n"]
-```
-
-#### Pushing / creating new translations
-
-For step-by-step instructions, read the [translation tutorial](./translation_tutorial.md#Tutorial).
-
-* First, install [Transifex CLI](https://docs.transifex.com/client/installing-the-client) and
-  [qgis-plugin-ci](https://github.com/opengisch/qgis-plugin-ci)
-* Make sure command `pylupdate5` works. Otherwise install it with `pip install pyqt5`
-* Run `qgis-plugin-ci push-translation <your-transifex-token>`
-* Go to your Transifex site, add some languages and start translating
-* Copy [push_translations.yml](push_translations.yml) file to [workflows](../.github/workflows) folder to enable
-  automatic pushing after commits to master
-* Add this badge ![](https://github.com/GispoCoding/eis_wizard/workflows/Translations/badge.svg) to
-  the [README](../README.md)
-
-##### Pulling
-
-There is no need to pull if you configure `--transifex-token` into your
-[release](../.github/workflows/release.yml) workflow (remember to use Github Secrets). Remember to uncomment the
-lrelease section as well. You can however pull manually to test the process.
-
-* Run `qgis-plugin-ci pull-translation --compile <your-transifex-token>`#### Translating with QT Linguistic (if Transifex not available)
-
-The translation files are in [i18n](../eis_wizard/resources/i18n) folder. Translatable content in python files is
-code such as `tr(u"Hello World")`.
-
-To update language *.ts* files to contain newest lines to translate, run
-
-```shell script
-python build.py transup
-```
-
-You can then open the *.ts* files you wish to translate with Qt Linguist and make the changes.
-
-Compile the translations to *.qm* files with:
-
-```shell script
-python build.py transcompile
-```
-
 
 ### Github Release
 
