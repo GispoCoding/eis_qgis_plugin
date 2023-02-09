@@ -1,8 +1,8 @@
-# EIS Wizard - A QGIS plugin for EIS Toolkit
+# EIS QGIS plugin
 Introduction
-EIS (Exploration Information Systems) Wizard will serve as a graphical user interface for the EIS Toolkit.
+EIS (Exploration Information Systems) QGIS plugin will serve as a graphical user interface for the EIS Toolkit.
 
-EIS Wizard is part of EIS Horizon EU project, which seeks to implement a modern and comprehensive collection of digital mineral exploration tools. EIS Toolkit will be implemented as a Python library, and EIS Wizard as a QGIS plugin written in Python.
+EIS QGIS plugin is a part of the EIS Horizon EU project, which seeks to implement a modern and comprehensive collection of digital mineral exploration tools. EIS Toolkit will be implemented as a Python library, and EIS QGIS plugin as a QGIS plugin written in Python. EIS QGIS plugin consists of two main parts: EIS Wizard, a collection of workflows and supplementary tools, and EIS Processing, a collection of EIS Toolkit algorithms available in the QGIS processing toolbox and in the QGIS graphical modeler.
 
 Implementation of EIS Wizard
 Since EIS Toolkit utilizes multiple other Python libraries and using external libraries in a QGIS plugin is in many cases difficult or impossible, EIS Toolkit must run outside QGIS. The current implementation plan is to execute EIS Toolkit as an external Python program. This is accomplished by using a Python library called subprocess that can be directed to call a virtual environment Python with EIS Toolkit installation. Communication between EIS Wizard and EIS Toolkit will be handled via stdin/stdout. Below are some diagrams of the initial architechture plans.
