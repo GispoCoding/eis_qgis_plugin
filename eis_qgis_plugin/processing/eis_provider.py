@@ -11,14 +11,14 @@ pluginPath = os.path.dirname(__file__)
 class EISProvider(QgsProcessingProvider):
 
     def __init__(self) -> None:
-        self.description_file = os.path.join(pluginPath, 'eis_config.ini')
+        self.description_file = os.path.join(pluginPath, '../config/eis_config.ini')
         super().__init__()
 
     def id(self) -> str:
         return 'eis'
 
     def name(self) -> str:
-        return 'EIS Wizard processing provider'
+        return 'EIS'
 
     def load(self) -> bool:
         # QgsSettings().setValue("path", "/path/to/backend_script.py")
@@ -33,7 +33,7 @@ class EISProvider(QgsProcessingProvider):
         return True
 
     def icon(self):
-        return QIcon(os.path.join(pluginPath, '../resources/icons/eis_icon.svg'))
+        return QIcon(os.path.join(pluginPath, '../resources/icons/plugin_icon.png'))
 
     def parse_algorithm_config(self, config: configparser.ConfigParser, algorithm: str) -> EISProcessingAlgorithm:
         alg_parameters = []

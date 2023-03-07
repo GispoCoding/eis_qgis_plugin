@@ -12,16 +12,25 @@ from qgis.core import (
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterVectorLayer,
+    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterMultipleLayers,
     QgsProcessingParameterFile,
     QgsProcessingParameterEnum,
     QgsProcessingParameterMatrix,
+    QgsProcessingParameterCrs,
     QgsProcessingFeedback,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterVectorDestination,
     QgsProcessingParameterFileDestination,
     QgsProcessingOutputMultipleLayers
 )
+
+
+# NOTE:
+# While these paths exist within the script, modify them to correspond to your Python venv and interface file location
+PYTHON_SCRIPT_FOLDER_PATH = "/home/niko/code/eis_venv"
+PYTOHN_PATH = PYTHON_SCRIPT_FOLDER_PATH + "/bin/python"
+TOOLKIT_PATH = PYTHON_SCRIPT_FOLDER_PATH + "/lib/python3.9/site-packages/eis_toolkit/wizard_interface/toolkit_interface_arg_parsing.py"
 
 
 class EISProcessingAlgorithm(QgsProcessingAlgorithm):
@@ -81,11 +90,15 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 self.addParameter(QgsProcessingParameterRasterLayer(**param_dict_copy))
             elif param_type == 'vector':
                 self.addParameter(QgsProcessingParameterVectorLayer(**param_dict_copy))
+            elif param_type == 'source':
+                self.addParameter(QgsProcessingParameterFeatureSource(**param_dict_copy))
             elif param_type == 'multiple':
                 self.addParameter(QgsProcessingParameterMultipleLayers(**param_dict_copy))
             elif param_type == 'enum':
                 param_dict_copy['options'] = [opt.strip() for opt in param_dict_copy['options'].split("|")]
                 self.addParameter(QgsProcessingParameterEnum(**param_dict_copy))
+            elif param_type == 'crs':
+                self.addParameter(QgsProcessingParameterCrs(**param_dict_copy))
             elif param_type == 'matrix':
                 self.addParameter(QgsProcessingParameterMatrix(**param_dict_copy))
                 # NOTE: causes QGIS to crash?
@@ -164,16 +177,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         if feedback is None:
             feedback = QgsProcessingFeedback()
 
-        # Get the path to the external script
-        python_script_folder_path = "/home/niko/code/eis_venv"
-        python_path = python_script_folder_path + "/bin/python"
-        toolkit_path = python_script_folder_path + "/lib/python3.9/site-packages/eis_toolkit/wizard_interface/toolkit_interface_test_2.py"
-
         parameters = self.convert_parameters(parameters, context)
 
         # Start the external process
         process = subprocess.Popen(
-            [python_path, toolkit_path] + ["call_" + self.name()] + parameters,
+            [PYTOHN_PATH, TOOLKIT_PATH] + ["call_" + self.name()] + parameters,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
 
