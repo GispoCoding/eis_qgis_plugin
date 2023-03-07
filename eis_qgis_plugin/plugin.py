@@ -14,6 +14,8 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.i18n import setup_translation
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import plugin_name
 
 from eis_qgis_plugin.wizard.eis_wizard_dialog import EISWizardDialog
+from eis_qgis_plugin.wizard.test_dialog import NewWizardDialog, PreprocessDialog
+
 from eis_qgis_plugin.processing.eis_provider import EISProvider
 
 #pluginPath = os.path.dirname(__file__)
@@ -166,12 +168,15 @@ class Plugin:
         if self.first_start == True:
             self.first_start = False
             self.dlg = EISWizardDialog(plugin=self)
+            self.test_dlg = NewWizardDialog(iface)
+            self.pre_dlg = PreprocessDialog(iface)
             # self.interface = EISWizardInterface(dlg=self.dlg, iface=self.iface, plugin=self)
             # self.dlg.set_interface(self.interface)
             self.set_python_path()
             self.set_toolkit_interface_path()
 
-        self.dlg.show() # Show the dialog
+        self.test_dlg.show() # Show the dialog
+        self.pre_dlg.show()
         result = self.dlg.exec_() # Run the dialog event loop
 
         if result:  # See if OK was pressed
