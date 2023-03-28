@@ -6,7 +6,7 @@ from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QWidget, QInputDialog, QLineEdit
 from qgis.utils import iface
-from qgis.core import QgsApplication
+from qgis.core import QgsApplication, QgsProject
 from eis_qgis_plugin.settings import get_python_venv_path, save_python_venv_path
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.custom_logging import (
@@ -155,7 +155,14 @@ class Plugin:
             add_to_toolbar=True,
             callback=self.open_explore
         )
-        
+
+        self.add_action(
+            "",
+            text='Add group',
+            parent=iface.mainWindow(),
+            add_to_toolbar=True,
+            callback=self.add_layer_group
+        )
 
         self.initProcessing()
 
@@ -198,6 +205,16 @@ class Plugin:
     def log(self, message: str) -> None:
         """Pushes a message to QGIS log."""
         self.iface.messageBar().pushMessage(message)
+
+    # EXPERIMENTS
+    def add_layer_group(self):
+        root = QgsProject.instance().layerTreeRoot()
+        eis_group = root.addGroup("EIS")
+        raw_group = eis_group.addGroup("Raw data")
+        processed_group = eis_group.addGroup("Processed data")
+        granite_group = processed_group.addGroup("Granite data")
+        fault_group = processed_group.addGroup("Fault lines data")
+
 
     def run(self):
         """Run method that performs all the real work"""
