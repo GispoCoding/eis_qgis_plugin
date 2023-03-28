@@ -1,17 +1,15 @@
-from typing import Dict
-import configparser
 import os
+import importlib
 
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsProcessingProvider
-from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 pluginPath = os.path.dirname(__file__)
 
 class EISProvider(QgsProcessingProvider):
 
     def __init__(self) -> None:
-        self.description_file = os.path.join(pluginPath, '../config/eis_config.ini')
+        self.alg_folder = os.path.join(pluginPath, 'algorithms')
         super().__init__()
 
     def id(self) -> str:
@@ -21,40 +19,35 @@ class EISProvider(QgsProcessingProvider):
         return 'EIS'
 
     def load(self) -> bool:
-        # QgsSettings().setValue("path", "/path/to/backend_script.py")
-
-        # NOTE: ProcessingConfig is an older feature and not usable?
-        # ProcessingConfig.addSetting(Setting(self.name(),
-        #                                     utils.WBT_EXECUTABLE,
-        #                                     self.tr('WhiteboxTools executable'),
-        #                                     utils.wbtExecutable(),
-        #                                     valuetype=Setting.FILE))
         self.refreshAlgorithms()
         return True
 
-    def icon(self):
-        return QIcon(os.path.join(pluginPath, '../resources/icons/plugin_icon.png'))
-
-    def parse_algorithm_config(self, config: configparser.ConfigParser, algorithm: str) -> EISProcessingAlgorithm:
-        alg_parameters = []
-        alg_descriptions = dict(config.items(algorithm))
-        for key, param_data in alg_descriptions.items():
-            if key[:6] == 'param_':
-                parsed_param_data = self.parse_algorithm_parameter(param_data)
-                alg_parameters.append(parsed_param_data)
-        return EISProcessingAlgorithm(alg_descriptions, alg_parameters)
-
-    def parse_algorithm_parameter(self, parameter_data: str) -> Dict:
-        param_data = {}
-        elements = parameter_data.split(',')
-        for param_element in elements:
-            data = [item.strip() for item in param_element.split(':')]
-            param_data[data[0].lower()] = data[1]
-        return param_data
+    # def icon(self):
+    #     return QIcon(os.path.join(pluginPath, '../resources/icons/plugin_icon.png'))
 
     def loadAlgorithms(self) -> None:
-        config = configparser.ConfigParser()
-        config.read(self.description_file)
-        for algorithm in config.sections():
-            alg = self.parse_algorithm_config(config, algorithm)
-            self.addAlgorithm(alg)
+        algorithm_instances = self.load_algorithms_from_directory(self.alg_folder)
+
+        # Add the algorithm instances to the provider
+        for algorithm in algorithm_instances:
+            self.addAlgorithm(algorithm)
+            
+    def load_algorithms_from_directory(self, algorithms_dir: str):
+        algorithm_instances = []
+
+        for file_name in os.listdir(algorithms_dir):
+            if file_name.endswith('.py') and not file_name.startswith('__'):
+                module_name = file_name[:-3]
+                class_name_parts = [part.capitalize() for part in module_name.split('_')]
+                class_name = 'EIS' + ''.join(class_name_parts)
+
+                # Import the module
+                spec = importlib.util.spec_from_file_location(module_name, os.path.join(algorithms_dir, file_name))
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+
+                # Create an instance of the algorithm class and add it to the list
+                algorithm_class = getattr(module, class_name)
+                algorithm_instances.append(algorithm_class())
+
+        return algorithm_instances

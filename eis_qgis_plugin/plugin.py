@@ -1,10 +1,13 @@
 from typing import Callable, List, Optional
 
+import os
+
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QWidget
+from qgis.PyQt.QtWidgets import QAction, QWidget, QInputDialog, QLineEdit
 from qgis.utils import iface
 from qgis.core import QgsApplication
+from eis_qgis_plugin.settings import get_python_venv_path, save_python_venv_path
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.custom_logging import (
     setup_logger,
@@ -13,12 +16,12 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.custom_logging import (
 from eis_qgis_plugin.qgis_plugin_tools.tools.i18n import setup_translation
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import plugin_name
 
-from eis_qgis_plugin.wizard.eis_wizard_dialog import EISWizardDialog
-from eis_qgis_plugin.wizard.test_dialog import NewWizardDialog, PreprocessDialog
-
+from eis_qgis_plugin.wizard.wizard_main import EISWizardMain
+from eis_qgis_plugin.wizard.wizard_preprocess import EISWizardPreprocess
+from eis_qgis_plugin.wizard.wizard_explore import EISWizardExplore
 from eis_qgis_plugin.processing.eis_provider import EISProvider
 
-#pluginPath = os.path.dirname(__file__)
+pluginPath = os.path.dirname(__file__)
 
 
 class Plugin:
@@ -125,8 +128,34 @@ class Plugin:
             text=Plugin.name,
             callback=self.run,
             parent=iface.mainWindow(),
-            add_to_toolbar=False,
+            add_to_toolbar=True,
         )
+
+        self.add_action(
+            os.path.join(pluginPath, 'resources/icons/plugin_icon.png'),  # Some placeholder icon
+            text='Set Python Virtual Environment Path',
+            parent=iface.mainWindow(),
+            add_to_toolbar=True,
+            callback=self.set_python_venv_path
+        )
+
+        # Add links to Wizard steps as separate buttons, at least for now
+        self.add_action(
+            "",
+            text='EIS Preprocess',
+            parent=iface.mainWindow(),
+            add_to_toolbar=True,
+            callback=self.open_preprocess
+        )
+
+        self.add_action(
+            "",
+            text='EIS Explore',
+            parent=iface.mainWindow(),
+            add_to_toolbar=True,
+            callback=self.open_explore
+        )
+        
 
         self.initProcessing()
 
@@ -146,15 +175,25 @@ class Plugin:
 
         QgsApplication.processingRegistry().removeProvider(self.provider)
 
-    def set_python_path(self) -> None:
-        """Sets path to Python with EIS Toolkit installed."""
-        self.python_path = self.dlg.setPythonPathText.toPlainText()
-        self.log(f"Python path set to: {self.python_path}")
+    def set_python_venv_path(self):
+        python_path, ok = QInputDialog.getText(
+            self.iface.mainWindow(),
+            'Python Virtual Environment Path',
+            'Enter the path to your Python virtual environment:',
+            QLineEdit.Normal,
+            get_python_venv_path()
+        )
 
-    def set_toolkit_interface_path(self) -> None:
-        """Sets path to interface file of EIS Toolkit."""
-        self.toolkit_interface_path = self.dlg.setToolkitInterfacePathText.toPlainText()
-        self.log(f"Toolkit interface path set to: {self.python_path}")
+        if ok and python_path:
+            save_python_venv_path(python_path)
+
+    def open_preprocess(self):
+        self.preprocess_window = EISWizardPreprocess(iface)
+        self.preprocess_window.show()
+
+    def open_explore(self):
+        self.explore_window = EISWizardExplore(iface)
+        self.explore_window.show()
 
     def log(self, message: str) -> None:
         """Pushes a message to QGIS log."""
@@ -163,21 +202,12 @@ class Plugin:
     def run(self):
         """Run method that performs all the real work"""
         self.first_start = True
-        # Create the dialog with elements (after translation) and keep reference
-        # Only create GUI ONCE in callback, so that it will only load when the plugin is started
-        if self.first_start == True:
+        if self.first_start:
             self.first_start = False
-            self.dlg = EISWizardDialog(plugin=self)
-            self.test_dlg = NewWizardDialog(iface)
-            self.pre_dlg = PreprocessDialog(iface)
-            # self.interface = EISWizardInterface(dlg=self.dlg, iface=self.iface, plugin=self)
-            # self.dlg.set_interface(self.interface)
-            self.set_python_path()
-            self.set_toolkit_interface_path()
+            self.wizard_window = EISWizardMain(iface)
 
-        self.test_dlg.show() # Show the dialog
-        self.pre_dlg.show()
-        result = self.dlg.exec_() # Run the dialog event loop
+        self.wizard_window.show() # Show the dialog
+        # result = self.test_dlg.exec_() # Run the dialog event loop
 
-        if result:  # See if OK was pressed
-            self.iface.messageBar().pushMessage('OK pressed. Closing EIS Wizard')
+        # if result:  # See if OK was pressed
+        #     self.iface.messageBar().pushMessage('OK pressed. Closing EIS Wizard')

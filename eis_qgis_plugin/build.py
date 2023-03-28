@@ -21,7 +21,7 @@ locales = ["fi"]
 profile = "EIS"
 ui_files = list(glob.glob("**/*.ui", recursive=True))
 resources = list(glob.glob("**/*.qrc", recursive=True))
-extra_dirs = ["resources", "config"]
+extra_dirs = ["resources"]
 compiled_resources: List[str] = []
 
 PluginMaker(

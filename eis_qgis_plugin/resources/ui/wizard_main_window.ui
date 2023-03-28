@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>479</height>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@
     <string/>
    </property>
    <property name="subTitle">
-    <string>Step 1/3 – Initialize project</string>
+    <string>Step 1/3 - Initialize a project</string>
    </property>
    <attribute name="pageId">
     <string notr="true">page1</string>
@@ -36,7 +36,7 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>110</y>
+      <y>107</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -78,7 +78,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>22</x>
+      <x>16</x>
       <y>46</y>
       <width>211</width>
       <height>21</height>
@@ -133,7 +133,7 @@
     <property name="geometry">
      <rect>
       <x>338</x>
-      <y>110</y>
+      <y>116</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -146,7 +146,7 @@
     <property name="geometry">
      <rect>
       <x>568</x>
-      <y>120</y>
+      <y>116</y>
       <width>26</width>
       <height>24</height>
      </rect>
@@ -159,7 +159,7 @@
     <property name="geometry">
      <rect>
       <x>336</x>
-      <y>40</y>
+      <y>46</y>
       <width>211</width>
       <height>21</height>
      </rect>
@@ -177,7 +177,7 @@
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>110</y>
+      <y>116</y>
       <width>91</width>
       <height>25</height>
      </rect>
@@ -217,211 +217,6 @@ border-color: rgb(255, 255, 255);
    <attribute name="pageId">
     <string notr="true">2</string>
    </attribute>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>21</x>
-      <y>18</y>
-      <width>101</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Input data</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>76</y>
-      <width>16</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_3">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>156</y>
-      <width>16</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_2">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>116</y>
-      <width>16</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_4">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>196</y>
-      <width>16</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>276</y>
-      <width>101</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Explore data</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>276</y>
-      <width>121</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Preprocess data</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>29</x>
-      <y>79</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Conductivity</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>117</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Magnetic</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_10">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>159</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Geochemical</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_11">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>200</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Structures</string>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>56</y>
-      <width>581</width>
-      <height>261</height>
-     </rect>
-    </property>
-    <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>20</y>
-       <width>160</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_2">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>60</y>
-       <width>160</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_3">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>100</y>
-       <width>160</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_4">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>140</y>
-       <width>160</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
-   <zorder>groupBox</zorder>
-   <zorder>label</zorder>
-   <zorder>radioButton</zorder>
-   <zorder>radioButton_3</zorder>
-   <zorder>radioButton_2</zorder>
-   <zorder>radioButton_4</zorder>
-   <zorder>pushButton</zorder>
-   <zorder>pushButton_2</zorder>
-   <zorder>label_8</zorder>
-   <zorder>label_9</zorder>
-   <zorder>label_10</zorder>
-   <zorder>label_11</zorder>
   </widget>
   <widget class="QWizardPage" name="EISWizardModelPage">
    <property name="title">
@@ -433,13 +228,195 @@ border-color: rgb(255, 255, 255);
    <attribute name="pageId">
     <string notr="true">page3</string>
    </attribute>
+   <widget class="QTabWidget" name="tabWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>601</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Model 1</string>
+     </attribute>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>300</y>
+        <width>89</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Run</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>251</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: italic 11pt &quot;Ubuntu&quot;;</string>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
+      </property>
+      <property name="text">
+       <string>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper suscipit tortor, ac sagittis nibh cursus vel. Pellentesque nec sem nec lectus vulputate sodales ut in odio. Nullam nec tincidunt diam, vitae finibus purus. Sed rutrum malesuada odio, in imperdiet tortor commodo eu. </string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>40</y>
+        <width>171</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: italic 11pt &quot;Ubuntu&quot;;</string>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
+      </property>
+      <property name="text">
+       <string>This method is commonly used in X to achieve Y.</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="Line" name="line_3">
+      <property name="geometry">
+       <rect>
+        <x>294</x>
+        <y>10</y>
+        <width>20</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+border-top-color: rgb(255, 255, 255);
+gridline-color: rgb(255, 255, 255);
+border-color: rgb(255, 255, 255);
+</string>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>20</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>In MPM</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_6">
+     <attribute name="title">
+      <string>Reclassify</string>
+     </attribute>
+     <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>30</y>
+        <width>160</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_2">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>70</y>
+        <width>160</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_3">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>110</y>
+        <width>160</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QgsRasterBandComboBox" name="mRasterBandComboBox">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>30</y>
+        <width>160</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QgsFieldComboBox" name="mFieldComboBox">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>70</y>
+        <width>160</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QgsFieldComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgsfieldcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>QgsMapLayerComboBox</class>
    <extends>QComboBox</extends>
    <header>qgsmaplayercombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsRasterBandComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgsrasterbandcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
