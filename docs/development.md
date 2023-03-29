@@ -5,6 +5,36 @@ This project uses [qgis_plugin_tools](https://github.com/Gispo/qgis_plugin_tools
 
 `git clone --recurse-submodules https://github.com/GispoCoding/eis_wizard.git`
 
+## Setting up development environment
+
+To get started with the development, follow these steps:
+
+1. Go to the [eis_qgis_plugin](../eis_qgis_plugin) directory with a terminal
+1. Create a new Python virtual environment with pre-commit using Python aware of QGIS libraries:
+   ```shell
+    python build.py venv
+    ```
+   In Windows it would be best to use python-qgis.bat or python-qgis-ltr.bat:
+   ```shell
+    C:\OSGeo4W64\bin\python-qgis.bat build.py venv
+   ```
+1. **Note: This part is  only for developers that are using QGIS < 3.16.8.** If you want to use IDE for development, it is best to start it with the
+   following way on Windows:
+   ```shell
+    :: Check out the arguments with python build.py start_ide -h
+    set QGIS_DEV_IDE=<path-to-your-ide.exe>
+    set QGIS_DEV_OSGEO4W_ROOT=C:\OSGeo4W64
+    set QGIS_DEV_PREFIX_PATH=C:\OSGeo4W64\apps\qgis-ltr
+    C:\OSGeo4W64\bin\python-qgis.bat build.py start_ide
+    :: If you want to create a bat script for starting the ide, you can do it with:
+    C:\OSGeo4W64\bin\python-qgis.bat build.py start_ide --save_to_disk
+   ```
+
+Now the development environment should be all-set.
+
+If you want to edit or disable some quite strict pre-commit scripts, edit .pre-commit-config.yaml.
+For example to disable typing, remove mypy hook and flake8-annotations from the file.
+
 
 ## Developing the plugin
 
