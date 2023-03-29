@@ -32,8 +32,22 @@ To get started with the development, follow these steps:
 
 Now the development environment should be all-set.
 
+To activate the environment from your current location:
+```shell
+source ../.venv/bin/activate
+```
+
+To deactivate the environment
+```shell
+deactivate
+```
+
 If you want to edit or disable some quite strict pre-commit scripts, edit .pre-commit-config.yaml.
 For example to disable typing, remove mypy hook and flake8-annotations from the file.
+You can also disable pre-commit for a specific commit like this:
+```shell
+git commit -m 'message' --no-verify
+```
 
 
 ## Developing the plugin
