@@ -39,3 +39,10 @@ class EISWizardExplore(QtWidgets.QDialog, FORM_CLASS):
     #     html = "file:///home/niko/Downloads/bokeh_test_embedded.html"
     #     self.web_view = QWebEngineView()
     #     self.web_view.load(QtCore.QUrl.fromLocalFile(html))
+
+
+class EISWizardExploreBig(QtWidgets.QDialog, load_ui("wizard_explore_big.ui")):
+    def __init__(self, iface: QgisInterface) -> None:
+        super().__init__()
+        self.setupUi(self)
+        self.iface = iface

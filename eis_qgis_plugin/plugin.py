@@ -18,7 +18,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import plugin_name
 
 from eis_qgis_plugin.wizard.wizard_main import EISWizardMain
 from eis_qgis_plugin.wizard.wizard_preprocess import EISWizardPreprocess
-from eis_qgis_plugin.wizard.wizard_explore import EISWizardExplore
+from eis_qgis_plugin.wizard.wizard_explore import EISWizardExplore, EISWizardExploreBig
 from eis_qgis_plugin.processing.eis_provider import EISProvider
 
 pluginPath = os.path.dirname(__file__)
@@ -199,7 +199,9 @@ class Plugin:
         self.preprocess_window.show()
 
     def open_explore(self):
+        self.explore_window_big = EISWizardExploreBig(iface)
         self.explore_window = EISWizardExplore(iface)
+        self.explore_window_big.show()
         self.explore_window.show()
 
     def log(self, message: str) -> None:
