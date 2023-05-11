@@ -1,13 +1,13 @@
 from qgis.core import (
-    QgsProcessingParameterRasterLayer,
     QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterRasterDestination
+    QgsProcessingParameterRasterDestination,
+    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISClipRaster(EISProcessingAlgorithm):
 
+class EISClipRaster(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -23,21 +23,19 @@ class EISClipRaster(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name = self.alg_parameters[0],
-                description = "Input raster"
+                name=self.alg_parameters[0], description="Input raster"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
-                name = self.alg_parameters[1],
-                description = "Areas to be clipped",
+                name=self.alg_parameters[1],
+                description="Areas to be clipped",
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name = self.alg_parameters[2],
-                description = "Output raster"
+                name=self.alg_parameters[2], description="Output raster"
             )
         )

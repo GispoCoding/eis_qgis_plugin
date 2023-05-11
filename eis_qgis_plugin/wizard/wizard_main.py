@@ -3,8 +3,8 @@ from qgis.gui import QgisInterface
 from qgis.PyQt import QtWidgets
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.wizard_preprocess import EISWizardPreprocess
 from eis_qgis_plugin.wizard.wizard_explore import EISWizardExplore
+from eis_qgis_plugin.wizard.wizard_preprocess import EISWizardPreprocess
 
 FORM_CLASS: QDialog = load_ui("wizard_main_window.ui")
 

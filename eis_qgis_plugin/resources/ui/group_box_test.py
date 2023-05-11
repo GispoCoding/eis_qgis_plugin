@@ -17,7 +17,9 @@ class Ui_Dialog(object):
         Dialog.resize(640, 792)
         self.scrollArea = QtWidgets.QScrollArea(Dialog)
         self.scrollArea.setGeometry(QtCore.QRect(10, 40, 611, 591))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
@@ -27,10 +29,14 @@ class Ui_Dialog(object):
         self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_4.setEnabled(True)
         self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 609, 589))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollAreaWidgetContents_4.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.scrollAreaWidgetContents_4.sizePolicy().hasHeightForWidth()
+        )
         self.scrollAreaWidgetContents_4.setSizePolicy(sizePolicy)
         self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_4)
@@ -51,7 +57,7 @@ class Ui_Dialog(object):
         self.groupBox_10.setObjectName("groupBox_10")
         self.label_20 = QtWidgets.QLabel(self.groupBox_10)
         self.label_20.setGeometry(QtCore.QRect(10, 30, 441, 81))
-        self.label_20.setStyleSheet("font: italic 11pt \"Ubuntu\";")
+        self.label_20.setStyleSheet('font: italic 11pt "Ubuntu";')
         self.label_20.setInputMethodHints(QtCore.Qt.ImhNone)
         self.label_20.setWordWrap(True)
         self.label_20.setObjectName("label_20")
@@ -64,7 +70,7 @@ class Ui_Dialog(object):
         self.groupBox_11.setObjectName("groupBox_11")
         self.label_21 = QtWidgets.QLabel(self.groupBox_11)
         self.label_21.setGeometry(QtCore.QRect(10, 30, 441, 81))
-        self.label_21.setStyleSheet("font: italic 11pt \"Ubuntu\";")
+        self.label_21.setStyleSheet('font: italic 11pt "Ubuntu";')
         self.label_21.setInputMethodHints(QtCore.Qt.ImhNone)
         self.label_21.setWordWrap(True)
         self.label_21.setObjectName("label_21")
@@ -77,7 +83,7 @@ class Ui_Dialog(object):
         self.groupBox_12.setObjectName("groupBox_12")
         self.label_22 = QtWidgets.QLabel(self.groupBox_12)
         self.label_22.setGeometry(QtCore.QRect(10, 30, 441, 81))
-        self.label_22.setStyleSheet("font: italic 11pt \"Ubuntu\";")
+        self.label_22.setStyleSheet('font: italic 11pt "Ubuntu";')
         self.label_22.setInputMethodHints(QtCore.Qt.ImhNone)
         self.label_22.setWordWrap(True)
         self.label_22.setObjectName("label_22")
@@ -95,11 +101,26 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.groupBox_10.setTitle(_translate("Dialog", "Reclassify"))
-        self.label_20.setText(_translate("Dialog", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper suscipit tortor, ac sagittis nibh cursus vel. Pellentesque nec sem nec lectus vulputate sodales ut in odio. Nullam nec tincidunt diam, vitae finibus purus. Sed rutrum malesuada odio, in imperdiet tortor commodo eu. "))
+        self.label_20.setText(
+            _translate(
+                "Dialog",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper suscipit tortor, ac sagittis nibh cursus vel. Pellentesque nec sem nec lectus vulputate sodales ut in odio. Nullam nec tincidunt diam, vitae finibus purus. Sed rutrum malesuada odio, in imperdiet tortor commodo eu. ",
+            )
+        )
         self.pushButton_20.setText(_translate("Dialog", "Run"))
         self.groupBox_11.setTitle(_translate("Dialog", "Reclassify"))
-        self.label_21.setText(_translate("Dialog", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper suscipit tortor, ac sagittis nibh cursus vel. Pellentesque nec sem nec lectus vulputate sodales ut in odio. Nullam nec tincidunt diam, vitae finibus purus. Sed rutrum malesuada odio, in imperdiet tortor commodo eu. "))
+        self.label_21.setText(
+            _translate(
+                "Dialog",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper suscipit tortor, ac sagittis nibh cursus vel. Pellentesque nec sem nec lectus vulputate sodales ut in odio. Nullam nec tincidunt diam, vitae finibus purus. Sed rutrum malesuada odio, in imperdiet tortor commodo eu. ",
+            )
+        )
         self.pushButton_21.setText(_translate("Dialog", "Run"))
         self.groupBox_12.setTitle(_translate("Dialog", "Reclassify"))
-        self.label_22.setText(_translate("Dialog", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper suscipit tortor, ac sagittis nibh cursus vel. Pellentesque nec sem nec lectus vulputate sodales ut in odio. Nullam nec tincidunt diam, vitae finibus purus. Sed rutrum malesuada odio, in imperdiet tortor commodo eu. "))
+        self.label_22.setText(
+            _translate(
+                "Dialog",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper suscipit tortor, ac sagittis nibh cursus vel. Pellentesque nec sem nec lectus vulputate sodales ut in odio. Nullam nec tincidunt diam, vitae finibus purus. Sed rutrum malesuada odio, in imperdiet tortor commodo eu. ",
+            )
+        )
         self.pushButton_22.setText(_translate("Dialog", "Run"))

@@ -1,14 +1,14 @@
 from qgis.core import (
-    QgsProcessingParameterMultipleLayers,
-    QgsProcessingParameterBoolean,
+    QgsProcessing,
     QgsProcessingOutputBoolean,
-    QgsProcessing
+    QgsProcessingParameterBoolean,
+    QgsProcessingParameterMultipleLayers,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISCheckRasterGrids(EISProcessingAlgorithm):
 
+class EISCheckRasterGrids(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -24,23 +24,20 @@ class EISCheckRasterGrids(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterMultipleLayers(
-                name = self.alg_parameters[0],
-                description = "Input rasters",
-                layerType = QgsProcessing.TypeRaster
+                name=self.alg_parameters[0],
+                description="Input rasters",
+                layerType=QgsProcessing.TypeRaster,
             )
         )
 
         self.addParameter(
             QgsProcessingParameterBoolean(
-                name = self.alg_parameters[1],
-                description = "Same extent",
-                defaultValue = False
+                name=self.alg_parameters[1],
+                description="Same extent",
+                defaultValue=False,
             )
         )
 
         self.addOutput(
-            QgsProcessingOutputBoolean(
-                name = "result",
-                description = "Check result"
-            )
+            QgsProcessingOutputBoolean(name="result", description="Check result")
         )

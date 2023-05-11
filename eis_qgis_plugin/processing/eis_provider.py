@@ -1,22 +1,22 @@
-import os
 import importlib
+import os
 
-from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsProcessingProvider
+from qgis.PyQt.QtGui import QIcon
 
 pluginPath = os.path.dirname(__file__)
 
-class EISProvider(QgsProcessingProvider):
 
+class EISProvider(QgsProcessingProvider):
     def __init__(self) -> None:
-        self.alg_folder = os.path.join(pluginPath, 'algorithms')
+        self.alg_folder = os.path.join(pluginPath, "algorithms")
         super().__init__()
 
     def id(self) -> str:
-        return 'eis'
+        return "eis"
 
     def name(self) -> str:
-        return 'EIS'
+        return "EIS"
 
     def load(self) -> bool:
         self.refreshAlgorithms()
@@ -31,18 +31,22 @@ class EISProvider(QgsProcessingProvider):
         # Add the algorithm instances to the provider
         for algorithm in algorithm_instances:
             self.addAlgorithm(algorithm)
-            
+
     def load_algorithms_from_directory(self, algorithms_dir: str):
         algorithm_instances = []
 
         for file_name in os.listdir(algorithms_dir):
-            if file_name.endswith('.py') and not file_name.startswith('__'):
+            if file_name.endswith(".py") and not file_name.startswith("__"):
                 module_name = file_name[:-3]
-                class_name_parts = [part.capitalize() for part in module_name.split('_')]
-                class_name = 'EIS' + ''.join(class_name_parts)
+                class_name_parts = [
+                    part.capitalize() for part in module_name.split("_")
+                ]
+                class_name = "EIS" + "".join(class_name_parts)
 
                 # Import the module
-                spec = importlib.util.spec_from_file_location(module_name, os.path.join(algorithms_dir, file_name))
+                spec = importlib.util.spec_from_file_location(
+                    module_name, os.path.join(algorithms_dir, file_name)
+                )
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module)
 

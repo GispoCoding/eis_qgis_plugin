@@ -1,12 +1,12 @@
 from qgis.core import (
+    QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterRasterDestination
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISUnifyRasters(EISProcessingAlgorithm):
 
+class EISUnifyRasters(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -22,21 +22,18 @@ class EISUnifyRasters(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name = self.alg_parameters[0],
-                description = "Base raster"
+                name=self.alg_parameters[0], description="Base raster"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name = self.alg_parameters[1],
-                description = "Raster(s) to unify"
+                name=self.alg_parameters[1], description="Raster(s) to unify"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name = self.alg_parameters[2],
-                description = "Output raster"
+                name=self.alg_parameters[2], description="Output raster"
             )
         )

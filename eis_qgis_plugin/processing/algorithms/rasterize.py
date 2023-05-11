@@ -1,12 +1,12 @@
 from qgis.core import (
+    QgsProcessingParameterRasterDestination,
     QgsProcessingParameterVectorLayer,
-    QgsProcessingParameterRasterDestination
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISRasterize(EISProcessingAlgorithm):
 
+class EISRasterize(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -22,14 +22,13 @@ class EISRasterize(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterVectorLayer(
-                name = self.alg_parameters[0],
-                description = "Input vector"
+                name=self.alg_parameters[0], description="Input vector"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name = self.alg_parameters[1],
-                description = "Output raster",
+                name=self.alg_parameters[1],
+                description="Output raster",
             )
         )

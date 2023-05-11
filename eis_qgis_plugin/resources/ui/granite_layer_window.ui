@@ -23,7 +23,7 @@
       <attribute name="title">
        <string>Tool 1</string>
       </attribute>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>30</x>

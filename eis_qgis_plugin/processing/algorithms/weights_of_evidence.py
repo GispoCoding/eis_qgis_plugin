@@ -1,14 +1,14 @@
 from qgis.core import (
-    QgsProcessingParameterRasterLayer,
     QgsProcessingParameterEnum,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterDestination
+    QgsProcessingParameterRasterDestination,
+    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISWeightsOfEvidence(EISProcessingAlgorithm):
 
+class EISWeightsOfEvidence(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -19,43 +19,50 @@ class EISWeightsOfEvidence(EISProcessingAlgorithm):
         self._short_help_string = "Compute weights of evidence"
 
     def initAlgorithm(self, config=None):
-        
-        self.alg_parameters = ["evidential_raster", "deposit_raster", "weights_type", "contrast", "output_raster"]
+
+        self.alg_parameters = [
+            "evidential_raster",
+            "deposit_raster",
+            "weights_type",
+            "contrast",
+            "output_raster",
+        ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name = self.alg_parameters[0],
-                description = "Geospatial evidential raster"
+                name=self.alg_parameters[0], description="Geospatial evidential raster"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name = self.alg_parameters[1],
-                description = "Mineral deposits raster"
+                name=self.alg_parameters[1], description="Mineral deposits raster"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name = self.alg_parameters[2],
-                description = "Weights of evidence computations type",
-                options = ["Unique weights", "Cumulative ascending weights", "Cumulative descending weights"]
+                name=self.alg_parameters[2],
+                description="Weights of evidence computations type",
+                options=[
+                    "Unique weights",
+                    "Cumulative ascending weights",
+                    "Cumulative descending weights",
+                ],
             )
         )
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name = self.alg_parameters[3],
-                description = "Studentized contrast value",
-                type = QgsProcessingParameterNumber.Double,
-                optional=True
+                name=self.alg_parameters[3],
+                description="Studentized contrast value",
+                type=QgsProcessingParameterNumber.Double,
+                optional=True,
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name = self.alg_parameters[4],
-                description = "Output raster"
+                name=self.alg_parameters[4], description="Output raster"
             )
         )

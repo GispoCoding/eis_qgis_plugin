@@ -1,13 +1,13 @@
 from qgis.core import (
-    QgsProcessingParameterRasterLayer,
     QgsProcessingParameterEnum,
-    QgsProcessingParameterRasterDestination
+    QgsProcessingParameterRasterDestination,
+    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISFuzzyOverlay(EISProcessingAlgorithm):
 
+class EISFuzzyOverlay(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -23,24 +23,22 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name = self.alg_parameters[0],
-                description = "Input layer"
+                name=self.alg_parameters[0], description="Input layer"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name = self.alg_parameters[1],
-                description = "Fuzzy method",
-                options = ["And" , "Or" , "Sum" , "Product" , "Gamma"],
-                defaultValue = "And"
+                name=self.alg_parameters[1],
+                description="Fuzzy method",
+                options=["And", "Or", "Sum", "Product", "Gamma"],
+                defaultValue="And",
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name = self.alg_parameters[2],
-                description = "Output raster",
+                name=self.alg_parameters[2],
+                description="Output raster",
             )
         )
-

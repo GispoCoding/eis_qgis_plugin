@@ -1,12 +1,12 @@
 from qgis.core import (
+    QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterRasterDestination
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISGenerateData(EISProcessingAlgorithm):
 
+class EISGenerateData(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -22,14 +22,13 @@ class EISGenerateData(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name = self.alg_parameters[0],
-                description = "Input layer"
+                name=self.alg_parameters[0], description="Input layer"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name = self.alg_parameters[1],
-                description = "Output file",
+                name=self.alg_parameters[1],
+                description="Output file",
             )
         )

@@ -1,13 +1,13 @@
 from qgis.core import (
-    QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterFolderDestination,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterFolderDestination
+    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISPca(EISProcessingAlgorithm):
 
+class EISPca(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -23,21 +23,19 @@ class EISPca(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name = self.alg_parameters[0],
-                description = "Input raster"
+                name=self.alg_parameters[0], description="Input raster"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name = self.alg_parameters[1],
-                description = "Number of components",
+                name=self.alg_parameters[1],
+                description="Number of components",
             )
         )
 
         self.addParameter(
             QgsProcessingParameterFolderDestination(
-                name = self.alg_parameters[2],
-                description = "Output folder"
+                name=self.alg_parameters[2], description="Output folder"
             )
         )

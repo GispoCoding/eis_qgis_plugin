@@ -1,25 +1,23 @@
+import os
 from typing import Callable, List, Optional
 
-import os
-
+from qgis.core import QgsApplication, QgsProject
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QWidget, QInputDialog, QLineEdit
+from qgis.PyQt.QtWidgets import QAction, QInputDialog, QLineEdit, QWidget
 from qgis.utils import iface
-from qgis.core import QgsApplication, QgsProject
-from eis_qgis_plugin.settings import get_python_venv_path, save_python_venv_path
 
+from eis_qgis_plugin.processing.eis_provider import EISProvider
 from eis_qgis_plugin.qgis_plugin_tools.tools.custom_logging import (
     setup_logger,
     teardown_logger,
 )
 from eis_qgis_plugin.qgis_plugin_tools.tools.i18n import setup_translation
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import plugin_name
-
+from eis_qgis_plugin.settings import get_python_venv_path, save_python_venv_path
+from eis_qgis_plugin.wizard.wizard_explore import EISWizardExplore, EISWizardExploreBig
 from eis_qgis_plugin.wizard.wizard_main import EISWizardMain
 from eis_qgis_plugin.wizard.wizard_preprocess import EISWizardPreprocess
-from eis_qgis_plugin.wizard.wizard_explore import EISWizardExplore, EISWizardExploreBig
-from eis_qgis_plugin.processing.eis_provider import EISProvider
 
 pluginPath = os.path.dirname(__file__)
 
@@ -132,36 +130,38 @@ class Plugin:
         )
 
         self.add_action(
-            os.path.join(pluginPath, 'resources/icons/plugin_icon.png'),  # Some placeholder icon
-            text='Set Python Virtual Environment Path',
+            os.path.join(
+                pluginPath, "resources/icons/plugin_icon.png"
+            ),  # Some placeholder icon
+            text="Set Python Virtual Environment Path",
             parent=iface.mainWindow(),
             add_to_toolbar=True,
-            callback=self.set_python_venv_path
+            callback=self.set_python_venv_path,
         )
 
         # Add links to Wizard steps as separate buttons, at least for now
         self.add_action(
             "",
-            text='EIS Preprocess',
+            text="EIS Preprocess",
             parent=iface.mainWindow(),
             add_to_toolbar=True,
-            callback=self.open_preprocess
+            callback=self.open_preprocess,
         )
 
         self.add_action(
             "",
-            text='EIS Explore',
+            text="EIS Explore",
             parent=iface.mainWindow(),
             add_to_toolbar=True,
-            callback=self.open_explore
+            callback=self.open_explore,
         )
 
         self.add_action(
             "",
-            text='Add group',
+            text="Add group",
             parent=iface.mainWindow(),
             add_to_toolbar=True,
-            callback=self.add_layer_group
+            callback=self.add_layer_group,
         )
 
         self.initProcessing()
@@ -185,10 +185,10 @@ class Plugin:
     def set_python_venv_path(self):
         python_path, ok = QInputDialog.getText(
             self.iface.mainWindow(),
-            'Python Virtual Environment Path',
-            'Enter the path to your Python virtual environment:',
+            "Python Virtual Environment Path",
+            "Enter the path to your Python virtual environment:",
             QLineEdit.Normal,
-            get_python_venv_path()
+            get_python_venv_path(),
         )
 
         if ok and python_path:
@@ -217,7 +217,6 @@ class Plugin:
         granite_group = processed_group.addGroup("Granite data")
         fault_group = processed_group.addGroup("Fault lines data")
 
-
     def run(self):
         """Run method that performs all the real work"""
         self.first_start = True
@@ -225,7 +224,7 @@ class Plugin:
             self.first_start = False
             self.wizard_window = EISWizardMain(iface)
 
-        self.wizard_window.show() # Show the dialog
+        self.wizard_window.show()  # Show the dialog
         # result = self.test_dlg.exec_() # Run the dialog event loop
 
         # if result:  # See if OK was pressed

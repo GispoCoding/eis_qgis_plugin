@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog
 from qgis.gui import QgisInterface
-from qgis.PyQt import QtWidgets, QtCore
+from qgis.PyQt import QtCore, QtWidgets
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
@@ -32,7 +32,7 @@ class EISWizardPreprocess(QtWidgets.QDialog, FORM_CLASS):
     #     h_layout.addWidget(scroll)
 
     #     for i in range(10):
-            
+
     #         # b = QtWidgets.QPushButton(inner)
     #         # b.setText(str(i))
 
@@ -40,7 +40,7 @@ class EISWizardPreprocess(QtWidgets.QDialog, FORM_CLASS):
 
     #         b = QtWidgets.QGroupBox(inner)
     #         b.setTitle(f"AAA {i}")
-            
+
     #         c = QtWidgets.QPushButton(b)
     #         c.setText(str(i))
     #         inner.layout().addWidget(b)

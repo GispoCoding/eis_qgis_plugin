@@ -1,38 +1,36 @@
 import os
+import re
 import subprocess
 import time
-import re
-
-from typing import List, Dict
+from typing import Dict, List
 
 from qgis.core import (
     QgsProcessingAlgorithm,
-    QgsProcessingParameterMapLayer,
-    QgsProcessingParameterBoolean,
-    QgsProcessingParameterString,
-    QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterVectorLayer,
-    QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterMultipleLayers,
-    QgsProcessingParameterFile,
-    QgsProcessingParameterEnum,
-    QgsProcessingParameterMatrix,
-    QgsProcessingParameterCrs,
     QgsProcessingFeedback,
-    QgsProcessingParameterRasterDestination,
-    QgsProcessingParameterVectorDestination,
+    QgsProcessingOutputMultipleLayers,
+    QgsProcessingParameterBoolean,
+    QgsProcessingParameterCrs,
+    QgsProcessingParameterEnum,
     QgsProcessingParameterFeatureSink,
+    QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterFolderDestination,
-    QgsProcessingOutputMultipleLayers
+    QgsProcessingParameterMapLayer,
+    QgsProcessingParameterMatrix,
+    QgsProcessingParameterMultipleLayers,
+    QgsProcessingParameterNumber,
+    QgsProcessingParameterRasterDestination,
+    QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterString,
+    QgsProcessingParameterVectorDestination,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.settings import get_python_venv_path
 
 
 class EISProcessingAlgorithm(QgsProcessingAlgorithm):
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -41,7 +39,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self._group = ""
         self._group_id = ""
         self._short_help_string = ""
-        
+
         self.alg_parameters = []
 
     def name(self):
@@ -69,10 +67,10 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         args = []
 
         flag_mapping = {
-            'resampling_method': '--resampling-method',
-            'output_raster': '--output-raster-file',
-            'same_extent': '--same-extent',
-            'crs': '--crs',
+            "resampling_method": "--resampling-method",
+            "output_raster": "--output-raster-file",
+            "same_extent": "--same-extent",
+            "crs": "--crs",
             # Add more mappings as needed
         }
 
@@ -110,7 +108,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             elif isinstance(param, QgsProcessingParameterMultipleLayers):
                 layers = self.parameterAsLayerList(parameters, name, context)
-                [args.append(os.path.normpath(layer.source()) ) for layer in layers]
+                [args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
 
             # TODO check if works
@@ -123,34 +121,44 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             elif isinstance(param, QgsProcessingParameterCrs):
                 crs = str(self.parameterAsCrs(parameters, name, context))
-                arg = str(crs.split('EPSG:')[-1][:-1])
+                arg = str(crs.split("EPSG:")[-1][:-1])
 
             # TODO (remove? broken parameter type in some API versions)
             elif isinstance(param, QgsProcessingParameterMatrix):
-                arg = [str(item) for item in self.parameterAsMatrix(parameters, name, context)]
+                arg = [
+                    str(item)
+                    for item in self.parameterAsMatrix(parameters, name, context)
+                ]
 
-            elif isinstance(param, QgsProcessingParameterRasterDestination) or \
-               isinstance(param, QgsProcessingParameterVectorDestination):
-                arg = os.path.normpath(self.parameterAsOutputLayer(parameters, name, context))
+            elif isinstance(
+                param, QgsProcessingParameterRasterDestination
+            ) or isinstance(param, QgsProcessingParameterVectorDestination):
+                arg = os.path.normpath(
+                    self.parameterAsOutputLayer(parameters, name, context)
+                )
 
             # TODO
             elif isinstance(param, QgsProcessingParameterFeatureSink):
                 raise Exception("Not implemented yet")
-            
+
             # TODO
             elif isinstance(param, QgsProcessingOutputMultipleLayers):
                 arg = self.parameterAsLayerList
                 raise Exception("Not implemented yet")
 
             elif isinstance(param, QgsProcessingParameterFileDestination):
-                arg = os.path.normpath(self.parameterAsFileOutput(parameters, name, context))
+                arg = os.path.normpath(
+                    self.parameterAsFileOutput(parameters, name, context)
+                )
 
             # TODO
             elif isinstance(param, QgsProcessingParameterFolderDestination):
                 raise Exception("Not implemented yet")
 
             else:
-                raise Exception("Parameter conversion failed, parameter is unknown type")
+                raise Exception(
+                    "Parameter conversion failed, parameter is unknown type"
+                )
 
             if flag:
                 args.append(flag)
@@ -173,9 +181,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         # toolkit_path = python_venv_path + "/lib/python3.9/site-packages/eis_toolkit/__main__.py"
 
         cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        process = subprocess.Popen(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
+        )
 
-        progress_regex = re.compile(r'(\d+)%')
+        progress_regex = re.compile(r"(\d+)%")
 
         # while process.poll() is None:
         #     stdout = process.stdout.readline().strip()
@@ -206,6 +216,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             if output_name in parameters:
                 results[output_name] = parameters[output_name]
             elif output.type() == "outputBoolean":
-                results[output_name] = stdout.strip().lower() == 'true'
+                results[output_name] = stdout.strip().lower() == "true"
 
         return results

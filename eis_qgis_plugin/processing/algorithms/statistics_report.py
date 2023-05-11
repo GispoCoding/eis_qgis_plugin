@@ -1,12 +1,12 @@
 from qgis.core import (
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterMapLayer,
-    QgsProcessingParameterFileDestination
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
-class EISStatisticsReport(EISProcessingAlgorithm):
 
+class EISStatisticsReport(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
@@ -22,16 +22,13 @@ class EISStatisticsReport(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterMapLayer(
-                name = self.alg_parameters[0],
-                description = "Input layer"
+                name=self.alg_parameters[0], description="Input layer"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name = self.alg_parameters[1],
-                description = "Output file",
+                name=self.alg_parameters[1],
+                description="Output file",
             )
         )
-
-        
