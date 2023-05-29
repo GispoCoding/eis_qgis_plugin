@@ -4,12 +4,12 @@ import os
 from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
-pluginPath = os.path.dirname(__file__)
+PLUGIN_PATH = os.path.dirname(__file__)
 
 
 class EISProvider(QgsProcessingProvider):
     def __init__(self) -> None:
-        self.alg_folder = os.path.join(pluginPath, "algorithms")
+        self.alg_folder = os.path.join(plugPLUGIN_PATHinPath, "algorithms")
         super().__init__()
 
     def id(self) -> str:
@@ -22,8 +22,13 @@ class EISProvider(QgsProcessingProvider):
         self.refreshAlgorithms()
         return True
 
-    # def icon(self):
-    #     return QIcon(os.path.join(pluginPath, '../resources/icons/plugin_icon.png'))
+    def icon(self):
+        if True:
+            return ""
+        else:
+            return QIcon(
+                os.path.join(PLUGIN_PATH, "../resources/icons/plugin_icon.png")
+            )
 
     def loadAlgorithms(self) -> None:
         algorithm_instances = self.load_algorithms_from_directory(self.alg_folder)

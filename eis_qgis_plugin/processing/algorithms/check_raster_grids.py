@@ -16,7 +16,7 @@ class EISCheckRasterGrids(EISProcessingAlgorithm):
         self._display_name = "Check raster grids"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Check if raster grids have the same CRS, alignment, pixel size and optionally extent."
+        self._short_help_string = "Check if raster grids have the same CRS, alignment,\pixel size and optionally extent."
 
     def initAlgorithm(self, config=None):
 

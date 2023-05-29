@@ -1,0 +1,398 @@
+{
+    "iocg": {
+        "source": {
+            "Distance to intrusions": {
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Low",
+                    "deposit": "Low"
+                },
+                "keywords": ["geology", "lithology"]
+            }, "Distance to albitized country rocks": {
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "Moderate"
+                },
+                "keywords": ["geology", "lithology", "mineralogy"]
+            },"Distance to felsic (meta)volcanic rocks and subvolcanic rocks": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "lithology"]
+            },"Distance to high concentrations of Na, K or Mg+-Fe": {
+                "importance": {
+                    "regional": "Low",
+                    "camp": "High",
+                    "deposit": "-"
+                },
+                "keywords": ["geochemistry"]
+            },"Distance to mafic (and felsic) subvolcanic/intrusion rocks": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "lithology"]
+            }
+        },
+        "active pathway": {
+            "proxy_1": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            }, "proxy_2": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_3": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_4": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_5": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_6": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_7": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_8": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            }
+        },
+        "trap": {
+            "proxy_1": {
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "High",
+                    "deposit": "-"
+                },
+                "keywords": ["geology"]
+            }, "proxy_2": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "-",
+                    "deposit": "-"
+                },
+                "keywords": ["geophysics"]
+            },"proxy_3": {
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Low",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_4": {
+                "importance": {
+                    "regional": "Low",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geochemistry"]
+            },"proxy_5": {
+                "importance": {
+                    "regional": "Low",
+                    "camp": "High",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_6": {
+                "importance": {
+                    "regional": "-",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geochemistry"]
+            },"proxy_7": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_8": {
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            }
+        },
+        "modification": {
+            "proxy_1": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            }, "proxy_2": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_3": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_4": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_5": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_6": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_7": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            },"proxy_8": {
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+                "keywords": ["geology", "geophysics"]
+            }
+        }
+    },
+    "2nd mineral system": {
+        "proxy_1": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        }, "proxy_2": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_3": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_4": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_5": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_6": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_7": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_8": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        }
+    },
+    "third mineral system": {
+        "proxy_1": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },
+        "proxy_2": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_3": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_4": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_5": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_6": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_7": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_8": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        }
+    },
+    "other/all": {
+        "proxy_1": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },
+        "proxy_2": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_3": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_4": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_5": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_6": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_7": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        },"proxy_8": {
+            "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                },
+            "keywords": ["geology", "geophysics"]
+        }
+    }
+}

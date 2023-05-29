@@ -5,3 +5,4 @@ exclude = test_*
 extend-ignore =
             E203, # whitespace before ':'
             ANN101 # Missing type annotation for self in method
+            N802

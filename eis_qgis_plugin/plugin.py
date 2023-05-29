@@ -2,24 +2,30 @@ import os
 from typing import Callable, List, Optional
 
 from qgis.core import QgsApplication, QgsProject
+from qgis.gui import QgisInterface
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QInputDialog, QLineEdit, QWidget
+from qgis.PyQt.QtWidgets import (
+    QAction,
+    QInputDialog,
+    QLineEdit,
+    QMenu,
+    QToolButton,
+    QWidget,
+)
 from qgis.utils import iface
 
-from eis_qgis_plugin.processing.eis_provider import EISProvider
-from eis_qgis_plugin.qgis_plugin_tools.tools.custom_logging import (
-    setup_logger,
-    teardown_logger,
-)
-from eis_qgis_plugin.qgis_plugin_tools.tools.i18n import setup_translation
-from eis_qgis_plugin.qgis_plugin_tools.tools.resources import plugin_name
-from eis_qgis_plugin.settings import get_python_venv_path, save_python_venv_path
-from eis_qgis_plugin.wizard.wizard_explore import EISWizardExplore, EISWizardExploreBig
-from eis_qgis_plugin.wizard.wizard_main import EISWizardMain
-from eis_qgis_plugin.wizard.wizard_preprocess import EISWizardPreprocess
+from .processing.eis_provider import EISProvider
+from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logger
+from .qgis_plugin_tools.tools.i18n import setup_translation
+from .qgis_plugin_tools.tools.resources import plugin_name
+from .settings import get_python_venv_path, save_python_venv_path
+from .wizard.wizard_explore import EISWizardExplore, EISWizardExploreBig
+from .wizard.wizard_main import EISWizardMain
+from .wizard.wizard_preprocess import EISWizardPreprocess
+from .wizard.wizard_search import SearchDialog
 
-pluginPath = os.path.dirname(__file__)
+PLUGIN_PATH = os.path.dirname(__file__)
 
 
 class Plugin:
@@ -42,7 +48,7 @@ class Plugin:
 
         self.actions: List[QAction] = []
         self.menu = Plugin.name
-        self.iface = iface
+        self.iface: QgisInterface = iface
 
         # locale = QgsApplication.locale()
         # qmPath = '{}/i18n/wbt_for_qgis_{}.qm'.format(pluginPath, locale)
@@ -110,10 +116,10 @@ class Plugin:
 
         if add_to_toolbar:
             # Adds plugin icon to Plugins toolbar
-            iface.addToolBarIcon(action)
+            self.iface.addToolBarIcon(action)
 
         if add_to_menu:
-            iface.addPluginToMenu(self.menu, action)
+            self.iface.addPluginToMenu(self.menu, action)
 
         self.actions.append(action)
 
@@ -121,48 +127,79 @@ class Plugin:
 
     def initGui(self) -> None:  # noqa N802
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        self.add_action(
-            "",
-            text=Plugin.name,
-            callback=self.run,
-            parent=iface.mainWindow(),
-            add_to_toolbar=True,
-        )
+        # icon_path = os.path.join(pluginPath, "resources/icons/plugin_icon.png")  # A placeholder icon
+        icon_path = os.path.join(
+            PLUGIN_PATH, "resources/icons/icon4.png"
+        )  # A placeholder icon
 
-        self.add_action(
-            os.path.join(
-                pluginPath, "resources/icons/plugin_icon.png"
-            ),  # Some placeholder icon
-            text="Set Python Virtual Environment Path",
-            parent=iface.mainWindow(),
-            add_to_toolbar=True,
+        # main_action = self.add_action(
+        #     icon_path,
+        #     text="EIS Wizard Main",
+        #     callback=self.run,
+        #     parent=self.iface.mainWindow(),
+        #     add_to_toolbar=False,
+        #     add_to_menu=False
+        # )
+
+        venv_action = self.add_action(
+            "",
+            text="EIS settings",
             callback=self.set_python_venv_path,
+            parent=self.iface.mainWindow(),
+            add_to_toolbar=False,
+            add_to_menu=False,
         )
 
         # Add links to Wizard steps as separate buttons, at least for now
-        self.add_action(
-            "",
+        preprocess_action = self.add_action(
+            icon_path,
             text="EIS Preprocess",
-            parent=iface.mainWindow(),
-            add_to_toolbar=True,
+            parent=self.iface.mainWindow(),
             callback=self.open_preprocess,
+            add_to_toolbar=False,
+            add_to_menu=False,
         )
 
-        self.add_action(
+        explore_action = self.add_action(
             "",
             text="EIS Explore",
-            parent=iface.mainWindow(),
-            add_to_toolbar=True,
+            parent=self.iface.mainWindow(),
             callback=self.open_explore,
+            add_to_toolbar=False,
+            add_to_menu=False,
         )
 
-        self.add_action(
+        group_action = self.add_action(
             "",
-            text="Add group",
-            parent=iface.mainWindow(),
-            add_to_toolbar=True,
+            text="Testing: Add group",
+            parent=self.iface.mainWindow(),
+            add_to_toolbar=False,
+            add_to_menu=False,
             callback=self.add_layer_group,
         )
+
+        search_action = self.add_action(
+            "",
+            text="Testing: Open search",
+            parent=self.iface.mainWindow(),
+            callback=self.open_search,
+            add_to_toolbar=False,
+            add_to_menu=False,
+        )
+
+        self.popupMenu = QMenu(self.iface.mainWindow())
+        # self.popupMenu.addAction(main_action)
+        self.popupMenu.addAction(preprocess_action)
+        self.popupMenu.addAction(explore_action)
+        self.popupMenu.addAction(venv_action)
+        self.popupMenu.addAction(search_action)
+        self.popupMenu.addAction(group_action)
+
+        self.toolButton = QToolButton()
+        self.toolButton.setMenu(self.popupMenu)
+        self.toolButton.setDefaultAction(preprocess_action)
+        self.toolButton.setPopupMode(QToolButton.MenuButtonPopup)
+        self.actions.append(self.iface.addToolBarWidget(self.toolButton))
 
         self.initProcessing()
 
@@ -176,8 +213,8 @@ class Plugin:
     def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
-            iface.removePluginMenu(Plugin.name, action)
-            iface.removeToolBarIcon(action)
+            self.iface.removePluginMenu(Plugin.name, action)
+            self.iface.removeToolBarIcon(action)
         teardown_logger(Plugin.name)
 
         QgsApplication.processingRegistry().removeProvider(self.provider)
@@ -195,14 +232,20 @@ class Plugin:
             save_python_venv_path(python_path)
 
     def open_preprocess(self):
-        self.preprocess_window = EISWizardPreprocess(iface)
+        self.preprocess_window = EISWizardPreprocess()
         self.preprocess_window.show()
 
     def open_explore(self):
-        self.explore_window_big = EISWizardExploreBig(iface)
-        self.explore_window = EISWizardExplore(iface)
-        self.explore_window_big.show()
+        self.explore_window = EISWizardExplore()
         self.explore_window.show()
+
+    def open_explore_big(self):
+        self.explore_window_big = EISWizardExploreBig()
+        self.explore_window_big.show()
+
+    def open_search(self):
+        self.search_dialog = SearchDialog()
+        self.search_dialog.show()
 
     def log(self, message: str) -> None:
         """Pushes a message to QGIS log."""
@@ -212,17 +255,17 @@ class Plugin:
     def add_layer_group(self):
         root = QgsProject.instance().layerTreeRoot()
         eis_group = root.addGroup("EIS")
-        raw_group = eis_group.addGroup("Raw data")
+        _ = eis_group.addGroup("Raw data")
         processed_group = eis_group.addGroup("Processed data")
-        granite_group = processed_group.addGroup("Granite data")
-        fault_group = processed_group.addGroup("Fault lines data")
+        _ = processed_group.addGroup("Granite data")
+        _ = processed_group.addGroup("Fault lines data")
 
     def run(self):
         """Run method that performs all the real work"""
         self.first_start = True
         if self.first_start:
             self.first_start = False
-            self.wizard_window = EISWizardMain(iface)
+            self.wizard_window = EISWizardMain(self.iface)
 
         self.wizard_window.show()  # Show the dialog
         # result = self.test_dlg.exec_() # Run the dialog event loop
