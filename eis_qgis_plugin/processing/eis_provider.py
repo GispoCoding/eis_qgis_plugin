@@ -22,13 +22,10 @@ class EISProvider(QgsProcessingProvider):
         self.refreshAlgorithms()
         return True
 
-    def icon(self):
-        if True:
-            return ""
-        else:
-            return QIcon(
-                os.path.join(PLUGIN_PATH, "../resources/icons/plugin_icon.png")
-            )
+    # def icon(self):
+    #     return QIcon(
+    #         os.path.join(PLUGIN_PATH, "../resources/icons/plugin_icon.png")
+    #     )
 
     def loadAlgorithms(self) -> None:
         algorithm_instances = self.load_algorithms_from_directory(self.alg_folder)
