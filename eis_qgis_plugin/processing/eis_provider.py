@@ -9,7 +9,7 @@ PLUGIN_PATH = os.path.dirname(__file__)
 
 class EISProvider(QgsProcessingProvider):
     def __init__(self) -> None:
-        self.alg_folder = os.path.join(plugPLUGIN_PATHinPath, "algorithms")
+        self.alg_folder = os.path.join(PLUGIN_PATH, "algorithms")
         super().__init__()
 
     def id(self) -> str:
