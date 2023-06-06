@@ -214,10 +214,7 @@ import atexit
 
 from .colormap import *
 
-print("colormap imported")
 from .functions import *
-
-print("functions imported")
 
 from .graphicsItems.ArrowItem import *
 from .graphicsItems.AxisItem import *

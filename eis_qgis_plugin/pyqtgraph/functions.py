@@ -17,23 +17,10 @@ from collections import OrderedDict
 import numpy as np
 
 from . import Qt, debug, getConfigOption, reload
-
-print("Imported1")
 from .metaarray import MetaArray
-
-print("Imported2")
-
 from .Qt import QT_LIB, QtCore, QtGui
-
-print("Imported3")
-
 from .util.cupy_helper import getCupy
-
-print("Imported4")
-
 from .util.numba_helper import getNumbaFunctions
-
-print("Imported qt and other stuff")
 
 # in order of appearance in this file.
 # add new functions to this list only if they are to reside in pg namespace.
