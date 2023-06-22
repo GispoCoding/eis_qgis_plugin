@@ -1,8 +1,7 @@
 import os
-import re
+# import re
 import subprocess
-import time
-from typing import Dict, List
+from typing import Dict
 
 from qgis.core import (
     QgsProcessingAlgorithm,
@@ -185,7 +184,8 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
         )
 
-        progress_regex = re.compile(r"(\d+)%")
+        # TODO
+        # progress_regex = re.compile(r"(\d+)%")
 
         # while process.poll() is None:
         #     stdout = process.stdout.readline().strip()

@@ -1,14 +1,17 @@
 from qgis.core import QgsVectorLayer, QgsMapLayer, QgsStyle
 from qgis.gui import QgsMapLayerComboBox, QgsFieldComboBox, QgsColorButton, QgsColorRampButton, QgsOpacityWidget
-from qgis.PyQt.QtWidgets import QWidget, QComboBox, QPushButton, QVBoxLayout, QFormLayout
+from qgis.PyQt.QtWidgets import QWidget, QComboBox, QPushButton, QVBoxLayout, QFormLayout, QDialog
+from qgis.PyQt.QtWebKitWidgets import QWebView
+from qgis.PyQt import QtCore
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 from eis_qgis_plugin import pyqtgraph as pg
+
 from .plot_utils import generate_color_mapping, opacity_to_alpha
 
 
-FORM_CLASS: QWidget = load_ui("parallel_chart_tab.ui")
+FORM_CLASS: QWidget = load_ui("explore/parallel_chart_tab.ui")
 
 
 class ParallelChart(QWidget, FORM_CLASS):
@@ -21,7 +24,10 @@ class ParallelChart(QWidget, FORM_CLASS):
     line_opacity_parallel: QgsOpacityWidget
 
     plot_button_parallel: QPushButton
+    plot_button_parallel_plotly: QPushButton
+    plot_button_seaborn: QPushButton
     clear_button_parallel: QPushButton
+    clear_seaborn: QPushButton
 
     plot_style_form: QFormLayout
 
@@ -29,17 +35,47 @@ class ParallelChart(QWidget, FORM_CLASS):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.init_parallel_plotting()
+        self.init_parallel_plotting()   
 
         # Connect signals
         self.layer_selection_parallel.layerChanged.connect(self.update)
         self.plot_button_parallel.clicked.connect(self.plot_parallel_coordinates)
+        self.plot_button_parallel_plotly.clicked.connect(self.plot_parallel_coordinates_plotly)
+        self.plot_button_seaborn.clicked.connect(self.open_seaborn_graph)
         self.clear_button_parallel.clicked.connect(self.clear)
+        self.clear_seaborn.clicked.connect(self.clear_fig)
 
         self.update(self.layer_selection_parallel.currentLayer())
 
 
     def init_parallel_plotting(self):
+
+        # window = pg.GraphicsLayoutWidget()
+        # self.plot_widget_parallel = win.addPlot()   
+
+        # # Assuming you have a list of your variable names
+        # variable_names = ["var1", "var2", "var3"]
+
+        # axis_items = []
+        # for i, var in enumerate(variable_names):
+        #     # create an AxisItem for this variable
+        #     axis = AxisItem("left")
+        #     # set the label of the AxisItem
+        #     axis.setLabel(var)
+        #     # Create a plot with axis
+        #     plot_item = window.addPlot(axisItems={'left': axis})
+        #     # add the AxisItem to the plot
+        #     axis.linkToView(plot_item.vb)
+        #     axis_items.append(axis)
+
+        # # Assuming you have some data for your variables
+        # data = [[1, 2, 3], [2, 3, 1], [3, 1, 2]]
+
+        # for i, d in enumerate(data):
+        #     # create a plot for this data, linked to the corresponding AxisItem
+        #     plot_item.plot(d, pen=(i, len(data)))
+
+
         self.plot_widget_parallel = pg.PlotWidget(parent=self.plot_container_parallel)
         self.plot_widget_parallel.setMinimumSize(450, 430)
         self.plot_widget_parallel.setBackground("w")
@@ -126,3 +162,77 @@ class ParallelChart(QWidget, FORM_CLASS):
         bottom_axis = self.plot_widget_parallel.getAxis("bottom")
         # print(numerical_field_names)
         bottom_axis.setTicks([field_labels])
+
+
+    def plot_parallel_coordinates_plotly(self):
+        import plotly.express as px
+        df = px.data.iris()
+        fig = px.parallel_coordinates(
+            data_frame=df,
+            color="species_id",
+            labels = {
+                "species_id": "Species",
+                "sepal_width": "Sepal Width",
+                "sepal_length": "Sepal Length",
+                "petal_width": "Petal Width",
+                "petal_length": "Petal Length"
+            },
+            color_continuous_scale=px.colors.diverging.Tealrose,
+            color_continuous_midpoint=2
+        )
+        fig.write_html("/home/niko/Downloads/plotly_parallel.html")
+
+        self.open_plotly_graph()
+    
+    def open_plotly_graph(self):
+        self.plot_dialog = QDialog()
+
+        layout = QVBoxLayout()
+        self.plot_dialog.setLayout(layout)
+
+        web_widget = QWebView(self.plot_dialog)
+        # web_widget.setUrl(QtCore.QUrl("file:///home/niko/Downloads/plotly_parallel.html"))
+        web_widget.setUrl(QtCore.QUrl("file:///home/niko/Downloads/plotly_interactive_test.html"))
+        layout.addWidget(web_widget)
+        self.plot_dialog.show()
+
+    def open_seaborn_graph(self):
+        from matplotlib.figure import Figure
+        from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+        from PyQt5.QtWidgets import QDialog, QVBoxLayout
+        from seaborn import barplot
+
+        # self.plot_dialog = QDialog()
+
+        # layout = QVBoxLayout()
+        # self.plot_dialog.setLayout(layout)
+
+        # pixmap = QtGui.QPixmap("/home/niko/Downloads/sns_out.svg")
+        # label = QLabel()
+        # label.setPixmap(pixmap)
+
+        # layout.addWidget(label)
+        # self.plot_dialog.show()
+        
+        # In your main application / widget, you would then create and show the dialog:
+        dialog = QDialog()
+        self.fig = Figure()
+        self.canvas = FigureCanvas(self.fig)
+
+        # Create a Seaborn plot
+        ax = self.fig.add_subplot(111)
+        barplot(x=[1, 2, 3, 4], y=[1, 2, 3, 4], ax=ax)
+
+        # Add the Matplotlib canvas to the dialog
+        layout = QVBoxLayout()
+        layout.addWidget(self.canvas)
+        dialog.setLayout(layout)
+        self.canvas.draw()
+
+        dialog.show()
+        dialog.exec()
+
+
+    def clear_fig(self):
+        self.fig.clear()
+        self.canvas.draw()

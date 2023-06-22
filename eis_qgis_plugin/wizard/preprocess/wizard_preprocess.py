@@ -16,19 +16,17 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
-FORM_CLASS: QDialog = load_ui("wizard_preprocess_iocg.ui")
-path = Path(os.path.dirname(__file__)).parent
+FORM_CLASS: QDialog = load_ui("preprocess/wizard_preprocess_iocg.ui")
+path = Path(os.path.dirname(__file__)).parent.parent
 
 
 class EISWizardPreprocess(QDialog, FORM_CLASS):
     def __init__(self) -> None:
         super().__init__()
         self.setupUi(self)
-        self.iface = iface
 
         self.proxy_widgets: Dict[str, Tuple[str, list, QWidget]] = {}
 

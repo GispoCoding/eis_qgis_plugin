@@ -121,7 +121,7 @@
       <widget class="QPushButton" name="pushButton">
        <property name="geometry">
         <rect>
-         <x>120</x>
+         <x>110</x>
          <y>40</y>
          <width>89</width>
          <height>25</height>
@@ -162,6 +162,45 @@
       <attribute name="title">
        <string>Tool 2</string>
       </attribute>
+      <widget class="QLabel" name="label_2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>50</y>
+         <width>67</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Step 1</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_6">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>100</y>
+         <width>67</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Step 2</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_7">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>150</y>
+         <width>67</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Step 3</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">

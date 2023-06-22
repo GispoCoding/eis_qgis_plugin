@@ -11,7 +11,7 @@ from qgis.PyQt.QtWidgets import (
     QLineEdit,
     QMenu,
     QToolButton,
-    QWidget,
+    QWidget
 )
 from qgis.utils import iface
 
@@ -20,9 +20,10 @@ from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logge
 from .qgis_plugin_tools.tools.i18n import setup_translation
 from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
-from .wizard.wizard_explore import EISWizardExplore, EISWizardExploreBig
+from .wizard.explore.wizard_explore import EISWizardExplore, EISWizardExploreBig
 from .wizard.wizard_main import EISWizardMain
-from .wizard.wizard_preprocess import EISWizardPreprocess
+from .wizard.preprocess.wizard_preprocess import EISWizardPreprocess
+from .wizard.model.model_wizard import EISWizardModeling
 from .wizard.wizard_search import SearchDialog
 
 PLUGIN_PATH = os.path.dirname(__file__)
@@ -169,6 +170,15 @@ class Plugin:
             add_to_menu=False,
         )
 
+        model_action = self.add_action(
+            "",
+            text="EIS Modeling",
+            parent=self.iface.mainWindow(),
+            callback=self.open_modeling,
+            add_to_toolbar=False,
+            add_to_menu=False,
+        )
+
         group_action = self.add_action(
             "",
             text="Testing: Add group",
@@ -191,6 +201,7 @@ class Plugin:
         # self.popupMenu.addAction(main_action)
         self.popupMenu.addAction(preprocess_action)
         self.popupMenu.addAction(explore_action)
+        self.popupMenu.addAction(model_action)
         self.popupMenu.addAction(venv_action)
         self.popupMenu.addAction(search_action)
         self.popupMenu.addAction(group_action)
@@ -242,6 +253,10 @@ class Plugin:
     def open_explore_big(self):
         self.explore_window_big = EISWizardExploreBig()
         self.explore_window_big.show()
+
+    def open_modeling(self):
+        self.model_window = EISWizardModeling()
+        self.model_window.show()
 
     def open_search(self):
         self.search_dialog = SearchDialog()

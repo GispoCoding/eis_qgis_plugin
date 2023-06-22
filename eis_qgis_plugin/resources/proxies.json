@@ -7,7 +7,8 @@
                     "camp": "Low",
                     "deposit": "Low"
                 },
-                "keywords": ["geology", "lithology"]
+                "keywords": ["geology", "lithology"],
+                "ui_template": "ui_1"
             }, "Distance to albitized country rocks": {
                 "importance": {
                     "regional": "Moderate",

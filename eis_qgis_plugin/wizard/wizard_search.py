@@ -10,16 +10,14 @@ from qgis.PyQt.QtWidgets import (
     QScrollArea,
     QSizePolicy,
     QVBoxLayout,
-    QWidget,
+    QWidget
 )
-from qgis.utils import iface
 
 
 class SearchDialog(QDialog):
     def __init__(self) -> None:
         super().__init__()
         # self.setupUi(self)
-        self.iface = iface
 
         self.main_layout = QVBoxLayout()
 
