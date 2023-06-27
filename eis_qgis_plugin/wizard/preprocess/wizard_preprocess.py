@@ -5,7 +5,6 @@ from typing import Dict, List, Tuple
 
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtWidgets import (
-    QComboBox,
     QDialog,
     QGridLayout,
     QHBoxLayout,

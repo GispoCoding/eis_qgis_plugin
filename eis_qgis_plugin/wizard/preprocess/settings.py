@@ -1,21 +1,9 @@
-import json
-import os
-from pathlib import Path
-from typing import Dict, List, Tuple
-
-from qgis.PyQt import QtGui
 from qgis.PyQt.QtWidgets import (
     QComboBox,
     QDialog,
-    QGridLayout,
-    QHBoxLayout,
     QLabel,
-    QLineEdit,
     QPushButton,
-    QScrollArea,
-    QSizePolicy,
     QVBoxLayout,
-    QWidget,
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
