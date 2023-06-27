@@ -45,6 +45,6 @@ class EISWizardPreprocessSettings(QDialog, FORM_CLASS):
     def send_settings(self):
         study_scale = self.combobox_scale.currentText()
         mineral_system = self.combobox_mineral.currentText()
+        self.close()
         main_window = EISWizardPreprocess(study_scale, mineral_system)
         main_window.exec()
-        self.close()
