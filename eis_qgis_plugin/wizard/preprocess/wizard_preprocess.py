@@ -130,7 +130,6 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
         # Importance label
         importance_label = QLabel(importance)
 
-        # Use self.importance_value function or something like if importance_label.text() == "High": etc?
         if importance_label.text() != "Importance":     
             if self.importance_value(importance_label.text()) == 1:
                 importance_label.setStyleSheet("color: red;")
@@ -142,7 +141,6 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
 
         # Keywords label
         keywords_label = QLabel()
-        # Colors from dictionary? Should be given as parameter(?)
         colors = {"geology": "sandybrown",
                   "geophysics": "blue",
                   "geochemistry": "orange",
