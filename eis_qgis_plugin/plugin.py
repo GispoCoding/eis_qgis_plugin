@@ -22,7 +22,7 @@ from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
 from .wizard.explore.wizard_explore import EISWizardExplore, EISWizardExploreBig
 from .wizard.wizard_main import EISWizardMain
-from .wizard.preprocess.settings import EISWizardPreprocessSettings
+from .wizard.preprocess.wizard_preprocess import EISWizardPreprocess
 from .wizard.model.model_wizard import EISWizardModeling
 from .wizard.wizard_search import SearchDialog
 
@@ -243,7 +243,7 @@ class Plugin:
             save_python_venv_path(python_path)
 
     def open_preprocess(self):
-        self.preprocess_window = EISWizardPreprocessSettings()
+        self.preprocess_window = EISWizardPreprocess()
         self.preprocess_window.show()
 
     def open_explore(self):
