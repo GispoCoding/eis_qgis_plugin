@@ -24,7 +24,7 @@ path = Path(os.path.dirname(__file__)).parent.parent
 
 
 class EISWizardPreprocess(QDialog, FORM_CLASS):
-    def __init__(self, scale, mineral_system) -> None:
+    def __init__(self, scale="regional", mineral_system="iocg") -> None:
         super().__init__()
         self.setupUi(self)
 
@@ -143,9 +143,9 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
         # Keywords label
         keywords_label = QLabel()
         # Colors from dictionary? Should be given as parameter(?)
-        colors = {"geology": "lawngreen",
+        colors = {"geology": "sandybrown",
                   "geophysics": "blue",
-                  "geochemistry": "purple",
+                  "geochemistry": "orange",
                   "lithology": "darkblue",
                   "mineralogy": "brown"}
         colored_text = ""
