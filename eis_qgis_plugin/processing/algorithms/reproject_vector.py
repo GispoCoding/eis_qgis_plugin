@@ -1,5 +1,5 @@
 from qgis.core import (
-    QgsProcessingParameterNumber,
+    QgsProcessingParameterCrs,
     QgsProcessingParameterVectorDestination,
     QgsProcessingParameterVectorLayer,
 )
@@ -27,7 +27,7 @@ class EISReprojectVector(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterNumber(
+            QgsProcessingParameterCrs(
                 name=self.alg_parameters[1], description="Target crs"
             )
         )
