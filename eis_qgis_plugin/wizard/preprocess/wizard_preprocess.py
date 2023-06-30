@@ -18,6 +18,7 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.preprocess.process import EISWizardPreprocessProcess
 
 FORM_CLASS: QDialog = load_ui("preprocess/wizard_preprocess_iocg.ui")
 path = Path(os.path.dirname(__file__)).parent.parent
@@ -161,6 +162,7 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
                 process_button,
                 load_button,
             )
+            process_button.clicked.connect(self.process_button)
 
     def create_active_pathway(self):
         tab: QWidget = self.pathway_tab
@@ -275,6 +277,10 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
                 keywords_label.hide()
                 process_button.hide()
                 load_button.hide()
+
+    def process_button(self):
+        process_window = EISWizardPreprocessProcess()
+        process_window.exec()
 
         # self.create_scroll_area()
 
