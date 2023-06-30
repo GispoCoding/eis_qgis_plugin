@@ -39,7 +39,7 @@
                 "keywords": ["geology", "lithology"]
             }
         },
-        "active pathway": {
+        "pathway": {
             "proxy_1": {
                 "importance": {
                     "regional": "High",
@@ -98,7 +98,7 @@
                 "keywords": ["geology", "geophysics"]
             }
         },
-        "trap": {
+        "depositional": {
             "proxy_1": {
                 "importance": {
                     "regional": "Moderate",
@@ -157,7 +157,7 @@
                 "keywords": ["geology", "geophysics"]
             }
         },
-        "modification": {
+        "mineralisation": {
             "proxy_1": {
                 "importance": {
                     "regional": "High",
