@@ -1,6 +1,6 @@
 {
     "iocg": {
-        "Source": {
+        "source": {
             "Distance to intrusions": {
                 "importance": {
                     "regional": "Moderate",
@@ -64,7 +64,7 @@
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geology"]
+                "keywords": ["geology", "lithology", "mineralogy"]
             },"Distance to magmatic intrusion of the relevant age (age from geology and radiometric data; distance from geophysical data)": {
                 "importance": {
                     "regional": "High",
@@ -123,7 +123,7 @@
                 "keywords": ["geology", "lithology"]
             }
         },
-        "Active/structural pathways": {
+        "pathway": {
             "Distance to structures": {
                 "importance": {
                     "regional": "High",
@@ -182,7 +182,7 @@
                 "keywords": ["geology"]
             }
         },
-        "Depositional processes": {
+        "depositional": {
             "Distance to rock units displaying -sodic alteration signature -potassic and/or calcic alteration signature": {
                 "importance": {
                     "regional": "Moderate",
@@ -297,7 +297,7 @@
                 "keywords": ["geochemistry"]
             }
         },
-        "Mineralisation, remobilisation, modification": {
+        "mineralisation": {
             "Distance to kinks, offsets and breaks in magnetic data": {
                 "importance": {
                     "regional": "Low",
