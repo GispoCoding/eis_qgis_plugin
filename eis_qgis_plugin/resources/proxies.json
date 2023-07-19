@@ -130,49 +130,49 @@
                     "camp": "High",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geology"]
+                "keywords": ["geology", "structures"]
             },"Distance to high order structrues, interpretated from gravity worms": {
                 "importance": {
                     "regional": "High",
                     "camp": "High",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geophysics"]
+                "keywords": ["geophysics", "gravity"]
             },"Distance to lower order structures": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geology"]
+                "keywords": ["geology", "structures"]
             },"Distance to lower order structrues, interpretated from pseudo gravity worms": {
                 "importance": {
                     "regional": "Low",
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geophysics"]
+                "keywords": ["geophysics", "gravity"]
             },"Distance to kinks, offsets and breaks (interpretation from magnetic data, e.g. gradient)": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geology"]
-            },"Distance to high structure (interpretation of high density structures derived from geological map or airborne VLF)": {
+                "keywords": ["geology", "magnetics", "structures"]
+            },"Distance to high density structure (interpretation of high density structures derived from geological map or airborne VLF)": {
                 "importance": {
                     "regional":"Moderate",
                     "camp": "Moderate",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geology"]
+                "keywords": ["geology", "structures", "airborne VLF"]
             },"Distance to crustal boundary (interpretation from  solid geology, seismic reflection, passive seismic, granity, magnetic data)": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geophysics"]
+                "keywords": ["geophysics", "structures", "gravimetry", "magnetics", "seismics"]
             },"Distance to intensity of structure": {
                 "importance": {
                     "regional": "Moderate",
@@ -183,28 +183,7 @@
             }
         },
         "depositional": {
-            "Distance to rock units displaying -sodic alteration signature -potassic and/or calcic alteration signature": {
-                "importance": {
-                    "regional": "Moderate",
-                    "camp": "High",
-                    "deposit": "High"
-                },
-                "keywords": []
-            },"Low Ti signature in Fe-oxides": {
-                "importance": {
-                    "regional": "Low",
-                    "camp": "Low",
-                    "deposit": "High"
-                },
-                "keywords": []
-            },"Distance to (Sub) economic Cu-Au concentrations": {
-                "importance": {
-                    "regional": "Low",
-                    "camp": "High",
-                    "deposit": "High"
-                },
-                "keywords": []
-            }," Distance to altered rocks": {
+            " Distance to altered rocks": {
             "importance": {
                 "regional": "Moderate",
                 "camp": "Moderate",
@@ -224,7 +203,7 @@
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geophysics"]
+                "keywords": ["geophysics", "magnetics"]
             },"Elevated V in till": {
                 "importance":{
                     "regional": "Moderate",
@@ -252,14 +231,14 @@
                     "camp": "Moderate",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geophysics"]
+                "keywords": ["geophysics", "radiometry"]
             },"Distance to high-magnetic field anomalies": {
                 "importance": {
                     "regional": "High",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geophysics"]
+                "keywords": ["geophysics", "magnetics"]
             },"Presence of carbonate horizons in metavolcanic rocks": {
                 "importance": {
                     "regional": "Moderate",
@@ -295,6 +274,27 @@
                     "deposit": "High"
                 },
                 "keywords": ["geochemistry"]
+            },"Distance to rock units displaying -sodic alteration signature -potassic and/or calcic alteration signature": {
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "High",
+                    "deposit": "High"
+                },
+                "keywords": ["geology", "geochemistry"]
+            },"Low Ti signature in Fe-oxides": {
+                "importance": {
+                    "regional": "Low",
+                    "camp": "Low",
+                    "deposit": "High"
+                },
+                "keywords": ["geology", "geochemistry"]
+            },"Distance to (Sub) economic Cu-Au concentrations": {
+                "importance": {
+                    "regional": "Low",
+                    "camp": "High",
+                    "deposit": "High"
+                },
+                "keywords": ["geology", "geochemistry"]
             }
         },
         "mineralisation": {
@@ -304,14 +304,14 @@
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geology"]
-            },"Distance to structures": {
+                "keywords": ["geology", "structures", "magnetics"]
+            },"Distance to structures of high density/intensity": {
                 "importance": {
                     "regional": "-",
                     "camp": "-",
                     "deposit": "Low"
                 },
-                "keywords": ["geology"]
+                "keywords": ["geology", "faults", "structures"]
             },"Distance to elevated REE, Fe, Cu, Co, Au, Bi, Mo anomalies": {
                 "importance": {
                     "regional": "High",
@@ -322,183 +322,41 @@
             }
         }
     },
-    "2nd mineral system": {
-        "proxy_1": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        }, "proxy_2": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_3": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_4": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_5": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_6": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_7": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_8": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
+    "li-pegm": {
+        "source": {
+
+        },
+        "pathway": {
+
+        },
+        "depositional": {
+
+        },
+        "timing_of_mineralisation": {
+
+        },
+        "modification/remomibilization": {
+
         }
     },
-    "third mineral system": {
-        "proxy_1": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
+    "vms": {
+        "source": {
+
         },
-        "proxy_2": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_3": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_4": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_5": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_6": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_7": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_8": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        }
-    },
-    "other/all": {
-        "proxy_1": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
+        "pathway": {
+
         },
-        "proxy_2": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_3": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_4": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_5": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_6": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_7": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
-        },"proxy_8": {
-            "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "-"
-                },
-            "keywords": ["geology", "geophysics"]
+        "depositional": {
+
+        },
+        "timing_of_mineralisation": {
+
+        },
+        "mineralisation_remobilization": {
+
+        },
+        "other": {
+            
         }
     }
 }
