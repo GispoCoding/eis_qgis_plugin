@@ -7,11 +7,11 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISKmeans(EISProcessingAlgorithm):
+class EISKMeans(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "kmeans"
+        self._name = "k_means"
         self._display_name = "K-means clustering"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
