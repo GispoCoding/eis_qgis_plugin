@@ -24,6 +24,7 @@ from qgis.core import (
     QgsProcessingParameterString,
     QgsProcessingParameterVectorDestination,
     QgsProcessingParameterVectorLayer,
+    QgsProcessingParameterPoint,
 )
 
 from eis_qgis_plugin.settings import get_python_venv_path
@@ -109,6 +110,14 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 layers = self.parameterAsLayerList(parameters, name, context)
                 [args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
+
+            # TODO check if works
+            elif isinstance(param, QgsProcessingParameterPoint):
+                center_coords = self.parameterAsPoint(parameters, name, context)
+                latitude = center_coords.y()
+                longitude = center_coords.x()
+                args.append(latitude)
+                args.append(longitude)
 
             # TODO check if works
             elif isinstance(param, QgsProcessingParameterFile):
