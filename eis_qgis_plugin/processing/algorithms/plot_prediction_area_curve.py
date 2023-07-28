@@ -1,5 +1,5 @@
 from qgis.core import (
-    QgsProcessingParameterMatrix,
+    QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,    
 )
 
@@ -26,19 +26,19 @@ class EISPlotPredictionAreaCurve(EISProcessingAlgorithm):
             "plot_figure"]
 
         self.addParameter(
-            QgsProcessingParameterMatrix(
+            QgsProcessingParameterFile(
                 name=self.alg_parameters[0], description="True positive rate values"
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterMatrix(
+            QgsProcessingParameterFile(
                 name=self.alg_parameters[1], description="Proportion of area values"
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterMatrix(
+            QgsProcessingParameterFile(
                 name=self.alg_parameters[2], description="Threshold values"
             )
         )
