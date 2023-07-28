@@ -1,6 +1,6 @@
 from qgis.core import (
+    QgsProcessingParameterBand,
     QgsProcessingParameterFileDestination,
-    QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterVectorLayer
 )
@@ -36,8 +36,8 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[2], description="Band index"
+            QgsProcessingParameterBand(
+                name=self.alg_parameters[2], description="Raster band"
             )
         )
 
