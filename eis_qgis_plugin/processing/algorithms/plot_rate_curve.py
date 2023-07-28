@@ -1,6 +1,6 @@
 from qgis.core import (
+    QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,
-    QgsProcessingParameterMatrix,
     QgsProcessingParameterString,
 )
 
@@ -23,13 +23,13 @@ class EISPlotRateCurve(EISProcessingAlgorithm):
         self.alg_parameters = ["x_values", "y_values", "plot_type", "plot_figure"]
 
         self.addParameter(
-            QgsProcessingParameterMatrix(
+            QgsProcessingParameterFile(
                 name=self.alg_parameters[0], description="False positive rate or proportion of area"
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterMatrix(
+            QgsProcessingParameterFile(
                 name=self.alg_parameters[1], description="True positive rate"
             )
         )
