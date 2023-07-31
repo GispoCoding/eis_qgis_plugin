@@ -1,7 +1,7 @@
 from qgis.core import (
     QgsProcessingParameterCrs,
+    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterVectorDestination,
-    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -21,7 +21,7 @@ class EISReprojectVector(EISProcessingAlgorithm):
         self.alg_parameters = ["input_vector", "target_crs", "output_vector"]
 
         self.addParameter(
-            QgsProcessingParameterVectorLayer(
+            QgsProcessingParameterFeatureSource(
                 name=self.alg_parameters[0], description="Input vector"
             )
         )

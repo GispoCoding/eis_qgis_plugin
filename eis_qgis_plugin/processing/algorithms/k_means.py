@@ -1,5 +1,5 @@
 from qgis.core import (
-    QgsProcessingParameterFolderDestination,
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
 )
@@ -19,7 +19,12 @@ class EISKMeans(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         
-        self.alg_parameters = ["input_raster", "clusters", "random_state", "output_folder"]
+        self.alg_parameters = [
+            "input_raster",
+            "clusters",
+            "random_state",
+            "output_file"
+        ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -40,7 +45,7 @@ class EISKMeans(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterFolderDestination(
-                name=self.alg_parameters[3], description="Output folder"
+            QgsProcessingParameterFileDestination(
+                name=self.alg_parameters[3], description="Output file"
             )
         )

@@ -13,8 +13,8 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
 
         self._name = "fuzzy_overlay"
         self._display_name = "Fuzzy overlay"
-        self._group = "Modelling"
-        self._group_id = "modelling"
+        self._group = "Prediction"
+        self._group_id = "prediction"
         self._short_help_string = "Compute fuzzy overlay"
 
     def initAlgorithm(self, config=None):

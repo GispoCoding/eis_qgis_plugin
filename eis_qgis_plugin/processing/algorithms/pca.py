@@ -1,5 +1,5 @@
 from qgis.core import (
-    QgsProcessingParameterFolderDestination,
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
 )
@@ -19,7 +19,7 @@ class EISPca(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
 
-        self.alg_parameters = ["input_raster", "components", "output_folder"]
+        self.alg_parameters = ["input_raster", "components", "output_file"]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -35,7 +35,7 @@ class EISPca(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterFolderDestination(
-                name=self.alg_parameters[2], description="Output folder"
+            QgsProcessingParameterFileDestination(
+                name=self.alg_parameters[2], description="Output file"
             )
         )

@@ -1,7 +1,7 @@
 from qgis.core import (
+    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterVectorLayer
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -28,7 +28,7 @@ class EISDistanceComputation(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterVectorLayer(
+            QgsProcessingParameterFeatureSource(
                 name=self.alg_parameters[1], description="Geometries"
             )
         )

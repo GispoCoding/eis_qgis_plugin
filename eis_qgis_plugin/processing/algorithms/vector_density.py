@@ -1,8 +1,8 @@
 from qgis.core import (
+    QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterVectorLayer,
-    QgsProcessingParameterFolderDestination
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -20,10 +20,16 @@ class EISVectorDensity(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         
-        self.alg_parameters = ["input_vectors", "resolution", "raster_profile", "buffer_value", "output_raster"]
+        self.alg_parameters = [
+            "input_vectors",
+            "resolution",
+            "raster_profile",
+            "buffer_value",
+            "output_raster"
+        ]
 
         self.addParameter(
-            QgsProcessingParameterVectorLayer(
+            QgsProcessingParameterFeatureSource(
                 name=self.alg_parameters[0], description="Input vectors"
             )
         )
@@ -47,7 +53,7 @@ class EISVectorDensity(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterFolderDestination(
+            QgsProcessingParameterFileDestination(
                 name=self.alg_parameters[4], description="Output vector data and metadata"
             )
         )

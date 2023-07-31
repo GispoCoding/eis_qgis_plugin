@@ -20,7 +20,12 @@ class EISPlotRateCurve(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         
-        self.alg_parameters = ["x_values", "y_values", "plot_type", "plot_figure"]
+        self.alg_parameters = [
+            "x_values",
+            "y_values",
+            "plot_type",
+            "plot_figure"
+        ]
 
         self.addParameter(
             QgsProcessingParameterFile(

@@ -1,8 +1,8 @@
 from qgis.core import (
     QgsProcessingParameterBand,
+    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterVectorLayer
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -21,7 +21,13 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         
-        self.alg_parameters = ["input_raster", "input_deposits", "band", "negatives", "output_metrics"]
+        self.alg_parameters = [
+            "input_raster",
+            "input_deposits",
+            "band",
+            "negatives",
+            "output_metrics"
+        ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -30,7 +36,7 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterVectorLayer(
+            QgsProcessingParameterFeatureSource(
                 name=self.alg_parameters[1], description="Mineral deposits"
             )
         )
@@ -42,7 +48,7 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterVectorLayer(
+            QgsProcessingParameterFeatureSource(
                 name=self.alg_parameters[3], description="Negative locations"
             )
         )
