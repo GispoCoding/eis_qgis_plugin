@@ -1,4 +1,5 @@
 from qgis.core import (
+    QgsProcessingParameterEnum,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
@@ -25,6 +26,7 @@ class EISVectorDensity(EISProcessingAlgorithm):
             "resolution",
             "raster_profile",
             "buffer_value",
+            "statistic",
             "output_raster"
         ]
 
@@ -36,24 +38,33 @@ class EISVectorDensity(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[1], description="Cell size"
+                name=self.alg_parameters[1], description="Cell size", optional=True
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[2], description="Raster profile"
+                name=self.alg_parameters[2], description="Raster profile", optional=True
             )
         )
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[3], description="Buffer"
+                name=self.alg_parameters[3], description="Buffer", optional=True
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                name=self.alg_parameters[4],
+                description="Statistic",
+                options=["density", "count"],
+                defaultValue="density" 
             )
         )
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[4], description="Output vector data and metadata"
+                name=self.alg_parameters[5], description="Output vector data and metadata"
             )
         )

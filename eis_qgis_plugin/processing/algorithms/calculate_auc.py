@@ -17,7 +17,7 @@ class EISCalculateAuc(EISProcessingAlgorithm):
         self._short_help_string = "Calculate area under curve (AUC)"
 
     def initAlgorithm(self, config=None):
-
+        # TODO: Give input data in some other form? At least, not as several files.
         self.alg_parameters = [
             "x_values",
             "y_values",

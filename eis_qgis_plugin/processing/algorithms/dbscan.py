@@ -1,7 +1,7 @@
 from qgis.core import (
+    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -20,15 +20,15 @@ class EISDbscan(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         
         self.alg_parameters = [
-            "input_raster",
+            "input_geometries",
             "max_distance",
             "min_samples",
             "output_file"
         ]
 
         self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Input raster"
+            QgsProcessingParameterFeatureSource(
+                name=self.alg_parameters[0], description="Input geometries"
             )
         )
 

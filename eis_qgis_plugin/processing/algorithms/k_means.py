@@ -1,7 +1,7 @@
 from qgis.core import (
+    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -20,27 +20,27 @@ class EISKMeans(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         
         self.alg_parameters = [
-            "input_raster",
+            "input_geometries",
             "clusters",
             "random_state",
             "output_file"
         ]
 
         self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Input raster"
+            QgsProcessingParameterFeatureSource(
+                name=self.alg_parameters[0], description="Input geometries"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[1], description="Number of clusters"
+                name=self.alg_parameters[1], description="Number of clusters", optional=True
             )
         )
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[2], description="Random state"
+                name=self.alg_parameters[2], description="Random state", optional=True
             )
         )
 

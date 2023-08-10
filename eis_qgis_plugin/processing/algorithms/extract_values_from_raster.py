@@ -1,8 +1,9 @@
 from qgis.core import (
+    QgsProcessing,
     QgsProcessingParameterString,
     QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterRasterLayer,
     QgsProcessingParameterFileDestination,
+    QgsProcessingParameterMultipleLayers,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -27,8 +28,8 @@ class EISExtractValuesFromRaster(EISProcessingAlgorithm):
         ]
 
         self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Input raster"
+            QgsProcessingParameterMultipleLayers(
+                name=self.alg_parameters[0], description="Input rasters", layerType=QgsProcessing.TypeRaster 
             )
         )
 
@@ -40,7 +41,7 @@ class EISExtractValuesFromRaster(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterString(
-                name=self.alg_parameters[2], multiLine=True, description="Raster column names"
+                name=self.alg_parameters[2], multiLine=True, description="Raster column names", optional=True
             )
         )
 

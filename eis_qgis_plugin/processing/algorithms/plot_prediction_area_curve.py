@@ -18,7 +18,7 @@ class EISPlotPredictionAreaCurve(EISProcessingAlgorithm):
         self._short_help_string = "Plot prediction-area (P-A) curve"
 
     def initAlgorithm(self, config=None):
-        
+        # TODO: Give input data in some other form? At least, not as several files.
         self.alg_parameters = [
             "true_positive_rate_values",
             "proportion_of_area_values",

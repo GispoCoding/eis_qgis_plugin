@@ -43,13 +43,13 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterBand(
-                name=self.alg_parameters[2], description="Raster band"
+                name=self.alg_parameters[2], description="Raster band", defaultValue=1
             )
         )
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[3], description="Negative locations"
+                name=self.alg_parameters[3], description="Negative locations", optional=True
             )
         )
 

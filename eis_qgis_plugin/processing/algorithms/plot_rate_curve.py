@@ -1,7 +1,7 @@
 from qgis.core import (
+    QgsProcessingParameterEnum,
     QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,
-    QgsProcessingParameterString,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -19,7 +19,7 @@ class EISPlotRateCurve(EISProcessingAlgorithm):
         self._short_help_string = "Plot success rate, prediction rate or ROC curve"
 
     def initAlgorithm(self, config=None):
-        
+        # TODO: Give input data in some other form? At least, not as several files.
         self.alg_parameters = [
             "x_values",
             "y_values",
@@ -40,8 +40,11 @@ class EISPlotRateCurve(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterString(
-                name=self.alg_parameters[2], description="Plot type"
+            QgsProcessingParameterEnum(
+                name=self.alg_parameters[2],
+                description="Plot type",
+                options=["success_rate", "prediction_rate", "roc"],
+                defaultValue="success_rate"
             )
         )
 

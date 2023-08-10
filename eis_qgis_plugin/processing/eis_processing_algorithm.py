@@ -113,11 +113,8 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             # TODO check if works
             elif isinstance(param, QgsProcessingParameterPoint):
-                center_coords = self.parameterAsPoint(parameters, name, context)
-                latitude = center_coords.y()
-                longitude = center_coords.x()
-                args.append(latitude)
-                args.append(longitude)
+                coords = self.parameterAsPoint(parameters, name, context)
+                arg = (coords.x(), coords.y())
 
             # TODO check if works
             elif isinstance(param, QgsProcessingParameterFile):
