@@ -24,7 +24,7 @@ path = Path(os.path.dirname(__file__)).parent.parent
 
 
 class EISWizardPreprocess(QDialog, FORM_CLASS):
-    def __init__(self) -> None:
+    def __init__(self, scale, mineral_system) -> None:
         super().__init__()
         self.setupUi(self)
 
@@ -34,7 +34,7 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
         self.bold_font.setBold(True)
 
         # self.create_active_pathway()
-        self.init_proxies(mineral_system="iocg", scale="regional")
+        self.init_proxies(mineral_system, scale)
 
         # self.overview_tab.repaint()
         self.source_tab.repaint()
@@ -58,7 +58,7 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
         # Read json
         with open(os.path.join(path, "resources/proxies.json"), "r") as f:
             data = json.loads(f.read())
-            proxy_categories = ["source"]
+            proxy_categories = ["source", "pathway", "depositional", "mineralisation"]
 
             for category in proxy_categories:
                 grid_layout = QGridLayout()
