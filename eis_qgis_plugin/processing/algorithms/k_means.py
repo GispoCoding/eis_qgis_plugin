@@ -7,19 +7,24 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISPca(EISProcessingAlgorithm):
+class EISKMeans(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "pca"
-        self._display_name = "Principal component analysis"
+        self._name = "k_means"
+        self._display_name = "K-means clustering"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
-        self._short_help_string = "Compute PCA"
+        self._short_help_string = "Perform K-means clustering"
 
     def initAlgorithm(self, config=None):
-
-        self.alg_parameters = ["input_geometries", "components", "output_file"]
+        
+        self.alg_parameters = [
+            "input_geometries",
+            "clusters",
+            "random_state",
+            "output_file"
+        ]
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
@@ -29,13 +34,18 @@ class EISPca(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[1],
-                description="Number of components",
+                name=self.alg_parameters[1], description="Number of clusters", optional=True
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                name=self.alg_parameters[2], description="Random state", optional=True
             )
         )
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[2], description="Output file"
+                name=self.alg_parameters[3], description="Output file"
             )
         )

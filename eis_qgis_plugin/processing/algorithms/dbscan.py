@@ -7,19 +7,24 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISPca(EISProcessingAlgorithm):
+class EISDbscan(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "pca"
-        self._display_name = "Principal component analysis"
+        self._name = "dbscan"
+        self._display_name = "DBSCAN"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
-        self._short_help_string = "Compute PCA"
+        self._short_help_string = "Perform DBSCAN"
 
     def initAlgorithm(self, config=None):
-
-        self.alg_parameters = ["input_geometries", "components", "output_file"]
+        
+        self.alg_parameters = [
+            "input_geometries",
+            "max_distance",
+            "min_samples",
+            "output_file"
+        ]
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
@@ -29,13 +34,18 @@ class EISPca(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[1],
-                description="Number of components",
+                name=self.alg_parameters[1], description="Maximum distance"
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                name=self.alg_parameters[2], description="Minimum number of samples"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[2], description="Output file"
+                name=self.alg_parameters[3], description="Output file"
             )
         )

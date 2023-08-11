@@ -1,5 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterEnum,
+    QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
 )
@@ -13,13 +14,13 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
 
         self._name = "fuzzy_overlay"
         self._display_name = "Fuzzy overlay"
-        self._group = "Modelling"
-        self._group_id = "modelling"
+        self._group = "Prediction"
+        self._group_id = "prediction"
         self._short_help_string = "Compute fuzzy overlay"
 
     def initAlgorithm(self, config=None):
 
-        self.alg_parameters = ["input_layer", "fuzzy_method", "output_raster"]
+        self.alg_parameters = ["input_layer", "fuzzy_method", "gamma", "output_raster"]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -37,8 +38,14 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
         )
 
         self.addParameter(
+            QgsProcessingParameterNumber(
+                name=self.alg_parameters[2], description="gamma", optional=True
+            )
+        )
+
+        self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[2],
+                name=self.alg_parameters[3],
                 description="Output raster",
             )
         )
