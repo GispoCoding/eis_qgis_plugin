@@ -1,7 +1,7 @@
 import os
 # import re
 import subprocess
-from typing import Dict
+from typing import Dict, List
 
 from qgis.core import (
     QgsProcessingAlgorithm,
@@ -40,7 +40,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self._group_id = ""
         self._short_help_string = ""
 
-        self.alg_parameters = []
+        self.alg_parameters: List[str] = []
 
     def name(self):
         return self._name
@@ -66,25 +66,33 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
     def prepare_arguments(self, parameters: Dict, context):
         args = []
 
-        flag_mapping = {
-            "resampling_method": "--resampling-method",
-            "output_raster": "--output-raster-file",
-            "same_extent": "--same-extent",
-            "crs": "--crs",
-            # Add more mappings as needed
-        }
+        # By default, all parameters are passed as Typer options (parameter name needs to be delivered
+        # prefixed with --)
+        
+        # TODO: Check if all these work with optional parameters (arg evaluating to None)
+
+        # NOTE: Because of the above, flag mapping is likely to be deleted
+        # flag_mapping = {
+        #     "resampling_method": "--resampling-method",
+        #     "output_raster": "--output-raster-file",
+        #     "same_extent": "--same-extent",
+        #     "crs": "--crs",
+        #     # Add more mappings as needed
+        # }
 
         for name in self.alg_parameters:
             param = self.parameterDefinition(name)
-            flag = flag_mapping.get(name)
-
+            param_name = "--" + name.replace("_", "-")
+            # flag = flag_mapping.get(name)
             if isinstance(param, QgsProcessingParameterBoolean):
                 arg = str(self.parameterAsBool(parameters, name, context))
 
             elif isinstance(param, QgsProcessingParameterString):
-                arg = self.parameterAsString(parameters, name, context)
+                arg = self.parameterAsString(parameters, name, context).lower()
 
             elif isinstance(param, QgsProcessingParameterNumber):
+                if not self.parameterAsString(parameters, name, context):  # Arg is None
+                    continue
                 if param.dataType() == QgsProcessingParameterNumber.Integer:
                     arg = str(self.parameterAsInt(parameters, name, context))
                 else:
@@ -92,29 +100,44 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             elif isinstance(param, QgsProcessingParameterMapLayer):
                 layer = self.parameterAsLayer(parameters, name, context)
+                if not layer:
+                    continue
                 arg = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterRasterLayer):
                 layer = self.parameterAsRasterLayer(parameters, name, context)
+                if not layer:
+                    continue
                 arg = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterFeatureSource):
                 layer = self.parameterAsVectorLayer(parameters, name, context)
+                if not layer:
+                    continue
                 arg = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterVectorLayer):
                 layer = self.parameterAsVectorLayer(parameters, name, context)
+                if not layer:
+                    continue
                 arg = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterMultipleLayers):
                 layers = self.parameterAsLayerList(parameters, name, context)
+                if not layers:
+                    continue
                 [args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
 
             # TODO check if works
             elif isinstance(param, QgsProcessingParameterPoint):
                 coords = self.parameterAsPoint(parameters, name, context)
-                arg = (coords.x(), coords.y())
+                if not coords:
+                    continue
+                args.append(param_name)
+                args.append(str(coords.x()))
+                args.append(str(coords.y()))
+                continue
 
             # TODO check if works
             elif isinstance(param, QgsProcessingParameterFile):
@@ -122,10 +145,12 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             # TODO
             elif isinstance(param, QgsProcessingParameterEnum):
-                arg = self.parameterAsEnumString(parameters, name, context)
+                arg = self.parameterAsEnumString(parameters, name, context).lower()
 
             elif isinstance(param, QgsProcessingParameterCrs):
                 crs = str(self.parameterAsCrs(parameters, name, context))
+                if not crs:
+                    continue
                 arg = str(crs.split("EPSG:")[-1][:-1])
 
             # TODO (remove? broken parameter type in some API versions)
@@ -165,8 +190,12 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                     "Parameter conversion failed, parameter is unknown type"
                 )
 
-            if flag:
-                args.append(flag)
+            # if flag:
+            #     args.append(flag)
+            if not arg:
+                continue
+
+            args.append(param_name)
             args.append(arg)
 
         return args
