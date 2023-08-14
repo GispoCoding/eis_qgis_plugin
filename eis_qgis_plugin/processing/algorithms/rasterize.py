@@ -24,10 +24,10 @@ class EISRasterize(EISProcessingAlgorithm):
 
         self.alg_parameters = ["input_vector",
                                 "resolution",
-                                "column_name",
+                                "value_column",
                                 "default_value",
                                 "fill_value",
-                                "raster_profile",
+                                "base_raster_profile_raster",
                                 "buffer_value",
                                 "merge_strategy",
                                 "output_raster"]
@@ -58,13 +58,13 @@ class EISRasterize(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[4], description="Fil value", defaultValue=0.0
+                name=self.alg_parameters[4], description="Fill value", defaultValue=0.0
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[5], description="Base raster profile", optional=True
+                name=self.alg_parameters[5], description="Base raster for raster profile", optional=True
             )
         )
         
@@ -76,7 +76,8 @@ class EISRasterize(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[7], options=["replace", "add"], defaultValue="replace"
+                name=self.alg_parameters[7], description="Merge strategy", options=["replace", "add"],
+                defaultValue="replace"
             )
         )
 

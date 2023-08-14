@@ -8,12 +8,12 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISWindowing(EISProcessingAlgorithm):
+class EISExtractWindow(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "windowing"
-        self._display_name = "Windowing"
+        self._name = "extract_window"
+        self._display_name = "Extract window (R)"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = "Extract window from raster"
@@ -21,7 +21,7 @@ class EISWindowing(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
 
         self.alg_parameters = [
-            "raster",
+            "input_raster",
             "center_coords",
             "height",
             "width",
@@ -30,7 +30,7 @@ class EISWindowing(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Source raster"
+                name=self.alg_parameters[0], description="Input raster"
             )
         )
 
