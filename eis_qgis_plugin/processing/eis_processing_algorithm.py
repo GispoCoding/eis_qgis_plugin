@@ -10,8 +10,10 @@ from qgis.core import (
     QgsProcessingParameterBoolean,
     QgsProcessingParameterCrs,
     QgsProcessingParameterEnum,
+    QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterField,
     QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterFolderDestination,
@@ -98,6 +100,17 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 else:
                     arg = str(self.parameterAsDouble(parameters, name, context))
 
+            elif isinstance(param, QgsProcessingParameterExtent):
+                if not self.parameterAsString(parameters, name, context):  # Arg is None
+                    continue
+                extents = self.parameterAsString(parameters, name, context).split("[")[0].strip().split(",")
+                args.append(param_name)
+                [args.append(coord) for coord in extents]
+                continue
+            
+            elif isinstance(param, QgsProcessingParameterField):
+                arg = self.parameterAsString(parameters, name, context)
+
             elif isinstance(param, QgsProcessingParameterMapLayer):
                 layer = self.parameterAsLayer(parameters, name, context)
                 if not layer:
@@ -126,6 +139,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 layers = self.parameterAsLayerList(parameters, name, context)
                 if not layers:
                     continue
+                args.append(param_name)
                 [args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
 
@@ -187,7 +201,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             else:
                 raise Exception(
-                    "Parameter conversion failed, parameter is unknown type"
+                    f"Parameter ({param_name}) conversion failed, parameter is unknown type."
                 )
 
             # if flag:
@@ -215,6 +229,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         # toolkit_path = python_venv_path + "/lib/python3.9/site-packages/eis_toolkit/__main__.py"
 
         cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
+        print(cmd)
         process = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
         )
