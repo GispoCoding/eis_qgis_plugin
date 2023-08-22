@@ -1,5 +1,6 @@
 import os
-# import re
+import re
+import time
 import subprocess
 from typing import Dict, List
 
@@ -214,6 +215,14 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         return args
 
+    
+    def get_bin_folder(self):
+        if os.name == "nt":  # Windows
+            return "Scripts"
+        else:
+            return "bin"
+
+
     def processAlgorithm(self, parameters, context, feedback):
         """
         Here is where the processing itself takes place.
@@ -224,40 +233,39 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         arguments = self.prepare_arguments(parameters, context)
 
-        eis_executable = get_python_venv_path() + "/bin/eis"
-        # python_path = python_venv_path + "/bin/python"
-        # toolkit_path = python_venv_path + "/lib/python3.9/site-packages/eis_toolkit/__main__.py"
+        eis_executable = os.path.join(get_python_venv_path(), self.get_bin_folder(), "eis")
 
         cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
-        print(cmd)
-        process = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
-        )
 
-        # TODO
-        # progress_regex = re.compile(r"(\d+)%")
+        try:
+            process = subprocess.Popen(
+                cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
+            )
+            progress_regex = re.compile(r"(\d+)%")
+        
+            while process.poll() is None:
+                stdout = process.stdout.readline().strip()
 
-        # while process.poll() is None:
-        #     stdout = process.stdout.readline().strip()
-        #     print(f"Polling toolkit. Stdout: {stdout}")
+                progress_match = progress_regex.search(stdout)
+                if progress_match:
+                    progress = int(progress_match.group(1))
+                    feedback.setProgress(progress)
+                    feedback.pushInfo(f"Progress: {progress}%")
+                else:
+                    feedback.pushInfo(stdout)
 
-        #     progress_match = progress_regex.search(stdout)
-        #     if progress_match:
-        #         progress = int(progress_match.group(1))
-        #         feedback.setProgress(progress)
-        #     else:
-        #         print(stdout)
+                time.sleep(0.05)
 
-        #     time.sleep(0.1)
+            stdout, stderr = process.communicate()
 
-        stdout, stderr = process.communicate()
+        except Exception as e:
+            feedback.reportError(f"Failed to run the command. Error: {str(e)}")
+            return {}
 
-        # Handle the return code as needed
         if process.returncode != 0:
-            # stderr = process.stderr.read()
-            print("EIS Toolkit algorithm execution failed with error:", stderr)
+            feedback.reportError(f"EIS Toolkit algorithm execution failed with error: {stderr}")
         else:
-            print("EIS Toolkit algorithm executed successfully!")
+            feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
 
         # Return results
         results = {}
