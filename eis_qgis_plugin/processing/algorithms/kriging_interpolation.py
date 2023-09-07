@@ -103,6 +103,6 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 name=self.alg_parameters[9],
-                description="Output raster and metadata",
+                description="Output raster",
             )
         )
