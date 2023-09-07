@@ -18,6 +18,7 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.preprocess.create_proxy import EISWizardProxy
 
 FORM_CLASS: QDialog = load_ui("preprocess/wizard_preprocess_iocg.ui")
 path = Path(os.path.dirname(__file__)).parent.parent
@@ -145,6 +146,7 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
             # Process button
             process_button = QPushButton("Process")
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+            process_button.clicked.connect(self.open_proxy_creation_1)
             grid_layout.addWidget(process_button, row, 3)
 
             # Load button
@@ -275,6 +277,12 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
                 keywords_label.hide()
                 process_button.hide()
                 load_button.hide()
+
+
+    def open_proxy_creation_1(self):
+        print("Hello")
+        self.proxy_window = EISWizardProxy(self)
+        self.proxy_window.show()
 
         # self.create_scroll_area()
 
