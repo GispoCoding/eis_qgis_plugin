@@ -42,7 +42,9 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterField(
-                name=self.alg_parameters[1], description="The column name with values for each geometry"
+                name=self.alg_parameters[1],
+                description="Interpolation attribute",
+                parentLayerParameterName=self.alg_parameters[0]
             )
         )
 
