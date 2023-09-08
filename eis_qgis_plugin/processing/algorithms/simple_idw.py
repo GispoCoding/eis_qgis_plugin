@@ -1,7 +1,7 @@
 from qgis.core import (
     QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterString,
+    QgsProcessingParameterField,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
 )
@@ -37,7 +37,7 @@ class EISSimpleIdw(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterString(
+            QgsProcessingParameterField(
                 name=self.alg_parameters[1], description="The column name with values for each geometry"
             )
         )

@@ -2,7 +2,7 @@ from qgis.core import (
     QgsProcessingParameterEnum,
     QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterString,
+    QgsProcessingParameterField,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
 )
@@ -41,7 +41,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterString(
+            QgsProcessingParameterField(
                 name=self.alg_parameters[1], description="The column name with values for each geometry"
             )
         )
@@ -92,11 +92,12 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterString(
+            QgsProcessingParameterEnum(
                 name=self.alg_parameters[8],
                 description="Drift terms",
-                multiLine=True,
-                defaultValue="regional_linear"
+                options=["regional_linear", "point_log", "external_Z", "specified", "functional"],
+                defaultValue="regional_linear",
+                allowMultiple=True
             )
         )
 
