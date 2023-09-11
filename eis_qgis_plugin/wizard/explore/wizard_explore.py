@@ -17,8 +17,8 @@ class EISWizardExplore(QDialog, FORM_CLASS):
 
     container: QWidget
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
         self.setupUi(self)
         self.iface = iface
 

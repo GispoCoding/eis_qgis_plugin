@@ -8,14 +8,14 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.preprocess.wizard_preprocess import EISWizardPreprocess
+from eis_qgis_plugin.wizard.preprocess.wizard_proxy import EISWizardProxy
 
 FORM_CLASS: QDialog = load_ui("preprocess/settings.ui")
 
-study_scales = ["regional", "camp", "deposit"]
-mineral_systems = ["iocg", "Mineral system 2", "Mineral system 3"]
+study_scales = ["Regional", "Camp", "Deposit"]
+mineral_systems = ["IOCG", "Li-Pegmatites", "Co-VMS"]
 
-class EISWizardPreprocessSettings(QDialog, FORM_CLASS):
+class EISWizardProxySettings(QDialog, FORM_CLASS):
     def __init__(self) -> None:
         super().__init__()
         self.setupUi(self)
@@ -40,12 +40,10 @@ class EISWizardPreprocessSettings(QDialog, FORM_CLASS):
 
         self.setLayout(self.main_layout)
 
-        self.combobox_scale.setFixedWidth(150)
-        self.combobox_system.setFixedWidth(150)
+        self.combobox_scale.setFixedWidth(160)
+        self.combobox_system.setFixedWidth(160)
 
         self.select_button.clicked.connect(self.send_settings)
-
-
 
     def populate_comboboxes(self):
         self.combobox_scale.addItems(study_scales)
@@ -55,5 +53,5 @@ class EISWizardPreprocessSettings(QDialog, FORM_CLASS):
         study_scale = self.combobox_scale.currentText()
         mineral_system = self.combobox_system.currentText()
         self.close()
-        main_window = EISWizardPreprocess(study_scale, mineral_system)
-        main_window.exec()
+        self.main_window = EISWizardProxy(study_scale, mineral_system)
+        self.main_window.show()
