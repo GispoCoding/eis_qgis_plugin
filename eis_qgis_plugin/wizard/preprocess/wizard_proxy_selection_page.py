@@ -33,6 +33,10 @@ FORM_CLASS: QWizardPage = load_ui("preprocess/wizard_proxy_selection.ui")
 path = Path(os.path.dirname(__file__)).parent.parent
 
 
+COLOR_CODE_IMPORTANCE = True
+COLOR_CODE_KEYWORDS = True
+
+
 class EISWizardProxySelection(QWizardPage, FORM_CLASS):
     layer_selection: QgsMapLayerComboBox
     attribute_selection: QgsFieldComboBox
@@ -145,10 +149,36 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
 
         # 2. Importance label
         importance_label = QLabel(importance)
+        if COLOR_CODE_IMPORTANCE and importance_label.text() != "Importance":
+            if self.importance_value(importance_label.text()) == 1:
+                importance_label.setStyleSheet("color: red;")
+            elif self.importance_value(importance_label.text()) == 2:
+                importance_label.setStyleSheet("color: orange;")
+            elif self.importance_value(importance_label.text()) == 3:
+                importance_label.setStyleSheet("color: green;")
         grid_layout.addWidget(importance_label, row, 1)
 
         # 3. Keywords label
-        keywords_label = QLabel(", ".join(keywords))
+        if COLOR_CODE_KEYWORDS:
+            keywords_label = QLabel()
+            colors = {
+                "geology": "sandybrown",
+                "geophysics": "blue",
+                "geochemistry": "orange",
+                #   "lithology": "darkblue",
+                #   "mineralogy": "brown"
+            }
+            keywords_text = ""
+
+            for word in keywords:
+                if word in colors.keys():
+                    keywords_text += f"<span style='color: {colors[word]};'>{word}</span>, "
+                else:
+                    keywords_text += f"{word}, "
+            keywords_text = keywords_text[:-2]
+            keywords_label.setText("<html><body>" + keywords_text + "</body></html>")
+        else:
+            keywords_label = QLabel(", ".join(keywords))
         keywords_label.setWordWrap(True)
         grid_layout.addWidget(keywords_label, row, 2)
 
