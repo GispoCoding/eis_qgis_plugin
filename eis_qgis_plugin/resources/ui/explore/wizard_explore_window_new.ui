@@ -1,0 +1,890 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>949</width>
+    <height>626</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>EIS Explore</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="tab_widget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="data_summary_tab">
+      <attribute name="title">
+       <string>Data summary</string>
+      </attribute>
+      <widget class="QLabel" name="label_34">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>30</y>
+         <width>151</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Summary statistics</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>60</y>
+         <width>197</width>
+         <height>111</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Mean</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Min</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Max</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="label_27">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Standard deviation</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_28">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Relative std. deviation</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLabel" name="label_29">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>580</x>
+         <y>60</y>
+         <width>136</width>
+         <height>88</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>25% quantile</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_32">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_15">
+          <property name="text">
+           <string>50% quantile</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_31">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_16">
+          <property name="text">
+           <string>75% quantile</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="label_30">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_17">
+          <property name="text">
+           <string>Skew</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_33">
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>80</y>
+         <width>181</width>
+         <height>84</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Layer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_2"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Field</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QgsFieldComboBox" name="mFieldComboBox"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="univariate_analysis_tab">
+      <attribute name="title">
+       <string>Univariate analysis</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QWidget" name="container" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QLabel" name="label_56">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Select data</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_3">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_35">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Layer</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QgsMapLayerComboBox" name="layer_selection"/>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_36">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Field/band</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QgsFieldComboBox" name="field_selection"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_59">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Plot customization</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_4">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_57">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Plot type</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="plot_type_selection">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Histogram</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>KDE</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Histogram + KDE</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>ECDF</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_58">
+                <property name="text">
+                 <string>Hue field/band</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QgsFieldComboBox" name="hue_field_selection">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_40">
+                <property name="text">
+                 <string>Palette</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QPushButton" name="palette_placeholder">
+                <property name="text">
+                 <string>placeholder</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_37">
+                <property name="text">
+                 <string>Color</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QgsColorButton" name="color_selection"/>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_41">
+                <property name="text">
+                 <string>Opacity</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QgsOpacityWidget" name="opacity_selection"/>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_38">
+                <property name="text">
+                 <string>Log scale</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QComboBox" name="log_scale_selection">
+                <item>
+                 <property name="text">
+                  <string>False</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>True</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="label_39">
+                <property name="text">
+                 <string>Fill</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QComboBox" name="fill_selection">
+                <item>
+                 <property name="text">
+                  <string>True</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>False</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_43">
+                <property name="text">
+                 <string>Multiple</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QComboBox" name="multiple_selection">
+                <item>
+                 <property name="text">
+                  <string>Stack</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Fill</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Layer</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Dodge (histograms)</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_45">
+                <property name="text">
+                 <string>Stat</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QComboBox" name="stat_selection">
+                <item>
+                 <property name="text">
+                  <string>count</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>frequency</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>probability</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>percent</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>density</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="label_46">
+                <property name="text">
+                 <string>Element</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="QComboBox" name="element_selection">
+                <item>
+                 <property name="text">
+                  <string>bars</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>step</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>poly</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QLabel" name="label_47">
+                <property name="text">
+                 <string>Nr. of bins</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="1">
+               <widget class="QSpinBox" name="nr_of_bins_selection"/>
+              </item>
+              <item row="11" column="0">
+               <widget class="QLabel" name="label_49">
+                <property name="text">
+                 <string>bw adjust</string>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="1">
+               <widget class="QDoubleSpinBox" name="bw_adjust_selection">
+                <property name="singleStep">
+                 <double>0.200000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPushButton" name="reset_btn">
+                <property name="text">
+                 <string>Reset</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="clear_btn">
+                <property name="text">
+                 <string>Clear</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="plot_btn">
+                <property name="text">
+                 <string>Plot</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QFrame" name="univariate_plot_container">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>600</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="bivariate_analysis_tab">
+      <attribute name="title">
+       <string>Bivariate analysis</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QFormLayout" name="formLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Layer</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_19">
+             <property name="text">
+              <string>X</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QgsFieldComboBox" name="mFieldComboBox_2"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_20">
+             <property name="text">
+              <string>Y</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QgsFieldComboBox" name="mFieldComboBox_3"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_21">
+             <property name="text">
+              <string>Z</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QgsFieldComboBox" name="mFieldComboBox_4"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>Plot and compute</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>4</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Statistics</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="3" column="1">
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string>0,24</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Variance</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_14">
+               <property name="text">
+                <string>Relative standard deviation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="label_22">
+               <property name="text">
+                <string>1,21</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_23">
+               <property name="text">
+                <string>Standard deviation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLabel" name="label_24">
+               <property name="text">
+                <string>1,10</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_25">
+               <property name="text">
+                <string>Mean</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_26">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>4,54</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="1">
+        <widget class="QWidget" name="charts_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="multivariate_analysis_tab">
+      <attribute name="title">
+       <string>Multivariate analysis</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="geospatial_analysis_tab">
+      <attribute name="title">
+       <string>Geospatial analysis</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsColorButton</class>
+   <extends>QToolButton</extends>
+   <header>qgscolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsFieldComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgsfieldcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsMapLayerComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgsmaplayercombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsOpacityWidget</class>
+   <extends>QWidget</extends>
+   <header>qgsopacitywidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
