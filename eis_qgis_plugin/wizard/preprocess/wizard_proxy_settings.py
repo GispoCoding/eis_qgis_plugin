@@ -15,6 +15,7 @@ FORM_CLASS: QDialog = load_ui("preprocess/settings.ui")
 study_scales = ["Regional", "Camp", "Deposit"]
 mineral_systems = ["IOCG", "Li-Pegmatites", "Co-VMS"]
 
+
 class EISWizardProxySettings(QDialog, FORM_CLASS):
     def __init__(self) -> None:
         super().__init__()
@@ -28,7 +29,7 @@ class EISWizardProxySettings(QDialog, FORM_CLASS):
         self.select_button = QPushButton("Select")
 
         self.populate_comboboxes()
-        
+
         self.layout_scale.addWidget(QLabel("Study scale:"))
         self.layout_scale.addWidget(self.combobox_scale)
         self.layout_system.addWidget(QLabel("Mineral System:"))

@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QWizardPage
 
 from qgis import processing
@@ -8,8 +7,8 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 FORM_CLASS: QWizardPage = load_ui("preprocess/wizard_proxy_creation.ui")
 
-class EISWizardProxyCreation(QWizardPage, FORM_CLASS):
 
+class EISWizardProxyCreation(QWizardPage, FORM_CLASS):
     def __init__(self) -> None:
         super().__init__()
         self.setupUi(self)
@@ -39,7 +38,6 @@ class EISWizardProxyCreation(QWizardPage, FORM_CLASS):
             lambda: processing.execAlgorithmDialog("eis:kriging_interpolation", {})
         )
         # self.binarize_btn.clicked.connect(processing.execAlgorithmDialog("eis:", {}) )
-
 
     def open_explore(self):
         self.explore_window = EISWizardExplore(self)

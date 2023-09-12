@@ -29,7 +29,6 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         self.tab_widget.addTab(self.parallel_charts_tab, "Parallel coordinates")
 
         self.create_roi()
-    
 
     def create_roi(self):
         self.plot_widget_roi = pg.PlotWidget(parent=self.container)
@@ -47,12 +46,10 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         self.plot_layout = QVBoxLayout(self.container)
         self.plot_layout.addWidget(self.plot_widget_roi)
 
-
     def plot_boxplot(self, data):
         for i, dataset in enumerate(data):
             for item in self.create_box(dataset, i):
                 self.plot_widget.addItem(item)
-
 
     def create_box(self, data, position):
         # Data for box
@@ -102,13 +99,13 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         return [box, whisker_top, whisker_bottom, scatter]
 
 
-
-class EISWizardExploreBig(QDialog, load_ui("old_designs_and_tests/wizard_explore_big_plotly_test.ui")):
+class EISWizardExploreBig(
+    QDialog, load_ui("old_designs_and_tests/wizard_explore_big_plotly_test.ui")
+):
     def __init__(self) -> None:
         super().__init__()
         self.setupUi(self)
         self.iface = iface
-
 
 
 # def plot_3D_scatterplot(self, data):

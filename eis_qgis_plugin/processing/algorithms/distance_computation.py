@@ -18,7 +18,7 @@ class EISDistanceComputation(EISProcessingAlgorithm):
         self._short_help_string = "Compute distance"
 
     def initAlgorithm(self, config=None):
-        
+
         self.alg_parameters = ["raster_profile", "geometries", "output_array"]
 
         self.addParameter(

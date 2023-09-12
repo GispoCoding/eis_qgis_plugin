@@ -1,19 +1,8 @@
-from qgis.PyQt.QtWidgets import (
-    QDialog,
-    QWizardPage,
-    QVBoxLayout,
-    QSizePolicy
-)
+from qgis.PyQt.QtWidgets import QDialog, QWizardPage, QVBoxLayout, QSizePolicy
 
-from qgis.gui import (
-    QgsMapLayerComboBox,
-    QgsFieldComboBox,
-    QgsFieldExpressionWidget
-)
+from qgis.gui import QgsMapLayerComboBox, QgsFieldComboBox, QgsFieldExpressionWidget
 
-from qgis.core import (
-    QgsMapLayerProxyModel
-)
+from qgis.core import QgsMapLayerProxyModel
 
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
@@ -43,7 +32,6 @@ class EISWizardProxy(QWizardPage):
         self.create_file_btn.clicked.connect(self.create_file)
         self.open_explore_btn.clicked.connect(self.open_explore)
 
-
     def set_layer(self, layer):
         self.attribute_selection.setLayer(layer)
         self.set_field(self.attribute_selection.currentField())
@@ -57,8 +45,6 @@ class EISWizardProxy(QWizardPage):
 
     def create_file(self):
         pass
-        
-
 
     def show_plot2(self):
         layout = QVBoxLayout()
@@ -73,9 +59,8 @@ class EISWizardProxy(QWizardPage):
         toolbar = NavigationToolbar(canvas, self.plot_widget)
         layout.addWidget(toolbar)
         layout.addWidget(canvas)
-        
-        self.plot_widget.setLayout(layout)
 
+        self.plot_widget.setLayout(layout)
 
     def show_plot(self):
         dialog = QDialog()
@@ -83,19 +68,19 @@ class EISWizardProxy(QWizardPage):
         dialog.resize(500, 400)
 
         layout = QVBoxLayout()
-        
+
         # Create Seaborn plot
         tips = sns.load_dataset("tips")
         fig, ax = plt.subplots()
         sns.barplot(x="day", y="total_bill", data=tips, ax=ax)
         # plt.show()
-        
+
         # Embed plot into PyQt5 dialog
         canvas = FigureCanvas(fig)
         canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         toolbar = NavigationToolbar(canvas, dialog)
         layout.addWidget(toolbar)
         layout.addWidget(canvas)
-        
+
         dialog.setLayout(layout)
         dialog.exec_()

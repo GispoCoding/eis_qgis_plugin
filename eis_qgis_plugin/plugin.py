@@ -11,7 +11,7 @@ from qgis.PyQt.QtWidgets import (
     QLineEdit,
     QMenu,
     QToolButton,
-    QWidget
+    QWidget,
 )
 from qgis.utils import iface
 
@@ -20,7 +20,8 @@ from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logge
 from .qgis_plugin_tools.tools.i18n import setup_translation
 from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
-from .wizard.explore.wizard_explore import EISWizardExplore, EISWizardExploreBig
+from .wizard.explore.wizard_explore import EISWizardExploreBig
+from .wizard.explore.wizard_explore_new import EISWizardExploreNew
 from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
 from .wizard.model.model_wizard import EISWizardModeling
 from .wizard.search_test import SearchDialog
@@ -246,7 +247,7 @@ class Plugin:
         self.proxy_settings_window.show()
 
     def open_explore(self):
-        self.explore_window = EISWizardExplore()
+        self.explore_window = EISWizardExploreNew()
         self.explore_window.show()
 
     def open_explore_big(self):

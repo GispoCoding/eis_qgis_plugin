@@ -15,16 +15,15 @@ from qgis.PyQt.QtWidgets import (
     QSizePolicy,
     QVBoxLayout,
     QWidget,
-    QDialog
+    QDialog,
 )
 
 from qgis.gui import (
     QgsMapLayerComboBox,
     QgsFieldComboBox,
     QgsFieldExpressionWidget,
-    QgsFileWidget
+    QgsFileWidget,
 )
-
 
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -68,7 +67,7 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
         # self.layer_selection.setFilters(QgsMapLayerProxyModel.VectorLayer)
         # self.layer_selection.layerChanged.connect(self.set_layer)
         # self.attribute_selection.fieldChanged.connect(self.set_field)
-        
+
         # # Connect buttons
         # self.compute_and_plot_btn.clicked.connect(self.compute_and_plot)
         # self.select_data_btn.clicked.connect(self.select_data)
@@ -82,7 +81,6 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
         # # Set plot layout
         # self.plot_layout = QVBoxLayout()
         # self.plot_widget.setLayout(self.plot_layout)
-
 
     def importance_value(self, importance_str):
         if importance_str.lower() == "high":
@@ -232,11 +230,9 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
                 process_button.hide()
                 load_button.hide()
 
-
     def open_proxy_creation(self):
         self.proxy_window = EISWizardProxy(self)
         self.proxy_window.show()
-
 
     # def open_explore(self):
     #     self.explore_window = EISWizardExplore(self)
@@ -258,7 +254,7 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
     #         print("Select a layer and field first!")
     #     else:
     #         self.get_statistics()
-    #         self.plot_distribution()  
+    #         self.plot_distribution()
 
     # def select_data(self):
     #     if self.field_expression.isValidExpression():
@@ -308,7 +304,6 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
 
     #     self.plot_layout.addWidget(toolbar)
     #     self.plot_layout.addWidget(canvas)
-
 
     # def create_scroll_area(self):
     #     page = self.geoprocessing_3

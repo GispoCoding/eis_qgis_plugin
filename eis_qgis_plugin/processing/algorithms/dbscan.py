@@ -18,12 +18,12 @@ class EISDbscan(EISProcessingAlgorithm):
         self._short_help_string = "Perform DBSCAN"
 
     def initAlgorithm(self, config=None):
-        
+
         self.alg_parameters = [
             "input_geometries",
             "max_distance",
             "min_samples",
-            "output_file"
+            "output_file",
         ]
 
         self.addParameter(
