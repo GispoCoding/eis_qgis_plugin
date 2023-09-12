@@ -6,15 +6,15 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISStatisticsReport(EISProcessingAlgorithm):
+class EISDescriptiveStatistics(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "statistics_report"
-        self._display_name = "Statistics report"
+        self._name = "descriptive_statistics"
+        self._display_name = "Descriptive statistics"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
-        self._short_help_string = "Generate a statistics report for a layer"
+        self._short_help_string = "Generate descriptive statistics for a layer"
 
     def initAlgorithm(self, config=None):
 

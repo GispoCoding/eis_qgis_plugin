@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WizardPage</class>
+ <widget class="QWizardPage" name="WizardPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>908</width>
+    <height>595</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WizardPage</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="source_tab">
+        <attribute name="title">
+         <string>Source</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="pathway_tab">
+        <attribute name="title">
+         <string>Active/structural pathways</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="depositional_tab">
+        <attribute name="title">
+         <string>Depositional processes</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="mineralisation_tab">
+        <attribute name="title">
+         <string>Mineralisation, remobilisation, modification</string>
+        </attribute>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
