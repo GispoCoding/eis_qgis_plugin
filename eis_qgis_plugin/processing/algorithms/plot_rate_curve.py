@@ -8,7 +8,6 @@ from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlg
 
 
 class EISPlotRateCurve(EISProcessingAlgorithm):
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -20,16 +19,12 @@ class EISPlotRateCurve(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         # TODO: Give input data in some other form? At least, not as several files.
-        self.alg_parameters = [
-            "x_values",
-            "y_values",
-            "plot_type",
-            "plot_figure"
-        ]
+        self.alg_parameters = ["x_values", "y_values", "plot_type", "plot_figure"]
 
         self.addParameter(
             QgsProcessingParameterFile(
-                name=self.alg_parameters[0], description="False positive rate or proportion of area"
+                name=self.alg_parameters[0],
+                description="False positive rate or proportion of area",
             )
         )
 
@@ -44,7 +39,7 @@ class EISPlotRateCurve(EISProcessingAlgorithm):
                 name=self.alg_parameters[2],
                 description="Plot type",
                 options=["success_rate", "prediction_rate", "roc"],
-                defaultValue="success_rate"
+                defaultValue="success_rate",
             )
         )
 

@@ -10,7 +10,7 @@ from qgis.PyQt.QtWidgets import (
     QScrollArea,
     QSizePolicy,
     QVBoxLayout,
-    QWidget
+    QWidget,
 )
 
 

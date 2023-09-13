@@ -8,6 +8,7 @@ from qgis.core import (
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
+
 class EISSimpleIdw(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
@@ -16,10 +17,12 @@ class EISSimpleIdw(EISProcessingAlgorithm):
         self._display_name = "IDW interpolation"
         self._group = "Vector processing"
         self._group_id = "vector_processing"
-        self._short_help_string = "Perform inverse distance weighting (IDW) interpolation"
+        self._short_help_string = (
+            "Perform inverse distance weighting (IDW) interpolation"
+        )
 
     def initAlgorithm(self, config=None):
-        
+
         self.alg_parameters = [
             "input_geometries",
             "target_column",
@@ -27,8 +30,8 @@ class EISSimpleIdw(EISProcessingAlgorithm):
             "resolution_y",
             "extent",
             "power",
-            "output_raster"
-            ]
+            "output_raster",
+        ]
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
@@ -40,7 +43,7 @@ class EISSimpleIdw(EISProcessingAlgorithm):
             QgsProcessingParameterField(
                 name=self.alg_parameters[1],
                 description="Interpolation attribute",
-                parentLayerParameterName=self.alg_parameters[0]
+                parentLayerParameterName=self.alg_parameters[0],
             )
         )
 

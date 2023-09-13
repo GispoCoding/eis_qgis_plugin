@@ -16,14 +16,14 @@ from qgis.PyQt.QtWidgets import (
     QSizePolicy,
     QVBoxLayout,
     QWidget,
-    QCheckBox
+    QCheckBox,
 )
 
 from qgis.gui import (
     QgsMapLayerComboBox,
     QgsFieldComboBox,
     QgsFieldExpressionWidget,
-    QgsFileWidget
+    QgsFileWidget,
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -140,7 +140,7 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
         keywords: List[str],
         label=False,
     ):
-        
+
         # 1. Name label
         name_label = QLabel(name)
         name_label.setWordWrap(True)
@@ -172,7 +172,9 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
 
             for word in keywords:
                 if word in colors.keys():
-                    keywords_text += f"<span style='color: {colors[word]};'>{word}</span>, "
+                    keywords_text += (
+                        f"<span style='color: {colors[word]};'>{word}</span>, "
+                    )
                 else:
                     keywords_text += f"{word}, "
             keywords_text = keywords_text[:-2]
@@ -244,7 +246,6 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
                 keywords_label.hide()
                 process_button.hide()
                 load_button.hide()
-
 
     def open_proxy_creation(self):
         self.wizard().next()

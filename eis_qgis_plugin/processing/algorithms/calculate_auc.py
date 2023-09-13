@@ -1,7 +1,4 @@
-from qgis.core import (
-    QgsProcessingParameterFile,
-    QgsProcessingParameterFileDestination
-)
+from qgis.core import QgsProcessingParameterFile, QgsProcessingParameterFileDestination
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
@@ -18,11 +15,7 @@ class EISCalculateAuc(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         # TODO: Give input data in some other form? At least, not as several files.
-        self.alg_parameters = [
-            "x_values",
-            "y_values",
-            "output_file"
-        ]
+        self.alg_parameters = ["x_values", "y_values", "output_file"]
 
         self.addParameter(
             QgsProcessingParameterFile(

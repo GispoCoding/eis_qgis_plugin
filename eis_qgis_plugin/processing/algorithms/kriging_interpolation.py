@@ -9,6 +9,7 @@ from qgis.core import (
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
+
 class EISKrigingInterpolation(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
@@ -20,7 +21,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         self._short_help_string = "Perform kriging interpolation"
 
     def initAlgorithm(self, config=None):
-        
+
         self.alg_parameters = [
             "input_geometries",
             "target_column",
@@ -31,7 +32,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             "coordinates_type",
             "method",
             "drift_terms",
-            "output_raster"
+            "output_raster",
         ]
 
         self.addParameter(
@@ -44,7 +45,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             QgsProcessingParameterField(
                 name=self.alg_parameters[1],
                 description="Interpolation attribute",
-                parentLayerParameterName=self.alg_parameters[0]
+                parentLayerParameterName=self.alg_parameters[0],
             )
         )
 
@@ -70,8 +71,15 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 name=self.alg_parameters[5],
                 description="Variogram model",
-                options=["linear", "power", "gaussian", "spherical", "exponential", "hole-effect"],
-                defaultValue="linear"
+                options=[
+                    "linear",
+                    "power",
+                    "gaussian",
+                    "spherical",
+                    "exponential",
+                    "hole-effect",
+                ],
+                defaultValue="linear",
             )
         )
 
@@ -80,7 +88,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
                 name=self.alg_parameters[6],
                 description="Coordinates type",
                 options=["euclidean", "geographic"],
-                defaultValue="geographic"
+                defaultValue="geographic",
             )
         )
 
@@ -89,7 +97,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
                 name=self.alg_parameters[7],
                 description="Kriging method",
                 options=["ordinary", "universal"],
-                defaultValue="ordinary"
+                defaultValue="ordinary",
             )
         )
 
@@ -97,9 +105,15 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 name=self.alg_parameters[8],
                 description="Drift terms",
-                options=["regional_linear", "point_log", "external_Z", "specified", "functional"],
+                options=[
+                    "regional_linear",
+                    "point_log",
+                    "external_Z",
+                    "specified",
+                    "functional",
+                ],
                 defaultValue="regional_linear",
-                allowMultiple=True
+                allowMultiple=True,
             )
         )
 

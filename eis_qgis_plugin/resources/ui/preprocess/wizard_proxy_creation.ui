@@ -133,12 +133,12 @@
     <rect>
      <x>482</x>
      <y>203</y>
-     <width>291</width>
+     <width>311</width>
      <height>25</height>
     </rect>
    </property>
    <property name="text">
-    <string>Calculate distances (from raster data)</string>
+    <string>Calculate distances (from raster data) (WIP)</string>
    </property>
   </widget>
   <widget class="QPushButton" name="binarize_btn">

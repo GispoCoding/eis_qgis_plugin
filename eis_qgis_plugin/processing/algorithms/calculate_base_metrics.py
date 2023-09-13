@@ -9,7 +9,6 @@ from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlg
 
 
 class EISCalculateBaseMetrics(EISProcessingAlgorithm):
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -20,13 +19,13 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
         self._display_name = "Calculate base metrics"
 
     def initAlgorithm(self, config=None):
-        
+
         self.alg_parameters = [
             "input_raster",
             "input_deposits",
             "band",
             "negatives",
-            "output_metrics"
+            "output_metrics",
         ]
 
         self.addParameter(
@@ -49,7 +48,9 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[3], description="Negative locations", optional=True
+                name=self.alg_parameters[3],
+                description="Negative locations",
+                optional=True,
             )
         )
 
