@@ -9,9 +9,14 @@ from qgis.PyQt.QtWidgets import (
     QDoubleSpinBox,
     QPushButton,
     QSizePolicy,
+    QFormLayout,
+    QListWidget,
+    QLabel
 )
 
-from qgis.core import NULL
+from qgis.core import QgsMapLayer, NULL 
+
+from qgis.PyQt.QtGui import QColor
 
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -22,7 +27,6 @@ from qgis.gui import (
     QgsMapLayerComboBox,
     QgsFieldComboBox,
     QgsColorButton,
-    QgsColorRampButton,
     QgsOpacityWidget,
 )
 
@@ -42,60 +46,268 @@ class EISWizardExploreNew(QDialog, FORM_CLASS):
     multivariate_analysis_tab: QWidget
     geospatial_analysis_tab: QWidget
 
+    # Data summary tab contents
+    data_summary_layer_selection: QgsMapLayerComboBox
+    data_summary_field_selection: QgsFieldComboBox
+    compute_btn: QPushButton
+
+    n_total: QLabel
+    n_valid: QLabel
+    n_null: QLabel
+    mean: QLabel
+    stdev: QLabel
+    relative_stdev: QLabel
+    variance: QLabel
+    skewness: QLabel
+    kurtosis: QLabel
+    min: QLabel
+    quantile25: QLabel
+    median: QLabel
+    quantile75: QLabel
+    max: QLabel
+    a_squared: QLabel
+    p_value: QLabel
+
     # Univariate tab contents
     container: QWidget
+    plot_customization_form: QFormLayout
     univariate_plot_container: QFrame
     layer_selection: QgsMapLayerComboBox
-    field_selection: QgsFieldComboBox
+    fields_selection: QListWidget
     plot_type_selection: QComboBox
-    hue_field_selection: QgsFieldComboBox
-    palatte_selection: QgsColorRampButton
+    # palette_selection: QgsColorRampButton
     color_selection: QgsColorButton
     opacity_selection: QgsOpacityWidget
     log_scale_selection: QComboBox
     fill_selection: QComboBox
     multiple_selection: QComboBox
-    stat_selection: QComboBox
+    hist_stat_selection: QComboBox
     element_selection: QComboBox
     nr_of_bins_selection: QSpinBox
     bw_adjust_selection: QDoubleSpinBox
+    ecdf_stat_selection: QComboBox
 
     plot_btn: QPushButton
+    clear_btn: QPushButton
+    reset_btn: QPushButton
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
-        self.plot_btn.clicked.connect(self.plot_distribution)
+        self.initialize_summary_tab()
+        self.initialize_univariate_tab()
+
+        # self.palette_selection = QgsColorRampButton()
+        # # Get the default style manager
+        # style_manager = QgsStyle.defaultStyle()
+
+        # # Get a predefined color ramp by its name
+        # spectral_color_ramp = style_manager.colorRamp("Spectral")
+
+        # self.palette_selection.setDefaultColorRamp(spectral_color_ramp)
+        # self.palette_selection.setColorRamp(spectral_color_ramp)
+        # self.plot_customization_form.insertRow(3, "Palette", self.palette_selection)
+
+    def initialize_summary_tab(self):
+        self.compute_btn.clicked.connect(self.compute_statistics)
+
+    def initialize_univariate_tab(self):
+        self.plot_btn.clicked.connect(self.plot)
+        self.clear_btn.clicked.connect(self.clear_plot)
+        self.reset_btn.clicked.connect(self.reset)
 
         self.layer_selection.layerChanged.connect(self.set_layer)
-        self.field_selection.fieldChanged.connect(self.set_field)
+        self.plot_type_selection.currentTextChanged.connect(self.set_buttons)
 
         self.plot_layout = QVBoxLayout()
         self.univariate_plot_container.setLayout(self.plot_layout)
 
+        self.set_buttons(self.plot_type_selection.currentText())
+
+    def compute_statistics(self):
+        pass
+
     def set_layer(self, layer):
-        self.field_selection.setLayer(layer)
-        self.set_field(self.field_selection.currentField())
+        self.fields_selection.clear()  # Clear existing items
+        if layer is not None:
+            if layer.type() == QgsMapLayer.VectorLayer:
+                for field in layer.fields():
+                    self.fields_selection.addItem(field.name())
+            elif layer.type() == QgsMapLayer.RasterLayer:
+                for i in range(layer.bandCount()):
+                    self.fields_selection.addItem(f"Band {i + 1}")
 
-    def set_field(self, field_name):
-        self.field_selection.setField(field_name)
+    def set_buttons(self, plot_type: str):
+        if plot_type.lower() == "histogram":
+            self.fill_selection.setEnabled(True)
+            self.multiple_selection.setEnabled(True)
 
-    def plot_distribution(self):
+            self.hist_stat_selection.setEnabled(True)
+            self.element_selection.setEnabled(True)
+            self.nr_of_bins_selection.setEnabled(True)
+
+            self.bw_adjust_selection.setEnabled(False)
+
+            self.ecdf_stat_selection.setEnabled(False)
+
+        elif plot_type.lower() == "kde":
+            self.fill_selection.setEnabled(True)
+            self.multiple_selection.setEnabled(True)
+
+            self.hist_stat_selection.setEnabled(False)
+            self.element_selection.setEnabled(False)
+            self.nr_of_bins_selection.setEnabled(False)
+
+            self.bw_adjust_selection.setEnabled(True)
+
+            self.ecdf_stat_selection.setEnabled(False)
+        
+        elif plot_type.lower() == "histogram + kde":
+            self.fill_selection.setEnabled(True)
+            self.multiple_selection.setEnabled(True)
+
+            self.hist_stat_selection.setEnabled(True)
+            self.element_selection.setEnabled(True)
+            self.nr_of_bins_selection.setEnabled(True)
+
+            self.bw_adjust_selection.setEnabled(True)
+
+            self.ecdf_stat_selection.setEnabled(False)
+
+        elif plot_type.lower() == "ecdf":
+            self.fill_selection.setEnabled(False)
+            self.multiple_selection.setEnabled(False)
+
+            self.hist_stat_selection.setEnabled(False)
+            self.element_selection.setEnabled(False)
+            self.nr_of_bins_selection.setEnabled(False)
+
+            self.bw_adjust_selection.setEnabled(False)
+
+            self.ecdf_stat_selection.setEnabled(True)
+
+
+    def clear_plot(self):
         for i in reversed(range(self.plot_layout.count())):
             widget = self.plot_layout.itemAt(i).widget()
             if widget is not None:
                 widget.deleteLater()
 
-        # Create Seaborn plot
-        values = [
-            feature.attribute(self.field_selection.currentField())
-            for feature in self.layer_selection.currentLayer().getFeatures()
-        ]
-        values_no_null = [value for value in values if value != NULL]
+    def reset(self):
+        self.fields_selection.clearSelection()
+
+        self.plot_type_selection.setCurrentIndex(0)
+        self.opacity_selection.setOpacity(90)
+        self.log_scale_selection.setCurrentIndex(0)
+        self.fill_selection.setCurrentIndex(0)
+        self.multiple_selection.setCurrentIndex(0)
+        self.hist_stat_selection.setCurrentIndex(0)
+        self.element_selection.setCurrentIndex(0)
+        self.nr_of_bins_selection.setValue(0)
+        self.bw_adjust_selection.setValue(1.00)
+
+    def get_bool(self, str: str) -> bool:
+        return str.lower() == "true" 
+    
+    def qcolor_to_mpl(self, qcolor: QColor):
+        """Convert QColor to Matplotlib color"""
+        return qcolor.redF(), qcolor.greenF(), qcolor.blueF(), qcolor.alphaF()
+    
+    def qgsColorRamp_to_list(self, qgsColorRamp, steps=10):
+        """Convert QgsColorRamp to a list of Seaborn-friendly colors"""
+        colors = []
+        for i in range(steps + 1):
+            ratio = i / steps
+            qcolor = qgsColorRamp.color(ratio)
+            colors.append((qcolor.redF(), qcolor.greenF(), qcolor.blueF(), qcolor.alphaF()))
+        return colors
+
+
+    def plot(self):
+        self.clear_plot()
+
+        layer = self.layer_selection.currentLayer()
+        selected_items = self.fields_selection.selectedItems()
+        selected_fields = [item.text() for item in selected_items]
+
+        data_dict = {}
+
+        # Loop through each field and append its data to long_form_data
+        for field in selected_fields:
+            if layer.type() == QgsMapLayer.VectorLayer:
+                values = [feature.attribute(field) for feature in layer.getFeatures()]
+                data = [value for value in values if value != NULL]
+                data_dict[field] = data
+            # Raster
+            else:  
+                data_provider = layer.dataProvider()
+                width = layer.width()
+                height = layer.height()
+                band = int(field.split()[-1])
+
+                data_block = data_provider.block(band, layer.extent(), width, height)
+                data = []
+
+                # Loop over all pixels
+                for row in range(height):
+                    for col in range(width):
+                        pixel_value = data_block.value(row, col)
+                        if pixel_value != NULL:
+                            data.append(pixel_value)
+            data_dict[field] = data
 
         fig, ax = plt.subplots()
-        sns.histplot(data=values_no_null, ax=ax)
+
+        sns_common_kwargs = {
+            "data": data_dict,
+            "fill": self.get_bool(self.fill_selection.currentText()),
+            "multiple": self.multiple_selection.currentText().split()[0].lower(),
+            "log_scale": self.get_bool(self.log_scale_selection),
+            "alpha": self.opacity_selection.opacity(),
+            "ax": ax
+        }
+
+        if self.plot_type_selection.currentText().lower() == "histogram":
+            sns.histplot(
+                **sns_common_kwargs,
+                stat=self.hist_stat_selection.currentText().lower(),
+                element=self.element_selection.currentText().lower(),
+                bins=self.nr_of_bins_selection.value() if self.nr_of_bins_selection.value() > 0 else "auto",
+                # palette=self.qgsColorRamp_to_list(self.palette_selection.colorRamp(), len(selected_fields)),
+                # color=self.qcolor_to_mpl(self.color_selection.color())
+            )  
+        
+        elif self.plot_type_selection.currentText().lower() == "kde":
+            sns.kdeplot(
+                **sns_common_kwargs,
+                bw_adjust=self.bw_adjust_selection.value(),
+                # palette=self.qgsColorRamp_to_list(self.palette_selection.colorRamp(), len(selected_fields)),
+                # color=self.qcolor_to_mpl(self.color_selection.color())
+            )
+
+        elif self.plot_type_selection.currentText().lower() == "histogram + kde":
+            sns.histplot(
+                **sns_common_kwargs,
+                stat=self.hist_stat_selection.currentText().lower(),
+                element=self.element_selection.currentText().lower(),
+                bins=self.nr_of_bins_selection.value() if self.nr_of_bins_selection.value() > 0 else "auto",
+                kde=True,
+                kde_kws={"bw_adjust": self.bw_adjust_selection.value()},
+                # palette=self.qgsColorRamp_to_list(self.palette_selection.colorRamp(), len(selected_fields)),
+                # color=self.qcolor_to_mpl(self.color_selection.color())
+            )  
+
+        elif self.plot_type_selection.currentText().lower() == "ecdf":
+            sns_common_kwargs.pop("fill")
+            sns_common_kwargs.pop("multiple")
+            sns.ecdfplot(
+                **sns_common_kwargs,
+                stat=self.ecdf_stat_selection.currentText().lower(),
+                # palette=self.qgsColorRamp_to_list(self.palette_selection.colorRamp(), len(selected_fields)),
+                # color=self.qcolor_to_mpl(self.color_selection.color())
+            )  
+
         canvas = FigureCanvas(fig)
         canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         toolbar = NavigationToolbar(canvas, self.univariate_plot_container)

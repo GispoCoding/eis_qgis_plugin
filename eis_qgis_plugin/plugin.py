@@ -144,7 +144,7 @@ class Plugin:
 
         venv_action = self.add_action(
             "",
-            text="EIS settings",
+            text="Settings",
             callback=self.set_python_venv_path,
             parent=self.iface.mainWindow(),
             add_to_toolbar=False,
@@ -154,7 +154,7 @@ class Plugin:
         # Add links to Wizard steps as separate buttons, at least for now
         preprocess_action = self.add_action(
             icon_path,
-            text="EIS Proxy preparation",
+            text="Prepare proxy data",
             parent=self.iface.mainWindow(),
             callback=self.open_proxy_settings,
             add_to_toolbar=False,
@@ -163,7 +163,7 @@ class Plugin:
 
         explore_action = self.add_action(
             "",
-            text="EIS Explore",
+            text="Explore",
             parent=self.iface.mainWindow(),
             callback=self.open_explore,
             add_to_toolbar=False,
@@ -172,14 +172,14 @@ class Plugin:
 
         model_action = self.add_action(
             "",
-            text="EIS Modeling",
+            text="Modeling",
             parent=self.iface.mainWindow(),
             callback=self.open_modeling,
             add_to_toolbar=False,
             add_to_menu=False,
         )
 
-        group_action = self.add_action(
+        self.add_action(
             "",
             text="Testing: Add group",
             parent=self.iface.mainWindow(),
@@ -188,7 +188,7 @@ class Plugin:
             callback=self.add_layer_group,
         )
 
-        search_action = self.add_action(
+        self.add_action(
             "",
             text="Testing: Open search",
             parent=self.iface.mainWindow(),
@@ -203,8 +203,8 @@ class Plugin:
         self.popupMenu.addAction(explore_action)
         self.popupMenu.addAction(model_action)
         self.popupMenu.addAction(venv_action)
-        self.popupMenu.addAction(search_action)
-        self.popupMenu.addAction(group_action)
+        # self.popupMenu.addAction(search_action)
+        # self.popupMenu.addAction(group_action)
 
         self.toolButton = QToolButton()
         self.toolButton.setMenu(self.popupMenu)
