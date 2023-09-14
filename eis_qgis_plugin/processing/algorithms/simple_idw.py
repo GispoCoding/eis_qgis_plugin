@@ -1,5 +1,4 @@
 from qgis.core import (
-    QgsProcessingParameterEnum,
     QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
@@ -10,28 +9,28 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISKrigingInterpolation(EISProcessingAlgorithm):
+class EISSimpleIdw(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "kriging_interpolation"
-        self._display_name = "Kriging interpolation"
+        self._name = "simple_idw"
+        self._display_name = "IDW interpolation"
         self._group = "Vector processing"
         self._group_id = "vector_processing"
-        self._short_help_string = "Perform kriging interpolation"
+        self._short_help_string = (
+            "Perform inverse distance weighting (IDW) interpolation"
+        )
 
     def initAlgorithm(self, config=None):
 
         self.alg_parameters = [
-            "input_vector",
+            "input_geometries",
             "target_column",
             "resolution_x",
             "resolution_y",
             "extent",
-            "variogram_model",
-            "coordinates_type",
-            "method",
-            "output_raster"
+            "power",
+            "output_raster",
         ]
 
         self.addParameter(
@@ -67,35 +66,13 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[5],
-                description="Variogram model",
-                options=["linear", "power", "gaussian", "spherical", "exponential"],
-                defaultValue="linear"
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[6],
-                description="Coordinates type",
-                options=["geographic", "euclidean"],
-                defaultValue="geographic"
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[7],
-                description="Kriging method",
-                options=["ordinary", "universal"],
-                defaultValue="ordinary",
+            QgsProcessingParameterNumber(
+                name=self.alg_parameters[5], description="Power", defaultValue=2
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[8],
-                description="Output raster",
+                name=self.alg_parameters[6], description="Output raster"
             )
         )

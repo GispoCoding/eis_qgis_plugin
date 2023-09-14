@@ -18,12 +18,12 @@ class EISKMeans(EISProcessingAlgorithm):
         self._short_help_string = "Perform K-means clustering"
 
     def initAlgorithm(self, config=None):
-        
+
         self.alg_parameters = [
             "input_geometries",
             "clusters",
             "random_state",
-            "output_file"
+            "output_file",
         ]
 
         self.addParameter(
@@ -34,7 +34,9 @@ class EISKMeans(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[1], description="Number of clusters", optional=True
+                name=self.alg_parameters[1],
+                description="Number of clusters",
+                optional=True,
             )
         )
 

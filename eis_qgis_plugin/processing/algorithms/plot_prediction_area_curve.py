@@ -1,13 +1,12 @@
 from qgis.core import (
     QgsProcessingParameterFile,
-    QgsProcessingParameterFileDestination,    
+    QgsProcessingParameterFileDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
 class EISPlotPredictionAreaCurve(EISProcessingAlgorithm):
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -23,7 +22,8 @@ class EISPlotPredictionAreaCurve(EISProcessingAlgorithm):
             "true_positive_rate_values",
             "proportion_of_area_values",
             "threshold_values",
-            "plot_figure"]
+            "plot_figure",
+        ]
 
         self.addParameter(
             QgsProcessingParameterFile(

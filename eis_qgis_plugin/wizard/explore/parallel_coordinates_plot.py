@@ -1,6 +1,19 @@
 from qgis.core import QgsVectorLayer, QgsMapLayer, QgsStyle
-from qgis.gui import QgsMapLayerComboBox, QgsFieldComboBox, QgsColorButton, QgsColorRampButton, QgsOpacityWidget
-from qgis.PyQt.QtWidgets import QWidget, QComboBox, QPushButton, QVBoxLayout, QFormLayout, QDialog
+from qgis.gui import (
+    QgsMapLayerComboBox,
+    QgsFieldComboBox,
+    QgsColorButton,
+    QgsColorRampButton,
+    QgsOpacityWidget,
+)
+from qgis.PyQt.QtWidgets import (
+    QWidget,
+    QComboBox,
+    QPushButton,
+    QVBoxLayout,
+    QFormLayout,
+    QDialog,
+)
 from qgis.PyQt.QtWebKitWidgets import QWebView
 from qgis.PyQt import QtCore
 
@@ -31,27 +44,27 @@ class ParallelChart(QWidget, FORM_CLASS):
 
     plot_style_form: QFormLayout
 
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.init_parallel_plotting()   
+        self.init_parallel_plotting()
 
         # Connect signals
         self.layer_selection_parallel.layerChanged.connect(self.update)
         self.plot_button_parallel.clicked.connect(self.plot_parallel_coordinates)
-        self.plot_button_parallel_plotly.clicked.connect(self.plot_parallel_coordinates_plotly)
+        self.plot_button_parallel_plotly.clicked.connect(
+            self.plot_parallel_coordinates_plotly
+        )
         self.plot_button_seaborn.clicked.connect(self.open_seaborn_graph)
         self.clear_button_parallel.clicked.connect(self.clear)
         self.clear_seaborn.clicked.connect(self.clear_fig)
 
         self.update(self.layer_selection_parallel.currentLayer())
 
-
     def init_parallel_plotting(self):
 
         # window = pg.GraphicsLayoutWidget()
-        # self.plot_widget_parallel = win.addPlot()   
+        # self.plot_widget_parallel = win.addPlot()
 
         # # Assuming you have a list of your variable names
         # variable_names = ["var1", "var2", "var3"]
@@ -74,7 +87,6 @@ class ParallelChart(QWidget, FORM_CLASS):
         # for i, d in enumerate(data):
         #     # create a plot for this data, linked to the corresponding AxisItem
         #     plot_item.plot(d, pen=(i, len(data)))
-
 
         self.plot_widget_parallel = pg.PlotWidget(parent=self.plot_container_parallel)
         self.plot_widget_parallel.setMinimumSize(450, 430)
@@ -100,15 +112,12 @@ class ParallelChart(QWidget, FORM_CLASS):
         self.color_ramp_button.setDefaultColorRamp(spectral_color_ramp)
         self.color_ramp_button.setColorRamp(spectral_color_ramp)
 
-    
     def update(self, layer: QgsMapLayer) -> None:
         if layer is not None:
             self.color_field_selection_parallel.setLayer(layer)
 
-
     def clear(self):
         self.plot_widget_parallel.clear()
-
 
     @staticmethod
     def normalize_value(layer: QgsVectorLayer, value: float, i: int):
@@ -120,7 +129,6 @@ class ParallelChart(QWidget, FORM_CLASS):
             normalized_value = 0
         return normalized_value
 
-
     def plot_parallel_coordinates(self):
         layer = self.layer_selection_parallel.currentLayer()
         if not layer:
@@ -131,11 +139,15 @@ class ParallelChart(QWidget, FORM_CLASS):
         if not color_field_name:
             print("No category field selected")
             return
-        
+
         fields = layer.fields()
         alpha = opacity_to_alpha(self.line_opacity_parallel.opacity())
-        color_mapping = generate_color_mapping(layer, color_field_name, self.color_ramp_button.colorRamp())
-        numerical_field_names = [field.name() for field in fields if field.name() != color_field_name]
+        color_mapping = generate_color_mapping(
+            layer, color_field_name, self.color_ramp_button.colorRamp()
+        )
+        numerical_field_names = [
+            field.name() for field in fields if field.name() != color_field_name
+        ]
         data_x = list(range(len(numerical_field_names)))
         field_labels = zip(data_x, numerical_field_names)
 
@@ -143,7 +155,9 @@ class ParallelChart(QWidget, FORM_CLASS):
             # Determine feature color
             color_field_value = feature[color_field_name]
             pen_color = color_mapping[color_field_value]
-            pen = pg.mkPen(pen_color.red(), pen_color.green(), pen_color.blue(), alpha, width=3)
+            pen = pg.mkPen(
+                pen_color.red(), pen_color.green(), pen_color.blue(), alpha, width=3
+            )
 
             # Collect data
             data_y = []
@@ -157,33 +171,33 @@ class ParallelChart(QWidget, FORM_CLASS):
             self.plot_widget_parallel.plot(
                 data_x, data_y, pen=pen, name=str(value), labels=field_labels
             )
-        
+
         # Rename axis labels
         bottom_axis = self.plot_widget_parallel.getAxis("bottom")
         # print(numerical_field_names)
         bottom_axis.setTicks([field_labels])
 
-
     def plot_parallel_coordinates_plotly(self):
         import plotly.express as px
+
         df = px.data.iris()
         fig = px.parallel_coordinates(
             data_frame=df,
             color="species_id",
-            labels = {
+            labels={
                 "species_id": "Species",
                 "sepal_width": "Sepal Width",
                 "sepal_length": "Sepal Length",
                 "petal_width": "Petal Width",
-                "petal_length": "Petal Length"
+                "petal_length": "Petal Length",
             },
             color_continuous_scale=px.colors.diverging.Tealrose,
-            color_continuous_midpoint=2
+            color_continuous_midpoint=2,
         )
         fig.write_html("/home/niko/Downloads/plotly_parallel.html")
 
         self.open_plotly_graph()
-    
+
     def open_plotly_graph(self):
         self.plot_dialog = QDialog()
 
@@ -192,7 +206,9 @@ class ParallelChart(QWidget, FORM_CLASS):
 
         web_widget = QWebView(self.plot_dialog)
         # web_widget.setUrl(QtCore.QUrl("file:///home/niko/Downloads/plotly_parallel.html"))
-        web_widget.setUrl(QtCore.QUrl("file:///home/niko/Downloads/plotly_interactive_test.html"))
+        web_widget.setUrl(
+            QtCore.QUrl("file:///home/niko/Downloads/plotly_interactive_test.html")
+        )
         layout.addWidget(web_widget)
         self.plot_dialog.show()
 
@@ -213,7 +229,7 @@ class ParallelChart(QWidget, FORM_CLASS):
 
         # layout.addWidget(label)
         # self.plot_dialog.show()
-        
+
         # In your main application / widget, you would then create and show the dialog:
         dialog = QDialog()
         self.fig = Figure()
@@ -231,7 +247,6 @@ class ParallelChart(QWidget, FORM_CLASS):
 
         dialog.show()
         dialog.exec()
-
 
     def clear_fig(self):
         self.fig.clear()
