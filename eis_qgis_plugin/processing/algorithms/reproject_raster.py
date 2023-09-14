@@ -13,7 +13,7 @@ class EISReprojectRaster(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "reproject_raster"
-        self._display_name = "Reproject raster"
+        self._display_name = "Reproject raster (R)"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = (
@@ -24,7 +24,7 @@ class EISReprojectRaster(EISProcessingAlgorithm):
 
         self.alg_parameters = [
             "input_raster",
-            "crs",
+            "target_crs",
             "resampling_method",
             "output_raster",
         ]

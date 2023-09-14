@@ -12,7 +12,7 @@ class EISReprojectVector(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "reproject_vector"
-        self._display_name = "Reproject vector"
+        self._display_name = "Reproject vector (R)"
         self._group = "Vector Processing"
         self._group_id = "vector_processing"
         self._short_help_string = "Reproject a vector layer"

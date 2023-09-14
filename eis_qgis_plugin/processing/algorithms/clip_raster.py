@@ -12,7 +12,7 @@ class EISClipRaster(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "clip_raster"
-        self._display_name = "Clip raster"
+        self._display_name = "Clip raster (R)"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = "Clip a raster with vector layer features."

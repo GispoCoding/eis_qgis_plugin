@@ -62,7 +62,7 @@ class EISRasterize(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[4], description="Fil value", defaultValue=0.0
+                name=self.alg_parameters[4], description="Fill value", defaultValue=0.0
             )
         )
 

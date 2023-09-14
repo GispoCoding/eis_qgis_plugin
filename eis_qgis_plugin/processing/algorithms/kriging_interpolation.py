@@ -23,7 +23,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
 
         self.alg_parameters = [
-            "input_geometries",
+            "input_vector",
             "target_column",
             "resolution_x",
             "resolution_y",

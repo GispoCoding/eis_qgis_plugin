@@ -1,5 +1,4 @@
 from qgis.core import (
-    QgsProcessingParameterFileDestination,
     QgsProcessingParameterMapLayer,
 )
 
@@ -18,7 +17,8 @@ class EISDescriptiveStatistics(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
 
-        self.alg_parameters = ["input_layer", "output_file"]
+        # self.alg_parameters = ["input_file", "output_file"]
+        self.alg_parameters = ["input_file"]
 
         self.addParameter(
             QgsProcessingParameterMapLayer(
@@ -26,9 +26,9 @@ class EISDescriptiveStatistics(EISProcessingAlgorithm):
             )
         )
 
-        self.addParameter(
-            QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[1],
-                description="Output file",
-            )
-        )
+        # self.addParameter(
+        #     QgsProcessingParameterFileDestination(
+        #         name=self.alg_parameters[1],
+        #         description="Output file",
+        #     )
+        # )

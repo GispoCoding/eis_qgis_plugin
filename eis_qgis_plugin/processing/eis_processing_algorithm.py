@@ -1,8 +1,8 @@
 import os
-
-# import re
+import time
 import subprocess
-from typing import Dict
+import json
+from typing import Dict, List
 
 from qgis.core import (
     QgsProcessingAlgorithm,
@@ -11,8 +11,10 @@ from qgis.core import (
     QgsProcessingParameterBoolean,
     QgsProcessingParameterCrs,
     QgsProcessingParameterEnum,
+    QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterField,
     QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterFolderDestination,
@@ -41,7 +43,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self._group_id = ""
         self._short_help_string = ""
 
-        self.alg_parameters = []
+        self.alg_parameters: List[str] = []
 
     def name(self):
         return self._name
@@ -67,55 +69,90 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
     def prepare_arguments(self, parameters: Dict, context):
         args = []
 
-        flag_mapping = {
-            "resampling_method": "--resampling-method",
-            "output_raster": "--output-raster-file",
-            "same_extent": "--same-extent",
-            "crs": "--crs",
-            # Add more mappings as needed
-        }
+        # By default, all parameters are passed as Typer options (parameter name needs to be delivered
+        # prefixed with --)
+        
+        # TODO: Check if all these work with optional parameters (arg evaluating to None)
+
+        # NOTE: Because of the above, flag mapping is likely to be deleted
+        # flag_mapping = {
+        #     "resampling_method": "--resampling-method",
+        #     "output_raster": "--output-raster-file",
+        #     "same_extent": "--same-extent",
+        #     "crs": "--crs",
+        #     # Add more mappings as needed
+        # }
 
         for name in self.alg_parameters:
             param = self.parameterDefinition(name)
-            flag = flag_mapping.get(name)
-
+            param_name = "--" + name.replace("_", "-")
+            # flag = flag_mapping.get(name)
             if isinstance(param, QgsProcessingParameterBoolean):
                 arg = str(self.parameterAsBool(parameters, name, context))
 
             elif isinstance(param, QgsProcessingParameterString):
-                arg = self.parameterAsString(parameters, name, context)
+                arg = self.parameterAsString(parameters, name, context).lower()
 
             elif isinstance(param, QgsProcessingParameterNumber):
+                if not self.parameterAsString(parameters, name, context):  # Arg is None
+                    continue
                 if param.dataType() == QgsProcessingParameterNumber.Integer:
                     arg = str(self.parameterAsInt(parameters, name, context))
                 else:
                     arg = str(self.parameterAsDouble(parameters, name, context))
 
+            elif isinstance(param, QgsProcessingParameterExtent):
+                if not self.parameterAsString(parameters, name, context):  # Arg is None
+                    continue
+                extents = self.parameterAsString(parameters, name, context).split("[")[0].strip().split(",")
+                args.append(param_name)
+                [args.append(coord) for coord in extents]
+                continue
+            
+            elif isinstance(param, QgsProcessingParameterField):
+                arg = self.parameterAsString(parameters, name, context)
+
             elif isinstance(param, QgsProcessingParameterMapLayer):
                 layer = self.parameterAsLayer(parameters, name, context)
+                if not layer:
+                    continue
                 arg = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterRasterLayer):
                 layer = self.parameterAsRasterLayer(parameters, name, context)
+                if not layer:
+                    continue
                 arg = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterFeatureSource):
                 layer = self.parameterAsVectorLayer(parameters, name, context)
+                if not layer:
+                    continue
                 arg = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterVectorLayer):
                 layer = self.parameterAsVectorLayer(parameters, name, context)
+                if not layer:
+                    continue
                 arg = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterMultipleLayers):
                 layers = self.parameterAsLayerList(parameters, name, context)
+                if not layers:
+                    continue
+                args.append(param_name)
                 [args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
 
             # TODO check if works
             elif isinstance(param, QgsProcessingParameterPoint):
                 coords = self.parameterAsPoint(parameters, name, context)
-                arg = (coords.x(), coords.y())
+                if not coords:
+                    continue
+                args.append(param_name)
+                args.append(str(coords.x()))
+                args.append(str(coords.y()))
+                continue
 
             # TODO check if works
             elif isinstance(param, QgsProcessingParameterFile):
@@ -123,10 +160,12 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             # TODO
             elif isinstance(param, QgsProcessingParameterEnum):
-                arg = self.parameterAsEnumString(parameters, name, context)
+                arg = self.parameterAsEnumString(parameters, name, context).lower()
 
             elif isinstance(param, QgsProcessingParameterCrs):
                 crs = str(self.parameterAsCrs(parameters, name, context))
+                if not crs:
+                    continue
                 arg = str(crs.split("EPSG:")[-1][:-1])
 
             # TODO (remove? broken parameter type in some API versions)
@@ -163,14 +202,26 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             else:
                 raise Exception(
-                    "Parameter conversion failed, parameter is unknown type"
+                    f"Parameter ({param_name}) conversion failed, parameter is unknown type."
                 )
 
-            if flag:
-                args.append(flag)
+            # if flag:
+            #     args.append(flag)
+            if not arg:
+                continue
+
+            args.append(param_name)
             args.append(arg)
 
         return args
+
+    
+    def get_bin_folder(self):
+        if os.name == "nt":  # Windows
+            return "Scripts"
+        else:
+            return "bin"
+
 
     def processAlgorithm(self, parameters, context, feedback):
         """
@@ -181,43 +232,61 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             feedback = QgsProcessingFeedback()
 
         arguments = self.prepare_arguments(parameters, context)
-
-        eis_executable = get_python_venv_path() + "/bin/eis"
-        # python_path = python_venv_path + "/bin/python"
-        # toolkit_path = python_venv_path + "/lib/python3.9/site-packages/eis_toolkit/__main__.py"
-
+        eis_executable = os.path.join(get_python_venv_path(), self.get_bin_folder(), "eis")
         cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
-        process = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
-        )
 
-        # TODO
-        # progress_regex = re.compile(r"(\d+)%")
-
-        # while process.poll() is None:
-        #     stdout = process.stdout.readline().strip()
-        #     print(f"Polling toolkit. Stdout: {stdout}")
-
-        #     progress_match = progress_regex.search(stdout)
-        #     if progress_match:
-        #         progress = int(progress_match.group(1))
-        #         feedback.setProgress(progress)
-        #     else:
-        #         print(stdout)
-
-        #     time.sleep(0.1)
-
-        stdout, stderr = process.communicate()
-
-        # Handle the return code as needed
-        if process.returncode != 0:
-            # stderr = process.stderr.read()
-            print("EIS Toolkit algorithm execution failed with error:", stderr)
-        else:
-            print("EIS Toolkit algorithm executed successfully!")
-
-        # Return results
         results = {}
+
+        try:
+            process = subprocess.Popen(
+                cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
+            )
+            # progress_regex = re.compile(r"(\d+)%")
+            progress_prefix = "Progress:"
+            results_prefix = "Results:"
+        
+            while process.poll() is None:
+                stdout = process.stdout.readline().strip()
+
+                # progress_match = progress_regex.search(stdout)
+                # if progress_match:
+                if progress_prefix in stdout:
+                    # progress = int(progress_match.group(1))
+                    progress = int(stdout.split(":")[1].strip()[:-1])
+                    feedback.setProgress(progress)
+                    feedback.pushInfo(f"Progress: {progress}%")
+                elif results_prefix in stdout:
+                    # Extract the JSON part
+                    json_str = stdout.split(results_prefix)[-1].strip()
+
+                    # Deserialize the JSON-formatted string to a Python dict
+                    output_dict = json.loads(json_str)
+
+                    for key, value in output_dict.items():
+                        results[key] = value
+                else:
+                    feedback.pushInfo(stdout)
+
+                time.sleep(0.05)
+
+            stdout, stderr = process.communicate()
+
+            if process.returncode != 0:
+                feedback.reportError(f"EIS Toolkit algorithm execution failed with error: {stderr}")
+            else:
+                feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
+
+        except Exception as e:
+            feedback.reportError(f"Failed to run the command. Error: {str(e)}")
+            process.terminate()
+            # return {}
+
+        finally:
+            # Ensure the subprocess is terminated
+            if process is not None:
+                process.terminate()
+
+        # Fetch results
         for output in self.outputDefinitions():
             output_name = output.name()
             if output_name in parameters:

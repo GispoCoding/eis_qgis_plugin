@@ -1,5 +1,4 @@
 from qgis.core import (
-    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
 )
@@ -19,7 +18,7 @@ class EISSnapRaster(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
 
-        self.alg_parameters = ["input_raster", "base_raster", "output_raster"]
+        self.alg_parameters = ["input_raster", "snap_raster", "output_raster"]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -28,8 +27,8 @@ class EISSnapRaster(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[1], description="Base raster"
+            QgsProcessingParameterRasterLayer(
+                name=self.alg_parameters[1], description="Base raster for snapping"
             )
         )
 
