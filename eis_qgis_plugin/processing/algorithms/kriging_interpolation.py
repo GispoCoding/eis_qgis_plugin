@@ -31,8 +31,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             "variogram_model",
             "coordinates_type",
             "method",
-            "drift_terms",
-            "output_raster",
+            "output_raster"
         ]
 
         self.addParameter(
@@ -71,15 +70,8 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 name=self.alg_parameters[5],
                 description="Variogram model",
-                options=[
-                    "linear",
-                    "power",
-                    "gaussian",
-                    "spherical",
-                    "exponential",
-                    "hole-effect",
-                ],
-                defaultValue="linear",
+                options=["linear", "power", "gaussian", "spherical", "exponential"],
+                defaultValue="linear"
             )
         )
 
@@ -87,8 +79,8 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 name=self.alg_parameters[6],
                 description="Coordinates type",
-                options=["euclidean", "geographic"],
-                defaultValue="geographic",
+                options=["geographic", "euclidean"],
+                defaultValue="geographic"
             )
         )
 
@@ -102,24 +94,8 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[8],
-                description="Drift terms",
-                options=[
-                    "regional_linear",
-                    "point_log",
-                    "external_Z",
-                    "specified",
-                    "functional",
-                ],
-                defaultValue="regional_linear",
-                allowMultiple=True,
-            )
-        )
-
-        self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[9],
+                name=self.alg_parameters[8],
                 description="Output raster",
             )
         )
