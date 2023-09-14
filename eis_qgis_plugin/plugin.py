@@ -11,7 +11,7 @@ from qgis.PyQt.QtWidgets import (
     QLineEdit,
     QMenu,
     QToolButton,
-    QWidget
+    QWidget,
 )
 from qgis.utils import iface
 
@@ -20,11 +20,11 @@ from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logge
 from .qgis_plugin_tools.tools.i18n import setup_translation
 from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
-from .wizard.explore.wizard_explore import EISWizardExplore, EISWizardExploreBig
-from .wizard.wizard_main import EISWizardMain
-from .wizard.preprocess.settings import EISWizardPreprocessSettings
+from .wizard.explore.wizard_explore import EISWizardExploreBig
+from .wizard.explore.wizard_explore_new import EISWizardExploreNew
+from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
 from .wizard.model.model_wizard import EISWizardModeling
-from .wizard.wizard_search import SearchDialog
+from .wizard.search_test import SearchDialog
 
 PLUGIN_PATH = os.path.dirname(__file__)
 
@@ -144,7 +144,7 @@ class Plugin:
 
         venv_action = self.add_action(
             "",
-            text="EIS settings",
+            text="Settings",
             callback=self.set_python_venv_path,
             parent=self.iface.mainWindow(),
             add_to_toolbar=False,
@@ -154,16 +154,16 @@ class Plugin:
         # Add links to Wizard steps as separate buttons, at least for now
         preprocess_action = self.add_action(
             icon_path,
-            text="EIS Preprocess",
+            text="Prepare proxy data",
             parent=self.iface.mainWindow(),
-            callback=self.open_preprocess,
+            callback=self.open_proxy_settings,
             add_to_toolbar=False,
             add_to_menu=False,
         )
 
         explore_action = self.add_action(
             "",
-            text="EIS Explore",
+            text="Explore",
             parent=self.iface.mainWindow(),
             callback=self.open_explore,
             add_to_toolbar=False,
@@ -172,14 +172,14 @@ class Plugin:
 
         model_action = self.add_action(
             "",
-            text="EIS Modeling",
+            text="Modeling",
             parent=self.iface.mainWindow(),
             callback=self.open_modeling,
             add_to_toolbar=False,
             add_to_menu=False,
         )
 
-        group_action = self.add_action(
+        self.add_action(
             "",
             text="Testing: Add group",
             parent=self.iface.mainWindow(),
@@ -188,7 +188,7 @@ class Plugin:
             callback=self.add_layer_group,
         )
 
-        search_action = self.add_action(
+        self.add_action(
             "",
             text="Testing: Open search",
             parent=self.iface.mainWindow(),
@@ -203,8 +203,8 @@ class Plugin:
         self.popupMenu.addAction(explore_action)
         self.popupMenu.addAction(model_action)
         self.popupMenu.addAction(venv_action)
-        self.popupMenu.addAction(search_action)
-        self.popupMenu.addAction(group_action)
+        # self.popupMenu.addAction(search_action)
+        # self.popupMenu.addAction(group_action)
 
         self.toolButton = QToolButton()
         self.toolButton.setMenu(self.popupMenu)
@@ -242,12 +242,12 @@ class Plugin:
         if ok and python_path:
             save_python_venv_path(python_path)
 
-    def open_preprocess(self):
-        self.preprocess_window = EISWizardPreprocessSettings()
-        self.preprocess_window.show()
+    def open_proxy_settings(self):
+        self.proxy_settings_window = EISWizardProxySettings()
+        self.proxy_settings_window.show()
 
     def open_explore(self):
-        self.explore_window = EISWizardExplore()
+        self.explore_window = EISWizardExploreNew()
         self.explore_window.show()
 
     def open_explore_big(self):
@@ -280,9 +280,8 @@ class Plugin:
         self.first_start = True
         if self.first_start:
             self.first_start = False
-            self.wizard_window = EISWizardMain(self.iface)
+            pass
 
-        self.wizard_window.show()  # Show the dialog
         # result = self.test_dlg.exec_() # Run the dialog event loop
 
         # if result:  # See if OK was pressed

@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>923</width>
+    <width>593</width>
     <height>557</height>
    </rect>
   </property>
@@ -33,21 +33,6 @@
        <widget class="QWidget" name="source_tab">
         <attribute name="title">
          <string>Source</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="pathway_tab">
-        <attribute name="title">
-         <string>Active/structural pathways</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="depositional_tab">
-        <attribute name="title">
-         <string>Depositional processes</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="mineralisation_tab">
-        <attribute name="title">
-         <string>Mineralisation, remobilisation, modification</string>
         </attribute>
        </widget>
       </widget>

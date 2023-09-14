@@ -1,6 +1,7 @@
 from qgis.PyQt.QtWidgets import QDialog, QWizard
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+
 # from eis_qgis_plugin.wizard.explore.wizard_explore import EISWizardExplore
 # from eis_qgis_plugin.wizard.preprocess.wizard_preprocess import EISWizardPreprocess
 

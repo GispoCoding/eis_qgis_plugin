@@ -1,11 +1,11 @@
 import json
 import os
+
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtWidgets import (
-    QDialog,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -15,32 +15,72 @@ from qgis.PyQt.QtWidgets import (
     QSizePolicy,
     QVBoxLayout,
     QWidget,
+    QDialog,
 )
 
+from qgis.gui import (
+    QgsMapLayerComboBox,
+    QgsFieldComboBox,
+    QgsFieldExpressionWidget,
+    QgsFileWidget,
+)
+
+
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from ..preprocess.create_proxy import EISWizardProxy
 
 FORM_CLASS: QDialog = load_ui("preprocess/wizard_preprocess_iocg.ui")
+# FORM_CLASS: QWizard = load_ui("preprocess/wizard_preprocess_iocg_3.ui")
 path = Path(os.path.dirname(__file__)).parent.parent
 
 
 class EISWizardPreprocess(QDialog, FORM_CLASS):
+    layer_selection: QgsMapLayerComboBox
+    attribute_selection: QgsFieldComboBox
+    field_expression: QgsFieldExpressionWidget
+
+    output_file: QgsFileWidget
+
     def __init__(self, scale, mineral_system) -> None:
         super().__init__()
         self.setupUi(self)
 
+        # PAGE 1
         self.proxy_widgets: Dict[str, Tuple[str, list, QWidget]] = {}
 
         self.bold_font = QtGui.QFont()
         self.bold_font.setBold(True)
 
-        # self.create_active_pathway()
         self.init_proxies(mineral_system, scale)
 
-        # self.overview_tab.repaint()
+        # Repaint
         self.source_tab.repaint()
         self.pathway_tab.repaint()
         self.depositional_tab.repaint()
         self.mineralisation_tab.repaint()
+
+        # self.open_explore_btn.clicked.connect(self.open_explore)
+
+        # # PAGE 2
+        # self.selected_layer: QgsVectorLayer = None
+        # self.selected_field: QgsField = None
+        # self.layer_selection.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        # self.layer_selection.layerChanged.connect(self.set_layer)
+        # self.attribute_selection.fieldChanged.connect(self.set_field)
+
+        # # Connect buttons
+        # self.compute_and_plot_btn.clicked.connect(self.compute_and_plot)
+        # self.select_data_btn.clicked.connect(self.select_data)
+        # self.create_file_btn.clicked.connect(self.create_file_from_selection)
+        # self.idw_btn.clicked.connect(lambda _: processing.execAlgorithmDialog("eis:simple_idw", {}) )
+        # self.kriging_btn.clicked.connect(lambda _: processing.execAlgorithmDialog("eis:kriging_interpolation", {}) )
+        # self.distance_raster_btn.clicked.connect(
+        #     lambda _: processing.execAlgorithmDialog("eis:distance_computation", {})
+        # )
+
+        # # Set plot layout
+        # self.plot_layout = QVBoxLayout()
+        # self.plot_widget.setLayout(self.plot_layout)
 
     def importance_value(self, importance_str):
         if importance_str.lower() == "high":
@@ -145,6 +185,7 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
             # Process button
             process_button = QPushButton("Process")
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+            process_button.clicked.connect(self.open_proxy_creation)
             grid_layout.addWidget(process_button, row, 3)
 
             # Load button
@@ -161,93 +202,6 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
                 process_button,
                 load_button,
             )
-
-    def create_active_pathway(self):
-        tab: QWidget = self.pathway_tab
-        self.main_layout = QVBoxLayout()
-
-        proxies: List[Tuple[str, str]] = [
-            ("Major structures", "High"),
-            ("Lower order structures", "High"),
-            ("Fluid flow and deposition", "Moderate"),
-            ("Proxy 4", "Low"),
-            ("Something", "Low"),
-        ]
-
-        self.proxy_widgets: Dict[str, Tuple[str, QWidget]] = {}
-        self.proxy_layout = QGridLayout()
-
-        # Add header row
-        bold_font = QtGui.QFont()
-        bold_font.setBold(True)
-
-        self.proxy_layout_header_widget = QWidget()
-        self.proxy_layout_header_layout = QHBoxLayout()
-
-        label = QLabel("Proxy")
-        self.proxy_layout_header_layout.addWidget(label)
-        label.setFont(bold_font)
-
-        importance_label = QLabel("Importance")
-        # importance_label.setMinimumWidth(82)
-        self.proxy_layout_header_layout.addWidget(importance_label)
-        importance_label.setFont(bold_font)
-
-        process_label = QLabel("Process")
-        self.proxy_layout_header_layout.addWidget(process_label)
-        process_label.setFont(bold_font)
-
-        load_label = QLabel("Load")
-        self.proxy_layout_header_layout.addWidget(load_label)
-        load_label.setFont(bold_font)
-
-        self.proxy_layout_header_widget.setLayout(self.proxy_layout_header_layout)
-        self.proxy_layout.addWidget(self.proxy_layout_header_widget, 0, 0, 1, 4)
-
-        for i, (proxy, importance) in enumerate(proxies):
-            i = i + 1
-            proxy_widget = QWidget()
-            proxy_layout = QHBoxLayout()
-
-            proxy_label = QLabel(proxy)
-            proxy_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-            proxy_layout.addWidget(proxy_label)
-
-            importance_label = QLabel(importance)
-            importance_label.setMinimumWidth(82)
-            proxy_layout.addWidget(importance_label)
-
-            process_button = QPushButton("Process")
-            process_button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-            proxy_layout.addWidget(process_button)
-
-            load_button = QPushButton("Load")
-            load_button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-            proxy_layout.addWidget(load_button)
-
-            proxy_widget.setLayout(proxy_layout)
-
-            self.proxy_widgets[proxy] = (importance, proxy_widget)
-            self.proxy_layout.addWidget(proxy_widget, i, 0, 1, 4)
-
-        self.search_layout = QHBoxLayout()
-        self.search_label = QLabel("Search")
-        self.search_bar = QLineEdit()
-        self.search_bar.textChanged.connect(self.update_widgets)
-        self.search_layout.addWidget(self.search_label)
-        self.search_layout.addWidget(self.search_bar)
-        self.main_layout.addLayout(self.search_layout)
-
-        scroll_widget = QWidget()
-        scroll_layout = QVBoxLayout()
-        scroll_layout.addLayout(self.proxy_layout)
-        scroll_widget.setLayout(scroll_layout)
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(scroll_widget)
-        self.main_layout.addWidget(scroll_area)
-
-        tab.setLayout(self.main_layout)
 
     def update_widgets(self, text):
         for proxy, (
@@ -276,7 +230,80 @@ class EISWizardPreprocess(QDialog, FORM_CLASS):
                 process_button.hide()
                 load_button.hide()
 
-        # self.create_scroll_area()
+    def open_proxy_creation(self):
+        self.proxy_window = EISWizardProxy(self)
+        self.proxy_window.show()
+
+    # def open_explore(self):
+    #     self.explore_window = EISWizardExplore(self)
+    #     self.explore_window.show()
+
+    # ----- PAGE 2 -----
+
+    # def set_layer(self, layer):
+    #     self.attribute_selection.setLayer(layer)
+    #     self.selected_layer = layer
+    #     self.set_field(self.attribute_selection.currentField())
+
+    # def set_field(self, field_name):
+    #     self.selected_field = field_name
+    #     self.field_expression.setField(field_name)
+
+    # def compute_and_plot(self):
+    #     if self.selected_layer is None or self.selected_field is None:
+    #         print("Select a layer and field first!")
+    #     else:
+    #         self.get_statistics()
+    #         self.plot_distribution()
+
+    # def select_data(self):
+    #     if self.field_expression.isValidExpression():
+    #         self.selected_layer.selectByExpression(self.field_expression.expression(), QgsVectorLayer.SetSelection)
+    #     else:
+    #         print("Expression invalid!")
+
+    # def create_file_from_selection(self):
+    #     print(self.output_file.filePath())
+    #     self.output_file.set
+
+    # def get_statistics(self):
+    #     # my_result = processing.run("eis:descriptive_statistics",
+    #     #     {
+    #     #         'input_layer': '/data/lines.shp',
+    #     #         'output_file': '/data/buffers.shp'
+    #     #     }
+    #     # )
+    #     # output = my_result['OUTPUT']
+    #     self.max_output.setText("1")
+    #     self.min_output.setText("2")
+    #     self.mean_output.setText("3")
+    #     self.median_output.setText("4")
+
+    # def plot_distribution(self):
+    #     for i in reversed(range(self.plot_layout.count())):
+    #         widget = self.plot_layout.itemAt(i).widget()
+    #         if widget is not None:
+    #             widget.deleteLater()
+
+    #     # Create Seaborn plot
+    #     values = [feature.attribute(self.selected_field) for feature in self.selected_layer.getFeatures()]
+    #     values_no_null = [value for value in values if value != NULL]
+
+    #     fig, ax = plt.subplots()
+    #     sns.histplot(data=values_no_null, ax=ax)
+    #     canvas = FigureCanvas(fig)
+    #     canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+    #     toolbar = NavigationToolbar(canvas, self.plot_widget)
+
+    #     # # Create Seaborn plot
+    #     # penguins = sns.load_dataset("penguins")
+    #     # fig, ax = plt.subplots()
+    #     # sns.histplot(data=penguins, x="flipper_length_mm", ax=ax)
+    #     # canvas = FigureCanvas(fig)
+    #     # canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+    #     self.plot_layout.addWidget(toolbar)
+    #     self.plot_layout.addWidget(canvas)
 
     # def create_scroll_area(self):
     #     page = self.geoprocessing_3

@@ -9,6 +9,7 @@ from qgis.core import (
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
+
 class EISKrigingInterpolation(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
@@ -20,7 +21,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         self._short_help_string = "Perform kriging interpolation"
 
     def initAlgorithm(self, config=None):
-        
+
         self.alg_parameters = [
             "input_geometries",
             "target_column",
@@ -43,7 +44,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             QgsProcessingParameterField(
                 name=self.alg_parameters[1],
                 description="Interpolation attribute",
-                parentLayerParameterName=self.alg_parameters[0]
+                parentLayerParameterName=self.alg_parameters[0],
             )
         )
 
@@ -88,7 +89,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
                 name=self.alg_parameters[7],
                 description="Kriging method",
                 options=["ordinary", "universal"],
-                defaultValue="ordinary"
+                defaultValue="ordinary",
             )
         )
 
