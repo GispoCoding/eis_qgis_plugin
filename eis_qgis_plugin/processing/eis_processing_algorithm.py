@@ -281,11 +281,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             process.terminate()
             # return {}
 
-        finally:
-            # Ensure the subprocess is terminated
-            if process is not None:
-                process.terminate()
-
         # Fetch results
         for output in self.outputDefinitions():
             output_name = output.name()
