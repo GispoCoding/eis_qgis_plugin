@@ -252,7 +252,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 # if progress_match:
                 if progress_prefix in stdout:
                     # progress = int(progress_match.group(1))
-                    progress = int(stdout.split(":")[1].strip())
+                    progress = int(stdout.split(":")[1].strip()[:-1])
                     feedback.setProgress(progress)
                     feedback.pushInfo(f"Progress: {progress}%")
                 elif results_prefix in stdout:
