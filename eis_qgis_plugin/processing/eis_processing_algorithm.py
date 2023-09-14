@@ -1,7 +1,7 @@
 import os
-import re
 import time
 import subprocess
+import json
 from typing import Dict, List
 
 from qgis.core import (
@@ -232,25 +232,38 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             feedback = QgsProcessingFeedback()
 
         arguments = self.prepare_arguments(parameters, context)
-
         eis_executable = os.path.join(get_python_venv_path(), self.get_bin_folder(), "eis")
-
         cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
+
+        results = {}
 
         try:
             process = subprocess.Popen(
                 cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
             )
-            progress_regex = re.compile(r"(\d+)%")
+            # progress_regex = re.compile(r"(\d+)%")
+            progress_prefix = "Progress:"
+            results_prefix = "Results:"
         
             while process.poll() is None:
                 stdout = process.stdout.readline().strip()
 
-                progress_match = progress_regex.search(stdout)
-                if progress_match:
-                    progress = int(progress_match.group(1))
+                # progress_match = progress_regex.search(stdout)
+                # if progress_match:
+                if progress_prefix in stdout:
+                    # progress = int(progress_match.group(1))
+                    progress = int(stdout.split(":")[1].strip())
                     feedback.setProgress(progress)
                     feedback.pushInfo(f"Progress: {progress}%")
+                elif results_prefix in stdout:
+                    # Extract the JSON part
+                    json_str = stdout.split(results_prefix)[-1].strip()
+
+                    # Deserialize the JSON-formatted string to a Python dict
+                    output_dict = json.loads(json_str)
+
+                    for key, value in output_dict.items():
+                        results[key] = value
                 else:
                     feedback.pushInfo(stdout)
 
@@ -258,17 +271,22 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             stdout, stderr = process.communicate()
 
+            if process.returncode != 0:
+                feedback.reportError(f"EIS Toolkit algorithm execution failed with error: {stderr}")
+            else:
+                feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
+
         except Exception as e:
             feedback.reportError(f"Failed to run the command. Error: {str(e)}")
-            return {}
+            process.terminate()
+            # return {}
 
-        if process.returncode != 0:
-            feedback.reportError(f"EIS Toolkit algorithm execution failed with error: {stderr}")
-        else:
-            feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
+        finally:
+            # Ensure the subprocess is terminated
+            if process is not None:
+                process.terminate()
 
-        # Return results
-        results = {}
+        # Fetch results
         for output in self.outputDefinitions():
             output_name = output.name()
             if output_name in parameters:
