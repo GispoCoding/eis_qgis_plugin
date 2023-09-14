@@ -173,12 +173,22 @@ class EISWizardExploreNew(QDialog, FORM_CLASS):
         self.n_valid.setText(str(nr_of_valids))
 
         # Get descriptive statistics
-        descriptive_statistics_results = processing.run("eis:descriptive_statistics",
-                                                        
-            {
-                'input_file': self.data_summary_layer_selection.currentLayer(),
-            }
-        )
+        
+        if layer.type() == QgsMapLayer.VectorLayer:
+            descriptive_statistics_results = processing.run("eis:descriptive_statistics_vector",
+                                                            
+                {
+                    'input_file': self.data_summary_layer_selection.currentLayer(),
+                    'column': self.data_summary_field_selection.currentField()
+                }
+            )
+        else:
+            descriptive_statistics_results = processing.run("eis:descriptive_statistics_raster",
+                                                            
+                {
+                    'input_file': self.data_summary_layer_selection.currentLayer(),
+                }
+            )
 
         self.min.setText(str(descriptive_statistics_results["min"]))
         self.quantile25.setText(str(descriptive_statistics_results["25%"]))
