@@ -278,8 +278,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         except Exception as e:
             feedback.reportError(f"Failed to run the command. Error: {str(e)}")
-            process.terminate()
-            # return {}
+            try:
+                process.terminate()
+            except UnboundLocalError:
+                pass
+            return {}
 
         # Fetch results
         for output in self.outputDefinitions():
