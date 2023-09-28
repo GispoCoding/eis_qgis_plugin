@@ -154,7 +154,7 @@ class Plugin:
         # Add links to Wizard steps as separate buttons, at least for now
         preprocess_action = self.add_action(
             icon_path,
-            text="Prepare proxy data",
+            text="Mineral system proxies",
             parent=self.iface.mainWindow(),
             callback=self.open_proxy_settings,
             add_to_toolbar=False,

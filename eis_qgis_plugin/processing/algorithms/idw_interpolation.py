@@ -9,11 +9,11 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISSimpleIdw(EISProcessingAlgorithm):
+class EISIdwInterpolation(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "simple_idw"
+        self._name = "idw_interpolation"
         self._display_name = "IDW interpolation"
         self._group = "Vector processing"
         self._group_id = "vector_processing"
@@ -24,10 +24,9 @@ class EISSimpleIdw(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
 
         self.alg_parameters = [
-            "input_geometries",
+            "input_vector",
             "target_column",
-            "resolution_x",
-            "resolution_y",
+            "resolution",
             "extent",
             "power",
             "output_raster",
@@ -49,30 +48,24 @@ class EISSimpleIdw(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[2], description="Pixel size X"
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[3], description="Pixel size Y"
+                name=self.alg_parameters[2], description="Pixel size"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterExtent(
-                name=self.alg_parameters[4], description="Raster extent", optional=True
+                name=self.alg_parameters[3], description="Raster extent", optional=True
             )
         )
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[5], description="Power", defaultValue=2
+                name=self.alg_parameters[4], description="Power", defaultValue=2
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[6], description="Output raster"
+                name=self.alg_parameters[5], description="Output raster"
             )
         )

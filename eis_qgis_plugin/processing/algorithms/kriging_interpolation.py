@@ -25,8 +25,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         self.alg_parameters = [
             "input_vector",
             "target_column",
-            "resolution_x",
-            "resolution_y",
+            "resolution",
             "extent",
             "variogram_model",
             "coordinates_type",
@@ -50,25 +49,19 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[2], description="Pixel size X"
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[3], description="Pixel size Y"
+                name=self.alg_parameters[2], description="Pixel size"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterExtent(
-                name=self.alg_parameters[4], description="Raster extent", optional=True
+                name=self.alg_parameters[3], description="Raster extent", optional=True
             )
         )
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[5],
+                name=self.alg_parameters[4],
                 description="Variogram model",
                 options=["linear", "power", "gaussian", "spherical", "exponential"],
                 defaultValue="linear"
@@ -77,7 +70,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[6],
+                name=self.alg_parameters[5],
                 description="Coordinates type",
                 options=["geographic", "euclidean"],
                 defaultValue="geographic"
@@ -86,7 +79,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[7],
+                name=self.alg_parameters[6],
                 description="Kriging method",
                 options=["ordinary", "universal"],
                 defaultValue="ordinary",
@@ -95,7 +88,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[8],
+                name=self.alg_parameters[7],
                 description="Output raster",
             )
         )

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WizardPage</class>
- <widget class="QWizardPage" name="WizardPage">
+ <class>wizard_proxy_creation_page</class>
+ <widget class="QWizardPage" name="wizard_proxy_creation_page">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>482</x>
-     <y>243</y>
+     <y>270</y>
      <width>291</width>
      <height>25</height>
     </rect>
@@ -30,7 +30,7 @@
    <property name="geometry">
     <rect>
      <x>482</x>
-     <y>323</y>
+     <y>350</y>
      <width>151</width>
      <height>25</height>
     </rect>
@@ -43,7 +43,7 @@
    <property name="geometry">
     <rect>
      <x>485</x>
-     <y>33</y>
+     <y>60</y>
      <width>141</width>
      <height>24</height>
     </rect>
@@ -57,69 +57,11 @@
     <string>Create proxy</string>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>32</x>
-     <y>103</y>
-     <width>166</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Extract by attribute</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QToolButton" name="extract_by_attribute_btn">
-      <property name="text">
-       <string>...</string>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::RightArrow</enum>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>32</x>
-     <y>253</y>
-     <width>178</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Extract by expression</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QToolButton" name="extract_by_expression_btn">
-      <property name="text">
-       <string>...</string>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::RightArrow</enum>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QPushButton" name="calculate_distances_vector_btn">
    <property name="geometry">
     <rect>
      <x>482</x>
-     <y>163</y>
+     <y>190</y>
      <width>291</width>
      <height>25</height>
     </rect>
@@ -132,7 +74,7 @@
    <property name="geometry">
     <rect>
      <x>482</x>
-     <y>203</y>
+     <y>230</y>
      <width>311</width>
      <height>25</height>
     </rect>
@@ -145,7 +87,7 @@
    <property name="geometry">
     <rect>
      <x>482</x>
-     <y>363</y>
+     <y>390</y>
      <width>151</width>
      <height>25</height>
     </rect>
@@ -154,43 +96,11 @@
     <string>Binarize</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>32</x>
-     <y>283</y>
-     <width>211</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Create a new vector layer where features match the given expression. Expressions are suitable for more complex selection operations.</string>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>32</x>
-     <y>125</y>
-     <width>211</width>
-     <height>91</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Create a new vector layer where features match the given criteria.</string>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QPushButton" name="interpolate_idw_btn">
    <property name="geometry">
     <rect>
      <x>482</x>
-     <y>283</y>
+     <y>310</y>
      <width>151</width>
      <height>25</height>
     </rect>
@@ -199,29 +109,11 @@
     <string>Interpolate – IDW</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_14">
-   <property name="geometry">
-    <rect>
-     <x>32</x>
-     <y>33</y>
-     <width>231</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Preprocess vector data</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_13">
    <property name="geometry">
     <rect>
-     <x>287</x>
-     <y>33</y>
+     <x>40</x>
+     <y>60</y>
      <width>141</width>
      <height>24</height>
     </rect>
@@ -238,8 +130,8 @@
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>259</x>
-     <y>33</y>
+     <x>195</x>
+     <y>60</y>
      <width>20</width>
      <height>431</height>
     </rect>
@@ -252,7 +144,7 @@
    <property name="geometry">
     <rect>
      <x>447</x>
-     <y>33</y>
+     <y>60</y>
      <width>20</width>
      <height>431</height>
     </rect>
@@ -265,7 +157,7 @@
    <property name="geometry">
     <rect>
      <x>25</x>
-     <y>61</y>
+     <y>88</y>
      <width>761</width>
      <height>20</height>
     </rect>
@@ -277,8 +169,8 @@
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>287</x>
-     <y>133</y>
+     <x>40</x>
+     <y>160</y>
      <width>141</width>
      <height>111</height>
     </rect>
@@ -293,8 +185,8 @@
   <widget class="QWidget" name="layoutWidget_3">
    <property name="geometry">
     <rect>
-     <x>287</x>
-     <y>103</y>
+     <x>40</x>
+     <y>130</y>
      <width>141</width>
      <height>25</height>
     </rect>
@@ -323,7 +215,7 @@
    <property name="geometry">
     <rect>
      <x>485</x>
-     <y>93</y>
+     <y>120</y>
      <width>271</width>
      <height>51</height>
     </rect>
@@ -334,6 +226,171 @@
    <property name="wordWrap">
     <bool>true</bool>
    </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>130</y>
+     <width>166</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Extract by attribute</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="extract_by_attribute_btn">
+      <property name="text">
+       <string>...</string>
+      </property>
+      <property name="arrowType">
+       <enum>Qt::RightArrow</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>280</y>
+     <width>178</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Extract by expression</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QToolButton" name="extract_by_expression_btn">
+      <property name="text">
+       <string>...</string>
+      </property>
+      <property name="arrowType">
+       <enum>Qt::RightArrow</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="label_14">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>60</y>
+     <width>231</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Preprocess vector data</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>310</y>
+     <width>211</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create a new vector layer where features match the given expression. Expressions are suitable for more complex selection operations.</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>152</y>
+     <width>211</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create a new vector layer where features match the given criteria.</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>10</y>
+     <width>751</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Selected proxy:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>10</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="selected_proxy_label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>-</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

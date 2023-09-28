@@ -9,7 +9,7 @@ class EISWizardProxy(QWizard):
         super().__init__(parent)
 
         self.setWindowTitle(
-            f"Prepare proxy data --- Mineral system: {mineral_system}, Study scale: {study_scale}"
+            f"EIS Mineral system proxies --- Mineral system: {mineral_system}, Study scale: {study_scale}"
         )
 
         self.resize(830, 520)

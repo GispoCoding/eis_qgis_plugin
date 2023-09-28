@@ -17,11 +17,14 @@ from qgis.PyQt.QtWidgets import (
 from qgis.core import QgsMapLayer, NULL 
 
 from qgis.PyQt.QtGui import QColor
+from qgis import processing
 
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+
+from qgis.utils import iface
 
 from qgis.gui import (
     QgsMapLayerComboBox,
@@ -49,7 +52,9 @@ class EISWizardExploreNew(QDialog, FORM_CLASS):
     # Data summary tab contents
     data_summary_layer_selection: QgsMapLayerComboBox
     data_summary_field_selection: QgsFieldComboBox
+    data_summary_band_selection: QComboBox
     compute_btn: QPushButton
+    layer_properties_btn: QPushButton
 
     n_total: QLabel
     n_valid: QLabel
@@ -110,7 +115,11 @@ class EISWizardExploreNew(QDialog, FORM_CLASS):
         # self.plot_customization_form.insertRow(3, "Palette", self.palette_selection)
 
     def initialize_summary_tab(self):
+        self.data_summary_layer_selection.layerChanged.connect(self.set_field_or_band)
         self.compute_btn.clicked.connect(self.compute_statistics)
+        self.layer_properties_btn.clicked.connect(self.open_layer_properties)
+
+        self.data_summary_field_selection.setLayer(self.data_summary_layer_selection.currentLayer())
 
     def initialize_univariate_tab(self):
         self.plot_btn.clicked.connect(self.plot)
@@ -126,7 +135,83 @@ class EISWizardExploreNew(QDialog, FORM_CLASS):
         self.set_buttons(self.plot_type_selection.currentText())
 
     def compute_statistics(self):
-        pass
+        # Get N
+        layer = self.data_summary_layer_selection.currentLayer()
+        if layer.type() == QgsMapLayer.VectorLayer:  # NOTE: Same snippet later, refactor at some point
+            field = self.data_summary_field_selection.currentField()
+            all_values = [feature.attribute(field) for feature in layer.getFeatures()]
+            nr_of_all_values = len(all_values)
+            nr_of_nulls = len([value for value in all_values if value == NULL])
+            nr_of_valids = nr_of_all_values - nr_of_nulls
+
+        elif layer.type() == QgsMapLayer.RasterLayer:  # NOTE: Same snippet later, refactor at some point
+            data_provider = layer.dataProvider()
+            width = layer.width()
+            height = layer.height()
+            band = int(self.data_summary_band_selection.currentIndex())
+
+            data_block = data_provider.block(band, layer.extent(), width, height)
+            nr_of_nulls = 0
+            nr_of_valids = 0
+            nr_of_all_values = width * height
+
+            # Loop over all pixels
+            for row in range(height):
+                for col in range(width):
+                    pixel_value = data_block.value(row, col)
+                    if pixel_value == NULL:
+                        nr_of_nulls += 1
+                    else:
+                        nr_of_valids += 1
+
+        else:
+            raise Exception("Not vector or raster")
+        
+
+        self.n_total.setText(str(nr_of_all_values))
+        self.n_null.setText(str(nr_of_nulls))
+        self.n_valid.setText(str(nr_of_valids))
+
+        # Get descriptive statistics
+        
+        if layer.type() == QgsMapLayer.VectorLayer:
+            descriptive_statistics_results = processing.run("eis:descriptive_statistics_vector",
+                                                            
+                {
+                    'input_file': self.data_summary_layer_selection.currentLayer(),
+                    'column': self.data_summary_field_selection.currentField()
+                }
+            )
+        else:
+            descriptive_statistics_results = processing.run("eis:descriptive_statistics_raster",
+                                                            
+                {
+                    'input_file': self.data_summary_layer_selection.currentLayer(),
+                }
+            )
+
+        self.min.setText(str(descriptive_statistics_results["min"]))
+        self.quantile25.setText(str(descriptive_statistics_results["25%"]))
+        self.median.setText(str(descriptive_statistics_results["50%"]))
+        self.quantile75.setText(str(descriptive_statistics_results["75%"]))
+        self.max.setText(str(descriptive_statistics_results["max"]))
+
+        self.mean.setText(str(descriptive_statistics_results["mean"]))
+        self.stdev.setText(str(descriptive_statistics_results["standard_deviation"]))
+        self.relative_stdev.setText(str(descriptive_statistics_results["relative_standard_deviation"]))
+        self.skewness.setText(str(descriptive_statistics_results["skew"]))
+
+    def open_layer_properties(self):
+        iface.showLayerProperties(self.data_summary_layer_selection.currentLayer())
+
+    def set_field_or_band(self, layer):
+        self.data_summary_field_selection.setLayer(layer)
+        self.data_summary_band_selection.clear()
+    
+        if layer.type() == QgsMapLayer.RasterLayer:
+            bands = [f"Band {i + 1}" for i in range(layer.bandCount())]
+            self.data_summary_band_selection.addItems(bands)
+
 
     def set_layer(self, layer):
         self.fields_selection.clear()  # Clear existing items
@@ -263,7 +348,7 @@ class EISWizardExploreNew(QDialog, FORM_CLASS):
             "data": data_dict,
             "fill": self.get_bool(self.fill_selection.currentText()),
             "multiple": self.multiple_selection.currentText().split()[0].lower(),
-            "log_scale": self.get_bool(self.log_scale_selection),
+            "log_scale": self.get_bool(self.log_scale_selection.currentText()),
             "alpha": self.opacity_selection.opacity(),
             "ax": ax
         }

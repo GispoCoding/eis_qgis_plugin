@@ -1,19 +1,19 @@
 from qgis.core import (
-    QgsProcessingParameterMapLayer,
+    QgsProcessingParameterRasterLayer
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISDescriptiveStatistics(EISProcessingAlgorithm):
+class EISDescriptiveStatisticsRaster(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "descriptive_statistics"
-        self._display_name = "Descriptive statistics"
+        self._name = "descriptive_statistics_raster"
+        self._display_name = "Descriptive statistics (raster)"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
-        self._short_help_string = "Generate descriptive statistics for a layer"
+        self._short_help_string = "Generate descriptive statistics for a raster layer"
 
     def initAlgorithm(self, config=None):
 
@@ -21,7 +21,7 @@ class EISDescriptiveStatistics(EISProcessingAlgorithm):
         self.alg_parameters = ["input_file"]
 
         self.addParameter(
-            QgsProcessingParameterMapLayer(
+            QgsProcessingParameterRasterLayer(
                 name=self.alg_parameters[0], description="Input layer"
             )
         )

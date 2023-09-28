@@ -7,6 +7,9 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
 )
 
+# from qgis.PyQt.QtCore import Qt
+# from qgis.utils import iface
+
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.preprocess.wizard_proxy import EISWizardProxy
 
@@ -55,4 +58,5 @@ class EISWizardProxySettings(QDialog, FORM_CLASS):
         mineral_system = self.combobox_system.currentText()
         self.close()
         self.main_window = EISWizardProxy(study_scale, mineral_system)
+        # iface.addDockWidget(Qt.RightDockWidgetArea, self.main_window)
         self.main_window.show()

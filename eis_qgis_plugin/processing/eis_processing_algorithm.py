@@ -209,6 +209,10 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             #     args.append(flag)
             if not arg:
                 continue
+                
+            # NOTE: Attempt to exclude some extra details that might come with layer file path for example
+            if "|" in arg:
+                arg = arg.split("|")[0]
 
             args.append(param_name)
             args.append(arg)
@@ -234,7 +238,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         arguments = self.prepare_arguments(parameters, context)
         eis_executable = os.path.join(get_python_venv_path(), self.get_bin_folder(), "eis")
         cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
-
         results = {}
 
         try:
@@ -278,13 +281,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         except Exception as e:
             feedback.reportError(f"Failed to run the command. Error: {str(e)}")
-            process.terminate()
-            # return {}
-
-        finally:
-            # Ensure the subprocess is terminated
-            if process is not None:
+            try:
                 process.terminate()
+            except UnboundLocalError:
+                pass
+            return {}
 
         # Fetch results
         for output in self.outputDefinitions():
