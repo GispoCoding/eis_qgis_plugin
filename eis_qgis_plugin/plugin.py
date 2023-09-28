@@ -142,6 +142,7 @@ class Plugin:
         #     add_to_menu=False
         # )
 
+
         venv_action = self.add_action(
             "",
             text="Settings",
