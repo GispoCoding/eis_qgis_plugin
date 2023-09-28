@@ -85,7 +85,7 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
 
                 # Label row
                 self.create_row(
-                    grid_layout, 0, "Proxy name", "Importance", ["Keywords"], label=True
+                    grid_layout, 0, "Proxy", "Importance", ["Keywords"], label=True
                 )
 
                 sorted_proxies = dict(
@@ -202,7 +202,7 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
             # 5. Process button
             process_button = QPushButton("Process")
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            process_button.clicked.connect(self.open_proxy_creation)
+            process_button.clicked.connect(lambda: self.open_proxy_creation(name_label.text()))
             grid_layout.addWidget(process_button, row, 4)
 
             # 6. Load button
@@ -216,6 +216,7 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
                 name_label,
                 importance_label,
                 keywords_label,
+                checkbox,
                 process_button,
                 load_button,
             )
@@ -227,6 +228,7 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
             name_label,
             importance_label,
             keywords_label,
+            checkbox,
             process_button,
             load_button,
         ) in self.proxy_widgets.items():
@@ -238,14 +240,17 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
                 name_label.show()
                 importance_label.show()
                 keywords_label.show()
+                checkbox.show()
                 process_button.show()
                 load_button.show()
             else:
                 name_label.hide()
                 importance_label.hide()
                 keywords_label.hide()
+                checkbox.hide()
                 process_button.hide()
                 load_button.hide()
 
-    def open_proxy_creation(self):
+    def open_proxy_creation(self, proxy_name):
+        self.wizard().page2.selected_proxy_label.setText(proxy_name)
         self.wizard().next()

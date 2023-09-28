@@ -348,7 +348,7 @@ class EISWizardExploreNew(QDialog, FORM_CLASS):
             "data": data_dict,
             "fill": self.get_bool(self.fill_selection.currentText()),
             "multiple": self.multiple_selection.currentText().split()[0].lower(),
-            "log_scale": self.get_bool(self.log_scale_selection),
+            "log_scale": self.get_bool(self.log_scale_selection.currentText()),
             "alpha": self.opacity_selection.opacity(),
             "ax": ax
         }

@@ -32,7 +32,7 @@ class EISWizardProxyCreation(QWizardPage, FORM_CLASS):
             lambda: processing.execAlgorithmDialog("eis:vector_density", {})
         )
         self.interpolate_idw_btn.clicked.connect(
-            lambda: processing.execAlgorithmDialog("eis:simple_idw", {})
+            lambda: processing.execAlgorithmDialog("eis:idw_interpolation", {})
         )
         self.interpolate_kriging_btn.clicked.connect(
             lambda: processing.execAlgorithmDialog("eis:kriging_interpolation", {})
