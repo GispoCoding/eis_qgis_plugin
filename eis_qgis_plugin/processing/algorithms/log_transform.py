@@ -1,24 +1,25 @@
 from qgis.core import (
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterRasterDestination,
-    QgsProcessingParameterNumber
+    QgsProcessingParameterEnum,
+    QgsProcessingParameterRasterDestination
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISBinarize(EISProcessingAlgorithm):
+class EISLogTransform(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "binarize"
-        self._display_name = "Binarize"
+        self._name = "log_transform"
+        self._display_name = "Logarithmic transform"
         self._group = "Transformations"
         self._group_id = "transformations"
-        self._short_help_string = "Calculate binarize transformation for data"
+        self._short_help_string = "Perform a logarithmic transformation on the provided data."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_raster", "threshold", "output_raster"]
+
+        self.alg_parameters = ["input_raster", "log_type", "output_raster"]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -27,16 +28,15 @@ class EISBinarize(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterNumber(
+            QgsProcessingParameterEnum(
                 name=self.alg_parameters[1],
-                description="Binarizing threshold",
-                type=QgsProcessingParameterNumber.Double
+                description="Lower",
+                options=["log2", "log10", "ln"]
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[2],
-                description="Output raster",
+                name=self.alg_parameters[2], description="Output raster"
             )
         )
