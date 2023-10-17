@@ -13,7 +13,7 @@ class EISExtractWindow(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "extract_window"
-        self._display_name = "Extract window (R)"
+        self._display_name = "Extract window"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = "Extract window from raster"

@@ -12,9 +12,9 @@ class EISDistanceComputation(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "distance_computation"
-        self._display_name = "Distance computation (R)"
-        self._group = "Spatial analysis"
-        self._group_id = "spatial_analysis"
+        self._display_name = "Distance computation"
+        self._group = "Vector processing"
+        self._group_id = "vector_processing"
         self._short_help_string = "Compute distance"
 
     def initAlgorithm(self, config=None):

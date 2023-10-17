@@ -88,7 +88,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             param_name = "--" + name.replace("_", "-")
             # flag = flag_mapping.get(name)
             if isinstance(param, QgsProcessingParameterBoolean):
-                arg = str(self.parameterAsBool(parameters, name, context))
+                if self.parameterAsBool(parameters, name, context):
+                    args.append(param_name)
+                else:
+                    args.append(param_name[:2] + "no-" + param_name[2:])
+                continue
 
             elif isinstance(param, QgsProcessingParameterString):
                 arg = self.parameterAsString(parameters, name, context).lower()
