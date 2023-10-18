@@ -1,7 +1,7 @@
 from qgis.core import (
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterMultipleLayers
+    QgsProcessingParameterMultipleLayers,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -15,10 +15,11 @@ class EISWeightsOfEvidenceCalculateResponses(EISProcessingAlgorithm):
         self._display_name = "Weights of evidence calculate responses"
         self._group = "Prediction"
         self._group_id = "prediction"
-        self._short_help_string = "Calculate responses for weights of evidence calculations"
+        self._short_help_string = (
+            "Calculate responses for weights of evidence calculations"
+        )
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_rasters",
             "deposits",
@@ -27,7 +28,8 @@ class EISWeightsOfEvidenceCalculateResponses(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterMultipleLayers(
-                name=self.alg_parameters[0], description="Weight rasters",
+                name=self.alg_parameters[0],
+                description="Weight rasters",
             )
         )
 

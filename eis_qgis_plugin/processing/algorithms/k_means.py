@@ -18,7 +18,6 @@ class EISKMeans(EISProcessingAlgorithm):
         self._short_help_string = "Perform K-means clustering"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_geometries",
             "clusters",

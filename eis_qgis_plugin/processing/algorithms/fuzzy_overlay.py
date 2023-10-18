@@ -19,7 +19,6 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
         self._short_help_string = "Compute fuzzy overlay"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = ["input_layer", "fuzzy_method", "gamma", "output_raster"]
 
         self.addParameter(

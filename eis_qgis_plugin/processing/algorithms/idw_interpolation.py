@@ -22,7 +22,6 @@ class EISIdwInterpolation(EISProcessingAlgorithm):
         )
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_vector",
             "target_column",

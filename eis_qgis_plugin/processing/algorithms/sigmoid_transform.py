@@ -2,7 +2,7 @@ from qgis.core import (
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterNumber,
     QgsProcessingParameterBoolean,
-    QgsProcessingParameterRasterDestination
+    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -16,11 +16,19 @@ class EISSigmoidTransform(EISProcessingAlgorithm):
         self._display_name = "Sigmoid transform"
         self._group = "Transformations"
         self._group_id = "transformations"
-        self._short_help_string = "Transform data into a sigmoid-shape based on a specified new range"
+        self._short_help_string = (
+            "Transform data into a sigmoid-shape based on a specified new range"
+        )
 
     def initAlgorithm(self, config=None):
-
-        self.alg_parameters = ["input_raster", "limit_lower", "limit_upper", "slope", "center", "output_raster"]
+        self.alg_parameters = [
+            "input_raster",
+            "limit_lower",
+            "limit_upper",
+            "slope",
+            "center",
+            "output_raster",
+        ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -33,7 +41,7 @@ class EISSigmoidTransform(EISProcessingAlgorithm):
                 name=self.alg_parameters[1],
                 description="Lower",
                 type=QgsProcessingParameterNumber.Double,
-                defaultValue=0.0
+                defaultValue=0.0,
             )
         )
 
@@ -42,7 +50,7 @@ class EISSigmoidTransform(EISProcessingAlgorithm):
                 name=self.alg_parameters[2],
                 description="Upper",
                 type=QgsProcessingParameterNumber.Double,
-                defaultValue=1.0
+                defaultValue=1.0,
             )
         )
 
@@ -51,15 +59,13 @@ class EISSigmoidTransform(EISProcessingAlgorithm):
                 name=self.alg_parameters[3],
                 description="Slope",
                 type=QgsProcessingParameterNumber.Double,
-                defaultValue=1.0
+                defaultValue=1.0,
             )
         )
 
         self.addParameter(
             QgsProcessingParameterBoolean(
-                name=self.alg_parameters[4],
-                description="Center",
-                defaultValue=True
+                name=self.alg_parameters[4], description="Center", defaultValue=True
             )
         )
 

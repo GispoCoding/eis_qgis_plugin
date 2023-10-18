@@ -4,7 +4,7 @@ from qgis.core import (
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFileDestination,
-    QgsProcessingParameterFolderDestination
+    QgsProcessingParameterFolderDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -21,7 +21,6 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
         self._short_help_string = "Compute weights of evidence"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "evidential_raster",
             "deposits",
@@ -50,7 +49,7 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
                 name=self.alg_parameters[2],
                 description="Override raster nodata",
                 type=QgsProcessingParameterNumber.Double,
-                optional=True
+                optional=True,
             )
         )
 
@@ -64,7 +63,7 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
                     "Cumulative ascending weights",
                     "Cumulative descending weights",
                 ],
-                defaultValue=1
+                defaultValue=1,
             )
         )
 
@@ -93,7 +92,7 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
                     "Generalized S_W+",
                 ],
                 allowMultiple=True,
-                defaultValue=[0, 1, 2, 7, 8]
+                defaultValue=[0, 1, 2, 7, 8],
             )
         )
 

@@ -1,6 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterRasterDestination
+    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -17,7 +17,6 @@ class EISZScoreNormalization(EISProcessingAlgorithm):
         self._short_help_string = "Normalize data based on mean and standard deviation."
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = ["input_raster", "output_raster"]
 
         self.addParameter(

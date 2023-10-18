@@ -19,7 +19,6 @@ class EISExtractWindow(EISProcessingAlgorithm):
         self._short_help_string = "Extract window from raster"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_raster",
             "center_coords",

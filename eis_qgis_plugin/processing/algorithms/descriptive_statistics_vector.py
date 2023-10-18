@@ -1,7 +1,4 @@
-from qgis.core import (
-    QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterField
-)
+from qgis.core import QgsProcessingParameterFeatureSource, QgsProcessingParameterField
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
@@ -17,7 +14,6 @@ class EISDescriptiveStatisticsVector(EISProcessingAlgorithm):
         self._short_help_string = "Generate descriptive statistics for a vector layer"
 
     def initAlgorithm(self, config=None):
-
         # self.alg_parameters = ["input_file", "column", "output_file"]
         self.alg_parameters = ["input_file", "column"]
 
@@ -31,7 +27,7 @@ class EISDescriptiveStatisticsVector(EISProcessingAlgorithm):
             QgsProcessingParameterField(
                 name=self.alg_parameters[1],
                 description="Column",
-                parentLayerParameterName=self.alg_parameters[0]
+                parentLayerParameterName=self.alg_parameters[0],
             )
         )
 

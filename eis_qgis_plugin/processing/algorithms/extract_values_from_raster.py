@@ -20,7 +20,6 @@ class EISExtractValuesFromRaster(EISProcessingAlgorithm):
         self._short_help_string = "Extract values from raster"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_raster",
             "input_vectors",

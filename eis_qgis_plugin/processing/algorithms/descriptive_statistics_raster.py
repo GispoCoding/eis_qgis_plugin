@@ -1,6 +1,4 @@
-from qgis.core import (
-    QgsProcessingParameterRasterLayer
-)
+from qgis.core import QgsProcessingParameterRasterLayer
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
@@ -16,7 +14,6 @@ class EISDescriptiveStatisticsRaster(EISProcessingAlgorithm):
         self._short_help_string = "Generate descriptive statistics for a raster layer"
 
     def initAlgorithm(self, config=None):
-
         # self.alg_parameters = ["input_file", "output_file"]
         self.alg_parameters = ["input_file"]
 

@@ -21,7 +21,6 @@ class EISRasterize(EISProcessingAlgorithm):
         self._short_help_string = "Rasterize a vector layer"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_vector",
             "resolution",

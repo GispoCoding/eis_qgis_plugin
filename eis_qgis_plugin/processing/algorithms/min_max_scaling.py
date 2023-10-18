@@ -1,7 +1,7 @@
 from qgis.core import (
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterDestination
+    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -15,10 +15,11 @@ class EISMinMaxScaling(EISProcessingAlgorithm):
         self._display_name = "Min-max scale"
         self._group = "Transformations"
         self._group_id = "transformations"
-        self._short_help_string = "Normalize raster to specified range using min and max values"
+        self._short_help_string = (
+            "Normalize raster to specified range using min and max values"
+        )
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = ["input_raster", "min", "max", "output_raster"]
 
         self.addParameter(
@@ -32,7 +33,7 @@ class EISMinMaxScaling(EISProcessingAlgorithm):
                 name=self.alg_parameters[1],
                 description="Min",
                 type=QgsProcessingParameterNumber.Double,
-                defaultValue=0.0
+                defaultValue=0.0,
             )
         )
 
@@ -41,7 +42,7 @@ class EISMinMaxScaling(EISProcessingAlgorithm):
                 name=self.alg_parameters[2],
                 description="Max",
                 type=QgsProcessingParameterNumber.Double,
-                defaultValue=1.0
+                defaultValue=1.0,
             )
         )
 

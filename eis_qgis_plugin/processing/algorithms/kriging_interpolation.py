@@ -21,7 +21,6 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         self._short_help_string = "Perform kriging interpolation"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_vector",
             "target_column",
@@ -30,7 +29,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             "variogram_model",
             "coordinates_type",
             "method",
-            "output_raster"
+            "output_raster",
         ]
 
         self.addParameter(
@@ -64,7 +63,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
                 name=self.alg_parameters[4],
                 description="Variogram model",
                 options=["linear", "power", "gaussian", "spherical", "exponential"],
-                defaultValue="linear"
+                defaultValue="linear",
             )
         )
 
@@ -73,7 +72,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
                 name=self.alg_parameters[5],
                 description="Coordinates type",
                 options=["geographic", "euclidean"],
-                defaultValue="geographic"
+                defaultValue="geographic",
             )
         )
 

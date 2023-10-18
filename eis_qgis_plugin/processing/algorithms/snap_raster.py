@@ -17,7 +17,6 @@ class EISSnapRaster(EISProcessingAlgorithm):
         self._short_help_string = "Snap a raster to same alignment with base raster"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = ["input_raster", "snap_raster", "output_raster"]
 
         self.addParameter(

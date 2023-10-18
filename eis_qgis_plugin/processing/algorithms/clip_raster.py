@@ -18,7 +18,6 @@ class EISClipRaster(EISProcessingAlgorithm):
         self._short_help_string = "Clip a raster with vector layer features."
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = ["input_raster", "geometries", "output_raster"]
 
         self.addParameter(

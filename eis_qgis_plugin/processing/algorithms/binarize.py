@@ -1,7 +1,7 @@
 from qgis.core import (
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterRasterDestination,
-    QgsProcessingParameterNumber
+    QgsProcessingParameterNumber,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -30,7 +30,7 @@ class EISBinarize(EISProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 name=self.alg_parameters[1],
                 description="Binarizing threshold",
-                type=QgsProcessingParameterNumber.Double
+                type=QgsProcessingParameterNumber.Double,
             )
         )
 

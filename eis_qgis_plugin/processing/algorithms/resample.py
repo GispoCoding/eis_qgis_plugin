@@ -19,7 +19,6 @@ class EISResample(EISProcessingAlgorithm):
         self._short_help_string = "Resample raster to a new resolution"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_raster",
             "resampling_method",

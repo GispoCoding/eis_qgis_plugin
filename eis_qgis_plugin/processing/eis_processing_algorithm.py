@@ -71,7 +71,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         # By default, all parameters are passed as Typer options (parameter name needs to be delivered
         # prefixed with --)
-        
+
         # TODO: Check if all these work with optional parameters (arg evaluating to None)
 
         # NOTE: Because of the above, flag mapping is likely to be deleted
@@ -108,11 +108,16 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             elif isinstance(param, QgsProcessingParameterExtent):
                 if not self.parameterAsString(parameters, name, context):  # Arg is None
                     continue
-                extents = self.parameterAsString(parameters, name, context).split("[")[0].strip().split(",")
+                extents = (
+                    self.parameterAsString(parameters, name, context)
+                    .split("[")[0]
+                    .strip()
+                    .split(",")
+                )
                 args.append(param_name)
                 [args.append(coord) for coord in extents]
                 continue
-            
+
             elif isinstance(param, QgsProcessingParameterField):
                 arg = self.parameterAsString(parameters, name, context)
 
@@ -213,7 +218,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             #     args.append(flag)
             if not arg:
                 continue
-                
+
             # NOTE: Attempt to exclude some extra details that might come with layer file path for example
             if "|" in arg:
                 arg = arg.split("|")[0]
@@ -223,13 +228,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         return args
 
-    
     def get_bin_folder(self):
         if os.name == "nt":  # Windows
             return "Scripts"
         else:
             return "bin"
-
 
     def processAlgorithm(self, parameters, context, feedback):
         """
@@ -240,18 +243,23 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             feedback = QgsProcessingFeedback()
 
         arguments = self.prepare_arguments(parameters, context)
-        eis_executable = os.path.join(get_python_venv_path(), self.get_bin_folder(), "eis")
+        eis_executable = os.path.join(
+            get_python_venv_path(), self.get_bin_folder(), "eis"
+        )
         cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
         results = {}
 
         try:
             process = subprocess.Popen(
-                cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
             )
             # progress_regex = re.compile(r"(\d+)%")
             progress_prefix = "Progress:"
             results_prefix = "Results:"
-        
+
             while process.poll() is None:
                 stdout = process.stdout.readline().strip()
 
@@ -279,7 +287,9 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             stdout, stderr = process.communicate()
 
             if process.returncode != 0:
-                feedback.reportError(f"EIS Toolkit algorithm execution failed with error: {stderr}")
+                feedback.reportError(
+                    f"EIS Toolkit algorithm execution failed with error: {stderr}"
+                )
             else:
                 feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
 

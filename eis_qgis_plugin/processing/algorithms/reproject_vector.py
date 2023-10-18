@@ -18,7 +18,6 @@ class EISReprojectVector(EISProcessingAlgorithm):
         self._short_help_string = "Reproject a vector layer"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = ["input_vector", "target_crs", "output_vector"]
 
         self.addParameter(

@@ -18,7 +18,6 @@ class EISPca(EISProcessingAlgorithm):
         self._short_help_string = "Compute PCA"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = ["input_geometries", "components", "output_file"]
 
         self.addParameter(

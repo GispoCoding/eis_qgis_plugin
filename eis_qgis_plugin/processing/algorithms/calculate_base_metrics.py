@@ -19,7 +19,6 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
         self._display_name = "Calculate base metrics"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_raster",
             "input_deposits",

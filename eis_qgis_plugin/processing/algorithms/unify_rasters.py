@@ -17,7 +17,6 @@ class EISUnifyRasters(EISProcessingAlgorithm):
         self._short_help_string = "Unify a set of rasters"
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = ["base_raster", "rasters", "output_raster"]
 
         self.addParameter(

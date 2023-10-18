@@ -1,7 +1,7 @@
 from qgis.core import (
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterDestination
+    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -15,11 +15,17 @@ class EISClipTransform(EISProcessingAlgorithm):
         self._display_name = "Clip transform"
         self._group = "Transformations"
         self._group_id = "transformations"
-        self._short_help_string = "Clips data based on specified upper and lower limits."
+        self._short_help_string = (
+            "Clips data based on specified upper and lower limits."
+        )
 
     def initAlgorithm(self, config=None):
-
-        self.alg_parameters = ["input_raster", "limit_lower", "limit_higher", "output_raster"]
+        self.alg_parameters = [
+            "input_raster",
+            "limit_lower",
+            "limit_higher",
+            "output_raster",
+        ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -32,7 +38,7 @@ class EISClipTransform(EISProcessingAlgorithm):
                 name=self.alg_parameters[1],
                 description="Lower",
                 type=QgsProcessingParameterNumber.Double,
-                optional=True
+                optional=True,
             )
         )
 
@@ -41,7 +47,7 @@ class EISClipTransform(EISProcessingAlgorithm):
                 name=self.alg_parameters[2],
                 description="Higher",
                 type=QgsProcessingParameterNumber.Double,
-                optional=True
+                optional=True,
             )
         )
 

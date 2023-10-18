@@ -21,7 +21,6 @@ class EISReprojectRaster(EISProcessingAlgorithm):
         )
 
     def initAlgorithm(self, config=None):
-
         self.alg_parameters = [
             "input_raster",
             "target_crs",

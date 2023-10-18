@@ -38,7 +38,6 @@ class EISProvider(QgsProcessingProvider):
 
         for file_name in os.listdir(algorithms_dir):
             if file_name.endswith(".py") and not file_name.startswith("__"):
-
                 module_name = file_name[:-3]
                 class_name_parts = [
                     part.capitalize() for part in module_name.split("_")

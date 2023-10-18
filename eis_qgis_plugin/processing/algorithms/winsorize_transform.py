@@ -2,7 +2,7 @@ from qgis.core import (
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterBoolean,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterDestination
+    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -18,10 +18,14 @@ class EISWinsorizeTransform(EISProcessingAlgorithm):
         self._group_id = "transformations"
         self._short_help_string = "Winsorize data based on specified percentile values."
 
-
     def initAlgorithm(self, config=None):
-
-        self.alg_parameters = ["input_raster", "percentile_lower", "percentile_higher", "inside", "output_raster"]
+        self.alg_parameters = [
+            "input_raster",
+            "percentile_lower",
+            "percentile_higher",
+            "inside",
+            "output_raster",
+        ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -36,7 +40,7 @@ class EISWinsorizeTransform(EISProcessingAlgorithm):
                 type=QgsProcessingParameterNumber.Double,
                 minValue=0.0,
                 maxValue=100.0,
-                optional=True
+                optional=True,
             )
         )
 
@@ -47,15 +51,13 @@ class EISWinsorizeTransform(EISProcessingAlgorithm):
                 type=QgsProcessingParameterNumber.Double,
                 minValue=0.0,
                 maxValue=100.0,
-                optional=True
+                optional=True,
             )
         )
 
         self.addParameter(
             QgsProcessingParameterBoolean(
-                name=self.alg_parameters[3],
-                description="Inside",
-                defaultValue=False
+                name=self.alg_parameters[3], description="Inside", defaultValue=False
             )
         )
 
