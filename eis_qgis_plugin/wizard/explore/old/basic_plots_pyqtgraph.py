@@ -45,7 +45,6 @@ HISTOGRAM_TEST_DATA = np.array([chi_data_1000, normal_data_1000])
 
 
 class BasicCharts(QWidget, FORM_CLASS):
-
     # Plot parameters
     layer_selection: QgsMapLayerComboBox
     chart_selection: QComboBox

@@ -16,8 +16,8 @@
   <widget class="QLabel" name="label_12">
    <property name="geometry">
     <rect>
-     <x>485</x>
-     <y>60</y>
+     <x>30</x>
+     <y>350</y>
      <width>141</width>
      <height>24</height>
     </rect>
@@ -34,8 +34,8 @@
   <widget class="QLabel" name="label_13">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>60</y>
+     <x>30</x>
+     <y>70</y>
      <width>141</width>
      <height>24</height>
     </rect>
@@ -52,20 +52,7 @@
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>195</x>
-     <y>60</y>
-     <width>20</width>
-     <height>431</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-  </widget>
-  <widget class="Line" name="line_2">
-   <property name="geometry">
-    <rect>
-     <x>447</x>
+     <x>182</x>
      <y>60</y>
      <width>20</width>
      <height>431</height>
@@ -78,8 +65,8 @@
   <widget class="Line" name="line_3">
    <property name="geometry">
     <rect>
-     <x>25</x>
-     <y>88</y>
+     <x>10</x>
+     <y>165</y>
      <width>761</width>
      <height>20</height>
     </rect>
@@ -91,10 +78,10 @@
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>160</y>
-     <width>141</width>
-     <height>111</height>
+     <x>221</x>
+     <y>104</y>
+     <width>231</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
@@ -104,29 +91,13 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="label_7">
-   <property name="geometry">
-    <rect>
-     <x>485</x>
-     <y>120</y>
-     <width>271</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Generate proxy data by selecting the correct processing tool for your data</string>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_14">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>60</y>
-     <width>231</width>
-     <height>24</height>
+     <x>30</x>
+     <y>170</y>
+     <width>151</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="font">
@@ -137,14 +108,17 @@
    <property name="text">
     <string>Preprocess vector data</string>
    </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>306</y>
+     <x>502</x>
+     <y>224</y>
      <width>211</width>
-     <height>111</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="text">
@@ -157,10 +131,10 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>148</y>
-     <width>211</width>
-     <height>91</height>
+     <x>222</x>
+     <y>227</y>
+     <width>201</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="text">
@@ -227,11 +201,24 @@
     </item>
    </layout>
   </widget>
+  <widget class="Line" name="line_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>325</y>
+     <width>761</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
   <widget class="QPushButton" name="open_explore_btn">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>130</y>
+     <x>220</x>
+     <y>70</y>
      <width>111</width>
      <height>25</height>
     </rect>
@@ -240,25 +227,12 @@
     <string>Open explore</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="extract_by_attribute_btn">
-   <property name="geometry">
-    <rect>
-     <x>230</x>
-     <y>130</y>
-     <width>171</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Extract by attribute</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="extract_by_expression_btn">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>280</y>
-     <width>171</width>
+     <x>500</x>
+     <y>200</y>
+     <width>181</width>
      <height>25</height>
     </rect>
    </property>
@@ -266,41 +240,33 @@
     <string>Extract by expression</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="extract_by_attribute_btn">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>200</y>
+     <width>181</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Extract by attribute</string>
+   </property>
+  </widget>
   <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>482</x>
-     <y>190</y>
-     <width>304</width>
-     <height>182</height>
+     <x>220</x>
+     <y>350</y>
+     <width>148</width>
+     <height>151</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QPushButton" name="calculate_distances_vector_btn">
+     <widget class="QPushButton" name="binarize_btn">
       <property name="text">
-       <string>Calculate distances (from vector data)</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="calculate_distances_raster_btn">
-      <property name="text">
-       <string>Calculate distances (from raster data) (WIP)</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="calculate_density_btn">
-      <property name="text">
-       <string>Calculate density</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="interpolate_idw_btn">
-      <property name="text">
-       <string>Interpolate – IDW</string>
+       <string>Binarize</string>
       </property>
      </widget>
     </item>
@@ -312,9 +278,23 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="binarize_btn">
+     <widget class="QPushButton" name="interpolate_idw_btn">
       <property name="text">
-       <string>Binarize</string>
+       <string>Interpolate – IDW</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="calculate_distances_btn">
+      <property name="text">
+       <string>Calculate distances</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="calculate_diensity_btn">
+      <property name="text">
+       <string>Calculate density</string>
       </property>
      </widget>
     </item>

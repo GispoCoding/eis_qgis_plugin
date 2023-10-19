@@ -3,7 +3,7 @@ from typing import Callable, List, Optional
 
 from qgis.core import QgsApplication, QgsProject
 from qgis.gui import QgisInterface
-from qgis.PyQt.QtCore import QCoreApplication, QTranslator
+from qgis.PyQt.QtCore import QCoreApplication, QTranslator, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QAction,
@@ -20,11 +20,11 @@ from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logge
 from .qgis_plugin_tools.tools.i18n import setup_translation
 from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
-from .wizard.explore.wizard_explore import EISWizardExploreBig
-from .wizard.explore.wizard_explore_new import EISWizardExploreNew
+from .wizard.explore.wizard_explore import EISWizardExplore
 from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
 from .wizard.model.model_wizard import EISWizardModeling
 from .wizard.search_test import SearchDialog
+from .wizard.preprocess.wizard_proxy_dock import EISWizardProxyDock
 
 PLUGIN_PATH = os.path.dirname(__file__)
 
@@ -142,7 +142,6 @@ class Plugin:
         #     add_to_menu=False
         # )
 
-
         venv_action = self.add_action(
             "",
             text="Settings",
@@ -180,6 +179,15 @@ class Plugin:
             add_to_menu=False,
         )
 
+        open_dock_action = self.add_action(
+            "",
+            text="Mineral system proxies DOCK version",
+            parent=self.iface.mainWindow(),
+            callback=self.open_proxy_dock_widget,
+            add_to_toolbar=False,
+            add_to_menu=False,
+        )
+
         self.add_action(
             "",
             text="Testing: Add group",
@@ -204,6 +212,7 @@ class Plugin:
         self.popupMenu.addAction(explore_action)
         self.popupMenu.addAction(model_action)
         self.popupMenu.addAction(venv_action)
+        self.popupMenu.addAction(open_dock_action)
         # self.popupMenu.addAction(search_action)
         # self.popupMenu.addAction(group_action)
 
@@ -248,16 +257,21 @@ class Plugin:
         self.proxy_settings_window.show()
 
     def open_explore(self):
-        self.explore_window = EISWizardExploreNew()
+        self.explore_window = EISWizardExplore()
         self.explore_window.show()
-
-    def open_explore_big(self):
-        self.explore_window_big = EISWizardExploreBig()
-        self.explore_window_big.show()
 
     def open_modeling(self):
         self.model_window = EISWizardModeling()
         self.model_window.show()
+
+    def open_proxy_dock_widget(self):
+        self.dock_widget = EISWizardProxyDock()
+        # connect to provide cleanup on closing of dockwidget
+
+        # show the dockwidget
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
+        # self.dock_widget.show()
+        # self.dock_widget. # TODO
 
     def open_search(self):
         self.search_dialog = SearchDialog()

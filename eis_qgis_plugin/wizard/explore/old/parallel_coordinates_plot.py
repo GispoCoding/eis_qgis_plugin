@@ -12,10 +12,7 @@ from qgis.PyQt.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QFormLayout,
-    QDialog,
 )
-from qgis.PyQt.QtWebKitWidgets import QWebView
-from qgis.PyQt import QtCore
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
@@ -62,7 +59,6 @@ class ParallelChart(QWidget, FORM_CLASS):
         self.update(self.layer_selection_parallel.currentLayer())
 
     def init_parallel_plotting(self):
-
         # window = pg.GraphicsLayoutWidget()
         # self.plot_widget_parallel = win.addPlot()
 
@@ -177,40 +173,6 @@ class ParallelChart(QWidget, FORM_CLASS):
         # print(numerical_field_names)
         bottom_axis.setTicks([field_labels])
 
-    def plot_parallel_coordinates_plotly(self):
-        import plotly.express as px
-
-        df = px.data.iris()
-        fig = px.parallel_coordinates(
-            data_frame=df,
-            color="species_id",
-            labels={
-                "species_id": "Species",
-                "sepal_width": "Sepal Width",
-                "sepal_length": "Sepal Length",
-                "petal_width": "Petal Width",
-                "petal_length": "Petal Length",
-            },
-            color_continuous_scale=px.colors.diverging.Tealrose,
-            color_continuous_midpoint=2,
-        )
-        fig.write_html("/home/niko/Downloads/plotly_parallel.html")
-
-        self.open_plotly_graph()
-
-    def open_plotly_graph(self):
-        self.plot_dialog = QDialog()
-
-        layout = QVBoxLayout()
-        self.plot_dialog.setLayout(layout)
-
-        web_widget = QWebView(self.plot_dialog)
-        # web_widget.setUrl(QtCore.QUrl("file:///home/niko/Downloads/plotly_parallel.html"))
-        web_widget.setUrl(
-            QtCore.QUrl("file:///home/niko/Downloads/plotly_interactive_test.html")
-        )
-        layout.addWidget(web_widget)
-        self.plot_dialog.show()
 
     def open_seaborn_graph(self):
         from matplotlib.figure import Figure
