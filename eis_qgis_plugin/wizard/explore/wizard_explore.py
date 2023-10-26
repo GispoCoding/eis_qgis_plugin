@@ -104,9 +104,12 @@ class EISWizardExplore(QDialog, FORM_CLASS):
     x_selection_bivariate: QgsFieldComboBox
     y_selection_bivariate: QgsFieldComboBox
     hue_bivariate: QgsFieldComboBox
+    size_bivariate: QgsFieldComboBox
+    style_bivariate: QgsFieldComboBox
     plot_type_selection_bivariate: QComboBox
     palette_selection_bivariate: QgsColorButton
     opacity_selection_bivariate: QgsOpacityWidget
+    legend_bivariate: QComboBox
 
     plot_btn_bivariate: QPushButton
     clear_btn_bivariate: QPushButton
@@ -249,10 +252,13 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             bands = [f"Band {i + 1}" for i in range(layer.bandCount())]
             self.data_summary_band_selection.addItems(bands)
 
-    def update_comboboxes_bivariate(self, layer):
-        self.x_selection_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
-        self.y_selection_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
-        self.hue_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
+    def update_comboboxes_bivariate(self):
+        current_layer = self.layer_selection_bivariate.currentLayer()
+        self.x_selection_bivariate.setLayer(current_layer)
+        self.y_selection_bivariate.setLayer(current_layer)
+        self.hue_bivariate.setLayer(current_layer)
+        self.size_bivariate.setLayer(current_layer)
+        self.style_bivariate.setLayer(current_layer)
 
     def set_layer(self, layer):
         self.fields_selection.clear()  # Clear existing items
@@ -339,11 +345,11 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         self.bw_adjust_selection.setValue(1.00)
 
         self.plot_type_selection_bivariate.setCurrentIndex(0)
-        self.x_selection_raster_bivariate.setCurrentIndex(0)
-        self.y_selection_raster_bivariate.setCurrentIndex(0)
-        self.hue_vector_bivariate.setCurrentIndex(0)
-        self.hue_raster_bivariate.setCurrentIndex(0)
+        self.hue_bivariate.setCurrentIndex(0)
+        self.size_bivariate.setCurrentIndex(0)
+        self.style_bivariate.setCurrentIndex(0)
         self.opacity_selection_bivariate.setOpacity(90)
+        self.legend_bivariate.setCurrentIndex(0)
 
     def get_bool(self, str: str) -> bool:
         return str.lower() == "true"
@@ -465,6 +471,8 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             self.x_selection_bivariate.currentField(),
             self.y_selection_bivariate.currentField(),
             self.hue_bivariate.currentField(),
+            self.size_bivariate.currentField(),
+            self.style_bivariate.currentField(),
         ]
         data_dict = {}
 
@@ -473,6 +481,8 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             data = [feature.attribute(field) for feature in layer.getFeatures()]
             data_dict[field] = data
 
+        legend = False if self.legend_bivariate.currentText() == "False" else self.legend_bivariate.currentText()
+
         fig, ax = plt.subplots()
 
         sns_common_kwargs = {
@@ -480,6 +490,10 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             "x": data_dict[selected_fields[0]],
             "y": data_dict[selected_fields[1]],
             "hue": data_dict[selected_fields[2]],
+            "size": data_dict[selected_fields[3]],
+            "style": data_dict[selected_fields[4]],
+            "legend": legend,
+            "alpha": self.opacity_selection.opacity(),
             "ax": ax,
         }
 
