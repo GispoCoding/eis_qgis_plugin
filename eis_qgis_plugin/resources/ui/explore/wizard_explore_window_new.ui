@@ -988,7 +988,7 @@
            <rect>
             <x>10</x>
             <y>10</y>
-            <width>281</width>
+            <width>284</width>
             <height>531</height>
            </rect>
           </property>
@@ -1122,6 +1122,34 @@
              <item row="1" column="1">
               <widget class="QgsFieldComboBox" name="hue_bivariate"/>
              </item>
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="size_checkbox_bivariate">
+               <property name="text">
+                <string>Size</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QgsFieldComboBox" name="size_bivariate">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="style_checkbox_bivariate">
+               <property name="text">
+                <string>Style</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QgsFieldComboBox" name="style_bivariate">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
              <item row="4" column="0">
               <widget class="QLabel" name="label_80">
                <property name="text">
@@ -1155,26 +1183,6 @@
                 <double>0.900000000000000</double>
                </property>
               </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="sizeLabel">
-               <property name="text">
-                <string>Size</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QgsFieldComboBox" name="size_bivariate"/>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="styleLabel">
-               <property name="text">
-                <string>Style</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QgsFieldComboBox" name="style_bivariate"/>
              </item>
              <item row="6" column="0">
               <widget class="QLabel" name="legendLabel">

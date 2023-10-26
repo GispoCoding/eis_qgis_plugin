@@ -12,6 +12,7 @@ from qgis.PyQt.QtWidgets import (
     QFormLayout,
     QListWidget,
     QLabel,
+    QCheckBox,
 )
 
 from qgis.core import QgsMapLayer, QgsMapLayerProxyModel, NULL
@@ -104,7 +105,9 @@ class EISWizardExplore(QDialog, FORM_CLASS):
     x_selection_bivariate: QgsFieldComboBox
     y_selection_bivariate: QgsFieldComboBox
     hue_bivariate: QgsFieldComboBox
+    size_checkbox_bivariate: QCheckBox
     size_bivariate: QgsFieldComboBox
+    style_checkbox_bivariate: QCheckBox
     style_bivariate: QgsFieldComboBox
     plot_type_selection_bivariate: QComboBox
     palette_selection_bivariate: QgsColorButton
@@ -165,6 +168,8 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         self.layer_selection_bivariate.setFilters(QgsMapLayerProxyModel.VectorLayer)
         self.layer_selection_bivariate.layerChanged.connect(self.update_comboboxes_bivariate)
         # self.plot_type_selection_bivariate.currentTextChanged.connect()
+        self.size_checkbox_bivariate.clicked.connect(self.enable_size_bivariate)
+        self.style_checkbox_bivariate.clicked.connect(self.enable_style_bivariate)
 
         self.plot_layout_bivariate = QVBoxLayout()
         self.bivariate_plot_container.setLayout(self.plot_layout_bivariate)
@@ -259,6 +264,18 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         self.hue_bivariate.setLayer(current_layer)
         self.size_bivariate.setLayer(current_layer)
         self.style_bivariate.setLayer(current_layer)
+
+    def enable_size_bivariate(self):
+        if self.size_checkbox_bivariate.isChecked():
+            self.size_bivariate.setEnabled(True)
+        else:
+            self.size_bivariate.setEnabled(False)
+
+    def enable_style_bivariate(self):
+        if self.style_checkbox_bivariate.isChecked():
+            self.style_bivariate.setEnabled(True)
+        else:
+            self.style_bivariate.setEnabled(False)
 
     def set_layer(self, layer):
         self.fields_selection.clear()  # Clear existing items
@@ -471,8 +488,6 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             self.x_selection_bivariate.currentField(),
             self.y_selection_bivariate.currentField(),
             self.hue_bivariate.currentField(),
-            self.size_bivariate.currentField(),
-            self.style_bivariate.currentField(),
         ]
         data_dict = {}
 
@@ -490,12 +505,20 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             "x": data_dict[selected_fields[0]],
             "y": data_dict[selected_fields[1]],
             "hue": data_dict[selected_fields[2]],
-            "size": data_dict[selected_fields[3]],
-            "style": data_dict[selected_fields[4]],
             "legend": legend,
             "alpha": self.opacity_selection.opacity(),
             "ax": ax,
         }
+
+        if self.size_checkbox_bivariate.isChecked():
+            field = self.size_bivariate.currentField()
+            data = [feature.attribute(field) for feature in layer.getFeatures()]
+            sns_common_kwargs["size"] = data
+
+        if self.style_checkbox_bivariate.isChecked():
+            field = self.style_bivariate.currentField()
+            data = [feature.attribute(field) for feature in layer.getFeatures()]
+            sns_common_kwargs["style"] = data
 
         if self.plot_type_selection_bivariate.currentText().lower() == "scatterplot":
             sns.scatterplot(
