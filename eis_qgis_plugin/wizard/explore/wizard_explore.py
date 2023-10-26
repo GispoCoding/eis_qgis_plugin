@@ -14,7 +14,7 @@ from qgis.PyQt.QtWidgets import (
     QLabel,
 )
 
-from qgis.core import QgsMapLayer, NULL
+from qgis.core import QgsMapLayer, QgsMapLayerProxyModel, NULL
 
 from qgis.PyQt.QtGui import QColor
 from qgis import processing
@@ -101,12 +101,9 @@ class EISWizardExplore(QDialog, FORM_CLASS):
     plot_customization_form_bivariate: QFormLayout
     bivariate_plot_container: QFrame
     layer_selection_bivariate: QgsMapLayerComboBox
-    x_selection_vector_bivariate: QgsFieldComboBox
-    y_selection_vector_bivariate: QgsFieldComboBox
-    x_selection_raster_bivariate: QComboBox
-    y_selection_raster_bivariate: QComboBox
-    hue_vector_bivariate: QgsFieldComboBox
-    hue_raster_bivariate: QComboBox
+    x_selection_bivariate: QgsFieldComboBox
+    y_selection_bivariate: QgsFieldComboBox
+    hue_bivariate: QgsFieldComboBox
     plot_type_selection_bivariate: QComboBox
     palette_selection_bivariate: QgsColorButton
     opacity_selection_bivariate: QgsOpacityWidget
@@ -162,18 +159,8 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         self.clear_btn_bivariate.clicked.connect(self.clear_plot_bivariate)
         self.reset_btn_bivariate.clicked.connect(self.reset)
 
-        self.x_selection_vector_bivariate.setEnabled(False)
-        self.y_selection_vector_bivariate.setEnabled(False)
-        self.hue_vector_bivariate.setEnabled(False)
-        self.x_selection_raster_bivariate.setEnabled(False)
-        self.y_selection_raster_bivariate.setEnabled(False)
-        self.hue_raster_bivariate.setEnabled(False)
-
-        self.layer_selection_bivariate.layerChanged.connect(self.set_bands_bivariate)
-        self.layer_selection_bivariate.layerChanged.connect(self.set_comboboxes_bivariate)
-        self.x_selection_vector_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
-        self.y_selection_vector_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
-        self.hue_vector_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
+        self.layer_selection_bivariate.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.layer_selection_bivariate.layerChanged.connect(self.update_comboboxes_bivariate)
         # self.plot_type_selection_bivariate.currentTextChanged.connect()
 
         self.plot_layout_bivariate = QVBoxLayout()
@@ -262,30 +249,10 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             bands = [f"Band {i + 1}" for i in range(layer.bandCount())]
             self.data_summary_band_selection.addItems(bands)
 
-    def set_bands_bivariate(self, layer):
-        if layer.type() == QgsMapLayer.RasterLayer:
-            bands = [f"Band {i + 1}" for i in range(layer.bandCount())]
-            self.x_selection_raster_bivariate.addItems(bands)
-            self.y_selection_raster_bivariate.addItems(bands)
-            self.hue_raster_bivariate.addItems(bands)
-
-    def set_comboboxes_bivariate(self, layer):
-        if layer.type() == QgsMapLayer.RasterLayer:
-            self.x_selection_vector_bivariate.setEnabled(False)
-            self.y_selection_vector_bivariate.setEnabled(False)
-            self.hue_vector_bivariate.setEnabled(False)
-            self.x_selection_raster_bivariate.setEnabled(True)
-            self.y_selection_raster_bivariate.setEnabled(True)
-            self.hue_raster_bivariate.setEnabled(True)
-            self.plot_type_selection_bivariate.model().item(1).setEnabled(False)
-        else:
-            self.x_selection_vector_bivariate.setEnabled(True)
-            self.y_selection_vector_bivariate.setEnabled(True)
-            self.hue_vector_bivariate.setEnabled(True)
-            self.x_selection_raster_bivariate.setEnabled(False)
-            self.y_selection_raster_bivariate.setEnabled(False)
-            self.hue_raster_bivariate.setEnabled(False)
-            self.plot_type_selection_bivariate.model().item(1).setEnabled(True)
+    def update_comboboxes_bivariate(self, layer):
+        self.x_selection_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
+        self.y_selection_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
+        self.hue_bivariate.setLayer(self.layer_selection_bivariate.currentLayer())
 
     def set_layer(self, layer):
         self.fields_selection.clear()  # Clear existing items
@@ -494,42 +461,16 @@ class EISWizardExplore(QDialog, FORM_CLASS):
     def plot_bivariate(self):
         self.clear_plot_bivariate()
         layer = self.layer_selection_bivariate.currentLayer()
-
-        if layer.type() == QgsMapLayer.VectorLayer:
-            selected_fields = [
-                self.x_selection_vector_bivariate.currentField(),
-                self.y_selection_vector_bivariate.currentField(),
-                self.hue_vector_bivariate.currentField(),
-            ]
-        else:
-            selected_fields = [
-                self.x_selection_raster_bivariate.currentText(),
-                self.y_selection_raster_bivariate.currentText(),
-                self.hue_raster_bivariate.currentText(),
-            ]
+        selected_fields = [
+            self.x_selection_bivariate.currentField(),
+            self.y_selection_bivariate.currentField(),
+            self.hue_bivariate.currentField(),
+        ]
         data_dict = {}
 
         # Loop through each field and append its data to long_form_data
         for field in selected_fields:
-            if layer.type() == QgsMapLayer.VectorLayer:
-                data = [feature.attribute(field) for feature in layer.getFeatures()]
-                data_dict[field] = data
-            # Raster
-            else:
-                data_provider = layer.dataProvider()
-                width = layer.width()
-                height = layer.height()
-                band = int(field.split()[-1])
-
-                data_block = data_provider.block(band, layer.extent(), width, height)
-                data = []
-
-                # Loop over all pixels
-                for row in range(height):
-                    for col in range(width):
-                        pixel_value = data_block.value(row, col)
-                        data.append(pixel_value)
-
+            data = [feature.attribute(field) for feature in layer.getFeatures()]
             data_dict[field] = data
 
         fig, ax = plt.subplots()
