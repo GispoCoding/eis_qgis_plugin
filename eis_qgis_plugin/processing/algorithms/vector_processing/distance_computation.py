@@ -32,6 +32,7 @@ class EISDistanceComputation(EISProcessingAlgorithm):
             )
         )
 
+        # ParameterFileDestination? It returns 2d araray.
         self.addParameter(
             QgsProcessingParameterRasterDestination(
                 name=self.alg_parameters[2], description="Output raster (distances)"
