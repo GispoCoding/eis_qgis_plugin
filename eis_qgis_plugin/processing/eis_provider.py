@@ -10,7 +10,7 @@ ICON_PATH = os.path.join(PLUGIN_PATH, "../resources/icons/plugin_icon.png")
 
 class EISProvider(QgsProcessingProvider):
     def __init__(self) -> None:
-        self.alg_folder = os.path.join(PLUGIN_PATH, "algorithms")
+        self.base_alg_folder = os.path.join(PLUGIN_PATH, "algorithms")
         super().__init__()
 
     def id(self) -> str:
@@ -27,13 +27,24 @@ class EISProvider(QgsProcessingProvider):
         return QIcon(ICON_PATH)
 
     def loadAlgorithms(self) -> None:
-        algorithm_instances = self.load_algorithms_from_directory(self.alg_folder)
+        # Load algorithms from each directory
+        validation = self.load_algorithms_from_directory("validation")
+        vector_processing = self.load_algorithms_from_directory("vector_processing")
+        raster_processing = self.load_algorithms_from_directory("raster_processing")
+        exploratory_analysis = self.load_algorithms_from_directory("exploratory_analysis")
+        prediction = self.load_algorithms_from_directory("prediction")
+        transformations = self.load_algorithms_from_directory("transformations")
+
 
         # Add the algorithm instances to the provider
-        for algorithm in algorithm_instances:
+        for algorithm in (
+            validation + vector_processing + raster_processing +
+            exploratory_analysis + prediction + transformations
+        ):
             self.addAlgorithm(algorithm)
 
-    def load_algorithms_from_directory(self, algorithms_dir: str):
+    def load_algorithms_from_directory(self, category: str):
+        algorithms_dir = os.path.join(self.base_alg_folder, category)
         algorithm_instances = []
 
         for file_name in os.listdir(algorithms_dir):
