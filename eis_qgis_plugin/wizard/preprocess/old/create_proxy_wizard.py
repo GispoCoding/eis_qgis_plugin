@@ -10,7 +10,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-from ...explore.wizard_explore import EISWizardExplore
+from ...explore.old.wizard_explore import EISWizardExplore
 
 
 class EISWizardProxy(QWizardPage):

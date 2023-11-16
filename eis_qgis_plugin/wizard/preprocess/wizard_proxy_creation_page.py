@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWizardPage
 
 from qgis import processing
 
-from ..explore.wizard_explore_new import EISWizardExploreNew
+from ..explore.wizard_explore import EISWizardExplore
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 FORM_CLASS: QWizardPage = load_ui("preprocess/wizard_proxy_creation.ui")
@@ -40,5 +40,5 @@ class EISWizardProxyCreation(QWizardPage, FORM_CLASS):
         # self.binarize_btn.clicked.connect(processing.execAlgorithmDialog("eis:", {}) )
 
     def open_explore(self):
-        self.explore_window = EISWizardExploreNew(self)
+        self.explore_window = EISWizardExplore(self)
         self.explore_window.show()

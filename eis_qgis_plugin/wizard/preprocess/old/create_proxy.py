@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWizardPage
 
 from qgis import processing
 
-from ...explore.wizard_explore import EISWizardExplore
+from ...explore.old.wizard_explore import EISWizardExplore
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 FORM_CLASS: QDialog = load_ui("preprocess/proxy_view_with_links.ui")
