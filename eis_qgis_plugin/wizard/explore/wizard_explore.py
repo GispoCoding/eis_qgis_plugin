@@ -12,9 +12,10 @@ from qgis.PyQt.QtWidgets import (
     QFormLayout,
     QListWidget,
     QLabel,
+    QCheckBox,
 )
 
-from qgis.core import QgsMapLayer, NULL
+from qgis.core import QgsMapLayer, QgsMapLayerProxyModel, NULL
 
 from qgis.PyQt.QtGui import QColor
 from qgis import processing
@@ -96,12 +97,35 @@ class EISWizardExplore(QDialog, FORM_CLASS):
     clear_btn: QPushButton
     reset_btn: QPushButton
 
+    # Bivariate tab contents
+    container_bivariate: QWidget
+    plot_customization_form_bivariate: QFormLayout
+    bivariate_plot_container: QFrame
+    layer_selection_bivariate: QgsMapLayerComboBox
+    x_selection_bivariate: QgsFieldComboBox
+    y_selection_bivariate: QgsFieldComboBox
+    hue_bivariate: QgsFieldComboBox
+    size_checkbox_bivariate: QCheckBox
+    size_bivariate: QgsFieldComboBox
+    style_checkbox_bivariate: QCheckBox
+    style_bivariate: QgsFieldComboBox
+    plot_type_selection_bivariate: QComboBox
+    palette_selection_bivariate: QgsColorButton
+    opacity_selection_bivariate: QgsOpacityWidget
+    legend_bivariate: QComboBox
+
+    plot_btn_bivariate: QPushButton
+    clear_btn_bivariate: QPushButton
+    reset_btn_bivariate: QPushButton
+
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
         self.initialize_summary_tab()
         self.initialize_univariate_tab()
+        self.initialize_bivariate_tab()
 
         # self.palette_selection = QgsColorRampButton()
         # # Get the default style manager
@@ -135,6 +159,20 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         self.univariate_plot_container.setLayout(self.plot_layout)
 
         self.set_buttons(self.plot_type_selection.currentText())
+
+    def initialize_bivariate_tab(self):
+        self.plot_btn_bivariate.clicked.connect(self.plot_bivariate)
+        self.clear_btn_bivariate.clicked.connect(self.clear_plot_bivariate)
+        self.reset_btn_bivariate.clicked.connect(self.reset)
+
+        self.layer_selection_bivariate.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.layer_selection_bivariate.layerChanged.connect(self.update_comboboxes_bivariate)
+        # self.plot_type_selection_bivariate.currentTextChanged.connect()
+        self.size_checkbox_bivariate.clicked.connect(self.enable_size_bivariate)
+        self.style_checkbox_bivariate.clicked.connect(self.enable_style_bivariate)
+
+        self.plot_layout_bivariate = QVBoxLayout()
+        self.bivariate_plot_container.setLayout(self.plot_layout_bivariate)
 
     def compute_statistics(self):
         # Get N
@@ -219,6 +257,26 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             bands = [f"Band {i + 1}" for i in range(layer.bandCount())]
             self.data_summary_band_selection.addItems(bands)
 
+    def update_comboboxes_bivariate(self):
+        current_layer = self.layer_selection_bivariate.currentLayer()
+        self.x_selection_bivariate.setLayer(current_layer)
+        self.y_selection_bivariate.setLayer(current_layer)
+        self.hue_bivariate.setLayer(current_layer)
+        self.size_bivariate.setLayer(current_layer)
+        self.style_bivariate.setLayer(current_layer)
+
+    def enable_size_bivariate(self):
+        if self.size_checkbox_bivariate.isChecked():
+            self.size_bivariate.setEnabled(True)
+        else:
+            self.size_bivariate.setEnabled(False)
+
+    def enable_style_bivariate(self):
+        if self.style_checkbox_bivariate.isChecked():
+            self.style_bivariate.setEnabled(True)
+        else:
+            self.style_bivariate.setEnabled(False)
+
     def set_layer(self, layer):
         self.fields_selection.clear()  # Clear existing items
         if layer is not None:
@@ -284,6 +342,12 @@ class EISWizardExplore(QDialog, FORM_CLASS):
             if widget is not None:
                 widget.deleteLater()
 
+    def clear_plot_bivariate(self):
+        for i in reversed(range(self.plot_layout_bivariate.count())):
+            widget = self.plot_layout_bivariate.itemAt(i).widget()
+            if widget is not None:
+                widget.deleteLater()
+
     def reset(self):
         self.fields_selection.clearSelection()
 
@@ -296,6 +360,13 @@ class EISWizardExplore(QDialog, FORM_CLASS):
         self.element_selection.setCurrentIndex(0)
         self.nr_of_bins_selection.setValue(0)
         self.bw_adjust_selection.setValue(1.00)
+
+        self.plot_type_selection_bivariate.setCurrentIndex(0)
+        self.hue_bivariate.setCurrentIndex(0)
+        self.size_bivariate.setCurrentIndex(0)
+        self.style_bivariate.setCurrentIndex(0)
+        self.opacity_selection_bivariate.setOpacity(90)
+        self.legend_bivariate.setCurrentIndex(0)
 
     def get_bool(self, str: str) -> bool:
         return str.lower() == "true"
@@ -409,3 +480,59 @@ class EISWizardExplore(QDialog, FORM_CLASS):
 
         self.plot_layout.addWidget(toolbar)
         self.plot_layout.addWidget(canvas)
+
+    def plot_bivariate(self):
+        self.clear_plot_bivariate()
+        layer = self.layer_selection_bivariate.currentLayer()
+        selected_fields = [
+            self.x_selection_bivariate.currentField(),
+            self.y_selection_bivariate.currentField(),
+            self.hue_bivariate.currentField(),
+        ]
+        data_dict = {}
+
+        # Loop through each field and append its data to long_form_data
+        for field in selected_fields:
+            data = [feature.attribute(field) for feature in layer.getFeatures()]
+            data_dict[field] = data
+
+        legend = False if self.legend_bivariate.currentText() == "False" else self.legend_bivariate.currentText()
+
+        fig, ax = plt.subplots()
+
+        sns_common_kwargs = {
+            "data": data_dict,
+            "x": data_dict[selected_fields[0]],
+            "y": data_dict[selected_fields[1]],
+            "hue": data_dict[selected_fields[2]],
+            "legend": legend,
+            "alpha": self.opacity_selection.opacity(),
+            "ax": ax,
+        }
+
+        if self.size_checkbox_bivariate.isChecked():
+            field = self.size_bivariate.currentField()
+            data = [feature.attribute(field) for feature in layer.getFeatures()]
+            sns_common_kwargs["size"] = data
+
+        if self.style_checkbox_bivariate.isChecked():
+            field = self.style_bivariate.currentField()
+            data = [feature.attribute(field) for feature in layer.getFeatures()]
+            sns_common_kwargs["style"] = data
+
+        if self.plot_type_selection_bivariate.currentText().lower() == "scatterplot":
+            sns.scatterplot(
+                **sns_common_kwargs,
+            )
+
+        if self.plot_type_selection_bivariate.currentText().lower() == "lineplot":
+            sns.lineplot(
+                **sns_common_kwargs
+            )
+
+        canvas = FigureCanvas(fig)
+        canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        toolbar = NavigationToolbar(canvas, self.bivariate_plot_container)
+
+        self.plot_layout_bivariate.addWidget(toolbar)
+        self.plot_layout_bivariate.addWidget(canvas)
