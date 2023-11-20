@@ -22,7 +22,7 @@ from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
 from .wizard.explore.wizard_explore import EISWizardExplore
 from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
-from .wizard.model.model_wizard import EISWizardModeling
+from .wizard.model.wizard_model import EISWizardModeling
 from .wizard.search_test import SearchDialog
 from .wizard.preprocess.wizard_proxy_dock import EISWizardProxyDock
 

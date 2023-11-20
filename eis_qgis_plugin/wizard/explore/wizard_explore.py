@@ -37,7 +37,7 @@ from qgis.gui import (
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 
-FORM_CLASS: QDialog = load_ui("explore/wizard_explore_window_new.ui")
+FORM_CLASS: QDialog = load_ui("explore/wizard_explore.ui")
 
 
 class EISWizardExplore(QDialog, FORM_CLASS):
