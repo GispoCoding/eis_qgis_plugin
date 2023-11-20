@@ -38,17 +38,7 @@
       <widget class="QComboBox" name="comboBox">
        <item>
         <property name="text">
-         <string>Weights of evidence</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>MLP (Multilayer perceptron)</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>CNN (Convoluted neural netwrok)</string>
+         <string>Random forest</string>
         </property>
        </item>
        <item>
@@ -58,253 +48,232 @@
        </item>
        <item>
         <property name="text">
-         <string>Random forests</string>
+         <string>Gradient boosting</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Weights of evidence</string>
         </property>
        </item>
       </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>20</y>
-      <width>252</width>
-      <height>175</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_8">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Model description</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFrame" name="frame_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <widget class="QLabel" name="label_7">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>210</y>
-      <width>252</width>
-      <height>175</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLabel" name="label_6">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Use cases</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFrame" name="frame_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <widget class="QLabel" name="label_5">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>140</y>
-      <width>91</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Train model</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>140</y>
-      <width>67</width>
+      <x>30</x>
+      <y>90</y>
+      <width>131</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>Predict</string>
+     <string>Model parameters</string>
     </property>
    </widget>
-   <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox">
+   <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>190</y>
-      <width>160</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>190</y>
-      <width>81</width>
+      <x>350</x>
+      <y>20</y>
+      <width>131</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>Input data</string>
+     <string>Training data</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_11">
+   <widget class="QgsFileWidget" name="mQgsFileWidget_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>236</y>
-      <width>111</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Train/test split</string>
-    </property>
-   </widget>
-   <widget class="QDoubleSpinBox" name="doubleSpinBox">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>230</y>
-      <width>65</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="value">
-     <double>0.400000000000000</double>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_13">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>220</y>
-      <width>81</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Input data</string>
-    </property>
-   </widget>
-   <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_2">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>220</y>
-      <width>160</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QgsFileWidget" name="mQgsFileWidget">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>287</y>
+      <x>130</x>
+      <y>347</y>
       <width>151</width>
       <height>27</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_15">
+   <widget class="QLabel" name="label_19">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>290</y>
+      <x>30</x>
+      <y>350</y>
       <width>91</width>
-      <height>17</height>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>Save model</string>
     </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>130</y>
+      <width>171</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Test/validation settings</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>120</y>
+      <width>241</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lossLabel">
+       <property name="text">
+        <string>Loss</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="lossComboBox"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="learningRateLabel">
+       <property name="text">
+        <string>Learning rate</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QgsDoubleSpinBox" name="learningRateQgsDoubleSpinBox"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="nEstimatorsLabel">
+       <property name="text">
+        <string>N estimators</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QgsSpinBox" name="nEstimatorsQgsSpinBox"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="maxDepthLabel">
+       <property name="text">
+        <string>Max depth</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QgsSpinBox" name="maxDepthQgsSpinBox"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="subsampleLabel">
+       <property name="text">
+        <string>Subsample</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QgsDoubleSpinBox" name="subsampleQgsDoubleSpinBox"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>50</y>
+      <width>191</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout_3">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>X (data)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>y (labels)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_2"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>160</y>
+      <width>241</width>
+      <height>122</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout_4">
+     <item row="0" column="0">
+      <widget class="QLabel" name="testMethodLabel_4">
+       <property name="text">
+        <string>Test method</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="testMethodComboBox_3"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="testMethodLabel_3">
+       <property name="text">
+        <string>Metrics</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="testMethodComboBox_4"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="simpleSplitSizeLabel_2">
+       <property name="text">
+        <string>Simple split size</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+       <property name="minimum">
+        <double>0.010000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.400000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="crossValidationFoldsLabel_2">
+       <property name="text">
+        <string>Cross-validation folds</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QgsSpinBox" name="crossValidationFoldsQgsSpinBox_2"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QWizardPage" name="wizardPage"/>
@@ -476,6 +445,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QgsDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>qgsdoublespinbox.h</header>
+  </customwidget>
+  <customwidget>
    <class>QgsFileWidget</class>
    <extends>QWidget</extends>
    <header>qgsfilewidget.h</header>
@@ -484,6 +458,11 @@
    <class>QgsMapLayerComboBox</class>
    <extends>QComboBox</extends>
    <header>qgsmaplayercombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>qgsspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
