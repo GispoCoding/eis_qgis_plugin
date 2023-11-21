@@ -47,7 +47,27 @@
        </property>
        <item>
         <property name="text">
-         <string>Random forest</string>
+         <string>Random forest - classifier</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Random forest - regressor</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Gradient boosting – classifier</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Gradient boosting – regressor</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Logistic regression (classifier)</string>
         </property>
        </item>
        <item>
@@ -66,7 +86,7 @@
         <rect>
          <x>10</x>
          <y>320</y>
-         <width>622</width>
+         <width>841</width>
          <height>370</height>
         </rect>
        </property>
@@ -100,7 +120,7 @@
          <rect>
           <x>20</x>
           <y>50</y>
-          <width>102</width>
+          <width>103</width>
           <height>213</height>
          </rect>
         </property>
@@ -115,21 +135,21 @@
          <item>
           <widget class="QPushButton" name="pushButton_4">
            <property name="text">
-            <string>Min-max</string>
+            <string>Linear Scaling</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_7">
            <property name="text">
-            <string>Clip</string>
+            <string>Clip? Area?</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_5">
            <property name="text">
-            <string>Log</string>
+            <string>Logarythmic scaling</string>
            </property>
           </widget>
          </item>
@@ -244,6 +264,32 @@
          </item>
         </layout>
        </widget>
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>280</y>
+          <width>181</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Evidence data discretization</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_11">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>310</y>
+          <width>100</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Reclassify</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QLabel" name="label_13">
        <property name="geometry">
@@ -285,43 +331,17 @@
                 </font>
                </property>
                <property name="text">
-                <string>Select model to train</string>
+                <string>Select evidence data</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QComboBox" name="comboBox_2">
-               <item>
-                <property name="text">
-                 <string>Random forest – classifier</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Random forest – regressor</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Gradient boosting – classifier</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Gradient boosting – regressor</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Logistic regression (classifier)</string>
-                </property>
-               </item>
-              </widget>
-             </item>
             </layout>
+           </item>
+           <item>
+            <widget class="QListView" name="listView"/>
            </item>
            <item>
             <spacer name="verticalSpacer_2">
@@ -992,7 +1012,7 @@
          <x>30</x>
          <y>90</y>
          <width>271</width>
-         <height>27</height>
+         <height>51</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -1005,7 +1025,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Data</string>
+           <string>Select evidence data</string>
           </property>
          </widget>
         </item>
@@ -1018,7 +1038,7 @@
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>140</y>
+         <y>440</y>
          <width>89</width>
          <height>25</height>
         </rect>
@@ -1027,6 +1047,34 @@
         <string>Run</string>
        </property>
       </widget>
+      <widget class="QListView" name="listView_2">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>200</y>
+         <width>271</width>
+         <height>192</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>550</y>
+         <width>120</width>
+         <height>80</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>GroupBox</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_8">
+      <attribute name="title">
+       <string>Validation</string>
+      </attribute>
      </widget>
     </widget>
    </item>
