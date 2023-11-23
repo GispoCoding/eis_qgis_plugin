@@ -27,6 +27,4 @@ The current plan is that EIS Wizard will have the following dialogs:
 Refer to [development](docs/development.md) for developing this QGIS3 plugin.
 
 ## License
-This plugin is licenced with[GNU General Public License, version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-
-See [LICENSE](LICENSE) for more information.
+Licensed under the EUPL-1.2 or later.
