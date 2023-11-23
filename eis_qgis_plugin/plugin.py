@@ -22,11 +22,12 @@ from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
 from .wizard.explore.wizard_explore import EISWizardExplore
 from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
-from .wizard.model.wizard_model import EISWizardModeling
+from .wizard.wizard_model import EISWizardModeling
 from .wizard.search_test import SearchDialog
 from .wizard.preprocess.wizard_proxy_dock import EISWizardProxyDock
+from .wizard.wizard_main import EISWizard
 
-PLUGIN_PATH = os.path.dirname(__file__)
+from eis_qgis_plugin.utils import PLUGIN_PATH
 
 
 class Plugin:
@@ -58,7 +59,6 @@ class Plugin:
         #     self.translator = QTranslator()
         #     self.translator.load(qmPath)
         #     QCoreApplication.installTranslator(self.translator)
-        self.provider = EISProvider()
 
     def add_action(
         self,
@@ -142,50 +142,59 @@ class Plugin:
         #     add_to_menu=False
         # )
 
-        venv_action = self.add_action(
+        self.add_action(
             "",
             text="Settings",
             callback=self.set_python_venv_path,
             parent=self.iface.mainWindow(),
             add_to_toolbar=False,
-            add_to_menu=False,
+            add_to_menu=True,
         )
 
         # Add links to Wizard steps as separate buttons, at least for now
-        preprocess_action = self.add_action(
+        wizard_action = self.add_action(
             icon_path,
-            text="Mineral system proxies",
+            text="EIS Wizard",
             parent=self.iface.mainWindow(),
-            callback=self.open_proxy_settings,
+            callback=self.open_wizard,
             add_to_toolbar=False,
             add_to_menu=False,
         )
 
-        explore_action = self.add_action(
+        self.add_action(
+            "",
+            text="Mineral system proxies",
+            parent=self.iface.mainWindow(),
+            callback=self.open_proxy_settings,
+            add_to_toolbar=False,
+            add_to_menu=True,
+        )
+
+        self.add_action(
             "",
             text="Explore",
             parent=self.iface.mainWindow(),
             callback=self.open_explore,
             add_to_toolbar=False,
-            add_to_menu=False,
+            add_to_menu=True,
         )
 
-        model_action = self.add_action(
+        self.add_action(
             "",
             text="Modeling",
             parent=self.iface.mainWindow(),
             callback=self.open_modeling,
             add_to_toolbar=False,
-            add_to_menu=False,
+            add_to_menu=True,
         )
 
-        open_dock_action = self.add_action(
+        self.add_action(
             "",
             text="Mineral system proxies DOCK version",
             parent=self.iface.mainWindow(),
             callback=self.open_proxy_dock_widget,
             add_to_toolbar=False,
-            add_to_menu=False,
+            add_to_menu=True,
         )
 
         self.add_action(
@@ -193,7 +202,7 @@ class Plugin:
             text="Testing: Add group",
             parent=self.iface.mainWindow(),
             add_to_toolbar=False,
-            add_to_menu=False,
+            add_to_menu=True,
             callback=self.add_layer_group,
         )
 
@@ -203,28 +212,29 @@ class Plugin:
             parent=self.iface.mainWindow(),
             callback=self.open_search,
             add_to_toolbar=False,
-            add_to_menu=False,
+            add_to_menu=True,
         )
 
         self.popupMenu = QMenu(self.iface.mainWindow())
-        # self.popupMenu.addAction(main_action)
-        self.popupMenu.addAction(preprocess_action)
-        self.popupMenu.addAction(explore_action)
-        self.popupMenu.addAction(model_action)
-        self.popupMenu.addAction(venv_action)
-        self.popupMenu.addAction(open_dock_action)
+        self.popupMenu.addAction(wizard_action)
+        # self.popupMenu.addAction(preprocess_action)
+        # self.popupMenu.addAction(explore_action)
+        # self.popupMenu.addAction(model_action)
+        # self.popupMenu.addAction(venv_action)
+        # self.popupMenu.addAction(open_dock_action)
         # self.popupMenu.addAction(search_action)
         # self.popupMenu.addAction(group_action)
 
         self.toolButton = QToolButton()
         self.toolButton.setMenu(self.popupMenu)
-        self.toolButton.setDefaultAction(preprocess_action)
+        self.toolButton.setDefaultAction(wizard_action)
         self.toolButton.setPopupMode(QToolButton.MenuButtonPopup)
         self.actions.append(self.iface.addToolBarWidget(self.toolButton))
 
         self.initProcessing()
 
     def initProcessing(self):
+        self.provider = EISProvider()
         QgsApplication.processingRegistry().addProvider(self.provider)
 
     def onClosePlugin(self) -> None:  # noqa N802
@@ -251,6 +261,10 @@ class Plugin:
 
         if ok and python_path:
             save_python_venv_path(python_path)
+
+    def open_wizard(self):
+        self.wizard = EISWizard()
+        self.wizard.show()
 
     def open_proxy_settings(self):
         self.proxy_settings_window = EISWizardProxySettings()

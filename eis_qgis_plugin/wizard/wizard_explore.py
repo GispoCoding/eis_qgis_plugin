@@ -1,5 +1,4 @@
 from qgis.PyQt.QtWidgets import (
-    QDialog,
     QTabWidget,
     QWidget,
     QVBoxLayout,
@@ -36,11 +35,10 @@ from qgis.gui import (
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
+FORM_CLASS: QWidget = load_ui("wizard_explore.ui")
 
-FORM_CLASS: QDialog = load_ui("explore/wizard_explore.ui")
 
-
-class EISWizardExplore(QDialog, FORM_CLASS):
+class EISWizardExplore(QWidget, FORM_CLASS):
     tab_widget: QTabWidget
 
     # Tabs
