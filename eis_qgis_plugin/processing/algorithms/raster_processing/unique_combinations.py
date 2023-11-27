@@ -6,7 +6,7 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISExtractWindow(EISProcessingAlgorithm):
+class EISUniqueCombinations(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
