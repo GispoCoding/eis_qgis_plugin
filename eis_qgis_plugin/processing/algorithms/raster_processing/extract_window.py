@@ -32,6 +32,7 @@ class EISExtractWindow(EISProcessingAlgorithm):
                 name=self.alg_parameters[0], description="Input raster"
             )
         )
+
         self.addParameter(
             QgsProcessingParameterPoint(
                 name=self.alg_parameters[1], description="Center coordinates"
