@@ -1,0 +1,27 @@
+from qgis.core import (
+    QgsProcessingParameterRasterLayer,
+)
+
+from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
+
+
+class EISExtractWindow(EISProcessingAlgorithm):
+    def __init__(self) -> None:
+        super().__init__()
+
+        self._name = "unique_combinations"
+        self._display_name = "Unique combinations"
+        self._group = "Unique Combinations"
+        self._group_id = "raster_processing"
+        self._short_help_string = "Get combinations of raster values between rasters"
+
+    def initAlgorithm(self, config=None):
+        self.alg_parameters = [
+            "input_raster"
+        ]
+
+        self.addParameter(
+            QgsProcessingParameterRasterLayer(
+                name=self.alg_parameters[0], description="Input raster"
+            )
+        )
