@@ -1,5 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -17,11 +18,18 @@ class EISExtractWindow(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "input_raster"
+            "input_raster",
+            "output_raster"
         ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
                 name=self.alg_parameters[0], description="Input raster"
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterRasterDestination(
+                name=self.alg_parameters[1], description="Output raster"
             )
         )
