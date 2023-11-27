@@ -1,8 +1,9 @@
 import os
-from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget
+from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget, QWidget, QVBoxLayout
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from qgis.PyQt.QtGui import QIcon
+from qgis.gui import QgsDockWidget
 
 from eis_qgis_plugin.utils import PLUGIN_PATH
 from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
@@ -12,9 +13,36 @@ from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
 
 
-FORM_CLASS: QDialog = load_ui("wizard.ui")
+class EISWizardDialog(QDialog):
 
-class EISWizard(QDialog, FORM_CLASS):
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.content = EISWizard()
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.content)
+
+        self.setLayout(layout)
+
+        self.setWindowTitle("EIS Wizard")
+
+
+class EISWizardDocked(QgsDockWidget):
+
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.content = EISWizard()
+        self.setWidget(self.content)
+
+        self.setWindowTitle("EIS Wizard")
+
+
+
+FORM_CLASS: QWidget = load_ui("wizard.ui")
+
+class EISWizard(QWidget, FORM_CLASS):
 
     menu_widget: QListWidget
     pages_widget: QStackedWidget

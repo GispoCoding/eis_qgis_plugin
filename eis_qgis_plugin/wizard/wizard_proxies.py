@@ -15,7 +15,8 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QComboBox,
-    QTabWidget
+    QTabWidget,
+    QStackedWidget
 )
 
 
@@ -46,6 +47,8 @@ class EISWizardProxies(QWidget, FORM_CLASS):
     pathway_tab_dock: QTabWidget
     depositional_tab_dock: QTabWidget
     mineralisation_tab_dock: QTabWidget
+
+    proxy_pages_widget: QStackedWidget
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -207,11 +210,14 @@ class EISWizardProxies(QWidget, FORM_CLASS):
             # 3. Process button
             process_button = QPushButton("Process")
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            process_button.clicked.connect(lambda: self.open_proxy_creation(name_label.text()))
+            # process_button.clicked.connect(lambda: self.open_proxy_creation(name_label.text()))
+            process_button.clicked.connect(lambda: self.open_proxy_creation_page_1())
             grid_layout.addWidget(process_button, row, 3)
 
             self.proxy_info[name] = (keywords, [name_label, importance_label, keywords_label, process_button])
 
+    def open_proxy_creation_page_1(self):
+        self.proxy_pages_widget.setCurrentIndex(2)
 
     def update_table(self, search_text: str):
         """Updates proxy table based on search."""

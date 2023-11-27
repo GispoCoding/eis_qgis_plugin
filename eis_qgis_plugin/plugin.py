@@ -25,7 +25,7 @@ from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
 from .wizard.wizard_model import EISWizardModeling
 from .wizard.search_test import SearchDialog
 from .wizard.preprocess.wizard_proxy_dock import EISWizardProxyDock
-from .wizard.wizard_main import EISWizard
+from .wizard.wizard_main import EISWizardDocked, EISWizardDialog
 
 from eis_qgis_plugin.utils import PLUGIN_PATH
 
@@ -156,7 +156,7 @@ class Plugin:
             icon_path,
             text="EIS Wizard",
             parent=self.iface.mainWindow(),
-            callback=self.open_wizard,
+            callback=self.open_wizard_dialog,
             add_to_toolbar=False,
             add_to_menu=False,
         )
@@ -193,6 +193,15 @@ class Plugin:
             text="Mineral system proxies DOCK version",
             parent=self.iface.mainWindow(),
             callback=self.open_proxy_dock_widget,
+            add_to_toolbar=False,
+            add_to_menu=True,
+        )
+
+        self.add_action(
+            "",
+            text="Docked full wizard",
+            parent=self.iface.mainWindow(),
+            callback=self.open_wizard_dock,
             add_to_toolbar=False,
             add_to_menu=True,
         )
@@ -262,9 +271,13 @@ class Plugin:
         if ok and python_path:
             save_python_venv_path(python_path)
 
-    def open_wizard(self):
-        self.wizard = EISWizard()
+    def open_wizard_dialog(self):
+        self.wizard = EISWizardDialog()
         self.wizard.show()
+
+    def open_wizard_dock(self):
+        self.wizard = EISWizardDocked()
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.wizard)
 
     def open_proxy_settings(self):
         self.proxy_settings_window = EISWizardProxySettings()

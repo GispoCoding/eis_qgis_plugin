@@ -24,7 +24,6 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
-from qgis.utils import iface
 
 from qgis.gui import (
     QgsMapLayerComboBox,
@@ -53,7 +52,6 @@ class EISWizardExplore(QWidget, FORM_CLASS):
     data_summary_field_selection: QgsFieldComboBox
     data_summary_band_selection: QComboBox
     compute_btn: QPushButton
-    layer_properties_btn: QPushButton
 
     n_total: QLabel
     n_valid: QLabel
@@ -139,7 +137,6 @@ class EISWizardExplore(QWidget, FORM_CLASS):
     def initialize_summary_tab(self):
         self.data_summary_layer_selection.layerChanged.connect(self.set_field_or_band)
         self.compute_btn.clicked.connect(self.compute_statistics)
-        self.layer_properties_btn.clicked.connect(self.open_layer_properties)
 
         self.data_summary_field_selection.setLayer(
             self.data_summary_layer_selection.currentLayer()
@@ -244,8 +241,8 @@ class EISWizardExplore(QWidget, FORM_CLASS):
         )
         self.skewness.setText(str(descriptive_statistics_results["skew"]))
 
-    def open_layer_properties(self):
-        iface.showLayerProperties(self.data_summary_layer_selection.currentLayer())
+    # def open_layer_properties(self):
+    #     iface.showLayerProperties(self.data_summary_layer_selection.currentLayer())
 
     def set_field_or_band(self, layer):
         self.data_summary_field_selection.setLayer(layer)
