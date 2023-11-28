@@ -1,28 +1,28 @@
 from qgis.core import (
+    QgsProcessingParameterMapLayer,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISPcaRaster(EISProcessingAlgorithm):
+class EISPca(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "pca_raster"
-        self._display_name = "Principal component analysis (raster)"
+        self._name = "pca"
+        self._display_name = "Principal component analysis"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
-        self._short_help_string = "Compute PCA (raster)"
+        self._short_help_string = "Compute PCA"
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_raster", "components", "output_file"]
+        self.alg_parameters = ["input_layer", "components", "output_file"]
 
         self.addParameter(
-             QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Input raster"
+            QgsProcessingParameterMapLayer(
+                name=self.alg_parameters[0], description="Input geometries"
             )
         )
 
@@ -35,6 +35,6 @@ class EISPcaRaster(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[2], description="Output file"
+                name=self.alg_parameters[2], description="Output vector"
             )
         )

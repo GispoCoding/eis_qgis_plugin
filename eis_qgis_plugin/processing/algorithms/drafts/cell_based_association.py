@@ -31,7 +31,9 @@ class EISCellBasedAssociation(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterVectorLayer(
-                name=self.alg_parameters[0], description="Input vector"
+                name=self.alg_parameters[0],
+                description="Input vector",
+                allowMultiple=True,
             )
         )
 
@@ -49,7 +51,7 @@ class EISCellBasedAssociation(EISProcessingAlgorithm):
             )
         )
 
-        # Not idea how to implement this
+        # No idea how to implement this
         # subset_target_attribute_values: Optional[List[Union[None, list, str]]] = None,
         # self.addParameter(
             # QgsProcessingParameter(

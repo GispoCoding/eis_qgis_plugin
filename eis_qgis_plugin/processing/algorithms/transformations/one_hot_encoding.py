@@ -1,6 +1,6 @@
 from qgis.core import (
-    QgsProcessingParameterFile,
-    QgsProcessingParameterString,
+    QgsProcessingParameterMapLayer,
+    QgsProcessingParameterField,
     QgsProcessingParameterBoolean,
     QgsProcessingParameterEnum,
     QgsProcessingParameterNumber,
@@ -36,18 +36,17 @@ class EISOneHotEncoding(EISProcessingAlgorithm):
             "output_file"
             ]
 
-        # Change to two optional layer inputs? VectorLayer & RasterLayer?
         self.addParameter(
-            QgsProcessingParameterFile(
+            QgsProcessingParameterMapLayer(
                 name=self.alg_parameters[0], description="Input file"
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterString(
+            QgsProcessingParameterField(
                 name=self.alg_parameters[1],
-                description="Target columns (for vector)",
-                multiLine=True,
+                description="Target columns (for vector layers)",
+                allowMultiple=True,
                 optional=True,
                 defaultValue=None
             )
@@ -81,9 +80,10 @@ class EISOneHotEncoding(EISProcessingAlgorithm):
 
         # Maybe this should be an Enum?
         self.addParameter(
-            QgsProcessingParameterString(
+            QgsProcessingParameterEnum(
                 name=self.alg_parameters[5],
                 description="output dtype",
+                options=["int", "float"]
             )
         )
 
@@ -101,6 +101,7 @@ class EISOneHotEncoding(EISProcessingAlgorithm):
                 name=self.alg_parameters[7],
                 description="Min frequency",
                 type=QgsProcessingParameterNumber.Double,
+                optional=True,
             )
         )
 
@@ -108,6 +109,7 @@ class EISOneHotEncoding(EISProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 name=self.alg_parameters[8],
                 description="Max categories",
+                optional=True,
             )
         )
 

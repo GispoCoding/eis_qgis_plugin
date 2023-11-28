@@ -1,6 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterFile,
-    QgsProcessingParameterEnum,
+    QgsProcessingParameterRasterLayer,
     QgsProcessingParameterString,
     QgsProcessingParameterNumber,
 )
@@ -20,33 +20,30 @@ class EISFeatureImportance(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "base_estimator",
+            "classifier_or_model",
             "test_x",
             "test_y",
-            "feature_column",
+            "feature_columns",
             "number_of_repetitions",
             "random_state"
             ]
 
-        # TODO! Need to figure out how to add set_params(dict)
         self.addParameter(
-            QgsProcessingParameterEnum(
+            QgsProcessingParameterFile(
                 name=self.alg_parameters[0],
-                description="Base Estimator",
-                options=["get_metadata_routing()", "get_params(deep=True)"],
-                defaultValue="get_metadata_routing()",
+                description="Classifier/Model",
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterFile(
+            QgsProcessingParameterRasterLayer(
                 name=self.alg_parameters[1],
                 description="Testing feature data (X)",
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterFile(
+            QgsProcessingParameterRasterLayer(
                 name=self.alg_parameters[2],
                 description="Testing feature data (Y)"
             )
@@ -54,7 +51,7 @@ class EISFeatureImportance(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterString(
-                name=self.alg_parameters[2],
+                name=self.alg_parameters[3],
                 description="Feature columns",
                 multiLine=True
             )
@@ -62,7 +59,7 @@ class EISFeatureImportance(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[3],
+                name=self.alg_parameters[4],
                 description="Number of repetitions",
                 defaultValue=50
             )
@@ -70,7 +67,7 @@ class EISFeatureImportance(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[4],
+                name=self.alg_parameters[5],
                 description="Random state",
                 defaultValue=0
             )

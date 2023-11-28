@@ -1,8 +1,8 @@
 from qgis.core import (
     QgsProcessingParameterNumber,
+    QgsProcessingParameterExtent,
     QgsProcessingParameterCrs,
     QgsProcessingParameterRasterDestination,
-    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -20,60 +20,20 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "template_raster", "constant_value", "coord_west", "coord_north",
-            "coord_east", "coord_south", "target_epsg", "target_pixel_size",
-            "raster_width", "raster_height", "nodata_value", "out_raster"
+            "extent", "target_crs", "pixel_size", "constant_value", "out_raster"
             ]
 
         self.addParameter(
-            QgsProcessingParameterRasterLayer(
+            QgsProcessingParameterExtent(
                 name=self.alg_parameters[0],
-                description="Template raster",
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[1],
-                description="Constant value to use.",
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[2],
-                description="West coordinate",
-                optional=True,
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[3],
-                description="North coordinate",
-                optional=True,
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[4],
-                description="East coordinate",
-                optional=True,
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[5],
-                description="South coordinate",
+                description="Extent",
                 optional=True,
             )
         )
 
         self.addParameter(
             QgsProcessingParameterCrs(
-                name=self.alg_parameters[6],
+                name=self.alg_parameters[1],
                 description="Target CRS",
                 optional=True,
             )
@@ -81,38 +41,22 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[7],
+                name=self.alg_parameters[2],
                 description="Target pixel size",
-                optional=True,
+                # optional=True,
+                defaultValue=0.01
             )
         )
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[8],
-                description="Raster width",
-                optional=True,
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[9],
-                description="Raster height",
-                optional=True,
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[10],
-                description="Nodata value",
-                optional=True,
+                name=self.alg_parameters[3],
+                description="Constant value to use.",
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[11], description="out_raster",
+                name=self.alg_parameters[4], description="out_raster",
             )
         )

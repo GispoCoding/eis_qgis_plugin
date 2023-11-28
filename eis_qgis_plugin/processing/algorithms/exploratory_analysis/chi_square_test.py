@@ -7,12 +7,12 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISStatisticalTests(EISProcessingAlgorithm):
+class EISChiSquareTest(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "statistical_tests"
-        self._display_name = "Statistical tests"
+        self._name = "chi_square_test"
+        self._display_name = "Chi-square test"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
         self._short_help_string = "Compute Chi-square test for independence on the input data."

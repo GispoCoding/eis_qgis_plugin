@@ -1,5 +1,6 @@
 from qgis.core import (
-    QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterMultipleLayers,
+    QgsProcessing,
     QgsProcessingParameterRasterDestination,
 )
 
@@ -23,13 +24,16 @@ class EISUniqueCombinations(EISProcessingAlgorithm):
         ]
 
         self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Input raster"
+            QgsProcessingParameterMultipleLayers(
+                name=self.alg_parameters[0],
+                description="Input raster or rasters",
+                layerType=QgsProcessing.TypeRaster,
             )
         )
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[1], description="Output raster"
+                name=self.alg_parameters[1],
+                description="Output raster"
             )
         )

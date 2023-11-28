@@ -1,6 +1,5 @@
 from qgis.core import (
-    QgsProcessingParameterEnum,
-    QgsProcessingParameterFile,
+    QgsProcessingParameterVectorLayer,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterBoolean,
     QgsProcessingParameterString,
@@ -20,10 +19,11 @@ class EISPlotCorrelationMatrix(EISProcessingAlgorithm):
         self._short_help_string = "Create a heatmap to visualize correlation matrix."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["matrix", "annotate", "cmap", "plot_title", "**kwargs", "out_raster"]
+        #self.alg_parameters = ["matrix", "annotate", "cmap", "plot_title", "**kwargs", "out_raster"]
+        self.alg_parameters = ["matrix", "annotate", "cmap", "plot_title", "out_raster"]
 
         self.addParameter(
-            QgsProcessingParameterFile(
+            QgsProcessingParameterVectorLayer(
                 name=self.alg_parameters[0],
                 description="Correlation matrix.",
             )
@@ -51,14 +51,15 @@ class EISPlotCorrelationMatrix(EISProcessingAlgorithm):
             )
         )
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[4], description="Additional parameters to pass to Seaborn and matplotlib.",
-            )
-        )
+        # TODO! Need to think about how to allow the user to pass **kwargs.
+        # self.addParameter(
+            # QgsProcessingParameterEnum(
+                # name=self.alg_parameters[4], description="Additional parameters to pass to Seaborn and matplotlib.",
+            # )
+        # )
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[5], description="Output"
+                name=self.alg_parameters[4], description="Output"
             )
         )
