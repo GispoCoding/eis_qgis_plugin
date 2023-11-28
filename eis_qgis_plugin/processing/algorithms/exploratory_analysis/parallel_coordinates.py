@@ -77,6 +77,6 @@ class EISParallelCoordinates(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[6], description="Output file", optional=True
+                name=self.alg_parameters[6], description="Output file"
             )
         )
