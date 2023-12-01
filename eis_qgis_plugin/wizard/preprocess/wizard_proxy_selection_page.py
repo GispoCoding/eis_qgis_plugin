@@ -19,11 +19,18 @@ from qgis.PyQt.QtWidgets import (
     QCheckBox,
 )
 
+from qgis.core import (
+    QgsVectorLayer,
+    QgsProject,
+    QgsLayerTreeModel,
+)
+
 from qgis.gui import (
     QgsMapLayerComboBox,
     QgsFieldComboBox,
     QgsFieldExpressionWidget,
     QgsFileWidget,
+    QgsLayerTreeView,
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -202,8 +209,10 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
             # 5. Process button
             process_button = QPushButton("Process")
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            process_button.clicked.connect(lambda: self.open_proxy_creation(name_label.text()))
             grid_layout.addWidget(process_button, row, 4)
+
+            # process_button.clicked.connect(lambda: self.open_proxy_creation(name_label.text()))
+            process_button.clicked.connect(lambda: self.create_and_update_tree_view(row, name, grid_layout))
 
             # 6. Load button
             load_button = QPushButton("Load")
@@ -219,6 +228,7 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
                 checkbox,
                 process_button,
                 load_button,
+                None, # Placeholder for tree view
             )
 
     def update_widgets(self, text):
@@ -251,6 +261,62 @@ class EISWizardProxySelection(QWizardPage, FORM_CLASS):
                 process_button.hide()
                 load_button.hide()
 
-    def open_proxy_creation(self, proxy_name):
-        self.wizard().page2.selected_proxy_label.setText(proxy_name)
-        self.wizard().next()
+    # def open_proxy_creation(self, proxy_name):
+    #     self.wizard().page2.selected_proxy_label.setText(proxy_name)
+    #     self.wizard().next()
+
+    def create_and_update_tree_view(self, row, name, grid_layout):
+        # Retrieve the existing widgets for the row
+        (
+            importance,
+            keywords,
+            name_label,
+            importance_label,
+            keywords_label,
+            checkbox,
+            process_button,
+            load_button,
+            tree_view,
+        ) = self.proxy_widgets[name]
+
+        vector_layer = QgsVectorLayer("Point?crs=EPSG:4326", f"my_vector_layer_{row}", "memory")
+
+        if tree_view is None:
+            # Create a new child grid layout for the row
+            child_grid_layout = QGridLayout()
+            grid_layout.addLayout(child_grid_layout, row + 1, 0, 1, grid_layout.columnCount())
+
+            # Create QgsLayerTreeView and add it to the child grid layout
+            tree_view = QgsLayerTreeView()
+            child_grid_layout.addWidget(tree_view, 0, 0, 1, child_grid_layout.columnCount())
+
+            # Create QgsLayerTreeModel
+            layer_tree_model = QgsLayerTreeModel(QgsProject.instance().layerTreeRoot())
+
+            # Connect the model to the view
+            tree_view.setModel(layer_tree_model)
+
+            # Store the tree view in the dictionary
+            self.proxy_widgets[name] = (
+                importance,
+                keywords,
+                name_label,
+                importance_label,
+                keywords_label,
+                checkbox,
+                process_button,
+                load_button,
+                tree_view,
+            )
+
+            if vector_layer.isValid():
+                root_group = layer_tree_model.rootGroup()
+                root_group.addLayer(vector_layer)
+
+        else:
+            if vector_layer.isValid():
+                layer_tree_model = tree_view.layerTreeModel()
+                root_group = layer_tree_model.rootGroup()
+                root_group.addLayer(vector_layer)
+
+        # TODO: TreeView currently isn't updated. Why?
