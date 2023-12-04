@@ -41,6 +41,11 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
         self.histogram_layer.layerChanged.connect(self.update_layer)
         self.update_layer(self.histogram_layer.currentLayer())
 
+        # Defaults from settings
+        settings = self.parent().parent().settings_page
+        self.histogram_color.setColor(settings.get_default_color())
+
+
     def update_layer(self, layer: QgsMapLayer):
         if layer is None:
             return

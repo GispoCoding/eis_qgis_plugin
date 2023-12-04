@@ -26,6 +26,10 @@ class EISWizardPairplot(QWidget, FORM_CLASS):
         super().__init__(parent)
         self.setupUi(self)
 
+        # Defaults from settings
+        settings = self.parent().parent().settings_page
+        self.pairplot_color.setColor(settings.get_default_color())
+
 
     def plot(self, ax):
         penguins = sns.load_dataset("penguins")

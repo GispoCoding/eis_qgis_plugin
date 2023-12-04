@@ -79,6 +79,11 @@ class EISWizard(QWidget, FORM_CLASS):
         # Icon by Icons8
 
         # Add pages
+
+        # Create Settings page first
+        self.settings_page = EISWizardSettings(self)
+        self.pages_widget.insertWidget(3, self.settings_page)
+
         self.proxies_page = EISWizardProxies(self)
         self.pages_widget.insertWidget(0, self.proxies_page)
 
@@ -88,9 +93,6 @@ class EISWizard(QWidget, FORM_CLASS):
         # self.model_page = EISWizardModeling(self)
         # self.pages_widget.insertWidget(2, self.model_page)
         self.pages_widget.insertWidget(2, QWidget())
-
-        self.settings_page = EISWizardSettings(self)
-        self.pages_widget.insertWidget(3, self.settings_page)
 
         self.about_page = EISWizardAbout(self)
         self.pages_widget.insertWidget(4, self.about_page)

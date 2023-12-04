@@ -30,6 +30,10 @@ class EISWizardBoxplot(QWidget, FORM_CLASS):
         self.boxplot_layer.layerChanged.connect(self.update_layer)
         self.update_layer(self.boxplot_layer.currentLayer())
 
+        # Defaults from settings
+        settings = self.parent().parent().settings_page
+        self.boxplot_color.setColor(settings.get_default_color())
+
 
     def update_layer(self, layer):
         if layer is None:
