@@ -1,10 +1,14 @@
 import seaborn as sns
-from qgis.gui import QgsColorButton, QgsMapLayerComboBox, QgsOpacityWidget
+from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.plots.utils import check_colors, vector_layer_to_df
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_pairplot.ui")
+
+KIND_MAPPING = {"histogram": "hist", "scatterplot": "scatter", "kde": "kde", "regression": "reg"}
+DIAG_KIND_MAPPING = {"auto": "auto", "histogram": "hist", "kde": "kde", "none": "None"}
 
 
 class EISWizardPairplot(QWidget, FORM_CLASS):
@@ -12,9 +16,7 @@ class EISWizardPairplot(QWidget, FORM_CLASS):
     pairplot_layer: QgsMapLayerComboBox
     pairplot_fields: QListWidget
 
-    pairplot_color: QgsColorButton
-    pairplot_opacity: QgsOpacityWidget
-    pairplot_log_scale: QComboBox
+    pairplot_color_field: QgsFieldComboBox
     pairplot_kind: QComboBox
     pairplot_diagonal_kind: QComboBox
 
@@ -26,12 +28,44 @@ class EISWizardPairplot(QWidget, FORM_CLASS):
         super().__init__(parent)
         self.setupUi(self)
 
-        # Defaults from settings
-        settings = self.parent().parent().settings_page
-        self.pairplot_color.setColor(settings.get_default_color())
+        self.pairplot_layer.layerChanged.connect(self.update)
+
+        self.pairplot_select_all_btn.clicked.connect(self.pairplot_fields.selectAll)
+        self.pairplot_deselect_all_btn.clicked.connect(self.pairplot_fields.clearSelection)
+
+
+    def update(self, layer):
+        if layer is None:
+            return
+
+        self.pairplot_fields.addItems(field.name() for field in layer.fields())
+        self.pairplot_color_field.setLayer(layer)
 
 
     def plot(self, ax):
+        layer = self.pairplot_layer.currentLayer()
+
+        fields = [item.text() for item in self.pairplot_fields.selectedItems()]
+        color_field_name = self.pairplot_color_field.currentField()
+        if color_field_name:
+            fields.append(color_field_name)
+
+        df = vector_layer_to_df(layer, *fields)
+
+        if color_field_name:
+            check_colors(df[color_field_name], 10)
+
+        grid = sns.pairplot(
+            data=df,
+            hue=color_field_name if color_field_name else None,
+            kind=KIND_MAPPING[self.pairplot_kind.currentText().lower()],
+            diag_kind=DIAG_KIND_MAPPING[self.pairplot_diagonal_kind.currentText().lower()]
+        )
+
+        return grid.figure
+
+
+    def plot_example(self, ax):
         penguins = sns.load_dataset("penguins")
 
         grid = sns.pairplot(
