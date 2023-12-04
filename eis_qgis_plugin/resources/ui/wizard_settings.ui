@@ -64,25 +64,18 @@
       <string>Plots</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Default categorical palette</string>
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QgsColorButton" name="mColorButton_2"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QgsColorButton" name="mColorButton"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Default continuous palette</string>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-       </widget>
+       </spacer>
       </item>
       <item row="0" column="2">
        <spacer name="horizontalSpacer">
@@ -97,8 +90,32 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="2">
-       <spacer name="horizontalSpacer_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Default categorical palette</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Default continuous palette</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Default color</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QgsColorButton" name="default_color_selection"/>
+      </item>
+      <item row="2" column="2">
+       <spacer name="horizontalSpacer_5">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -109,6 +126,64 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="categorical_palette_selection">
+        <item>
+         <property name="text">
+          <string>deep</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>pastel</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>dark</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>colorblind</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bright</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="continuous_palette_selection">
+        <item>
+         <property name="text">
+          <string>viridis</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>plasma</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>inferno</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>magma</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>cividis</string>
+         </property>
+        </item>
+       </widget>
       </item>
      </layout>
     </widget>

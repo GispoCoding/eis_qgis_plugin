@@ -22,12 +22,15 @@ from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logge
 from .qgis_plugin_tools.tools.i18n import setup_translation
 from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
-from .wizard.explore.wizard_explore import EISWizardExplore
+
+# from .wizard.wizard_model import EISWizardModeling
+# from .wizard.search_test import SearchDialog
 from .wizard.preprocess.wizard_proxy_dock import EISWizardProxyDock
+
+# from .wizard.explore.wizard_explore import EISWizardExplore
 from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
-from .wizard.search_test import SearchDialog
 from .wizard.wizard_main import EISWizardDialog, EISWizardDocked
-from .wizard.wizard_model import EISWizardModeling
+from .wizard.wizard_settings import EISWizardSettings
 
 
 class Plugin:
@@ -156,7 +159,7 @@ class Plugin:
             icon_path,
             text="EIS Wizard",
             parent=self.iface.mainWindow(),
-            callback=self.open_wizard_dialog,
+            callback=self.open_wizard,
             add_to_toolbar=False,
             add_to_menu=False,
         )
@@ -170,23 +173,23 @@ class Plugin:
             add_to_menu=True,
         )
 
-        self.add_action(
-            "",
-            text="Explore",
-            parent=self.iface.mainWindow(),
-            callback=self.open_explore,
-            add_to_toolbar=False,
-            add_to_menu=True,
-        )
+        # self.add_action(
+        #     "",
+        #     text="Explore",
+        #     parent=self.iface.mainWindow(),
+        #     callback=self.open_explore,
+        #     add_to_toolbar=False,
+        #     add_to_menu=True,
+        # )
 
-        self.add_action(
-            "",
-            text="Modeling",
-            parent=self.iface.mainWindow(),
-            callback=self.open_modeling,
-            add_to_toolbar=False,
-            add_to_menu=True,
-        )
+        # self.add_action(
+        #     "",
+        #     text="Modeling",
+        #     parent=self.iface.mainWindow(),
+        #     callback=self.open_modeling,
+        #     add_to_toolbar=False,
+        #     add_to_menu=True,
+        # )
 
         self.add_action(
             "",
@@ -215,14 +218,14 @@ class Plugin:
             callback=self.add_layer_group,
         )
 
-        self.add_action(
-            "",
-            text="Testing: Open search",
-            parent=self.iface.mainWindow(),
-            callback=self.open_search,
-            add_to_toolbar=False,
-            add_to_menu=True,
-        )
+        # self.add_action(
+        #     "",
+        #     text="Testing: Open search",
+        #     parent=self.iface.mainWindow(),
+        #     callback=self.open_search,
+        #     add_to_toolbar=False,
+        #     add_to_menu=True,
+        # )
 
         self.popupMenu = QMenu(self.iface.mainWindow())
         self.popupMenu.addAction(wizard_action)
@@ -271,6 +274,14 @@ class Plugin:
         if ok and python_path:
             save_python_venv_path(python_path)
 
+    def open_wizard(self):
+        self.settings = EISWizardSettings()
+        if self.settings.get_dock_wizard_selection():
+            self.open_wizard_dock()
+        else:
+            self.open_wizard_dialog()
+
+
     def open_wizard_dialog(self):
         self.wizard = EISWizardDialog()
         self.wizard.show()
@@ -283,13 +294,13 @@ class Plugin:
         self.proxy_settings_window = EISWizardProxySettings()
         self.proxy_settings_window.show()
 
-    def open_explore(self):
-        self.explore_window = EISWizardExplore()
-        self.explore_window.show()
+    # def open_explore(self):
+    #     self.explore_window = EISWizardExplore()
+    #     self.explore_window.show()
 
-    def open_modeling(self):
-        self.model_window = EISWizardModeling()
-        self.model_window.show()
+    # def open_modeling(self):
+    #     self.model_window = EISWizardModeling()
+    #     self.model_window.show()
 
     def open_proxy_dock_widget(self):
         self.dock_widget = EISWizardProxyDock()
@@ -300,9 +311,9 @@ class Plugin:
         # self.dock_widget.show()
         # self.dock_widget. # TODO
 
-    def open_search(self):
-        self.search_dialog = SearchDialog()
-        self.search_dialog.show()
+    # def open_search(self):
+    #     self.search_dialog = SearchDialog()
+    #     self.search_dialog.show()
 
     def log(self, message: str) -> None:
         """Pushes a message to QGIS log."""
