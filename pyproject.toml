@@ -10,7 +10,7 @@ omit = ["eis_qgis_plugin/qgis_plugin_tools/*"]
 
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
-select = ["E", "F"]
+select = ["E", "F", "I"]
 ignore = []
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
