@@ -1,13 +1,12 @@
 import numpy as np
-from qgis.PyQt.QtWidgets import QDialog, QTabWidget, QWidget, QVBoxLayout
+from qgis.PyQt.QtWidgets import QDialog, QTabWidget, QVBoxLayout, QWidget
 from qgis.utils import iface
 
 from eis_qgis_plugin import pyqtgraph as pg
-from .basic_plots_pyqtgraph import BasicCharts
-from .parallel_coordinates_plot import ParallelChart
-
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
+from .basic_plots_pyqtgraph import BasicCharts
+from .parallel_coordinates_plot import ParallelChart
 
 FORM_CLASS: QDialog = load_ui("explore/wizard_explore_window.ui")
 

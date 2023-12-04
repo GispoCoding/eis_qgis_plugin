@@ -1,10 +1,10 @@
 import json
 import os
-
 from typing import Dict, List, Tuple
 
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtWidgets import (
+    QComboBox,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -12,13 +12,11 @@ from qgis.PyQt.QtWidgets import (
     QPushButton,
     QScrollArea,
     QSizePolicy,
+    QStackedWidget,
+    QTabWidget,
     QVBoxLayout,
     QWidget,
-    QComboBox,
-    QTabWidget,
-    QStackedWidget
 )
-
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import PLUGIN_PATH

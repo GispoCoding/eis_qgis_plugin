@@ -1,12 +1,12 @@
-from qgis.PyQt.QtWidgets import QDockWidget
 import json
 import os
-
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtWidgets import (
+    QComboBox,
+    QDockWidget,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -14,15 +14,12 @@ from qgis.PyQt.QtWidgets import (
     QPushButton,
     QScrollArea,
     QSizePolicy,
+    QTabWidget,
     QVBoxLayout,
     QWidget,
-    QComboBox,
-    QTabWidget
 )
 
-
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-
 
 FORM_CLASS = load_ui("preprocess/wizard_proxy_selection_dock.ui")
 path = Path(os.path.dirname(__file__)).parent.parent

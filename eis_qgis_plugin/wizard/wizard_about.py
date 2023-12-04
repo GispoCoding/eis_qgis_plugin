@@ -1,7 +1,7 @@
 import os
 
-from qgis.PyQt.QtWidgets import QDialog, QWidget, QLabel
 from qgis.PyQt.QtGui import QPixmap
+from qgis.PyQt.QtWidgets import QDialog, QLabel, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import PLUGIN_PATH

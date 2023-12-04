@@ -1,6 +1,4 @@
-from qgis.PyQt.QtWidgets import QDialog, QWidget, QTableWidget
-
-
+from qgis.PyQt.QtWidgets import QDialog, QTableWidget, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 

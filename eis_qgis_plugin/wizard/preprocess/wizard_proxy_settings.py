@@ -1,15 +1,14 @@
 from qgis.PyQt.QtWidgets import (
     QComboBox,
     QDialog,
+    QHBoxLayout,
     QLabel,
     QPushButton,
-    QHBoxLayout,
     QVBoxLayout,
 )
 
 # from qgis.PyQt.QtCore import Qt
 # from qgis.utils import iface
-
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.preprocess.wizard_proxy import EISWizardProxy
 

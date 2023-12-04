@@ -3,7 +3,7 @@ from typing import Callable, List, Optional
 
 from qgis.core import QgsApplication, QgsProject
 from qgis.gui import QgisInterface
-from qgis.PyQt.QtCore import QCoreApplication, QTranslator, Qt
+from qgis.PyQt.QtCore import QCoreApplication, Qt, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QAction,
@@ -15,19 +15,19 @@ from qgis.PyQt.QtWidgets import (
 )
 from qgis.utils import iface
 
+from eis_qgis_plugin.utils import PLUGIN_PATH
+
 from .processing.eis_provider import EISProvider
 from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logger
 from .qgis_plugin_tools.tools.i18n import setup_translation
 from .qgis_plugin_tools.tools.resources import plugin_name
 from .settings import get_python_venv_path, save_python_venv_path
 from .wizard.explore.wizard_explore import EISWizardExplore
-from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
-from .wizard.wizard_model import EISWizardModeling
-from .wizard.search_test import SearchDialog
 from .wizard.preprocess.wizard_proxy_dock import EISWizardProxyDock
-from .wizard.wizard_main import EISWizardDocked, EISWizardDialog
-
-from eis_qgis_plugin.utils import PLUGIN_PATH
+from .wizard.preprocess.wizard_proxy_settings import EISWizardProxySettings
+from .wizard.search_test import SearchDialog
+from .wizard.wizard_main import EISWizardDialog, EISWizardDocked
+from .wizard.wizard_model import EISWizardModeling
 
 
 class Plugin:

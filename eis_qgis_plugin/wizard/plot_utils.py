@@ -1,11 +1,10 @@
 from enum import Enum
 
-from qgis.PyQt.QtGui import QColor
-from qgis.gui import QgsColorButton
 from qgis.core import QgsColorRamp, QgsVectorLayer
+from qgis.gui import QgsColorButton
+from qgis.PyQt.QtGui import QColor
 
 from eis_qgis_plugin import pyqtgraph as pg
-
 
 # River nights in specific order, max 6 colors
 DEFAULT_COLORS_CATECORIGAL = [

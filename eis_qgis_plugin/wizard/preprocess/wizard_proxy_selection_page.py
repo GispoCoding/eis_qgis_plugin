@@ -1,12 +1,17 @@
 import json
 import os
-
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+from qgis.gui import (
+    QgsFieldComboBox,
+    QgsFieldExpressionWidget,
+    QgsFileWidget,
+    QgsMapLayerComboBox,
+)
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtWidgets import (
-    QWizardPage,
+    QCheckBox,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -16,18 +21,10 @@ from qgis.PyQt.QtWidgets import (
     QSizePolicy,
     QVBoxLayout,
     QWidget,
-    QCheckBox,
-)
-
-from qgis.gui import (
-    QgsMapLayerComboBox,
-    QgsFieldComboBox,
-    QgsFieldExpressionWidget,
-    QgsFileWidget,
+    QWizardPage,
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-
 
 FORM_CLASS: QWizardPage = load_ui("preprocess/wizard_proxy_selection.ui")
 path = Path(os.path.dirname(__file__)).parent.parent

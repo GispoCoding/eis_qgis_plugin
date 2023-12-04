@@ -1,16 +1,15 @@
 import os
-from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget, QWidget, QVBoxLayout
+
+from qgis.gui import QgsDockWidget
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from qgis.PyQt.QtGui import QIcon
-from qgis.gui import QgsDockWidget
-
 from eis_qgis_plugin.utils import PLUGIN_PATH
-from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
-from eis_qgis_plugin.wizard.wizard_explore import EISWizardExplore
-from eis_qgis_plugin.wizard.wizard_modeling import EISWizardModeling
-from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
+from eis_qgis_plugin.wizard.wizard_plot import EISWizardPlotting
+from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
+from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 
 
 class EISWizardDialog(QDialog):
@@ -83,11 +82,12 @@ class EISWizard(QWidget, FORM_CLASS):
         self.proxies_page = EISWizardProxies(self)
         self.pages_widget.insertWidget(0, self.proxies_page)
 
-        self.explore_page = EISWizardExplore(self)
+        self.explore_page = EISWizardPlotting(self)
         self.pages_widget.insertWidget(1, self.explore_page)
 
-        self.model_page = EISWizardModeling(self)
-        self.pages_widget.insertWidget(2, self.model_page)
+        # self.model_page = EISWizardModeling(self)
+        # self.pages_widget.insertWidget(2, self.model_page)
+        self.pages_widget.insertWidget(2, QWidget())
 
         self.settings_page = EISWizardSettings(self)
         self.pages_widget.insertWidget(3, self.settings_page)

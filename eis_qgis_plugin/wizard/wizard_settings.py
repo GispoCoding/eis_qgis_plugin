@@ -1,5 +1,5 @@
-from qgis.PyQt.QtWidgets import QDialog, QWidget, QLineEdit, QCheckBox, QPushButton
 from qgis.core import QgsSettings
+from qgis.PyQt.QtWidgets import QCheckBox, QDialog, QLineEdit, QPushButton, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 

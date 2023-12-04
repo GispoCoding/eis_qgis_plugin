@@ -1,23 +1,23 @@
 import numpy as np
 from qgis.core import QgsMapLayer
 from qgis.gui import (
-    QgsMapLayerComboBox,
-    QgsFieldComboBox,
     QgsColorButton,
+    QgsFieldComboBox,
+    QgsMapLayerComboBox,
     QgsOpacityWidget,
 )
-from qgis.PyQt.QtWidgets import QVBoxLayout, QComboBox, QPushButton, QWidget
-
-from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from qgis.PyQt.QtWidgets import QComboBox, QPushButton, QVBoxLayout, QWidget
 
 from eis_qgis_plugin import pyqtgraph as pg
+from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+
 from .plot_utils import (
-    update_color_selection,
+    CHART_MAPPINGS,
+    ChartType,
     create_brush,
     create_pen,
     opacity_to_alpha,
-    CHART_MAPPINGS,
-    ChartType,
+    update_color_selection,
 )
 
 FORM_CLASS: QWidget = load_ui("explore/basic_charts_tab.ui")

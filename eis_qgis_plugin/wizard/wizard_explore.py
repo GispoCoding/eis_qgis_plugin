@@ -1,35 +1,30 @@
-from qgis.PyQt.QtWidgets import (
-    QTabWidget,
-    QWidget,
-    QVBoxLayout,
-    QFrame,
-    QComboBox,
-    QSpinBox,
-    QDoubleSpinBox,
-    QPushButton,
-    QSizePolicy,
-    QFormLayout,
-    QListWidget,
-    QLabel,
-    QCheckBox,
-)
-
-from qgis.core import QgsMapLayer, QgsMapLayerProxyModel, NULL
-
-from qgis.PyQt.QtGui import QColor
-from qgis import processing
-
-import seaborn as sns
 import matplotlib.pyplot as plt
+import seaborn as sns
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-
-
+from qgis import processing
+from qgis.core import NULL, QgsMapLayer, QgsMapLayerProxyModel
 from qgis.gui import (
-    QgsMapLayerComboBox,
-    QgsFieldComboBox,
     QgsColorButton,
+    QgsFieldComboBox,
+    QgsMapLayerComboBox,
     QgsOpacityWidget,
+)
+from qgis.PyQt.QtGui import QColor
+from qgis.PyQt.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QDoubleSpinBox,
+    QFormLayout,
+    QFrame,
+    QLabel,
+    QListWidget,
+    QPushButton,
+    QSizePolicy,
+    QSpinBox,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
