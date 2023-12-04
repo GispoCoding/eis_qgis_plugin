@@ -52,7 +52,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
     # INDIVIDUAL GET MEHTODS
     def get_toolkit_venv_path(self):
         key = _VENV_PATH_SETTING
-        return self.settings.value(key, "") if key else DEFAULTS[key]
+        return self.settings.value(key, DEFAULTS[key])
 
     def get_dock_wizard_selection(self):
         key = _DOCK_SETTING
@@ -60,15 +60,15 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
     def get_default_color(self):
         key = _COLOR_SETTING
-        return self.settings.value(key) if key else DEFAULTS[key]
+        return self.settings.value(key, DEFAULTS[key])
 
     def get_default_categorical_palette(self):
         key = _CATEGORICAL_PALETTE_SETTING
-        return self.settings.value(key) if key else DEFAULTS[key]
+        return self.settings.value(key, DEFAULTS[key])
 
     def get_default_continuous_palette(self):
         key = _CONTINUOUS_PALETTE_SETTING
-        return self.settings.value(key) if key else DEFAULTS[key]
+        return self.settings.value(key, DEFAULTS[key])
 
     def get_layer_group_selection(self):
         key = _LAYER_GROUP_SETTING
