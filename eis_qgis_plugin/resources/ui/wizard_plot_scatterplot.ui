@@ -52,7 +52,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QgsMapLayerComboBox" name="scatterplot_layer"/>
+       <widget class="QgsMapLayerComboBox" name="layer"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
@@ -62,7 +62,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QgsFieldComboBox" name="scatterplot_X">
+       <widget class="QgsFieldComboBox" name="X">
         <property name="editable">
          <bool>true</bool>
         </property>
@@ -76,7 +76,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QgsFieldComboBox" name="scatterplot_Y">
+       <widget class="QgsFieldComboBox" name="Y">
         <property name="editable">
          <bool>true</bool>
         </property>
@@ -86,17 +86,28 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="plot_customization_box_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QgsCollapsibleGroupBox" name="parameter_box">
      <property name="title">
       <string>Plot parameters</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Color field</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QgsFieldComboBox" name="color_field">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="allowEmptyFieldName">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_113">
         <property name="text">
@@ -105,7 +116,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QgsColorButton" name="scatterplot_color">
+       <widget class="QgsColorButton" name="color">
         <property name="minimumSize">
          <size>
           <width>24</width>
@@ -122,7 +133,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QgsOpacityWidget" name="scatterplot_opacity">
+       <widget class="QgsOpacityWidget" name="opacity">
         <property name="opacity">
          <double>1.000000000000000</double>
         </property>
@@ -135,6 +146,16 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="1">
+       <widget class="QgsFieldComboBox" name="size">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="allowEmptyFieldName">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_117">
         <property name="text">
@@ -142,35 +163,8 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QgsFieldComboBox" name="scatterplot_size">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-        <property name="allowEmptyFieldName">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="1">
-       <widget class="QgsFieldComboBox" name="scatterplot_style">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-        <property name="allowEmptyFieldName">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Color field</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QgsFieldComboBox" name="scatterplot_color_field">
+       <widget class="QgsFieldComboBox" name="style">
         <property name="editable">
          <bool>true</bool>
         </property>
@@ -186,9 +180,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QgsCollapsibleGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>qgscollapsiblegroupbox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>QgsColorButton</class>
    <extends>QToolButton</extends>
    <header>qgscolorbutton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QgsFieldComboBox</class>
@@ -204,6 +205,7 @@
    <class>QgsOpacityWidget</class>
    <extends>QWidget</extends>
    <header>qgsopacitywidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

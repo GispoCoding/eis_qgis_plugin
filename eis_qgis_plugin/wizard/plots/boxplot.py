@@ -4,12 +4,12 @@ from qgis.gui import QgsColorButton, QgsFieldComboBox, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.utils import check_colors, vector_layer_to_df
+from eis_qgis_plugin.wizard.plots.plot_template import PlotTemplate
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_boxplot.ui")
 
 
-class EISWizardBoxplot(QWidget, FORM_CLASS):
+class EISWizardBoxplot(PlotTemplate, FORM_CLASS):
     """
     Class for EIS-Seaborn boxplots.
 
@@ -17,63 +17,55 @@ class EISWizardBoxplot(QWidget, FORM_CLASS):
     producing the plot.
     """
 
-    boxplot_layer: QgsMapLayerComboBox
-    boxplot_X: QgsFieldComboBox
-    boxplot_Y: QgsFieldComboBox
+    layer: QgsMapLayerComboBox
+    X: QgsFieldComboBox
+    Y: QgsFieldComboBox
 
-    boxplot_color_field: QgsFieldComboBox
-    boxplot_color: QgsColorButton
-    boxplot_log_scale: QComboBox
+    color_field: QgsFieldComboBox
+    color: QgsColorButton
+    log_scale: QComboBox
 
 
     def __init__(self, parent=None) -> None:
+        self.collapsed_height = 220
+
         super().__init__(parent)
-        self.setupUi(self)
 
-        self.boxplot_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
 
-        self.boxplot_layer.layerChanged.connect(self.update_layer)
-        self.update_layer(self.boxplot_layer.currentLayer())
-
-        self.settings_page = self.parent().parent().settings_page
-        self.reset()
-
-    def _set_deafult_color(self):
-        """Fetch default color from settings and set color widget selection."""
-        self.boxplot_color.setColor(self.settings_page.get_default_color())
 
     def update_layer(self, layer):
         """Update (set) widgets based on selected layer."""
         if layer is None:
             return
 
-        self.boxplot_X.setLayer(layer)
-        self.boxplot_Y.setLayer(layer)
-        self.boxplot_color_field.setLayer(layer)
+        self.X.setLayer(layer)
+        self.Y.setLayer(layer)
+        self.color_field.setLayer(layer)
 
 
     def plot(self, ax):
         """Plot to given axis."""
-        layer = self.boxplot_layer.currentLayer()
+        layer = self.layer.currentLayer()
 
-        X_field_name = self.boxplot_X.currentField()
-        Y_field_name = self.boxplot_Y.currentField()
-        color_field_name = self.boxplot_color_field.currentField()
+        X_field_name = self.X.currentField()
+        Y_field_name = self.Y.currentField()
+        color_field_name = self.color_field.currentField()
         fields = [X_field_name, Y_field_name]
         if color_field_name:
             fields.append(color_field_name)
 
-        df = vector_layer_to_df(layer, *fields)
+        df = self.vector_layer_to_df(layer, *fields)
 
         if color_field_name:
-            check_colors(df[color_field_name], 10)
+            self.check_unique_values(df, color_field_name, 10)
 
         sns.boxplot(
             data=df,
             x=X_field_name,
             y=Y_field_name,
             hue=color_field_name if color_field_name else None,
-            color=self.boxplot_color.color().getRgbF(),
+            color=self.color.color().getRgbF(),
             ax=ax
         )
 
@@ -94,6 +86,7 @@ class EISWizardBoxplot(QWidget, FORM_CLASS):
 
     def reset(self):
         """Reset parameters to defaults."""
-        self.boxplot_color_field.setField("")
-        self._set_deafult_color()
-        self.boxplot_log_scale.setCurrentIndex(0)
+        super().reset()
+
+        self.color_field.setField("")
+        self.log_scale.setCurrentIndex(0)

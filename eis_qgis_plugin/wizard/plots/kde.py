@@ -1,15 +1,22 @@
 import seaborn as sns
 from qgis.core import QgsMapLayer
-from qgis.gui import QgsColorButton, QgsFieldComboBox, QgsMapLayerComboBox, QgsOpacityWidget, QgsRasterBandComboBox
+from qgis.gui import (
+    QgsCollapsibleGroupBox,
+    QgsColorButton,
+    QgsFieldComboBox,
+    QgsMapLayerComboBox,
+    QgsOpacityWidget,
+    QgsRasterBandComboBox,
+)
 from qgis.PyQt.QtWidgets import QComboBox, QDoubleSpinBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.utils import check_colors, raster_layer_to_array, str_to_bool, vector_layer_to_df
+from eis_qgis_plugin.wizard.plots.plot_template import PlotTemplate
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_kde.ui")
 
 
-class EISWizardKde(QWidget, FORM_CLASS):
+class EISWizardKde(PlotTemplate, FORM_CLASS):
     """
     Class for EIS-Seaborn kdeplots.
 
@@ -17,32 +24,25 @@ class EISWizardKde(QWidget, FORM_CLASS):
     producing the plot.
     """
 
-    kde_layer: QgsMapLayerComboBox
-    kde_raster_X: QgsRasterBandComboBox
-    kde_vector_X: QgsFieldComboBox
+    layer: QgsMapLayerComboBox
+    raster_X: QgsRasterBandComboBox
+    vector_X: QgsFieldComboBox
 
-    kde_color_field: QgsFieldComboBox
-    kde_color: QgsColorButton
-    kde_opacity: QgsOpacityWidget
-    kde_log_scale: QComboBox
-    kde_fill: QComboBox
-    kde_multiple: QComboBox
-    kde_bw_adjust: QDoubleSpinBox
+    parameter_box: QgsCollapsibleGroupBox
+    color_field: QgsFieldComboBox
+    color: QgsColorButton
+    opacity: QgsOpacityWidget
+    log_scale: QComboBox
+    fill: QComboBox
+    multiple: QComboBox
+    bw_adjust: QDoubleSpinBox
 
 
     def __init__(self, parent=None) -> None:
+        self.collapsed_height = 190
+
         super().__init__(parent)
-        self.setupUi(self)
 
-        self.kde_layer.layerChanged.connect(self.update_layer)
-        self.update_layer(self.kde_layer.currentLayer())
-
-        self.settings_page = self.parent().parent().settings_page
-        self.reset()
-
-    def _set_deafult_color(self):
-        """Fetch default color from settings and set color widget selection."""
-        self.kde_color.setColor(self.settings_page.get_default_color())
 
     def update_layer(self, layer):
         """Update (set/show/hide) widgets based on selected layer."""
@@ -50,46 +50,46 @@ class EISWizardKde(QWidget, FORM_CLASS):
             return
 
         if layer.type() == QgsMapLayer.VectorLayer:
-            self.kde_raster_X.hide()
+            self.raster_X.hide()
 
-            self.kde_vector_X.setLayer(layer)
-            self.kde_vector_X.show()
+            self.vector_X.setLayer(layer)
+            self.vector_X.show()
 
-            self.kde_color_field.setLayer(layer)
-            self.kde_color_field.setEnabled(True)
+            self.color_field.setLayer(layer)
+            self.color_field.setEnabled(True)
 
         elif layer.type() == QgsMapLayer.RasterLayer:
-            self.kde_vector_X.hide()
-            self.kde_color_field.setEnabled(False)
+            self.vector_X.hide()
+            self.color_field.setEnabled(False)
 
-            self.kde_raster_X.setLayer(layer)
-            self.kde_raster_X.show()
+            self.raster_X.setLayer(layer)
+            self.raster_X.show()
 
 
     def plot(self, ax):
         """Plot to given axis."""
-        layer = self.kde_layer.currentLayer()
+        layer = self.layer.currentLayer()
 
         if layer.type() == QgsMapLayer.VectorLayer:
-            X_field_name = self.kde_vector_X.currentField()
-            color_field_name = self.kde_color_field.currentField()
+            X_field_name = self.vector_X.currentField()
+            color_field_name = self.color_field.currentField()
             fields = [X_field_name] + ([color_field_name] if color_field_name else [])
 
-            df = vector_layer_to_df(layer, *fields)
+            df = self.vector_layer_to_df(layer, *fields)
 
             if color_field_name:
-                check_colors(df[color_field_name], 10)
+                self.check_unique_values(df, color_field_name, 10)
 
             layer_specific_kwargs = {
                 "data": df,
                 "x": X_field_name,
                 "hue": color_field_name if color_field_name else None,
-                "multiple": self.kde_multiple.currentText().lower(),
+                "multiple": self.multiple.currentText().lower(),
                 "palette": "dark" if color_field_name else None
             }
 
         elif layer.type() == QgsMapLayer.RasterLayer:
-            data = raster_layer_to_array(layer)
+            data = self.raster_layer_to_array(layer)
 
             layer_specific_kwargs = {
                 "data": data
@@ -100,11 +100,11 @@ class EISWizardKde(QWidget, FORM_CLASS):
 
         sns.kdeplot(
             **layer_specific_kwargs,
-            color=self.kde_color.color().getRgbF(),
-            alpha=self.kde_opacity.opacity(),
-            log_scale=str_to_bool(self.kde_log_scale.currentText()),
-            fill=str_to_bool(self.kde_fill.currentText()),
-            bw_adjust=self.kde_bw_adjust.value(),
+            color=self.color.color().getRgbF(),
+            alpha=self.opacity.opacity(),
+            log_scale=self.str_to_bool(self.log_scale.currentText()),
+            fill=self.str_to_bool(self.fill.currentText()),
+            bw_adjust=self.bw_adjust.value(),
             ax=ax
         )
 
@@ -125,10 +125,11 @@ class EISWizardKde(QWidget, FORM_CLASS):
 
     def reset(self):
         """Reset parameters to defaults."""
-        self.kde_color_field.setField("")
-        self._set_deafult_color()
-        self.kde_opacity.setOpacity(100)
-        self.kde_log_scale.setCurrentIndex(0)
-        self.kde_fill.setCurrentIndex(0)
-        self.kde_multiple.setCurrentIndex(0)
-        self.kde_bw_adjust.setValue(1.0)
+        super().reset()
+
+        self.color_field.setField("")
+        self.opacity.setOpacity(100)
+        self.log_scale.setCurrentIndex(0)
+        self.fill.setCurrentIndex(0)
+        self.multiple.setCurrentIndex(0)
+        self.bw_adjust.setValue(1.0)

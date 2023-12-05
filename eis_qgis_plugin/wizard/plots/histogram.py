@@ -1,21 +1,23 @@
 import seaborn as sns
 from qgis.core import QgsMapLayer
-from qgis.gui import QgsColorButton, QgsFieldComboBox, QgsMapLayerComboBox, QgsOpacityWidget, QgsRasterBandComboBox
+from qgis.gui import (
+    QgsCollapsibleGroupBox,
+    QgsColorButton,
+    QgsFieldComboBox,
+    QgsMapLayerComboBox,
+    QgsOpacityWidget,
+    QgsRasterBandComboBox,
+)
 from qgis.PyQt.QtWidgets import QComboBox, QSpinBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.utils import (
-    check_colors,
-    raster_layer_to_array,
-    str_to_bool,
-    vector_layer_to_df,
-)
+from eis_qgis_plugin.wizard.plots.plot_template import PlotTemplate
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_histogram.ui")
 
 
 
-class EISWizardHistogram(QWidget, FORM_CLASS):
+class EISWizardHistogram(PlotTemplate, FORM_CLASS):
     """
     Class for EIS-Seaborn histograms (histplots).
 
@@ -23,34 +25,27 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
     producing the plot.
     """
 
-    histogram_layer: QgsMapLayerComboBox
-    histogram_raster_X: QgsRasterBandComboBox
-    histogram_vector_X: QgsFieldComboBox
+    layer: QgsMapLayerComboBox
+    raster_X: QgsRasterBandComboBox
+    vector_X: QgsFieldComboBox
 
-    histogram_color_field: QgsFieldComboBox
-    histogram_color: QgsColorButton
-    histogram_opacity: QgsOpacityWidget
-    histogram_log_scale: QComboBox
-    histogram_fill: QComboBox
-    histogram_multiple: QComboBox
-    histogram_stat: QComboBox
-    histogram_element: QComboBox
-    histogram_nr_of_bins: QSpinBox
+    parameter_box: QgsCollapsibleGroupBox
+    color_field: QgsFieldComboBox
+    color: QgsColorButton
+    opacity: QgsOpacityWidget
+    log_scale: QComboBox
+    fill: QComboBox
+    multiple: QComboBox
+    stat: QComboBox
+    element: QComboBox
+    nr_of_bins: QSpinBox
 
 
     def __init__(self, parent=None) -> None:
+        self.collapsed_height = 190
+
         super().__init__(parent)
-        self.setupUi(self)
 
-        self.histogram_layer.layerChanged.connect(self.update_layer)
-        self.update_layer(self.histogram_layer.currentLayer())
-
-        self.settings_page = self.parent().parent().settings_page
-        self.reset()
-
-    def _set_deafult_color(self):
-        """Fetch default color from settings and set color widget selection."""
-        self.histogram_color.setColor(self.settings_page.get_default_color())
 
     def update_layer(self, layer: QgsMapLayer):
         """Update (set/show/hide) widgets based on selected layer."""
@@ -58,45 +53,45 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
             return
 
         if layer.type() == QgsMapLayer.VectorLayer:
-            self.histogram_raster_X.hide()
+            self.raster_X.hide()
 
-            self.histogram_vector_X.setLayer(layer)
-            self.histogram_vector_X.show()
+            self.vector_X.setLayer(layer)
+            self.vector_X.show()
 
-            self.histogram_color_field.setLayer(layer)
-            self.histogram_color_field.setEnabled(True)
+            self.color_field.setLayer(layer)
+            self.color_field.setEnabled(True)
 
         elif layer.type() == QgsMapLayer.RasterLayer:
-            self.histogram_vector_X.hide()
-            self.histogram_color_field.setEnabled(False)
+            self.vector_X.hide()
+            self.color_field.setEnabled(False)
 
-            self.histogram_raster_X.setLayer(layer)
-            self.histogram_raster_X.show()
+            self.raster_X.setLayer(layer)
+            self.raster_X.show()
 
     def plot(self, ax):
         """Plot to given axis."""
-        layer = self.histogram_layer.currentLayer()
+        layer = self.layer.currentLayer()
 
         if layer.type() == QgsMapLayer.VectorLayer:
-            X_field_name = self.histogram_vector_X.currentField()
-            color_field_name = self.histogram_color_field.currentField()
+            X_field_name = self.vector_X.currentField()
+            color_field_name = self.color_field.currentField()
             fields = [X_field_name] + ([color_field_name] if color_field_name else [])
 
-            df = vector_layer_to_df(layer, *fields)
+            df = self.vector_layer_to_df(layer, *fields)
 
             if color_field_name:
-                check_colors(df[color_field_name], 10)
+                self.check_unique_values(df, color_field_name, 10)
 
             layer_specific_kwargs = {
                 "data": df,
                 "x": X_field_name,
                 "hue": color_field_name if color_field_name else None,
-                "multiple": self.histogram_multiple.currentText().lower(),
+                "multiple": self.multiple.currentText().lower(),
                 "palette": "dark" if color_field_name else None
             }
 
         elif layer.type() == QgsMapLayer.RasterLayer:
-            data = raster_layer_to_array(layer)
+            data = self.raster_layer_to_array(layer)
 
             layer_specific_kwargs = {
                 "data": data
@@ -107,13 +102,13 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
 
         sns.histplot(
             **layer_specific_kwargs,
-            color=self.histogram_color.color().getRgbF(),
-            alpha=self.histogram_opacity.opacity(),
-            log_scale=str_to_bool(self.histogram_log_scale.currentText()),
-            fill=str_to_bool(self.histogram_fill.currentText()),
-            stat=self.histogram_stat.currentText().lower(),
-            element=self.histogram_element.currentText().lower(),
-            bins=self.histogram_nr_of_bins.value() if self.histogram_nr_of_bins.value() > 0 else "auto",
+            color=self.color.color().getRgbF(),
+            alpha=self.opacity.opacity(),
+            log_scale=self.str_to_bool(self.log_scale.currentText()),
+            fill=self.str_to_bool(self.fill.currentText()),
+            stat=self.stat.currentText().lower(),
+            element=self.element.currentText().lower(),
+            bins=self.nr_of_bins.value() if self.nr_of_bins.value() > 0 else "auto",
             ax=ax
         )
 
@@ -134,13 +129,13 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
 
     def reset(self):
         """Reset parameters to defaults."""
-        self.histogram_color_field.setField("")
-        self._set_deafult_color()
-        self.histogram_opacity.setOpacity(100)
-        self.histogram_log_scale.setCurrentIndex(0)
+        super().reset()
 
-        self.histogram_fill.setCurrentIndex(0)
-        self.histogram_multiple.setCurrentIndex(0)
-        self.histogram_stat.setCurrentIndex(0)
-        self.histogram_element.setCurrentIndex(0)
-        self.histogram_nr_of_bins.setValue(0)
+        self.color_field.setField("")
+        self.opacity.setOpacity(100)
+        self.log_scale.setCurrentIndex(0)
+        self.fill.setCurrentIndex(0)
+        self.multiple.setCurrentIndex(0)
+        self.stat.setCurrentIndex(0)
+        self.element.setCurrentIndex(0)
+        self.nr_of_bins.setValue(0)

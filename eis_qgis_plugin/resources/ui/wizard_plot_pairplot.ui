@@ -52,7 +52,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QgsMapLayerComboBox" name="pairplot_layer"/>
+       <widget class="QgsMapLayerComboBox" name="layer"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
@@ -62,7 +62,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QListWidget" name="pairplot_fields">
+       <widget class="QListWidget" name="fields">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -80,14 +80,14 @@
       <item row="2" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="pairplot_select_all_btn">
+         <widget class="QPushButton" name="select_all_btn">
           <property name="text">
            <string>Select all</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pairplot_deselect_all_btn">
+         <widget class="QPushButton" name="deselect_all_btn">
           <property name="text">
            <string>Deselect all</string>
           </property>
@@ -99,13 +99,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="plot_customization_box_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QgsCollapsibleGroupBox" name="parameter_box">
      <property name="title">
       <string>Plot parameters</string>
      </property>
@@ -118,7 +112,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QgsFieldComboBox" name="pairplot_color_field">
+       <widget class="QgsFieldComboBox" name="color_field">
         <property name="editable">
          <bool>true</bool>
         </property>
@@ -135,7 +129,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="pairplot_kind">
+       <widget class="QComboBox" name="kind">
         <item>
          <property name="text">
           <string>Scatterplot</string>
@@ -166,7 +160,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QComboBox" name="pairplot_diagonal_kind">
+       <widget class="QComboBox" name="diagonal_kind">
         <item>
          <property name="text">
           <string>Auto</string>
@@ -195,6 +189,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QgsCollapsibleGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>qgscollapsiblegroupbox.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>QgsFieldComboBox</class>
    <extends>QComboBox</extends>

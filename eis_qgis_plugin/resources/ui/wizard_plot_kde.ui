@@ -52,7 +52,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QgsMapLayerComboBox" name="kde_layer"/>
+       <widget class="QgsMapLayerComboBox" name="layer"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
@@ -64,10 +64,10 @@
       <item row="1" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QgsRasterBandComboBox" name="kde_raster_X"/>
+         <widget class="QgsRasterBandComboBox" name="raster_X"/>
         </item>
         <item>
-         <widget class="QgsFieldComboBox" name="kde_vector_X">
+         <widget class="QgsFieldComboBox" name="vector_X">
           <property name="editable">
            <bool>true</bool>
           </property>
@@ -79,13 +79,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="plot_customization_box_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QgsCollapsibleGroupBox" name="parameter_box">
      <property name="title">
       <string>Plot parameters</string>
      </property>
@@ -98,7 +92,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QgsFieldComboBox" name="kde_color_field">
+       <widget class="QgsFieldComboBox" name="color_field">
         <property name="editable">
          <bool>true</bool>
         </property>
@@ -115,7 +109,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QgsColorButton" name="kde_color">
+       <widget class="QgsColorButton" name="color">
         <property name="minimumSize">
          <size>
           <width>24</width>
@@ -131,6 +125,13 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="1">
+       <widget class="QgsOpacityWidget" name="opacity">
+        <property name="opacity">
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_115">
         <property name="text">
@@ -139,7 +140,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="kde_log_scale">
+       <widget class="QComboBox" name="log_scale">
         <item>
          <property name="text">
           <string>False</string>
@@ -160,7 +161,7 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QComboBox" name="kde_fill">
+       <widget class="QComboBox" name="fill">
         <item>
          <property name="text">
           <string>True</string>
@@ -181,7 +182,7 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QComboBox" name="kde_multiple">
+       <widget class="QComboBox" name="multiple">
         <item>
          <property name="text">
           <string>Stack</string>
@@ -212,7 +213,7 @@
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QDoubleSpinBox" name="kde_bw_adjust">
+       <widget class="QDoubleSpinBox" name="bw_adjust">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -227,13 +228,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QgsOpacityWidget" name="kde_opacity">
-        <property name="opacity">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -241,9 +235,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QgsCollapsibleGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>qgscollapsiblegroupbox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>QgsColorButton</class>
    <extends>QToolButton</extends>
    <header>qgscolorbutton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QgsFieldComboBox</class>
@@ -259,6 +260,7 @@
    <class>QgsOpacityWidget</class>
    <extends>QWidget</extends>
    <header>qgsopacitywidget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QgsRasterBandComboBox</class>
