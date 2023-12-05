@@ -34,12 +34,15 @@ class PlotTemplate(QWidget):
         self.reset()
 
     def update_layer(self, layer: QgsMapLayer):
+        """Update widgets when layer is changed. Should be implemented in the child class."""
         raise NotImplementedError("Update layer needs to be defined in child class.")
 
     def plot(self, ax):
+        """Plot. Should be implemented in the child class."""
         raise NotImplementedError("Plot needs to be defined in child class.")
 
     def reset(self):
+        """Reset plot parameters to defaults."""
         self.parameter_box.setCollapsed(False)
 
         if hasattr(self, 'color'):
@@ -50,6 +53,7 @@ class PlotTemplate(QWidget):
         self.color.setColor(self.settings_page.get_default_color())
 
     def resize_parameter_box(self, collapsed: bool):
+        """Resize self and the parent widget (QStackedWidget) according to collapse signal."""
         if collapsed:
             self.setMinimumHeight(self.collapsed_height)
             self.setMaximumHeight(self.collapsed_height)
@@ -59,9 +63,16 @@ class PlotTemplate(QWidget):
         container = self.parentWidget()
         container.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         container.setMinimumHeight(self.height())
+        # container.setMaximumHeight(self.height())
 
     @staticmethod
     def check_unique_values(df: pd.DataFrame, field_name: str, threshold: int = 10):
+        """
+        Check if given field in a Dataframe has more unique values than given threshold.
+
+        Can be used for input validation for SNS hues, style and size parameters (or other
+        field inputs that expect categorical data).
+        """
         values = df[field_name]
         nr_of_values = np.unique(values).size
         if nr_of_values > threshold:
@@ -69,10 +80,12 @@ class PlotTemplate(QWidget):
 
     @staticmethod
     def str_to_bool(str: str) -> bool:
+        """Conversion from str to bool."""
         return bool(str.lower() == "true")
 
     @staticmethod
     def convert_dtype(qgis_dtype) -> np.dtype:
+        """Convert QGIS datatype to Numpy type."""
         if qgis_dtype == Qgis.Float32:
             dtype = np.float32
         elif qgis_dtype == Qgis.Float64:
@@ -92,9 +105,9 @@ class PlotTemplate(QWidget):
 
     @staticmethod
     def vector_layer_to_df(layer: QgsVectorLayer, *fields) -> pd.DataFrame:
+        """Create a DataFrame from given vector layer and its fields."""
         nr_of_features = layer.featureCount()
 
-        print(fields)
         df_data = {}
         for field in fields:
             df_data[field] = np.empty(nr_of_features)
@@ -107,15 +120,11 @@ class PlotTemplate(QWidget):
         # Create a DataFrame
         df = pd.DataFrame(df_data)
 
-        # Check if DataFrame is empty
-        if df.empty:
-            print("No data to plot.")
-            return
-
         return df
 
     @staticmethod
     def raster_layer_to_array(layer: QgsRasterLayer, filter_nodata: bool = True) -> np.ndarray:
+        """Create a 1D Numpy array from raster layer and filter nodata."""
         provider = layer.dataProvider()
         rows, cols = layer.height(), layer.width()
 
