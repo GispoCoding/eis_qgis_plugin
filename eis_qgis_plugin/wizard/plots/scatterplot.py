@@ -9,13 +9,13 @@ from qgis.gui import (
 from qgis.PyQt.QtWidgets import QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.plot_template import PlotTemplate
+from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_scatterplot.ui")
 
 
 
-class EISWizardScatterplot(PlotTemplate, FORM_CLASS):
+class EISWizardScatterplot(EISPlot, FORM_CLASS):
     """
     Class for EIS-Seaborn scatterplots.
 
@@ -35,7 +35,7 @@ class EISWizardScatterplot(PlotTemplate, FORM_CLASS):
 
 
     def __init__(self, parent=None) -> None:
-        self.collapsed_height = 220
+        self.collapsed_height = 200
 
         super().__init__(parent)
 

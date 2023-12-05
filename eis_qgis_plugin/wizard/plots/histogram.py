@@ -11,13 +11,13 @@ from qgis.gui import (
 from qgis.PyQt.QtWidgets import QComboBox, QSpinBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.plot_template import PlotTemplate
+from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_histogram.ui")
 
 
 
-class EISWizardHistogram(PlotTemplate, FORM_CLASS):
+class EISWizardHistogram(EISPlot, FORM_CLASS):
     """
     Class for EIS-Seaborn histograms (histplots).
 
@@ -42,7 +42,7 @@ class EISWizardHistogram(PlotTemplate, FORM_CLASS):
 
 
     def __init__(self, parent=None) -> None:
-        self.collapsed_height = 190
+        self.collapsed_height = 170
 
         super().__init__(parent)
 

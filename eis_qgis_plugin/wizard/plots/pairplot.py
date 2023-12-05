@@ -3,8 +3,7 @@ from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.plot_template import PlotTemplate
-from eis_qgis_plugin.wizard.plots.utils import check_colors, vector_layer_to_df
+from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_pairplot.ui")
 
@@ -12,7 +11,7 @@ KIND_MAPPING = {"histogram": "hist", "scatterplot": "scatter", "kde": "kde", "re
 DIAG_KIND_MAPPING = {"auto": "auto", "histogram": "hist", "kde": "kde", "none": "None"}
 
 
-class EISWizardPairplot(PlotTemplate, FORM_CLASS):
+class EISWizardPairplot(EISPlot, FORM_CLASS):
     """
     Class for EIS-Seaborn pairplots.
 
@@ -32,7 +31,7 @@ class EISWizardPairplot(PlotTemplate, FORM_CLASS):
 
 
     def __init__(self, parent=None) -> None:
-        self.collapsed_height = 300
+        self.collapsed_height = 270
 
         super().__init__(parent)
 
@@ -58,10 +57,10 @@ class EISWizardPairplot(PlotTemplate, FORM_CLASS):
         if color_field_name:
             fields.append(color_field_name)
 
-        df = vector_layer_to_df(layer, *fields)
+        df = self.vector_layer_to_df(layer, *fields)
 
         if color_field_name:
-            check_colors(df[color_field_name], 10)
+            self.check_unique_values(df, color_field_name, 10)
 
         grid = sns.pairplot(
             data=df,

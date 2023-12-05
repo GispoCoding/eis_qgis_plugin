@@ -11,12 +11,12 @@ from qgis.gui import (
 from qgis.PyQt.QtWidgets import QComboBox, QDoubleSpinBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.plot_template import PlotTemplate
+from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_kde.ui")
 
 
-class EISWizardKde(PlotTemplate, FORM_CLASS):
+class EISWizardKde(EISPlot, FORM_CLASS):
     """
     Class for EIS-Seaborn kdeplots.
 
@@ -39,7 +39,7 @@ class EISWizardKde(PlotTemplate, FORM_CLASS):
 
 
     def __init__(self, parent=None) -> None:
-        self.collapsed_height = 190
+        self.collapsed_height = 170
 
         super().__init__(parent)
 

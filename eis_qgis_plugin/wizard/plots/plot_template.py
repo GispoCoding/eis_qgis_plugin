@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 from qgis.core import Qgis, QgsMapLayer, QgsRasterLayer, QgsVectorLayer
@@ -6,7 +5,7 @@ from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QSizePolicy, QWidget
 
 
-class PlotTemplate(QWidget):
+class EISPlot(QWidget):
     """Template / parent class for plot classes in EIS Wizard."""
 
     layer: QgsMapLayerComboBox
@@ -129,7 +128,7 @@ class PlotTemplate(QWidget):
         rows, cols = layer.height(), layer.width()
 
         block = provider.block(1, layer.extent(), cols, rows)
-        numpy_dtype = PlotTemplate.convert_dtype(block.dataType())
+        numpy_dtype = EISPlot.convert_dtype(block.dataType())
         data = np.frombuffer(block.data(), dtype=numpy_dtype)
 
         if filter_nodata:

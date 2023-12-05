@@ -4,12 +4,12 @@ from qgis.gui import QgsColorButton, QgsFieldComboBox, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.plot_template import PlotTemplate
+from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
 FORM_CLASS: QWidget = load_ui("wizard_plot_boxplot.ui")
 
 
-class EISWizardBoxplot(PlotTemplate, FORM_CLASS):
+class EISWizardBoxplot(EISPlot, FORM_CLASS):
     """
     Class for EIS-Seaborn boxplots.
 
@@ -27,7 +27,7 @@ class EISWizardBoxplot(PlotTemplate, FORM_CLASS):
 
 
     def __init__(self, parent=None) -> None:
-        self.collapsed_height = 220
+        self.collapsed_height = 200
 
         super().__init__(parent)
 
