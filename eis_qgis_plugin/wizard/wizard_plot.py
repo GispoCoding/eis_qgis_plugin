@@ -74,6 +74,7 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
 
 
     def resize_parameter_container(self, index):
+        """Resize the QStackedWidget that contains plot parameters according to the needed size."""
         widget = self.plot_parameters_container.widget(index)
         if widget:
             self.plot_parameters_container.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
@@ -86,9 +87,6 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
 
     def create_plot(self):
         self.close_and_remove_plot()
-
-        # Tinker with matplolib
-        # fig.canvas.mpl_connect('close_event', self.on_close)
 
         i = self.plot_parameters_container.currentIndex()
         page = self.pages[i]
@@ -103,6 +101,9 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
         canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         toolbar = NavigationToolbar(canvas, self.plot_container)
 
+        # Tinker with matplolib
+        # fig.canvas.mpl_connect('close_event', self.on_close)
+
         self.plot_layout.addWidget(toolbar)
         self.plot_layout.addWidget(canvas)
 
@@ -112,6 +113,7 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
 
 
     def close_and_remove_plot(self):
+        plt.close('all')
         for i in reversed(range(self.plot_layout.count())):
             widget = self.plot_layout.itemAt(i).widget()
             if widget is not None:
