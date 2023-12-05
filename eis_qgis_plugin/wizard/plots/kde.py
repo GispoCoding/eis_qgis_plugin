@@ -10,6 +10,12 @@ FORM_CLASS: QWidget = load_ui("wizard_plot_kde.ui")
 
 
 class EISWizardKde(QWidget, FORM_CLASS):
+    """
+    Class for EIS-Seaborn kdeplots.
+
+    Initialized from a UI file. Responsible for updating widgets and
+    producing the plot.
+    """
 
     kde_layer: QgsMapLayerComboBox
     kde_raster_X: QgsRasterBandComboBox
@@ -31,12 +37,15 @@ class EISWizardKde(QWidget, FORM_CLASS):
         self.kde_layer.layerChanged.connect(self.update_layer)
         self.update_layer(self.kde_layer.currentLayer())
 
-        # Defaults from settings
-        settings = self.parent().parent().settings_page
-        self.kde_color.setColor(settings.get_default_color())
+        self.settings_page = self.parent().parent().settings_page
+        self.reset()
 
+    def _set_deafult_color(self):
+        """Fetch default color from settings and set color widget selection."""
+        self.kde_color.setColor(self.settings_page.get_default_color())
 
     def update_layer(self, layer):
+        """Update (set/show/hide) widgets based on selected layer."""
         if layer is None:
             return
 
@@ -58,6 +67,7 @@ class EISWizardKde(QWidget, FORM_CLASS):
 
 
     def plot(self, ax):
+        """Plot to given axis."""
         layer = self.kde_layer.currentLayer()
 
         if layer.type() == QgsMapLayer.VectorLayer:
@@ -100,6 +110,7 @@ class EISWizardKde(QWidget, FORM_CLASS):
 
 
     def plot_example(self, ax):
+        """Produce example plot using SNS data."""
         penguins = sns.load_dataset("penguins")
 
         sns.kdeplot(
@@ -113,4 +124,11 @@ class EISWizardKde(QWidget, FORM_CLASS):
 
 
     def reset(self):
-        pass
+        """Reset parameters to defaults."""
+        self.kde_color_field.setField("")
+        self._set_deafult_color()
+        self.kde_opacity.setOpacity(100)
+        self.kde_log_scale.setCurrentIndex(0)
+        self.kde_fill.setCurrentIndex(0)
+        self.kde_multiple.setCurrentIndex(0)
+        self.kde_bw_adjust.setValue(1.0)

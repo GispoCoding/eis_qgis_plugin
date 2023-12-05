@@ -5,8 +5,6 @@ from qgis.PyQt.QtWidgets import QComboBox, QSpinBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.plots.utils import (
-    COLOR,
-    OPACITY,
     check_colors,
     raster_layer_to_array,
     str_to_bool,
@@ -18,6 +16,12 @@ FORM_CLASS: QWidget = load_ui("wizard_plot_histogram.ui")
 
 
 class EISWizardHistogram(QWidget, FORM_CLASS):
+    """
+    Class for EIS-Seaborn histograms (histplots).
+
+    Initialized from a UI file. Responsible for updating widgets and
+    producing the plot.
+    """
 
     histogram_layer: QgsMapLayerComboBox
     histogram_raster_X: QgsRasterBandComboBox
@@ -41,12 +45,15 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
         self.histogram_layer.layerChanged.connect(self.update_layer)
         self.update_layer(self.histogram_layer.currentLayer())
 
-        # Defaults from settings
-        settings = self.parent().parent().settings_page
-        self.histogram_color.setColor(settings.get_default_color())
+        self.settings_page = self.parent().parent().settings_page
+        self.reset()
 
+    def _set_deafult_color(self):
+        """Fetch default color from settings and set color widget selection."""
+        self.histogram_color.setColor(self.settings_page.get_default_color())
 
     def update_layer(self, layer: QgsMapLayer):
+        """Update (set/show/hide) widgets based on selected layer."""
         if layer is None:
             return
 
@@ -67,6 +74,7 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
             self.histogram_raster_X.show()
 
     def plot(self, ax):
+        """Plot to given axis."""
         layer = self.histogram_layer.currentLayer()
 
         if layer.type() == QgsMapLayer.VectorLayer:
@@ -111,6 +119,7 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
 
 
     def plot_example(self, ax):
+        """Produce example plot using SNS data."""
         penguins = sns.load_dataset("penguins")
 
         sns.histplot(
@@ -124,8 +133,10 @@ class EISWizardHistogram(QWidget, FORM_CLASS):
 
 
     def reset(self):
-        self.histogram_color.setColor(COLOR)
-        self.histogram_opacity.setOpacity(OPACITY)
+        """Reset parameters to defaults."""
+        self.histogram_color_field.setField("")
+        self._set_deafult_color()
+        self.histogram_opacity.setOpacity(100)
         self.histogram_log_scale.setCurrentIndex(0)
 
         self.histogram_fill.setCurrentIndex(0)

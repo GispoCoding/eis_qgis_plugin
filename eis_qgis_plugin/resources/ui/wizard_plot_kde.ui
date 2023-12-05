@@ -90,6 +90,23 @@
       <string>Plot parameters</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Color field</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QgsFieldComboBox" name="kde_color_field">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="allowEmptyFieldName">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_113">
         <property name="text">
@@ -111,13 +128,6 @@
        <widget class="QLabel" name="label_114">
         <property name="text">
          <string>Opacity</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QgsOpacityWidget" name="kde_opacity">
-        <property name="opacity">
-         <double>0.900000000000000</double>
         </property>
        </widget>
       </item>
@@ -217,20 +227,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QgsFieldComboBox" name="kde_color_field">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-        <property name="allowEmptyFieldName">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Color field</string>
+      <item row="2" column="1">
+       <widget class="QgsOpacityWidget" name="kde_opacity">
+        <property name="opacity">
+         <double>1.000000000000000</double>
         </property>
        </widget>
       </item>

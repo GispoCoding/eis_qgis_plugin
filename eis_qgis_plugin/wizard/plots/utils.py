@@ -3,11 +3,6 @@ from typing import Sequence
 import numpy as np
 import pandas as pd
 from qgis.core import Qgis, QgsRasterLayer, QgsVectorLayer
-from qgis.PyQt.QtGui import QColor
-
-# DEFAULTS
-COLOR = QColor(30, 62, 205, 255)
-OPACITY = 0.95
 
 
 def check_colors(hues: Sequence, threshold: int = 10):

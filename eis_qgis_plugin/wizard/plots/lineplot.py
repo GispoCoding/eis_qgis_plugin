@@ -15,6 +15,12 @@ FORM_CLASS: QWidget = load_ui("wizard_plot_lineplot.ui")
 
 
 class EISWizardLineplot(QWidget, FORM_CLASS):
+    """
+    Class for EIS-Seaborn lineplots.
+
+    Initialized from a UI file. Responsible for updating widgets and
+    producing the plot.
+    """
 
     lineplot_layer: QgsMapLayerComboBox
     lineplot_X: QgsFieldComboBox
@@ -36,12 +42,15 @@ class EISWizardLineplot(QWidget, FORM_CLASS):
         self.lineplot_layer.layerChanged.connect(self.update_layer)
         self.update_layer(self.lineplot_layer.currentLayer())
 
-        # Defaults from settings
-        settings = self.parent().parent().settings_page
-        self.lineplot_color.setColor(settings.get_default_color())
+        self.settings_page = self.parent().parent().settings_page
+        self.reset()
 
+    def _set_deafult_color(self):
+        """Fetch default color from settings and set color widget selection."""
+        self.lineplot_color.setColor(self.settings_page.get_default_color())
 
     def update_layer(self, layer):
+        """Update (set) widgets based on selected layer."""
         if layer is None:
             return
 
@@ -53,6 +62,7 @@ class EISWizardLineplot(QWidget, FORM_CLASS):
 
 
     def plot(self, ax):
+        """Plot to given axis."""
         layer = self.lineplot_layer.currentLayer()
 
         X_field_name = self.lineplot_X.currentField()
@@ -87,6 +97,7 @@ class EISWizardLineplot(QWidget, FORM_CLASS):
 
 
     def plot_example(self, ax):
+        """Produce example plot using SNS data."""
         penguins = sns.load_dataset("penguins")
 
         sns.lineplot(
@@ -100,4 +111,9 @@ class EISWizardLineplot(QWidget, FORM_CLASS):
 
 
     def reset(self):
-        pass
+        """Reset parameters to defaults."""
+        self.lineplot_color_field.setField("")
+        self._set_deafult_color()
+        self.lineplot_opacity.setOpacity(100)
+        self.lineplot_size.setField("")
+        self.lineplot_style.setField("")

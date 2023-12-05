@@ -12,6 +12,12 @@ DIAG_KIND_MAPPING = {"auto": "auto", "histogram": "hist", "kde": "kde", "none": 
 
 
 class EISWizardPairplot(QWidget, FORM_CLASS):
+    """
+    Class for EIS-Seaborn pairplots.
+
+    Initialized from a UI file. Responsible for updating widgets and
+    producing the plot.
+    """
 
     pairplot_layer: QgsMapLayerComboBox
     pairplot_fields: QListWidget
@@ -33,8 +39,10 @@ class EISWizardPairplot(QWidget, FORM_CLASS):
         self.pairplot_select_all_btn.clicked.connect(self.pairplot_fields.selectAll)
         self.pairplot_deselect_all_btn.clicked.connect(self.pairplot_fields.clearSelection)
 
+        self.reset()
 
     def update(self, layer):
+        """Update (set/add items) widgets based on selected layer."""
         if layer is None:
             return
 
@@ -43,6 +51,7 @@ class EISWizardPairplot(QWidget, FORM_CLASS):
 
 
     def plot(self, ax):
+        """Plot to given axis."""
         layer = self.pairplot_layer.currentLayer()
 
         fields = [item.text() for item in self.pairplot_fields.selectedItems()]
@@ -66,11 +75,11 @@ class EISWizardPairplot(QWidget, FORM_CLASS):
 
 
     def plot_example(self, ax):
+        """Produce example plot using SNS data."""
         penguins = sns.load_dataset("penguins")
 
         grid = sns.pairplot(
             data=penguins,
-            # vars=["flipper_length_mm", "bill_length_mm"],
             hue="species",
             palette="dark",
         )
@@ -79,4 +88,7 @@ class EISWizardPairplot(QWidget, FORM_CLASS):
 
 
     def reset(self):
-        pass
+        """Reset parameters to defaults."""
+        self.pairplot_color_field.setField("")
+        self.pairplot_kind.setCurrentIndex(0)
+        self.pairplot_diagonal_kind.setCurrentIndex(0)
