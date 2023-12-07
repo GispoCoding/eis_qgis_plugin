@@ -1,7 +1,7 @@
 from qgis.core import (
-    QgsProcessingParameterNumber,
-    QgsProcessingParameterExtent,
     QgsProcessingParameterCrs,
+    QgsProcessingParameterExtent,
+    QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
 )
 

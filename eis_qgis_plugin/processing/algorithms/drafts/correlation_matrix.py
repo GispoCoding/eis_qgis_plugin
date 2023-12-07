@@ -1,6 +1,6 @@
 from qgis.core import (
-    QgsProcessingParameterFile,
     QgsProcessingParameterEnum,
+    QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
 )
