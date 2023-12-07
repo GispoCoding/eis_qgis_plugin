@@ -1,6 +1,6 @@
 from qgis.core import (
-    QgsProcessingParameterMultipleLayers,
     QgsProcessing,
+    QgsProcessingParameterMultipleLayers,
     QgsProcessingParameterRasterDestination,
 )
 

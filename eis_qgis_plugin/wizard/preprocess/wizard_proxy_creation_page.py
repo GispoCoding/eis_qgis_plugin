@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QWizardPage
-
 from qgis import processing
 
-from ..explore.wizard_explore import EISWizardExplore
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+
+from ..explore.wizard_explore import EISWizardExplore
 
 FORM_CLASS: QWizardPage = load_ui("preprocess/wizard_proxy_creation.ui")
 

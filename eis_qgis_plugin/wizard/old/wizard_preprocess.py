@@ -1,11 +1,17 @@
 import json
 import os
-
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+from qgis.gui import (
+    QgsFieldComboBox,
+    QgsFieldExpressionWidget,
+    QgsFileWidget,
+    QgsMapLayerComboBox,
+)
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtWidgets import (
+    QDialog,
     QGridLayout,
     QHBoxLayout,
     QLabel,
@@ -15,18 +21,10 @@ from qgis.PyQt.QtWidgets import (
     QSizePolicy,
     QVBoxLayout,
     QWidget,
-    QDialog,
 )
-
-from qgis.gui import (
-    QgsMapLayerComboBox,
-    QgsFieldComboBox,
-    QgsFieldExpressionWidget,
-    QgsFileWidget,
-)
-
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+
 from ..preprocess.create_proxy import EISWizardProxy
 
 FORM_CLASS: QDialog = load_ui("preprocess/wizard_preprocess_iocg.ui")

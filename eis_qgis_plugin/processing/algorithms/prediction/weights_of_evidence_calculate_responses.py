@@ -1,7 +1,7 @@
 from qgis.core import (
-    QgsProcessingParameterRasterDestination,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterMultipleLayers,
+    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm

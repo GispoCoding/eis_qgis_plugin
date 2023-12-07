@@ -1,10 +1,10 @@
 from qgis.core import (
     QgsProcessingParameterEnum,
-    QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterLayer,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterFolderDestination,
+    QgsProcessingParameterNumber,
+    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm

@@ -1,10 +1,10 @@
 from qgis.core import (
+    QgsProcessingParameterBoolean,
+    QgsProcessingParameterColor,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterString,
-    QgsProcessingParameterColor,
-    QgsProcessingParameterBoolean,
-    QgsProcessingParameterFileDestination
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm

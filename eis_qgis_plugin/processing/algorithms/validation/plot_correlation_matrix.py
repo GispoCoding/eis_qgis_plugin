@@ -1,8 +1,8 @@
 from qgis.core import (
-    QgsProcessingParameterVectorLayer,
-    QgsProcessingParameterFileDestination,
     QgsProcessingParameterBoolean,
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterString,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm

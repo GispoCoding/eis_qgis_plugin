@@ -1,7 +1,7 @@
 from qgis.PyQt.QtWidgets import QWizard
 
-from .wizard_proxy_selection_page import EISWizardProxySelection
 from .wizard_proxy_creation_page import EISWizardProxyCreation
+from .wizard_proxy_selection_page import EISWizardProxySelection
 
 
 class EISWizardProxy(QWizard):
