@@ -7,6 +7,7 @@ from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayou
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import PLUGIN_PATH
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
+from eis_qgis_plugin.wizard.wizard_modeling import EISWizardModeling
 from eis_qgis_plugin.wizard.wizard_plot import EISWizardPlotting
 from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
 from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
@@ -90,9 +91,9 @@ class EISWizard(QWidget, FORM_CLASS):
         self.explore_page = EISWizardPlotting(self)
         self.pages_widget.insertWidget(1, self.explore_page)
 
-        # self.model_page = EISWizardModeling(self)
-        # self.pages_widget.insertWidget(2, self.model_page)
-        self.pages_widget.insertWidget(2, QWidget())
+        self.model_page = EISWizardModeling(self)
+        self.pages_widget.insertWidget(2, self.model_page)
+        # self.pages_widget.insertWidget(2, QWidget())
 
         self.about_page = EISWizardAbout(self)
         self.pages_widget.insertWidget(4, self.about_page)
