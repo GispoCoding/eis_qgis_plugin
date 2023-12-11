@@ -1,6 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterBoolean,
-    QgsProcessingParameterColor,
+    # QgsProcessingParameterColor,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
     QgsProcessingParameterFileDestination,
@@ -26,7 +26,7 @@ class EISParallelCoordinates(EISProcessingAlgorithm):
             "input_vector",
             "color_column_name",
             "plot_title",
-            "palette",
+            "palette_name",
             "curved_lines",
             "show_plot",
             "output_file"
@@ -55,11 +55,17 @@ class EISParallelCoordinates(EISProcessingAlgorithm):
             )
         )
 
-        self.addParameter(  #TODO Modify
-            QgsProcessingParameterColor(
-                name=self.alg_parameters[3],
-                description="Palette",
-                optional=True
+        # self.addParameter(  #TODO Modify
+            # QgsProcessingParameterColor(
+                # name=self.alg_parameters[3],
+                # description="Palette",
+                # optional=True
+            # )
+        # )
+
+        self.addParameter(
+            QgsProcessingParameterString(
+                name=self.alg_parameters[3], description="Palette name"
             )
         )
 

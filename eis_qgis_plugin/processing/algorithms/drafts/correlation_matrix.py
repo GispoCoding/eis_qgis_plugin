@@ -19,7 +19,7 @@ class EISCorrelationMatrix(EISProcessingAlgorithm):
         self._short_help_string = "Compute correlation matrix on the input data."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_data", "correlation_method", "min_periods", "output_file"]
+        self.alg_parameters = ["input_vector", "correlation_method", "min_periods", "output_file"]
 
         self.addParameter(
             QgsProcessingParameterFile(

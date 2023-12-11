@@ -1,7 +1,7 @@
 from qgis.core import (
-    QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterField,
+    QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,
-    QgsProcessingParameterString,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -18,26 +18,29 @@ class EISChiSquareTest(EISProcessingAlgorithm):
         self._short_help_string = "Compute Chi-square test for independence on the input data."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_geometries", "target_column", "columns", "output_file"]
+        self.alg_parameters = ["input_file", "target_column", "columns", "output_file"]
 
         self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input geometries"
+            QgsProcessingParameterFile(
+                name=self.alg_parameters[0], description="Input file"
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterString(
+            QgsProcessingParameterField(
                 name=self.alg_parameters[1],
                 description="Target column",
+                parentLayerParameterName=self.alg_parameters[0],
+                defaultValue=None
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterString(
+            QgsProcessingParameterField(
                 name=self.alg_parameters[2],
                 description="Columns to test against target column",
-                multiLine=True,
+                allowMultiple=True,
+                parentLayerParameterName=self.alg_parameters[0],
                 defaultValue=None
             )
         )

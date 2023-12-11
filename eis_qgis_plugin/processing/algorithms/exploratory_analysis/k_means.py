@@ -11,7 +11,7 @@ class EISKMeans(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "k_means"
+        self._name = "k_means_clustering"
         self._display_name = "K-means clustering"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
@@ -19,15 +19,15 @@ class EISKMeans(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "input_geometries",
-            "clusters",
+            "input_vector",
+            "number_of_clusters",
             "random_state",
-            "output_file",
+            "output_vector",
         ]
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input geometries"
+                name=self.alg_parameters[0], description="Input vector"
             )
         )
 
@@ -47,6 +47,6 @@ class EISKMeans(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[3], description="Output file"
+                name=self.alg_parameters[3], description="Output vector"
             )
         )

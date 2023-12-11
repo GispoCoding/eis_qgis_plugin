@@ -11,18 +11,18 @@ class EISPca(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "pca"
+        self._name = "compute_pca"
         self._display_name = "Principal component analysis"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
         self._short_help_string = "Compute PCA"
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_layer", "components", "output_file"]
+        self.alg_parameters = ["input_vector", "number_of_components", "output_file"]
 
         self.addParameter(
             QgsProcessingParameterMapLayer(
-                name=self.alg_parameters[0], description="Input geometries"
+                name=self.alg_parameters[0], description="Input layer"
             )
         )
 

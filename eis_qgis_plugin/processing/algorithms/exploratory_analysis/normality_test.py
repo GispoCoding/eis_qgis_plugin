@@ -17,7 +17,7 @@ class EISNormalityTest(EISProcessingAlgorithm):
         self._short_help_string = "Compute Shapiro-Wilk test for normality on the input data."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_geometries", "output_file"]
+        self.alg_parameters = ["input_file", "output_file"]
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(

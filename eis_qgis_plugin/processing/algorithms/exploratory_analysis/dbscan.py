@@ -19,15 +19,15 @@ class EISDbscan(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "input_geometries",
+            "input_vector",
             "max_distance",
             "min_samples",
-            "output_file",
+            "output_vector",
         ]
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input geometries"
+                name=self.alg_parameters[0], description="Input vector"
             )
         )
 
@@ -45,6 +45,6 @@ class EISDbscan(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[3], description="Output file"
+                name=self.alg_parameters[3], description="Output vector"
             )
         )
