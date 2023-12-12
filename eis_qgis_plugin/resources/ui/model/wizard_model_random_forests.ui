@@ -315,69 +315,9 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="4" column="0" colspan="2">
-                   <widget class="QPushButton" name="train_pb">
-                    <property name="text">
-                     <string>Start training</string>
-                    </property>
-                   </widget>
-                  </item>
                  </layout>
                 </item>
                </layout>
-              </item>
-              <item row="3" column="0">
-               <widget class="QTabWidget" name="tabWidget_3">
-                <property name="currentIndex">
-                 <number>1</number>
-                </property>
-                <widget class="QWidget" name="tab_6">
-                 <attribute name="title">
-                  <string>Training log</string>
-                 </attribute>
-                 <layout class="QVBoxLayout" name="verticalLayout_17">
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_18">
-                    <item>
-                     <widget class="QTextBrowser" name="textBrowser_2"/>
-                    </item>
-                    <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_6">
-                      <item>
-                       <widget class="QLabel" name="label_15">
-                        <property name="text">
-                         <string>Progress</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QProgressBar" name="progressBar_2">
-                        <property name="value">
-                         <number>24</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
-                  </item>
-                 </layout>
-                </widget>
-                <widget class="QWidget" name="tab_7">
-                 <attribute name="title">
-                  <string>Training results</string>
-                 </attribute>
-                 <layout class="QVBoxLayout" name="verticalLayout_19">
-                  <item>
-                   <widget class="QTableWidget" name="results_table">
-                    <property name="alternatingRowColors">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </widget>
               </item>
              </layout>
             </item>
