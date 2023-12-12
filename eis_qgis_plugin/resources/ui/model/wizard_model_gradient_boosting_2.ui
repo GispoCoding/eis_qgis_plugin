@@ -62,7 +62,7 @@
        <widget class="QgsMapLayerComboBox" name="y"/>
       </item>
       <item row="0" column="1">
-       <widget class="QTableWidget" name="data_table">
+       <widget class="QTableWidget" name="training_data">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -312,19 +312,6 @@
    </item>
    <item>
     <widget class="QgsFileWidget" name="model_save_path"/>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

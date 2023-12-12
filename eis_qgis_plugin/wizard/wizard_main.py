@@ -18,6 +18,9 @@ class EISWizardDialog(QDialog):
     def __init__(self) -> None:
         super().__init__()
 
+        # Default size
+        self.resize(1000, 850)
+
         self.content = EISWizard()
 
         layout = QVBoxLayout()
