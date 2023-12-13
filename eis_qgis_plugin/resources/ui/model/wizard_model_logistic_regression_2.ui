@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>571</width>
-    <height>591</height>
+    <height>594</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,14 +45,14 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="training_data_label">
         <property name="text">
          <string>X</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="y_label">
         <property name="text">
          <string>Y</string>
         </property>
@@ -105,14 +105,14 @@
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="penalty_label">
         <property name="text">
          <string>Penalty</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="loss">
+       <widget class="QComboBox" name="penalty">
         <item>
          <property name="text">
           <string>l1</string>
@@ -135,44 +135,20 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="max_iter"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Verbose</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Random state</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QSpinBox" name="random_state">
-        <property name="specialValueText">
-         <string/>
-        </property>
-        <property name="value">
-         <number>42</number>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="max_iter_label">
         <property name="text">
          <string>Max iter</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QSpinBox" name="verbose">
-        <property name="maximum">
-         <number>1</number>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="max_iter"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="solver_label">
+        <property name="text">
+         <string>Solver</string>
         </property>
        </widget>
       </item>
@@ -210,10 +186,34 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_5">
+      <item row="3" column="0">
+       <widget class="QLabel" name="verbose_label">
         <property name="text">
-         <string>Solver</string>
+         <string>Verbose</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="verbose">
+        <property name="maximum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="random_state_label">
+        <property name="text">
+         <string>Random state</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QSpinBox" name="random_state">
+        <property name="specialValueText">
+         <string/>
+        </property>
+        <property name="value">
+         <number>42</number>
         </property>
        </widget>
       </item>
@@ -290,7 +290,7 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="metric_label">
+       <widget class="QLabel" name="validation_metric_label">
         <property name="text">
          <string>Metric</string>
         </property>

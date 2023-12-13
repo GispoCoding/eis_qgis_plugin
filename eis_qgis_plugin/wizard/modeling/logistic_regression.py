@@ -31,7 +31,39 @@ class EISWizardLogisticRegression(EISModel, FORM_CLASS):
         super().initialize_classifier()
 
 
-    def train_model(self):
+    def set_tooltips(self):
+        super().set_tooltips()
+
+        penalty_tip = "Specifies the norm of the penalty."
+        self.penalty.setToolTip(penalty_tip)
+        self.penalty_label.setToolTip(penalty_tip)
+
+        max_iter_tip = "Maximum number of iterations taken for the solvers to converge."
+        self.max_iter.setToolTip(max_iter_tip)
+        self.max_iter_label.setToolTip(max_iter_tip)
+
+        solver_tip = "Algorithm to use in the optimization problem."
+        self.solver.setToolTip(solver_tip)
+        self.solver_label.setToolTip(solver_tip)
+
+        verbose_tip = (
+            "Specifies if modeling progress and performance should be printed."
+            " 0 doesn't print, values 1 or above will produce prints."
+        )
+        self.verbose.setToolTip(verbose_tip)
+        self.verbose_label.setToolTip(verbose_tip)
+
+        random_state_tip = "Seed for random number generation."
+        self.random_state.setToolTip(random_state_tip)
+        self.random_state_label.setToolTip(random_state_tip)
+
+
+    def train_model(self, text_edit, progress_bar):
+        """
+        Train a logistic regression model.
+
+        Runs the EIS logistic_regression processing algorithm. Computation is done in EIS backend (EIS Toolkit).
+        """
         # Skeleton
 
         layers = self.get_training_layers()

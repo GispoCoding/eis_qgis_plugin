@@ -37,16 +37,69 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
 
 
     def initialize_classifier(self):
+        """Initialize gradient boosting classifier settings."""
         super().initialize_classifier()
         self.loss.addItems(["log_loss", "exponential"])
 
 
     def initialize_regressor(self):
+        """Initialize gradient boosting regressor settings."""
         super().initialize_regressor()
         self.loss.addItems(["squared_error", "absolute_error", "huber", "quantile"])
 
 
+    def set_tooltips(self):
+        super().set_tooltips()
+
+        loss_tip = "The loss function to be optimized."
+        self.loss.setToolTip(loss_tip)
+        self.loss_label.setToolTip(loss_tip)
+
+        learning_rate_tip = "Shrinks the contribution of each tree."
+        self.learning_rate.setToolTip(learning_rate_tip)
+        self.learning_rate_label.setToolTip(learning_rate_tip)
+
+        n_estimators_tip = (
+            "The number of boosting stages to run. Gradient boosting is fairly robust to over-fitting"
+            " so a large number can result in better performance."
+        )
+        self.n_estimators.setToolTip(n_estimators_tip)
+        self.n_estimators_label.setToolTip(n_estimators_tip)
+
+        max_depth_tip = (
+            "Maximum depth of the individual regression estimators. The maximum depth limits the number"
+            " of nodes in the tree. If None, nodes are expanded until all leaves"
+            " are pure or until all leaves contain less than min_samples_split samples."
+        )
+        self.max_depth.setToolTip(max_depth_tip)
+        self.max_depth_label.setToolTip(max_depth_tip)
+
+        # TODO
+        # subsample: The fraction of samples to be used for fitting the individual base learners.
+        #     If smaller than 1.0 this results in Stochastic Gradient Boosting. Subsample interacts with the
+        #     parameter n_estimators. Choosing subsample < 1.0 leads to a reduction of variance and an increase in bias.
+        #     Values must be in the range 0.0 < x <= 1.0. Defaults to 1.0.
+
+        verbose_tip = (
+            "Specifies if modeling progress and performance should be printed. 0 doesn't print,"
+            " 1 prints once in a while depending on the number of tress, 2 or above will print for every tree."
+        )
+        self.verbose.setToolTip(verbose_tip)
+        self.verbose_label.setToolTip(verbose_tip)
+
+        random_state_tip = "Seed for random number generation."
+        self.random_state.setToolTip(random_state_tip)
+        self.random_state_label.setToolTip(random_state_tip)
+
+
+
     def train_model(self, text_edit, progress_bar):
+        """
+        Train a gradient boosting model.
+
+        Runs the EIS gradient_boosting_classifier or gradient_boosting_regressor processing algorithm. Computation is
+        done in EIS backend (EIS Toolkit).
+        """
         # Skeleton
 
         alg = "eis:gradient_boosting" + "classifier" if self.model_type == ModelType.CLASSIFIER else "regressor"
@@ -73,6 +126,7 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
             }
         )
 
+        # Testing
         # LOG TEST
         from time import sleep
         example_log_output = [

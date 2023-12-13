@@ -1,8 +1,5 @@
 from qgis import processing
-from qgis.PyQt.QtWidgets import (
-    QSpinBox,
-    QWidget,
-)
+from qgis.PyQt.QtWidgets import QComboBox, QSpinBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.model_template import EISModel, ModelType
@@ -15,6 +12,7 @@ class EISWizardRandomForests(EISModel, FORM_CLASS):
     Class for random forest models.
     """
     n_estimators: QSpinBox
+    criterion: QComboBox
     max_depth: QSpinBox
     verbose: QSpinBox
     random_state: QSpinBox
@@ -32,17 +30,55 @@ class EISWizardRandomForests(EISModel, FORM_CLASS):
             self.initialize_regressor()
 
 
+    def set_tooltips(self):
+        super().set_tooltips()
+
+        n_estimators_tip = "The number of trees in the forest."
+        self.n_estimators.setToolTip(n_estimators_tip)
+        self.n_estimators_label.setToolTip(n_estimators_tip)
+
+        criterion_tip =""  #TODO
+        self.criterion.setToolTip(criterion_tip)
+        self.criterion_label.setToolTip(criterion_tip)
+
+        max_depth_tip = (
+            "The maximum depth of the tree. If None, nodes are expanded until all leaves are pure or"
+            " until all leaves contain less than min_samples_split samples."
+        )
+        self.max_depth.setToolTip(max_depth_tip)
+        self.max_depth_label.setToolTip(max_depth_tip)
+
+        verbose_tip = (
+            "Specifies if modeling progress and performance should be printed."
+            " 0 doesn't print, values 1 or above will produce prints."
+        )
+        self.verbose.setToolTip(verbose_tip)
+        self.verbose_label.setToolTip(verbose_tip)
+
+        random_state_tip = "Seed for random number generation."
+        self.random_state.setToolTip(random_state_tip)
+        self.random_state_label.setToolTip(random_state_tip)
+
+
     def initialize_classifier(self):
+        """Initialize random forest classifier settings."""
         super().initialize_classifier()
-        self.criterion = ["gini", "entropy", "log_loss"]
+        self.criterion.addItems(["gini", "entropy", "log_loss"])
 
 
     def initialize_regressor(self):
+        """Initialize random forest regressor settings."""
         super().initialize_regressor()
-        self.criterion = ["squared_error", "absolute_error", "friedman_mse", "poisson"]
+        self.criterion.addItems(["squared_error", "absolute_error", "friedman_mse", "poisson"])
 
 
     def train_model(self, text_edit, progress_bar):
+        """
+        Train a random forest model.
+
+        Runs the EIS random_forest_classifier or random_forest_regressor processing algorithm. Computation is
+        done in EIS backend (EIS Toolkit).
+        """
         # Skeleton
 
         alg = "eis:random_forest_" + "classifier" if self.model_type == ModelType.CLASSIFIER else "regressor"
@@ -67,6 +103,7 @@ class EISWizardRandomForests(EISModel, FORM_CLASS):
             }
         )
 
+        # Testing
         from time import sleep
         for i in range(1, 101):
             progress_bar.setValue(i)

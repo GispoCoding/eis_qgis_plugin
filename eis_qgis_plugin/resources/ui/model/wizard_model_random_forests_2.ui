@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>561</width>
-    <height>591</height>
+    <height>595</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,14 +45,14 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="training_data_label">
         <property name="text">
          <string>X</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="y_label">
         <property name="text">
          <string>Y</string>
         </property>
@@ -115,7 +115,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="n_estimators_label">
         <property name="text">
          <string>N estimators</string>
         </property>
@@ -132,7 +132,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="max_depth_label">
         <property name="text">
          <string>Max depth</string>
         </property>
@@ -146,7 +146,7 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="verbose_label">
         <property name="text">
          <string>Verbose</string>
         </property>
@@ -160,7 +160,7 @@
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="random_state_label">
         <property name="text">
          <string>Random state</string>
         </property>
@@ -170,7 +170,7 @@
        <widget class="QComboBox" name="criterion"/>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="criterion_label">
         <property name="text">
          <string>Criterion</string>
         </property>
@@ -189,7 +189,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
-       <widget class="QLabel" name="testMethodLabel_7">
+       <widget class="QLabel" name="validation_method_label">
         <property name="text">
          <string>Validation method</string>
         </property>
@@ -225,14 +225,14 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="simpleSplitSizeLabel_4">
+       <widget class="QLabel" name="split_size_label">
         <property name="text">
          <string>Split size (validation)</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="crossValidationFoldsLabel_4">
+       <widget class="QLabel" name="cv_folds_label">
         <property name="text">
          <string>Cross-validation folds</string>
         </property>
@@ -252,7 +252,7 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="testMethodLabel_8">
+       <widget class="QLabel" name="validation_metric_label">
         <property name="text">
          <string>Metric</string>
         </property>

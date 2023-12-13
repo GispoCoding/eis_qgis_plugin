@@ -1,8 +1,6 @@
 from enum import Enum
 
-import numpy as np
-import pandas as pd
-from qgis.core import Qgis, QgsApplication, QgsRasterLayer, QgsVectorLayer
+from qgis.core import QgsApplication
 from qgis.gui import QgsCollapsibleGroupBox, QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QComboBox, QPushButton, QSizePolicy, QTableWidget, QWidget
@@ -72,6 +70,7 @@ class EISModel(QWidget):
         # NOTE: Not sure why the widget gets initialized with vertically too big and we need to reduce it here..
         self.resize_container(-self.validation_box_collapse_effect-self.parameter_box_collapse_effect)
 
+        self.set_tooltips()
 
     def initialize_classifier(self):
         """Initialize general settings of a classifier model."""
@@ -113,6 +112,7 @@ class EISModel(QWidget):
 
 
     def update_validation_settings(self, method: str):
+        """Change available choices in GUI based on selected validation method."""
         method = method.lower()
         if method == "split":
             self.split_size.setEnabled(True)
@@ -183,12 +183,12 @@ class EISModel(QWidget):
 
 
     def train_model(self):
-        """Run model. Should be implemented in the child class."""
-        raise NotImplementedError("Run model needs to be defined in child class.")
+        """Start training the model. Should be implemented in the child class."""
+        raise NotImplementedError("Train model needs to be defined in child class.")
 
 
     def reset(self):
-        """Reset general model parameters and view."""
+        """Reset general model parameters to defaults and uncollapse group boxes."""
         self.parameter_box.setCollapsed(False)
         self.validation_box.setCollapsed(False)
 
@@ -199,7 +199,41 @@ class EISModel(QWidget):
         self.validation_method.setCurrentIndex(0)
 
 
+    def set_tooltips(self):
+        """Set tooltips to the common widgets."""
+        training_data_tooltip = "Layers used for training the model."
+        self.training_data.setToolTip(training_data_tooltip)
+        self.training_data_label.setToolTip(training_data_tooltip)
+
+        y_tooltip = "Layer with target labels for training."
+        self.y.setToolTip(y_tooltip)
+        self.y_label.setToolTip(y_tooltip)
+
+        validation_method_tip = (
+            "Validation method to use. 'split' divides data into two parts, 'kfold_cv'"
+            " performs k-fold cross-validation, 'skfold_cv' performs stratified k-fold cross-validation,"
+            " 'loo_cv' performs leave-one-out cross-validation and 'none' will not validate model at all"
+            " (in this case, all X and y will be used solely for training).")
+        self.validation_method.setToolTip(validation_method_tip)
+        self.validation_method_label.setToolTip(validation_method_tip)
+
+        split_size_tip = "Fraction of the dataset to be used as validation data (rest is used for training)."
+        self.split_size.setToolTip(split_size_tip)
+        self.split_size_label.setToolTip(split_size_tip)
+
+        cv_folds_tip = (
+            "Number of folds used in cross-validation. Used only when validation_method is 'kfold_cv' or 'skfold_cv'."
+        )
+        self.cv_folds.setToolTip(cv_folds_tip)
+        self.cv_folds_label.setToolTip(cv_folds_tip)
+
+        validation_metric_tip = "Metric to use for scoring the model."
+        self.validation_metric.setToolTip(validation_metric_tip)
+        self.validation_metric_label.setToolTip(validation_metric_tip)
+
+
     def populate_table(self):
+        """TBD if this method is needed."""
         self.results_table.clear()
         headers = self.metrics.checkedItems()
 
@@ -207,61 +241,3 @@ class EISModel(QWidget):
         self.results_table.setColumnCount(len(headers))
         self.results_table.setHorizontalHeaderLabels(headers)
         # TODO: Populate table with train results
-
-
-    @staticmethod
-    def convert_dtype(qgis_dtype) -> np.dtype:
-        """Convert QGIS datatype to Numpy type."""
-        if qgis_dtype == Qgis.Float32:
-            dtype = np.float32
-        elif qgis_dtype == Qgis.Float64:
-            dtype = np.float64
-        elif qgis_dtype == Qgis.Int16:
-            dtype = np.int16
-        elif qgis_dtype == Qgis.Int32:
-            dtype = np.int32
-        elif qgis_dtype == Qgis.UInt16:
-            dtype = np.uint16
-        elif qgis_dtype == Qgis.UInt32:
-            dtype = np.uint32
-        else:
-            raise Exception(f"Datatype conversion to Numpy failed. Raster dtype: {qgis_dtype}")
-
-        return dtype
-
-
-    @staticmethod
-    def vector_layer_to_df(layer: QgsVectorLayer, *fields) -> pd.DataFrame:
-        """Create a DataFrame from given vector layer and its fields."""
-        nr_of_features = layer.featureCount()
-
-        df_data = {}
-        for field in fields:
-            df_data[field] = np.empty(nr_of_features)
-
-        # Iterate over features and collect to arrays
-        for i, feature in enumerate(layer.getFeatures()):
-            for field in fields:
-                df_data[field][i] = feature[field]
-
-        # Create a DataFrame
-        df = pd.DataFrame(df_data)
-
-        return df
-
-
-    @staticmethod
-    def raster_layer_to_array(layer: QgsRasterLayer, filter_nodata: bool = True) -> np.ndarray:
-        """Create a 1D Numpy array from raster layer and filter nodata."""
-        provider = layer.dataProvider()
-        rows, cols = layer.height(), layer.width()
-
-        block = provider.block(1, layer.extent(), cols, rows)
-        numpy_dtype = EISModel.convert_dtype(block.dataType())
-        data = np.frombuffer(block.data(), dtype=numpy_dtype)
-
-        if filter_nodata:
-            filtered_data = data[data != block.noDataValue()]
-            return filtered_data
-
-        return data
