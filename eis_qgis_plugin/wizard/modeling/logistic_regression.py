@@ -1,7 +1,7 @@
 from qgis import processing
+from qgis.gui import QgsSpinBox
 from qgis.PyQt.QtWidgets import (
     QComboBox,
-    QSpinBox,
     QWidget,
 )
 
@@ -16,10 +16,10 @@ class EISWizardLogisticRegression(EISModel, FORM_CLASS):
     Class for logistic regression.
     """
     penalty: QComboBox
-    max_iter: QSpinBox
+    max_iter: QgsSpinBox
     solver: QComboBox
-    verbose: QSpinBox
-    random_state: QSpinBox
+    verbose: QgsSpinBox
+    random_state: QgsSpinBox
 
 
     def __init__(self, parent) -> None:
@@ -32,6 +32,7 @@ class EISWizardLogisticRegression(EISModel, FORM_CLASS):
 
 
     def set_tooltips(self):
+        """Set tooltips for logistic regression parameters."""
         super().set_tooltips()
 
         penalty_tip = "Specifies the norm of the penalty."
@@ -68,24 +69,36 @@ class EISWizardLogisticRegression(EISModel, FORM_CLASS):
 
         layers = self.get_training_layers()
 
-        processing.run(
-            "eis:logistic_regression",
-            {
-                'input_data': layers,
-                'labels': self.y.layer(),
+        if False:
+            processing.run(
+                "eis:logistic_regression",
+                {
+                    'input_data': layers,
+                    'labels': self.y.currentLayer(),
 
-                'penalty': self.penalty.currentText(),
-                'max_iter': self.max_iter.value(),
-                'solver': self.solver.currentText(),
-                'verbose': self.verbose.value(),
-                'random_state': self.random_state.value(),
-                'model_save_path': self.model_save_path.filePath(),
+                    'penalty': self.penalty.currentText(),
+                    'max_iter': self.max_iter.value(),
+                    'solver': self.solver.currentText(),
+                    'verbose': self.verbose.value(),
+                    'random_state': self.random_state.value(),
+                    'model_save_path': self.model_save_path.filePath(),
 
-                'validation_method': self.validation_method.currentText(),
-                'split_size': self.split_size.value(),
-                'cv': self.cv_folds.value(),
-                'validation_metric': self.validation_metric.currentText()
-            }
-        )
+                    'validation_method': self.validation_method.currentText(),
+                    'split_size': self.split_size.value(),
+                    'cv': self.cv_folds.value(),
+                    'validation_metric': self.validation_metric.currentText()
+                }
+            )
 
         pass
+
+
+    def reset(self):
+        """Reset logistic regression parameters to defaults."""
+        super().reset()
+
+        self.penalty.setCurrentIndex(0)
+        self.max_iter.setValue(100)
+        self.solver.setCurrentIndex(0)
+        self.verbose.setValue(0)
+        self.random_state.setValue(-1)

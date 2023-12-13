@@ -1,5 +1,6 @@
 from qgis import processing
-from qgis.PyQt.QtWidgets import QComboBox, QSpinBox, QWidget
+from qgis.gui import QgsSpinBox
+from qgis.PyQt.QtWidgets import QComboBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.model_template import EISModel, ModelType
@@ -11,11 +12,11 @@ class EISWizardRandomForests(EISModel, FORM_CLASS):
     """
     Class for random forest models.
     """
-    n_estimators: QSpinBox
+    n_estimators: QgsSpinBox
     criterion: QComboBox
-    max_depth: QSpinBox
-    verbose: QSpinBox
-    random_state: QSpinBox
+    max_depth: QgsSpinBox
+    verbose: QgsSpinBox
+    random_state: QgsSpinBox
 
     def __init__(self, parent, model_type) -> None:
         self.parameter_box_collapse_effect = 170
@@ -31,13 +32,14 @@ class EISWizardRandomForests(EISModel, FORM_CLASS):
 
 
     def set_tooltips(self):
+        """Set tooltips for random forest parameters."""
         super().set_tooltips()
 
         n_estimators_tip = "The number of trees in the forest."
         self.n_estimators.setToolTip(n_estimators_tip)
         self.n_estimators_label.setToolTip(n_estimators_tip)
 
-        criterion_tip =""  #TODO
+        criterion_tip = "" # TODO
         self.criterion.setToolTip(criterion_tip)
         self.criterion_label.setToolTip(criterion_tip)
 
@@ -84,24 +86,26 @@ class EISWizardRandomForests(EISModel, FORM_CLASS):
         alg = "eis:random_forest_" + "classifier" if self.model_type == ModelType.CLASSIFIER else "regressor"
         layers = self.get_training_layers()
 
-        processing.run(
-            alg,
-            {
-                'input_data': layers,
-                'labels': self.y.layer(),
+        if False:
+            processing.run(
+                alg,
+                {
+                    'input_data': layers,
+                    'labels': self.y.currentLayer(),
 
-                'n_estimators': self.n_estimators.value(),
-                'max_depth': self.max_depth.value(),
-                'verbose': self.verbose.value(),
-                'random_state': self.random_state.value(),
-                'model_save_path': self.model_save_path.filePath(),
+                    'n_estimators': self.n_estimators.value(),
+                    'criterion': self.criterion.currentText(),
+                    'max_depth': self.max_depth.value(),
+                    'verbose': self.verbose.value(),
+                    'random_state': self.random_state.value(),
+                    'model_save_path': self.model_save_path.filePath(),
 
-                'validation_method': self.validation_method.currentText(),
-                'split_size': self.split_size.value(),
-                'cv': self.cv_folds.value(),
-                'validation_metric': self.validation_metric.currentText()
-            }
-        )
+                    'validation_method': self.validation_method.currentText(),
+                    'split_size': self.split_size.value(),
+                    'cv': self.cv_folds.value(),
+                    'validation_metric': self.validation_metric.currentText()
+                }
+            )
 
         # Testing
         from time import sleep
@@ -111,3 +115,14 @@ class EISWizardRandomForests(EISModel, FORM_CLASS):
                 text_edit.append(f"Progress: {i}%")
             sleep(0.05)
         text_edit.append("Finished!")
+
+
+    def reset(self):
+        """Reset random forest parameters to defaults."""
+        super().reset()
+
+        self.n_estimators.setValue(0)
+        self.criterion.setCurrentIndex(0)
+        self.max_depth.setValue(3)
+        self.verbose.setValue(0)
+        self.random_state.setValue(-1)

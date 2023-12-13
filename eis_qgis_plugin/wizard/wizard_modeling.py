@@ -39,8 +39,8 @@ class EISWizardModeling(QWidget, FORM_CLASS):
 
         self.model_parameters_container.currentChanged.connect(self.resize_parameter_container)
 
-        self.start_training_btn.clicked.connect(self.run_selected_model)
-        self.reset_btn.clicked.connect(self.reset)
+        self.start_training_btn.clicked.connect(self.train_selected_model)
+        self.reset_btn.clicked.connect(self.reset_selected_model)
 
         self.pages = [
             EISWizardLogisticRegression(self),
@@ -72,15 +72,16 @@ class EISWizardModeling(QWidget, FORM_CLASS):
 
         # Create pages for parameters
 
-    def run_selected_model(self):
+    def train_selected_model(self):
         """Call the run method of the selected model."""
         page = self.pages[self.model_parameters_container.currentIndex()]
-        result = page.run_model(self.training_log, self.training_progress_bar)
+        result = page.train_model(self.training_log, self.training_progress_bar)
         if result:
             page.show_output()  # TODO
 
 
-    def reset(self):
+    def reset_selected_model(self):
+        """Reset parameters of the selected model."""
         page = self.pages[self.model_parameters_container.currentIndex()]
         page.reset()
 

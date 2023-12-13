@@ -113,14 +113,17 @@
       </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="penalty">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
         <item>
          <property name="text">
-          <string>l1</string>
+          <string>l2</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>l2</string>
+          <string>l1</string>
          </property>
         </item>
         <item>
@@ -141,9 +144,6 @@
          <string>Max iter</string>
         </property>
        </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="max_iter"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="solver_label">
@@ -193,13 +193,6 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QSpinBox" name="verbose">
-        <property name="maximum">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="random_state_label">
         <property name="text">
@@ -207,13 +200,39 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QSpinBox" name="random_state">
-        <property name="specialValueText">
-         <string/>
+      <item row="1" column="1">
+       <widget class="QgsSpinBox" name="max_iter">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
         </property>
         <property name="value">
-         <number>42</number>
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QgsSpinBox" name="verbose">
+        <property name="maximum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QgsSpinBox" name="random_state">
+        <property name="specialValueText">
+         <string>None (random)</string>
+        </property>
+        <property name="minimum">
+         <number>-1</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+        <property name="value">
+         <number>-1</number>
         </property>
        </widget>
       </item>

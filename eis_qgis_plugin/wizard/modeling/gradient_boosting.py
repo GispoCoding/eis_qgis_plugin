@@ -1,10 +1,6 @@
 from qgis import processing
-from qgis.PyQt.QtWidgets import (
-    QComboBox,
-    QDoubleSpinBox,
-    QSpinBox,
-    QWidget,
-)
+from qgis.gui import QgsDoubleSpinBox, QgsSpinBox
+from qgis.PyQt.QtWidgets import QComboBox, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.model_template import EISModel, ModelType
@@ -17,16 +13,17 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
     Class for gradient boosting models.
     """
     loss: QComboBox
-    learning_rate: QDoubleSpinBox
-    n_estimators: QSpinBox
-    max_depth: QSpinBox
-    verbose: QSpinBox
-    random_state: QSpinBox
+    learning_rate: QgsDoubleSpinBox
+    n_estimators: QgsSpinBox
+    max_depth: QgsSpinBox
+    subsample: QgsDoubleSpinBox
+    verbose: QgsSpinBox
+    random_state: QgsSpinBox
 
 
     def __init__(self, parent, model_type) -> None:
-        self.parameter_box_collapse_effect = 201
-        self.start_height = 628
+        self.parameter_box_collapse_effect = 232
+        self.start_height = 653
 
         super().__init__(parent, model_type)
 
@@ -49,6 +46,7 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
 
 
     def set_tooltips(self):
+        """Set tooltips for gradient boosting parameters."""
         super().set_tooltips()
 
         loss_tip = "The loss function to be optimized."
@@ -74,11 +72,14 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
         self.max_depth.setToolTip(max_depth_tip)
         self.max_depth_label.setToolTip(max_depth_tip)
 
-        # TODO
-        # subsample: The fraction of samples to be used for fitting the individual base learners.
-        #     If smaller than 1.0 this results in Stochastic Gradient Boosting. Subsample interacts with the
-        #     parameter n_estimators. Choosing subsample < 1.0 leads to a reduction of variance and an increase in bias.
-        #     Values must be in the range 0.0 < x <= 1.0. Defaults to 1.0.
+        subsample_tip = (
+            "The fraction of samples to be used for fitting the individual base learners."
+            " If smaller than 1.0 this results in Stochastic Gradient Boosting. Subsample interacts with the"
+            " parameter n_estimators."
+            " Choosing subsample < 1.0 leads to a reduction of variance and an increase in bias."
+        )
+        self.subsample.setToolTip(subsample_tip)
+        self.subsample_label.setToolTip(subsample_tip)
 
         verbose_tip = (
             "Specifies if modeling progress and performance should be printed. 0 doesn't print,"
@@ -90,7 +91,6 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
         random_state_tip = "Seed for random number generation."
         self.random_state.setToolTip(random_state_tip)
         self.random_state_label.setToolTip(random_state_tip)
-
 
 
     def train_model(self, text_edit, progress_bar):
@@ -105,26 +105,27 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
         alg = "eis:gradient_boosting" + "classifier" if self.model_type == ModelType.CLASSIFIER else "regressor"
         layers = self.get_training_layers()
 
-        processing.run(
-            alg,
-            {
-                'input_data': layers,
-                'labels': self.y.layer(),
+        if False:
+            processing.run(
+                alg,
+                {
+                    'input_data': layers,
+                    'labels': self.y.currentLayer(),
 
-                'learning_rate': self.learning_rate.value(),
-                'loss': self.loss.currentText(),
-                'n_estimators': self.n_estimators.value(),
-                'max_depth': self.max_depth.value(),
-                'verbose': self.verbose.value(),
-                'random_state': self.random_state.value(),
-                'model_save_path': self.model_save_path.filePath(),
+                    'learning_rate': self.learning_rate.value(),
+                    'loss': self.loss.currentText(),
+                    'n_estimators': self.n_estimators.value(),
+                    'max_depth': self.max_depth.value(),
+                    'verbose': self.verbose.value(),
+                    'random_state': self.random_state.value(),
+                    'model_save_path': self.model_save_path.filePath(),
 
-                'validation_method': self.validation_method.currentText(),
-                'split_size': self.split_size.value(),
-                'cv': self.cv_folds.value(),
-                'validation_metric': self.validation_metric.currentText()
-            }
-        )
+                    'validation_method': self.validation_method.currentText(),
+                    'split_size': self.split_size.value(),
+                    'cv': self.cv_folds.value(),
+                    'validation_metric': self.validation_metric.currentText()
+                }
+            )
 
         # Testing
         # LOG TEST
@@ -163,3 +164,16 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
                 pass
 
         text_edit.append("\n Training finished!")
+
+
+    def reset(self):
+        """Reset gradient boosting parameters to defaults."""
+        super().reset()
+
+        self.loss.setCurrentIndex(0)
+        self.learning_rate.setValue(0.1)
+        self.n_estimators.setValue(100)
+        self.max_depth.setValue(3)
+        self.subsample.setValue(1)
+        self.verbose.setValue(0)
+        self.random_state.setValue(-1)

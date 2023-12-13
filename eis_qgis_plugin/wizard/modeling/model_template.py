@@ -85,7 +85,7 @@ class EISModel(QWidget):
 
 
     def resize_parameter_box(self, collapsed: bool):
-        """Capture collapse signal of parameter box and resize self and parent forcefully."""
+        """Capture collapse signal of parameter box and resize self and parent."""
         if collapsed:
             self.resize_container(-self.parameter_box_collapse_effect)
         else:
@@ -93,7 +93,7 @@ class EISModel(QWidget):
 
 
     def resize_validation_box(self, collapsed: bool):
-        """Capture collapse signal of validation box and resize self and parent forcefully."""
+        """Capture collapse signal of validation box and resize self and parent."""
         if collapsed:
             self.resize_container(-self.validation_box_collapse_effect)
         else:
@@ -101,7 +101,11 @@ class EISModel(QWidget):
 
 
     def resize_container(self, amount: int):
-        """Resizes forcefully self and parent by modifying min and max height by given `amount`."""
+        """
+        Resizes self and parent by modifying min and max height by given `amount`.
+
+        Resizes "forcefully", so sets min and max heights and vertical size policy to fixed.
+        """
         self.setMinimumHeight(self.height() + amount)
         self.setMaximumHeight(self.height() + amount)
         self.current_height = self.height()
@@ -116,6 +120,9 @@ class EISModel(QWidget):
         method = method.lower()
         if method == "split":
             self.split_size.setEnabled(True)
+            self.cv_folds.setEnabled(False)
+        elif method == "leave-one-out cv":
+            self.split_size.setEnabled(False)
             self.cv_folds.setEnabled(False)
         elif method == "none":
             self.split_size.setEnabled(False)
@@ -188,7 +195,7 @@ class EISModel(QWidget):
 
 
     def reset(self):
-        """Reset general model parameters to defaults and uncollapse group boxes."""
+        """Reset validation parameters to defaults and uncollapse group boxes."""
         self.parameter_box.setCollapsed(False)
         self.validation_box.setCollapsed(False)
 
@@ -200,7 +207,7 @@ class EISModel(QWidget):
 
 
     def set_tooltips(self):
-        """Set tooltips to the common widgets."""
+        """Set tooltips for the validation parameters."""
         training_data_tooltip = "Layers used for training the model."
         self.training_data.setToolTip(training_data_tooltip)
         self.training_data_label.setToolTip(training_data_tooltip)

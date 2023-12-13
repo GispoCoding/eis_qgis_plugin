@@ -104,30 +104,10 @@
       <bool>false</bool>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
-      <item row="0" column="1">
-       <widget class="QSpinBox" name="n_estimators">
-        <property name="maximum">
-         <number>999999999</number>
-        </property>
-        <property name="value">
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="n_estimators_label">
         <property name="text">
          <string>N estimators</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QSpinBox" name="max_depth">
-        <property name="maximum">
-         <number>999999999</number>
-        </property>
-        <property name="value">
-         <number>3</number>
         </property>
        </widget>
       </item>
@@ -138,24 +118,10 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QSpinBox" name="verbose">
-        <property name="maximum">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="verbose_label">
         <property name="text">
          <string>Verbose</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QSpinBox" name="random_state">
-        <property name="value">
-         <number>42</number>
         </property>
        </widget>
       </item>
@@ -173,6 +139,55 @@
        <widget class="QLabel" name="criterion_label">
         <property name="text">
          <string>Criterion</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QgsSpinBox" name="n_estimators">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QgsSpinBox" name="max_depth">
+        <property name="specialValueText">
+         <string>None</string>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>3</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QgsSpinBox" name="verbose">
+        <property name="maximum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QgsSpinBox" name="random_state">
+        <property name="specialValueText">
+         <string>None (random)</string>
+        </property>
+        <property name="minimum">
+         <number>-1</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+        <property name="value">
+         <number>-1</number>
         </property>
        </widget>
       </item>
