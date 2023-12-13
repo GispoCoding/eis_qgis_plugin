@@ -33,7 +33,9 @@ class EISDbscan(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[1], description="Maximum distance"
+                name=self.alg_parameters[1],
+                description="Maximum distance",
+                type=QgsProcessingParameterNumber.Double
             )
         )
 
