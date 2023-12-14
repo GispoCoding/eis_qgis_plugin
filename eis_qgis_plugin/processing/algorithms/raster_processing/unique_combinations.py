@@ -19,7 +19,7 @@ class EISUniqueCombinations(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "input_raster",
+            "input_rasters",
             "output_raster"
         ]
 
@@ -30,6 +30,7 @@ class EISUniqueCombinations(EISProcessingAlgorithm):
                 layerType=QgsProcessing.TypeRaster,
             )
         )
+
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
