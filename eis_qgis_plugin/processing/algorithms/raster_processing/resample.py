@@ -12,8 +12,8 @@ class EISResample(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "resample"
-        self._display_name = "Resample"
+        self._name = "resample_raster"
+        self._display_name = "Resample raster"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = "Resample raster to a new resolution"
@@ -22,7 +22,7 @@ class EISResample(EISProcessingAlgorithm):
         self.alg_parameters = [
             "input_raster",
             "resampling_method",
-            "upscale_factor",
+            "target_resolution",
             "output_raster",
         ]
 
@@ -52,7 +52,7 @@ class EISResample(EISProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterNumber(
                 name=self.alg_parameters[2],
-                description="Upscale factor",
+                description="Target resolution",
                 type=QgsProcessingParameterNumber.Double,
             )
         )
