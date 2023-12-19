@@ -1,4 +1,5 @@
 import seaborn as sns
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
 from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 
@@ -35,13 +36,15 @@ class EISWizardPairplot(EISPlot, FORM_CLASS):
 
         super().__init__(parent)
 
+        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+
         self.select_all_btn.clicked.connect(self.fields.selectAll)
         self.deselect_all_btn.clicked.connect(self.fields.clearSelection)
 
 
     def update_layer(self, layer):
         """Update (set/add items) widgets based on selected layer."""
-        if layer is None:
+        if layer is None or not isinstance(layer, QgsVectorLayer):
             return
 
         self.fields.addItems(field.name() for field in layer.fields())

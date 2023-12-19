@@ -67,7 +67,8 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         raise Exception("Not implemented in the child class!")
 
     def prepare_arguments(self, parameters: Dict, context):
-        args = []
+        args = []  # These parameters are delivered without the parameter name tag
+        kwargs = []  # These parameters are delivered with their name
 
         # By default, all parameters are passed as Typer options (parameter name needs to be delivered
         # prefixed with --)
@@ -89,9 +90,9 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             # flag = flag_mapping.get(name)
             if isinstance(param, QgsProcessingParameterBoolean):
                 if self.parameterAsBool(parameters, name, context):
-                    args.append(param_name)
+                    kwargs.append(param_name)
                 else:
-                    args.append(param_name[:2] + "no-" + param_name[2:])
+                    kwargs.append(param_name[:2] + "no-" + param_name[2:])
                 continue
 
             elif isinstance(param, QgsProcessingParameterString):
@@ -114,8 +115,8 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                     .strip()
                     .split(",")
                 )
-                args.append(param_name)
-                [args.append(coord) for coord in extents]
+                kwargs.append(param_name)
+                [kwargs.append(coord) for coord in extents]
                 continue
 
             elif isinstance(param, QgsProcessingParameterField):
@@ -145,11 +146,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                     continue
                 arg = os.path.normpath(layer.source())
 
+            # Multiple layers input needs to be the first delivered to the CLI always
             elif isinstance(param, QgsProcessingParameterMultipleLayers):
                 layers = self.parameterAsLayerList(parameters, name, context)
                 if not layers:
                     continue
-                args.append(param_name)
                 [args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
 
@@ -158,9 +159,9 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 coords = self.parameterAsPoint(parameters, name, context)
                 if not coords:
                     continue
-                args.append(param_name)
-                args.append(str(coords.x()))
-                args.append(str(coords.y()))
+                kwargs.append(param_name)
+                kwargs.append(str(coords.x()))
+                kwargs.append(str(coords.y()))
                 continue
 
             # TODO check if works
@@ -223,10 +224,10 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             if "|" in arg:
                 arg = arg.split("|")[0]
 
-            args.append(param_name)
-            args.append(arg)
+            kwargs.append(param_name)
+            kwargs.append(arg)
 
-        return args
+        return args, kwargs
 
     def get_bin_folder(self):
         if os.name == "nt":  # Windows
@@ -242,11 +243,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         if feedback is None:
             feedback = QgsProcessingFeedback()
 
-        arguments = self.prepare_arguments(parameters, context)
+        arguments, arguments_with_name = self.prepare_arguments(parameters, context)
         eis_executable = os.path.join(
             get_python_venv_path(), self.get_bin_folder(), "eis"
         )
-        cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
+        cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments + arguments_with_name
         results = {}
 
         try:

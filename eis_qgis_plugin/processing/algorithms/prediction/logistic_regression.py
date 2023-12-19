@@ -1,10 +1,10 @@
 from qgis.core import (
     QgsProcessing,
     QgsProcessingParameterEnum,
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterMapLayer,
     QgsProcessingParameterMultipleLayers,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -129,8 +129,9 @@ class EISLogisticRegression(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterRasterDestination(
+            QgsProcessingParameterFileDestination(
                 name=self.alg_parameters[11],
-                description="Output raster",
+                description="Output model",
+                fileFilter='.joblib (*.joblib)'
             )
         )
