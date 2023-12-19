@@ -14,7 +14,7 @@ class EISLogisticRegression(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "logistic_regression"
+        self._name = "logistic_regression_train"
         self._display_name = "Logistic regression"
         self._group = "Prediction"
         self._group_id = "prediction"
@@ -22,10 +22,10 @@ class EISLogisticRegression(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "X",
-            "y",
+            "input_rasters",
+            "target_labels",
             "validation_method",
-            "metrics",
+            "validation_metric",
             "split_size",
             "cv_folds",
             "penalty",
@@ -33,18 +33,18 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             "solver",
             "verbose",
             "random_state",
-            "output_raster"
+            "output_file"
         ]
 
         self.addParameter(
             QgsProcessingParameterMultipleLayers(
-                name=self.alg_parameters[0], description="X", layerType=QgsProcessing.TypeRaster
+                name=self.alg_parameters[0], description="Training data", layerType=QgsProcessing.TypeRaster
             )
         )
 
         self.addParameter(
             QgsProcessingParameterMapLayer(
-                name=self.alg_parameters[1], description="y"
+                name=self.alg_parameters[1], description="Target labels"
             )
         )
 
@@ -60,7 +60,7 @@ class EISLogisticRegression(EISProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterEnum(
                 name=self.alg_parameters[3],
-                description="Validation metrics",
+                description="Validation metric",
                 options=["accuracy", "precision", "recall", "f1", "auc"],
                 defaultValue="accuracy"
             )
@@ -88,7 +88,7 @@ class EISLogisticRegression(EISProcessingAlgorithm):
                 name=self.alg_parameters[6],
                 description="Penalty",
                 options=["l2", "l1", "elasicnet"],
-                defaultValue=0,
+                defaultValue="l2",
                 optional=True
             )
         )
