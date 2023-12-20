@@ -71,7 +71,9 @@ class EISLogisticRegression(EISProcessingAlgorithm):
                 name=self.alg_parameters[4],
                 description="Split size",
                 type=QgsProcessingParameterNumber.Double,
-                defaultValue=0.2
+                defaultValue=0.2,
+                minValue=0.001,
+                maxValue=0.999
             )
         )
 
@@ -79,7 +81,8 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 name=self.alg_parameters[5],
                 description="CV folds",
-                defaultValue=5
+                defaultValue=5,
+                minValue=2
             )
         )
 
@@ -97,7 +100,8 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 name=self.alg_parameters[7],
                 description="Max iter",
-                defaultValue=100
+                defaultValue=100,
+                minValue=1
             )
         )
 
@@ -124,7 +128,8 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 name=self.alg_parameters[10],
                 description="Random state",
-                optional=True
+                optional=True,
+                minValue=0
             )
         )
 
