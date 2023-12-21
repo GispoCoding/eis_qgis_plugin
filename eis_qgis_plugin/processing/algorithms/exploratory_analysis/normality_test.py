@@ -1,6 +1,5 @@
 from qgis.core import (
-    QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterFileDestination,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -17,17 +16,10 @@ class EISNormalityTest(EISProcessingAlgorithm):
         self._short_help_string = "Compute Shapiro-Wilk test for normality on the input data."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_file", "output_file"]
+        self.alg_parameters = ["input_vector"]
 
         self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input geometries"
-            )
-        )
-
-
-        self.addParameter(
-            QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[1], description="Output file"
+            QgsProcessingParameterVectorLayer(
+                name=self.alg_parameters[0], description="Input vector"
             )
         )
