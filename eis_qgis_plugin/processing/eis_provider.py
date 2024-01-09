@@ -2,7 +2,6 @@ import importlib
 import os
 
 from qgis.core import QgsProcessingProvider
-from qgis.PyQt.QtGui import QIcon
 
 PLUGIN_PATH = os.path.dirname(__file__)
 ICON_PATH = os.path.join(PLUGIN_PATH, "../resources/icons/plugin_icon.png")
@@ -23,8 +22,8 @@ class EISProvider(QgsProcessingProvider):
         self.refreshAlgorithms()
         return True
 
-    def icon(self):
-        return QIcon(ICON_PATH)
+    # def icon(self):
+    #     return QIcon(ICON_PATH)
 
     def loadAlgorithms(self) -> None:
         # Load algorithms from each directory
@@ -34,7 +33,6 @@ class EISProvider(QgsProcessingProvider):
         exploratory_analysis = self.load_algorithms_from_directory("exploratory_analysis")
         prediction = self.load_algorithms_from_directory("prediction")
         transformations = self.load_algorithms_from_directory("transformations")
-
 
         # Add the algorithm instances to the provider
         for algorithm in (

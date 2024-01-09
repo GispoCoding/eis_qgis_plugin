@@ -2,14 +2,16 @@ import json
 import os
 import subprocess
 import time
-from typing import Dict, List
+from typing import Any, Dict, List, Optional, Tuple
 
 from qgis.core import (
     QgsProcessingAlgorithm,
+    QgsProcessingContext,
     QgsProcessingFeedback,
     QgsProcessingOutputMultipleLayers,
     QgsProcessingParameterBoolean,
     QgsProcessingParameterCrs,
+    QgsProcessingParameterDefinition,
     QgsProcessingParameterEnum,
     QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSink,
@@ -46,27 +48,80 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self.alg_parameters: List[str] = []
 
     def name(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the unique name (ID) of the processing algorithm.
+        """
         return self._name
 
     def displayName(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the display name of the processing algorithm.
+        """
         return self._display_name
 
     def group(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the display name of the group the processing algorithm belongs to.
+        """
         return self._group
 
     def groupId(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the group ID of the processing algorithm.
+        """
         return self._group_id
 
     def shortHelpString(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the short help string of the processing algorithm.
+        """
         return self._short_help_string
 
     def createInstance(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Creates instance of the processing algorithm class.
+        """
         return self.__class__()
 
     def initAlgorithm(self, config=None):
-        raise Exception("Not implemented in the child class!")
+        """
+        QgsProcessingAlgorithm method.
 
-    def prepare_arguments(self, parameters: Dict, context):
+        Initializes the algorithm by defining its parameters. Implemented in child
+        classes for EISProcessingAlgorithms.
+        """
+        raise Exception("initAlgorithm is not implemented in the child class!")
+
+    def prepare_arguments(
+        self,
+        parameters: Dict[str, QgsProcessingParameterDefinition],
+        context: QgsProcessingContext
+    ) -> Tuple[List[str], List[str]]:
+        """
+        Prepare arguments to call EIS Toolkit CLI.
+
+        Iterates all parameters of the algorithm and creates command-line arguments
+        to be delivered to EIS Toolkit. Most parameter values are delivered with their
+        name as Typer options.
+
+        Returns:
+            List of arguments (a list with only parameter values, non-empty only if
+            QgsProcessingParameterMultipleLayers is present) and list where every other element is
+            parameter name and every other is the parameter value (of the preceding parameter name).
+        """
+
         args = []  # These parameters are delivered without the parameter name tag
         kwargs = []  # These parameters are delivered with their name
 
@@ -74,15 +129,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         # prefixed with --)
 
         # TODO: Check if all these work with optional parameters (arg evaluating to None)
-
-        # NOTE: Because of the above, flag mapping is likely to be deleted
-        # flag_mapping = {
-        #     "resampling_method": "--resampling-method",
-        #     "output_raster": "--output-raster-file",
-        #     "same_extent": "--same-extent",
-        #     "crs": "--crs",
-        #     # Add more mappings as needed
-        # }
 
         for name in self.alg_parameters:
             param = self.parameterDefinition(name)
@@ -170,7 +216,9 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             # TODO
             elif isinstance(param, QgsProcessingParameterEnum):
-                arg = self.parameterAsEnumString(parameters, name, context).lower()
+                # arg = self.parameterAsEnumString(parameters, name, context).lower()  # Bugged in some QGIS v?
+                idx = self.parameterAsEnum(parameters, name, context)
+                arg = param.options()[idx]
 
             elif isinstance(param, QgsProcessingParameterCrs):
                 crs = str(self.parameterAsCrs(parameters, name, context))
@@ -215,8 +263,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                     f"Parameter ({param_name}) conversion failed, parameter is unknown type."
                 )
 
-            # if flag:
-            #     args.append(flag)
             if not arg:
                 continue
 
@@ -229,15 +275,27 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         return args, kwargs
 
-    def get_bin_folder(self):
+    @staticmethod
+    def get_bin_folder():
+        """Get folder name based on OS."""
         if os.name == "nt":  # Windows
             return "Scripts"
         else:
             return "bin"
 
-    def processAlgorithm(self, parameters, context, feedback):
+    def processAlgorithm(
+        self,
+        parameters: Dict[str, QgsProcessingParameterDefinition],
+        context: QgsProcessingContext,
+        feedback: Optional[QgsProcessingFeedback]
+    ) -> Dict[str, Any]:
         """
-        Here is where the processing itself takes place.
+        QgsProcessingAlgorithm method.
+
+        Defined commonly for all EISProcessingAlgorithms. A command to EIS Toolkit CLI is
+        constructed using `prepare_arguments` and delivered using the `subprocess` module.
+        The received messages from EIS CLI are parsed and either used to set progress, show info
+        or to get the results.
         """
 
         if feedback is None:
