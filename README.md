@@ -11,7 +11,7 @@ EIS Processing Algorithms are powered by EIS Toolkit, a Python library for miner
 Since EIS Toolkit utilizes multiple other Python libraries and using external libraries in a QGIS plugin is in many cases difficult or impossible, EIS Toolkit runs outside of QGIS. The EIS Processing Algorithms call EIS Toolkit via command line and EIS Wizard calls EIS Processing Algorithms for individual steps.
 
 ## EIS Wizard UI design
-The objective of EIS Wizard is to provide guidance and a convenient interface to use EIS Processing Algorithms in approriate ways. Since EIS Processing Algorithms already implement handy and concise interfaces for the tools, in some cases EIS Wizard will forward the user to run some processing algorithm, and in other cases another customized interface is created for the task. 
+The objective of EIS Wizard is to provide guidance and a convenient interface to use EIS Processing Algorithms in approriate ways. Since EIS Processing Algorithms already implement handy and concise interfaces for the tools, in some cases EIS Wizard will forward the user to run some processing algorithm, and in other cases another customized interface is created for the task.
 
 The current plan is that EIS Wizard will have the following pages:
 
