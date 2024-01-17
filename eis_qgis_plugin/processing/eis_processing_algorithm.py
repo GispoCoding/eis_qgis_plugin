@@ -323,7 +323,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             )
             # progress_regex = re.compile(r"(\d+)%")
             progress_prefix = "Progress:"
-            out_layers_prefix = "Layers:"
+            out_rasters_prefix = "Output rasters:"
             results_prefix = "Results:"
 
             while process.poll() is None:
@@ -345,9 +345,9 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
                     for key, value in output_dict.items():
                         results[key] = value
-                elif out_layers_prefix in stdout:
+                elif out_rasters_prefix in stdout:
                     # Extract the JSON part
-                    json_str = stdout.split(out_layers_prefix)[-1].strip()
+                    json_str = stdout.split(out_rasters_prefix)[-1].strip()
 
                     # Deserialize the JSON-formatted string to a Python dict
                     output_dict = json.loads(json_str)
