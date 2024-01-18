@@ -19,14 +19,14 @@ class EISUniqueCombinations(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "input_raster",
+            "input_rasters",
             "output_raster"
         ]
 
         self.addParameter(
             QgsProcessingParameterMultipleLayers(
                 name=self.alg_parameters[0],
-                description="Input raster or rasters",
+                description="Input rasters",
                 layerType=QgsProcessing.TypeRaster,
             )
         )

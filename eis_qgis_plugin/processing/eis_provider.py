@@ -33,6 +33,7 @@ class EISProvider(QgsProcessingProvider):
         exploratory_analysis = self.load_algorithms_from_directory("exploratory_analysis")
         prediction = self.load_algorithms_from_directory("prediction")
         transformations = self.load_algorithms_from_directory("transformations")
+        utilities = self.load_algorithms_from_directory("utilities")
 
         # Add the algorithm instances to the provider
         for algorithm in (
