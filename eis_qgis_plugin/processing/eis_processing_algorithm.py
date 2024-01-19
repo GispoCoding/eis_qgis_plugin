@@ -314,6 +314,8 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments + arguments_with_name
         results = {}
 
+        print(cmd)
+
         try:
             process = subprocess.Popen(
                 cmd,
