@@ -38,7 +38,7 @@ class EISProvider(QgsProcessingProvider):
         # Add the algorithm instances to the provider
         for algorithm in (
             validation + vector_processing + raster_processing +
-            exploratory_analysis + prediction + transformations
+            exploratory_analysis + prediction + transformations + utilities
         ):
             self.addAlgorithm(algorithm)
 
