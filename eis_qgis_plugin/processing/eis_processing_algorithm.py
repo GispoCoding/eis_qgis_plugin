@@ -168,7 +168,14 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 continue
 
             elif isinstance(param, QgsProcessingParameterField):
-                arg = self.parameterAsString(parameters, name, context)
+                if param.allowMultiple():
+                    fields = self.parameterAsFields(parameters, name, context)
+                    for field in fields:
+                        args.append(param_name)
+                        args.append(field)
+                    continue
+                else:
+                    arg = self.parameterAsString(parameters, name, context)
 
             elif isinstance(param, QgsProcessingParameterMapLayer):
                 layer = self.parameterAsLayer(parameters, name, context)
