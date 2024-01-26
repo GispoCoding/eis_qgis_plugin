@@ -8,12 +8,12 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISResample(EISProcessingAlgorithm):
+class EISResampleRaster(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "resample"
-        self._display_name = "Resample"
+        self._name = "resample_raster"
+        self._display_name = "Resample raster"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = "Resample raster to a new resolution"
@@ -21,8 +21,8 @@ class EISResample(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
             "input_raster",
+            "resolution",
             "resampling_method",
-            "upscale_factor",
             "output_raster",
         ]
 
@@ -33,8 +33,16 @@ class EISResample(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterEnum(
+            QgsProcessingParameterNumber(
                 name=self.alg_parameters[1],
+                description="Resolution",
+                type=QgsProcessingParameterNumber.Double,
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                name=self.alg_parameters[2],
                 description="Resampling method",
                 options=[
                     "Nearest",
@@ -45,15 +53,7 @@ class EISResample(EISProcessingAlgorithm):
                     "Max",
                     "Min",
                 ],
-                defaultValue="Nearest",
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[2],
-                description="Upscale factor",
-                type=QgsProcessingParameterNumber.Double,
+                defaultValue="Bilinear",
             )
         )
 
