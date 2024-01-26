@@ -11,7 +11,7 @@ class EISPlrTransform(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "plr_transform"
-        self._display_name = "Pairwise logratio transform"
+        self._display_name = "Pivot logratio transform"
         self._group = "Transformations"
         self._group_id = "transformations"
         self._short_help_string = (
