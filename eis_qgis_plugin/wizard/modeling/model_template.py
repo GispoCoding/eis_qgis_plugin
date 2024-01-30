@@ -3,7 +3,7 @@ from enum import Enum
 from qgis.core import QgsApplication
 from qgis.gui import QgsCollapsibleGroupBox, QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QComboBox, QPushButton, QSizePolicy, QTableWidget, QWidget
+from qgis.PyQt.QtWidgets import QComboBox, QHeaderView, QPushButton, QSizePolicy, QTableWidget, QWidget
 
 
 class ModelType(Enum):
@@ -56,9 +56,12 @@ class EISModel(QWidget):
         self.validation_box_collapse_effect = 139
 
         # Initialize table for training data
-        self.training_data.setColumnWidth(0, 500)
+        self.training_data.setColumnWidth(0, 200)
+        self.training_data.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+
         self.training_data.setColumnWidth(1, 50)
         self.training_data.setColumnWidth(2, 50)
+
         self.add_row_to_table()
 
         # Connect signals
