@@ -1,14 +1,11 @@
 from qgis import processing
 from qgis.gui import QgsDoubleSpinBox, QgsSpinBox
-from qgis.PyQt.QtWidgets import QComboBox, QWidget
+from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
-from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.modeling.model_template import EISModel, ModelType
-
-FORM_CLASS: QWidget = load_ui("model/wizard_model_gradient_boosting_2.ui")
+from eis_qgis_plugin.wizard.modeling.ml_model_template import EISModel, ModelType
 
 
-class EISWizardGradientBoosting(EISModel, FORM_CLASS):
+class EISWizardGradientBoosting(EISModel):
     """
     Class for gradient boosting models.
     """
@@ -22,15 +19,58 @@ class EISWizardGradientBoosting(EISModel, FORM_CLASS):
 
 
     def __init__(self, parent, model_type) -> None:
-        self.parameter_box_collapse_effect = 232
-        self.start_height = 653
-
         super().__init__(parent, model_type)
 
+        self.add_model_parameters()
+        self.add_general_model_parameters()
+
+        self.model_type = model_type
         if model_type == ModelType.CLASSIFIER:
             self.initialize_classifier()
         elif model_type == ModelType.REGRESSOR:
             self.initialize_regressor()
+
+
+    def add_model_parameters(self):
+        """Add parameter widgets for Gradient Boosting model."""
+        self.loss_label = QLabel()
+        self.loss_label.setText("Loss")
+        self.loss = QComboBox()
+        self.loss.addItems([])
+        self.train_parameter_box.layout().addRow(self.loss_label, self.loss)
+
+        self.learning_rate_label = QLabel()
+        self.learning_rate_label.setText("Learning rate")
+        self.learning_rate = QgsDoubleSpinBox()
+        self.learning_rate.setMinimum(0.01)
+        self.learning_rate.setMaximum(99.99)
+        self.learning_rate.setValue(0.1)
+        self.train_parameter_box.layout().addRow(self.learning_rate_label, self.learning_rate)
+
+        self.n_estimators_label = QLabel()
+        self.n_estimators_label.setText("N estimators")
+        self.n_estimators = QgsSpinBox()
+        self.n_estimators.setMinimum(1)
+        self.n_estimators.setMaximum(1000)
+        self.n_estimators.setValue(100)
+        self.train_parameter_box.layout().addRow(self.n_estimators_label, self.n_estimators)
+
+        self.max_depth_label = QLabel()
+        self.max_depth_label.setText("Max depth")
+        self.max_depth = QgsSpinBox()
+        self.max_depth.setMinimum(0)
+        self.max_depth.setMaximum(1000)
+        self.max_depth.setValue(3)
+        self.train_parameter_box.layout().addRow(self.max_depth_label, self.max_depth)
+
+        self.subsample_label = QLabel()
+        self.subsample_label.setText("Subsample")
+        self.subsample = QgsDoubleSpinBox()
+        self.subsample.setMinimum(0.01)
+        self.subsample.setMaximum(1.0)
+        self.subsample.setValue(1.0)
+        self.subsample.setDecimals(2)
+        self.train_parameter_box.layout().addRow(self.subsample_label, self.subsample)
 
 
     def initialize_classifier(self):

@@ -1,71 +1,97 @@
-from typing import Callable, Optional
-
-from qgis.core import QgsApplication
+from qgis.core import QgsApplication, QgsMapLayerProxyModel
 from qgis.gui import QgsMapLayerComboBox
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QHeaderView, QPushButton, QSizePolicy, QTableWidget
+from qgis.PyQt.QtWidgets import QHeaderView, QLabel, QLineEdit, QPushButton, QSizePolicy, QTableWidget
 
-# WIP
+HEADER_ROW_HEIGHT = 23
 
 class ModelDataTable(QTableWidget):
-        
-    def __init__(self, parent, resize_callback: Optional[Callable] = None) -> None:
+    """
+    Class for displaying model data (evidence layers/data) in testing/application phase.
+    
+    This table does not have "add" or "remove" buttons, but creates as many rows as the selected model
+    used in training phase.
+    """
+
+    def __init__(self, parent, row_height: int = 26) -> None:
         super().__init__(parent)
 
-        self.resize_callback = resize_callback
+        self.row_height = row_height
 
-        self.setColumnCount(3)
-        self.setHorizontalHeaderLabels(["Data", "Add", "Delete"])
-        self.setMinimumHeight(75)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.setColumnCount(2)
+        self.setHorizontalHeaderLabels(["Tag", "Data"])
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.setColumnWidth(0, 150)
+        self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
 
-        # Initialize table for training data
-        self.setColumnWidth(0, 200)
-        self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-
-        self.setColumnWidth(1, 50)
-        self.setColumnWidth(2, 50)
-
-        self.add_row_to_table()
+        self.setMinimumHeight(23)
+        self.setMaximumHeight(23)
 
 
+    def load_model(self, tags):
+        """Load information about the selected model (number of rows/layers and corresponding tags)."""
+        # Remove all previous rows
+        self.setRowCount(0)
 
-    def create_table_buttons(self):
-        """Create buttons for a row in the training data table widget."""
-        add_row = QPushButton()
-        add_row.setIcon(QIcon(QgsApplication.iconPath('symbologyAdd.svg')))
-        add_row.setToolTip('Add a row below.')
-        remove_row = QPushButton()
-        remove_row.setIcon(QIcon(QgsApplication.iconPath('symbologyRemove.svg')))
-        remove_row.setToolTip('Remove row.')
+        # Set table size according to number of evidence layers / rows
+        nr_of_rows = len(tags)
+        self.setMinimumHeight(HEADER_ROW_HEIGHT + nr_of_rows * self.row_height)
+        self.setMaximumHeight(HEADER_ROW_HEIGHT + nr_of_rows * self.row_height)
 
-        add_row.clicked.connect(self.add_row_to_table)
-        remove_row.clicked.connect(self.remove_row)
+        for i, tag in enumerate(tags):
+            self.insertRow(i)
+            tag_label = QLabel()
+            tag_label.setText(tag)
+            self.setCellWidget(i, 0, tag_label)
+            layer_selection = QgsMapLayerComboBox()
+            layer_selection.setFilters(QgsMapLayerProxyModel.RasterLayer)
+            self.setCellWidget(i, 1, layer_selection)
 
-        return add_row, remove_row
+            self.setRowHeight(i, self.row_height)
+
+
+class ModelTrainingDataTable(QTableWidget):
+    """
+    Class for displaying model data (evidence layers/data) in training phase.
     
-    def remove_row(self):
-        """Remove the selected row from the training data table widget."""
-        rows = self.rowCount()
-        if rows == 1:
-            return
-        selection = self.selectedIndexes()
+    This table has "add" or "remove" buttons to control how many rows are used.
+    """
 
-        self.clearSelection()
-        self.removeRow(rows - 1 if len(selection) <= 0 else selection[0].row())
+    def __init__(self, parent, row_height: int = 26):
+        super().__init__(parent)
 
-        if self.resize_callback is not None:
-            self.resize_callback(-25)
-            # self.resize_container(-25)
+        self.row_height = row_height
+
+        self.setColumnCount(4)
+        self.setHorizontalHeaderLabels(["Tag", "Data", "Add", "Delete"])
+        self.setColumnWidth(0, 150)
+        self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.setColumnWidth(2, 50)
+        self.setColumnWidth(3, 50)
+
+        self.setMinimumHeight(23)
+
+        self.add_row()
 
 
-    def get_training_layers(self):
-        """Get all layers currently selected in the training data table."""
-        return [self.cellWidget(row, 0).currentLayer() for row in range(self.rowCount())]
+    def create_buttons(self):
+        """Create "add" and "delete" buttons the table."""
+        add_row_btn = QPushButton()
+        add_row_btn.setIcon(QIcon(QgsApplication.iconPath('symbologyAdd.svg')))
+        add_row_btn.setToolTip('Add a row below.')
+        remove_row_btn = QPushButton()
+        remove_row_btn.setIcon(QIcon(QgsApplication.iconPath('symbologyRemove.svg')))
+        remove_row_btn.setToolTip('Remove row.')
+
+        add_row_btn.clicked.connect(self.add_row)
+        remove_row_btn.clicked.connect(self.remove_row)
+
+        return add_row_btn, remove_row_btn
 
 
-    def add_row_to_table(self):
-        """Add a row in the training data table widget."""
+    def add_row(self):
+        """Add a row in the table."""
+        # Find row index
         rows = self.rowCount()
         if rows == -1:
             rows = 0
@@ -73,18 +99,36 @@ class ModelDataTable(QTableWidget):
         selection = self.selectedIndexes()
         row_index = rows if len(selection) <= 0 else selection[0].row() + 1
 
+        # Create row and set row and table size
         self.insertRow(row_index)
+        self.setRowHeight(row_index, self.row_height)
+        self.setMinimumHeight(self.minimumHeight() + self.row_height)
 
-        layer_widget = QgsMapLayerComboBox()
+        # Add widgets to row
+        add_btn, remove_btn = self.create_buttons()
 
-        add_btn, remove_btn = self.create_table_buttons()
+        self.setCellWidget(row_index, 0, QLineEdit())
+        layer_selection = QgsMapLayerComboBox()
+        layer_selection.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        self.setCellWidget(row_index, 1, layer_selection)
+        self.setCellWidget(row_index, 2, add_btn)
+        self.setCellWidget(row_index, 3, remove_btn)
 
-        self.setCellWidget(row_index, 0, layer_widget)
-        self.setCellWidget(row_index, 1, add_btn)
-        self.setCellWidget(row_index, 2, remove_btn)
-
+        # Reset selection
         self.clearSelection()
 
-        if self.resize_callback is not None:
-            self.resize_callback(25)
-            # self.resize_container(25)
+
+    def remove_row(self):
+        """Remove selected row from the table."""
+        rows = self.rowCount()
+        if rows == 1:  # Can't remove the last row
+            return
+        selection = self.selectedIndexes()
+        row_index = rows - 1 if len(selection) <= 0 else selection[0].row()
+        
+        # Remove row and set table size
+        self.removeRow(row_index)
+        self.setMinimumHeight(self.minimumHeight() - self.row_height)
+
+        # Reset selection
+        self.clearSelection()
