@@ -1,34 +1,51 @@
 from qgis import processing
 from qgis.gui import QgsSpinBox
-from qgis.PyQt.QtWidgets import QComboBox, QWidget
+from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
-from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.modeling.model_template import EISModel, ModelType
-
-FORM_CLASS: QWidget = load_ui("model/wizard_model_random_forests_2.ui")
+from eis_qgis_plugin.wizard.modeling.ml_model_template import EISModel, ModelType
 
 
-class EISWizardRandomForests(EISModel, FORM_CLASS):
+class EISWizardRandomForests(EISModel):
     """
     Class for random forest models.
     """
-    n_estimators: QgsSpinBox
-    criterion: QComboBox
-    max_depth: QgsSpinBox
-    verbose: QgsSpinBox
-    random_state: QgsSpinBox
 
     def __init__(self, parent, model_type) -> None:
-        self.parameter_box_collapse_effect = 170
-        self.start_height = 591
-        self.model_type = model_type  # Classifier or regressor
-
         super().__init__(parent, model_type)
+        
+        self.add_model_parameters()
+        self.add_general_model_parameters()
 
+        self.model_type = model_type  # Classifier or regressor
         if model_type == ModelType.CLASSIFIER:
             self.initialize_classifier()
         elif model_type == ModelType.REGRESSOR:
             self.initialize_regressor()
+
+
+    def add_model_parameters(self):
+        """Add parameter widgets for Random Forest model."""
+        self.n_estimators_label = QLabel()
+        self.n_estimators_label.setText("N estimators")
+        self.n_estimators = QgsSpinBox()
+        self.n_estimators.setMinimum(1)
+        self.n_estimators.setMaximum(1000)
+        self.n_estimators.setValue(100)
+        self.train_parameter_box.layout().addRow(self.n_estimators_label, self.n_estimators)
+
+        self.criterion_label = QLabel()
+        self.criterion_label.setText("Criterion")
+        self.criterion = QComboBox()
+        
+        self.train_parameter_box.layout().addRow(self.criterion_label, self.criterion)
+
+        self.max_depth_label = QLabel()
+        self.max_depth_label.setText("Max depth")
+        self.max_depth = QgsSpinBox()
+        self.max_depth.setMinimum(0)
+        self.max_depth.setMaximum(1000)
+        self.max_depth.setValue(3)
+        self.train_parameter_box.layout().addRow(self.max_depth_label, self.max_depth)
 
 
     def set_tooltips(self):

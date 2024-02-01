@@ -87,6 +87,11 @@ QListWidget::item::selected {
      </item>
      <item>
       <property name="text">
+       <string>Results</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Settings</string>
       </property>
      </item>

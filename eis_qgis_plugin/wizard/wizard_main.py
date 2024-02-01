@@ -10,6 +10,7 @@ from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
 from eis_qgis_plugin.wizard.wizard_modeling import EISWizardModeling
 from eis_qgis_plugin.wizard.wizard_plot import EISWizardPlotting
 from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
+from eis_qgis_plugin.wizard.wizard_results import EISWizardResults
 from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 
 
@@ -74,11 +75,11 @@ class EISWizard(QWidget, FORM_CLASS):
         item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png")))
         # Icon by Icons8
 
-        item = self.menu_widget.item(3)
+        item = self.menu_widget.item(4)
         item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg")))
         # Icon by Icons8
 
-        item = self.menu_widget.item(4)
+        item = self.menu_widget.item(5)
         item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/about.svg")))
         # Icon by Icons8
 
@@ -86,7 +87,7 @@ class EISWizard(QWidget, FORM_CLASS):
 
         # Create Settings page first
         self.settings_page = EISWizardSettings(self)
-        self.pages_widget.insertWidget(3, self.settings_page)
+        self.pages_widget.insertWidget(4, self.settings_page)
 
         self.proxies_page = EISWizardProxies(self)
         self.pages_widget.insertWidget(0, self.proxies_page)
@@ -98,8 +99,11 @@ class EISWizard(QWidget, FORM_CLASS):
         self.pages_widget.insertWidget(2, self.model_page)
         # self.pages_widget.insertWidget(2, QWidget())
 
+        self.results_page = EISWizardResults(self)
+        self.pages_widget.insertWidget(3, self.results_page)
+
         self.about_page = EISWizardAbout(self)
-        self.pages_widget.insertWidget(4, self.about_page)
+        self.pages_widget.insertWidget(5, self.about_page)
 
         # Set menu
         self.menu_widget.setMinimumWidth(
