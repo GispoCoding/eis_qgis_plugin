@@ -392,6 +392,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             if output_name in parameters:
                 results[output_name] = parameters[output_name]
             elif output.type() == "outputBoolean":
-                results[output_name] = stdout.strip().lower() == "true"
+                results[output_name] = results["result"]
 
         return results
