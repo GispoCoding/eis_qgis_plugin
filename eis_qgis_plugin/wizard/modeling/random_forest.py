@@ -5,7 +5,7 @@ from qgis.PyQt.QtWidgets import QComboBox, QLabel
 from eis_qgis_plugin.wizard.modeling.ml_model_template import EISModel, ModelType
 
 
-class EISWizardRandomForests(EISModel):
+class EISWizardRandomForest(EISModel):
     """
     Class for random forest models.
     """

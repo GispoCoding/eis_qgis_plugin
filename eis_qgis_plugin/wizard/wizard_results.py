@@ -5,7 +5,7 @@ from qgis.PyQt.QtWidgets import (
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
-FORM_CLASS: QDialog = load_ui("model/wizard_model_evaluation_2.ui")
+FORM_CLASS: QDialog = load_ui("results/wizard_model_evaluation_2.ui")
 
 
 class EISWizardResults(QWidget, FORM_CLASS):   

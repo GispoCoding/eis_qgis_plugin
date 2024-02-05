@@ -13,7 +13,7 @@ from eis_qgis_plugin.wizard.plots.lineplot import EISWizardLineplot
 from eis_qgis_plugin.wizard.plots.pairplot import EISWizardPairplot
 from eis_qgis_plugin.wizard.plots.scatterplot import EISWizardScatterplot
 
-FORM_CLASS: QWidget = load_ui("wizard_plot.ui")
+FORM_CLASS: QWidget = load_ui("explore/wizard_plot.ui")
 
 
 
