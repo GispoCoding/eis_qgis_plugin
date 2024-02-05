@@ -21,7 +21,7 @@ from qgis.PyQt.QtWidgets import (
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
-FORM_CLASS = load_ui("preprocess/wizard_proxy_selection_dock.ui")
+FORM_CLASS = load_ui("mineral_proxies/wizard_proxy_selection_dock.ui")
 path = Path(os.path.dirname(__file__)).parent.parent
 
 

@@ -26,7 +26,7 @@ from qgis.PyQt.QtWidgets import (
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
-FORM_CLASS: QWizardPage = load_ui("preprocess/wizard_proxy_selection.ui")
+FORM_CLASS: QWizardPage = load_ui("mineral_proxies/wizard_proxy_selection.ui")
 path = Path(os.path.dirname(__file__)).parent.parent
 
 

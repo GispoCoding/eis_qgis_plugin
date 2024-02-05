@@ -16,7 +16,7 @@ from qgis.PyQt.QtWidgets import (
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable, ModelTrainingDataTable
 
-FORM_CLASS: QWidget = load_ui("model/wizard_ml_model_template.ui")
+FORM_CLASS: QWidget = load_ui("modeling/wizard_ml_model_template.ui")
 
 
 class ModelType(Enum):

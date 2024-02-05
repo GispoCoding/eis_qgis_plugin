@@ -6,7 +6,7 @@ from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
-FORM_CLASS: QWidget = load_ui("wizard_plot_pairplot.ui")
+FORM_CLASS: QWidget = load_ui("explore/wizard_plot_pairplot.ui")
 
 KIND_MAPPING = {"histogram": "hist", "scatterplot": "scatter", "kde": "kde", "regression": "reg"}
 DIAG_KIND_MAPPING = {"auto": "auto", "histogram": "hist", "kde": "kde", "none": "None"}

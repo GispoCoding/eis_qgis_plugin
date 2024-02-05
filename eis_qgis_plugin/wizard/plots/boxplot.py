@@ -6,7 +6,7 @@ from qgis.PyQt.QtWidgets import QComboBox, QWidget
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
-FORM_CLASS: QWidget = load_ui("wizard_plot_boxplot.ui")
+FORM_CLASS: QWidget = load_ui("explore/wizard_plot_boxplot.ui")
 
 
 class EISWizardBoxplot(EISPlot, FORM_CLASS):
