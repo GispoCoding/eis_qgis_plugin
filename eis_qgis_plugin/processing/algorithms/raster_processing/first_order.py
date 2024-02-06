@@ -7,7 +7,7 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISCSFirstOrderBasicSet(EISProcessingAlgorithm):
+class EISFirstOrder(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
