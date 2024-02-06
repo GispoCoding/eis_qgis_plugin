@@ -35,6 +35,11 @@ IMPORTANCE_VALUES = {
     "-": 4
 }
 
+class EISWizardProxyCreationGeneral(QWidget, load_ui("mineral_proxies/wizard_proxy_creation_general.ui")):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi(self)
+
 
 class EISWizardProxies(QWidget, FORM_CLASS):
     scale_selection: QComboBox
@@ -46,11 +51,12 @@ class EISWizardProxies(QWidget, FORM_CLASS):
     depositional_tab_dock: QTabWidget
     mineralisation_tab_dock: QTabWidget
 
-    proxy_pages_widget: QStackedWidget
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+
+        self.proxy_pages_widget: QStackedWidget
 
         # Set bold font
         self.bold_font = QtGui.QFont()
@@ -72,6 +78,15 @@ class EISWizardProxies(QWidget, FORM_CLASS):
         self.initialize_ui()
         self.update()
 
+        self.proxy_pages_widget.insertWidget(5, EISWizardProxyCreationGeneral())
+        self.next_btn.clicked.connect(self.next_page)
+        self.previous_btn.clicked.connect(self.previous_page)
+
+    def next_page(self):
+        self.proxy_pages_widget.setCurrentIndex(self.proxy_pages_widget.currentIndex()+1)
+
+    def previous_page(self):
+        self.proxy_pages_widget.setCurrentIndex(self.proxy_pages_widget.currentIndex()-1)
 
     def initialize_ui(self):
         """Initialize the UI."""

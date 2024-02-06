@@ -26,13 +26,44 @@
          <item>
           <layout class="QFormLayout" name="formLayout_4">
            <item row="0" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Mineral system</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="mineral_system_selection">
+             <item>
+              <property name="text">
+               <string>IOCG</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Li-Pegmatites</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Co-VMS</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Custom/free</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
               <string>Scale</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="1" column="1">
             <widget class="QComboBox" name="scale_selection">
              <property name="toolTip">
               <string/>
@@ -50,32 +81,6 @@
              <item>
               <property name="text">
                <string>Deposit</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>Mineral system</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="mineral_system_selection">
-             <item>
-              <property name="text">
-               <string>IOCG</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Li-Pegmatites</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Co-VMS</string>
               </property>
              </item>
             </widget>
@@ -140,7 +145,7 @@
          <item>
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>Workflow 1</string>
+            <string>Workflow 1 – Compute distances to selected features</string>
            </property>
           </widget>
          </item>
@@ -149,32 +154,42 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>Layer</string>
+              <string>Vector layer</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
             <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox"/>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>Selection</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QgsFieldExpressionWidget" name="mFieldExpressionWidget"/>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>Raster template</string>
+              <string>Selection criteria for attribute</string>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
+            <widget class="QgsFieldExpressionWidget" name="mFieldExpressionWidget"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Raster template (for output)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
             <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_2"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QgsFieldComboBox" name="mFieldComboBox_3"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_29">
+             <property name="text">
+              <string>Attribute</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -209,7 +224,7 @@
          <item>
           <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>Workflow 2</string>
+            <string>Workflow 2 – Compute distance to anomaly for raster data (or binarize?)</string>
            </property>
           </widget>
          </item>
@@ -228,7 +243,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_10">
              <property name="text">
-              <string>Threshold</string>
+              <string>Anomaly threshold value</string>
              </property>
             </widget>
            </item>
@@ -249,7 +264,7 @@
            <item>
             <widget class="QPushButton" name="pushButton_2">
              <property name="text">
-              <string>Compute distances</string>
+              <string>Compute distance to anomaly</string>
              </property>
             </widget>
            </item>
@@ -277,7 +292,7 @@
        <item>
         <widget class="QLabel" name="label_11">
          <property name="text">
-          <string>Workflow 3</string>
+          <string>Workflow 3 – Interpolate vector data and compute distance to anomaly (or binarize?)</string>
          </property>
         </widget>
        </item>
@@ -331,14 +346,93 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 1 - Interpolate</string>
+          <string>Step 1 - Interpolate vector data</string>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="title">
+          <string>Interpolation settings</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_13">
+            <item>
+             <widget class="QRadioButton" name="radioButton_5">
+              <property name="text">
+               <string>IDW interpolation</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_15">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_34">
+                <property name="text">
+                 <string>Power</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QgsDoubleSpinBox" name="mQgsDoubleSpinBox_8"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_14">
+            <item>
+             <widget class="QRadioButton" name="radioButton_6">
+              <property name="text">
+               <string>Kriging interpolation</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_16">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_35">
+                <property name="text">
+                 <string>Variogram model</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="comboBox_10"/>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_36">
+                <property name="text">
+                 <string>Coordinates type</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="comboBox_11"/>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_37">
+                <property name="text">
+                 <string>Kriging method</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QComboBox" name="comboBox_12"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Interpolation settings</string>
+          <string>Interpolation output settings</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
@@ -360,68 +454,6 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QGroupBox" name="groupBox_2">
-           <property name="title">
-            <string>IDW interpolation</string>
-           </property>
-           <layout class="QFormLayout" name="formLayout_5">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_18">
-              <property name="text">
-               <string>Power</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QgsDoubleSpinBox" name="mQgsDoubleSpinBox_2"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_3">
-           <property name="title">
-            <string>Kriging interpolation</string>
-           </property>
-           <layout class="QFormLayout" name="formLayout_6">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_15">
-              <property name="text">
-               <string>Variogram model</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="comboBox"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_16">
-              <property name="text">
-               <string>Coordinates type</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="comboBox_2"/>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_17">
-              <property name="text">
-               <string>Kriging method</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QComboBox" name="comboBox_3"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_5">
@@ -449,7 +481,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - Compute distances / binarize</string>
+          <string>Step 2 - Compute distances to anomaly / binarize the interpolation results</string>
          </property>
         </widget>
        </item>
@@ -458,7 +490,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_20">
            <property name="text">
-            <string>Threshold</string>
+            <string>Anomaly threshold value</string>
            </property>
           </widget>
          </item>
@@ -472,14 +504,14 @@
          <item>
           <widget class="QPushButton" name="pushButton_4">
            <property name="text">
-            <string>Binarize</string>
+            <string>Interpolate + Binarize</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_5">
            <property name="text">
-            <string>Compute distances</string>
+            <string>Interpolate + Compute distance to anomaly</string>
            </property>
           </widget>
          </item>
@@ -501,11 +533,11 @@
       </layout>
      </widget>
      <widget class="QWidget" name="proxy_creation_page_4">
-      <layout class="QVBoxLayout" name="verticalLayout_10">
+      <layout class="QVBoxLayout" name="verticalLayout_12">
        <item>
         <widget class="QLabel" name="label_28">
          <property name="text">
-          <string>Workflow 4</string>
+          <string>Workflow 4 – Interpolate vector data</string>
          </property>
         </widget>
        </item>
@@ -534,9 +566,88 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_4">
+        <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
           <string>Interpolation settings</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <widget class="QRadioButton" name="radioButton_3">
+              <property name="text">
+               <string>IDW interpolation</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_13">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_30">
+                <property name="text">
+                 <string>Power</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QgsDoubleSpinBox" name="mQgsDoubleSpinBox_7"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <widget class="QRadioButton" name="radioButton_4">
+              <property name="text">
+               <string>Kriging interpolation</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_14">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_31">
+                <property name="text">
+                 <string>Variogram model</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="comboBox_7"/>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_32">
+                <property name="text">
+                 <string>Coordinates type</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="comboBox_8"/>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_33">
+                <property name="text">
+                 <string>Kriging method</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QComboBox" name="comboBox_9"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Output settings</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_9">
           <item>
@@ -560,68 +671,6 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QGroupBox" name="groupBox_5">
-           <property name="title">
-            <string>IDW interpolation</string>
-           </property>
-           <layout class="QFormLayout" name="formLayout_11">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_24">
-              <property name="text">
-               <string>Power</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QgsDoubleSpinBox" name="mQgsDoubleSpinBox_6"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_6">
-           <property name="title">
-            <string>Kriging interpolation</string>
-           </property>
-           <layout class="QFormLayout" name="formLayout_12">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_25">
-              <property name="text">
-               <string>Variogram model</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="comboBox_4"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_26">
-              <property name="text">
-               <string>Coordinates type</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="comboBox_5"/>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_27">
-              <property name="text">
-               <string>Kriging method</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QComboBox" name="comboBox_6"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
         <widget class="QPushButton" name="pushButton_6">
          <property name="text">
           <string>Interpolate</string>
@@ -643,8 +692,25 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="proxy_creation_page_5"/>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QPushButton" name="previous_btn">
+       <property name="text">
+        <string>Previous</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="next_btn">
+       <property name="text">
+        <string>Next</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
