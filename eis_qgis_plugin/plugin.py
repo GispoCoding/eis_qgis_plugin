@@ -5,7 +5,7 @@ from qgis.core import QgsApplication
 from qgis.gui import QgisInterface
 from qgis.PyQt.QtCore import QCoreApplication, Qt, QTranslator
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QInputDialog, QLineEdit, QMenu, QToolButton, QWidget
+from qgis.PyQt.QtWidgets import QAction, QMenu, QToolButton, QWidget
 from qgis.utils import iface
 
 from eis_qgis_plugin.utils import PLUGIN_PATH
@@ -14,7 +14,8 @@ from .processing.eis_provider import EISProvider
 from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logger
 from .qgis_plugin_tools.tools.i18n import setup_translation
 from .qgis_plugin_tools.tools.resources import plugin_name
-from .settings import get_python_venv_path, save_python_venv_path
+
+# from .settings import get_python_env_path, save_python_env_path
 from .wizard.wizard_main import EISWizardDialog, EISWizardDocked
 from .wizard.wizard_settings import EISWizardSettings
 
@@ -123,16 +124,16 @@ class Plugin:
             icon_path,
             text="EIS Wizard",
             parent=self.iface.mainWindow(),
-            callback=self.open_wizard,
+            callback=lambda: self.open_wizard(0),
             add_to_toolbar=False,
             add_to_menu=True,
         )
 
-        toolkit_action = self.add_action(
+        env_action = self.add_action(
             "",
             text="Set EIS Toolkit env",
-            callback=self.set_python_venv_path,
             parent=self.iface.mainWindow(),
+            callback=lambda: self.open_wizard(4),
             add_to_toolbar=False,
             add_to_menu=True,
         )
@@ -213,7 +214,7 @@ class Plugin:
 
         self.popupMenu = QMenu(self.iface.mainWindow())
         self.popupMenu.addAction(wizard_action)
-        self.popupMenu.addAction(toolkit_action)
+        self.popupMenu.addAction(env_action)
         # self.popupMenu.addAction(preprocess_action)
         # self.popupMenu.addAction(explore_action)
         # self.popupMenu.addAction(model_action)
@@ -245,32 +246,34 @@ class Plugin:
 
         QgsApplication.processingRegistry().removeProvider(self.provider)
 
-    def open_wizard(self):
+    def open_wizard(self, page):
         self.settings = EISWizardSettings()
         if self.settings.get_dock_wizard_selection():
-            self.open_wizard_dock()
+            self.open_wizard_dock(page)
         else:
-            self.open_wizard_dialog()
+            self.open_wizard_dialog(page)
 
-    def open_wizard_dialog(self):
+    def open_wizard_dialog(self, page):
         self.wizard = EISWizardDialog()
         self.wizard.show()
+        self.wizard.content.menu_widget.setCurrentRow(page)
 
-    def open_wizard_dock(self):
+    def open_wizard_dock(self, page):
         self.wizard = EISWizardDocked()
         self.iface.addDockWidget(Qt.RightDockWidgetArea, self.wizard)
+        self.wizard.content.menu_widget.setCurrentRow(page)
 
-    def set_python_venv_path(self):
-        python_path, ok = QInputDialog.getText(
-            self.iface.mainWindow(),
-            "Set path to EIS Toolkit env",
-            "Path to Python environment with EIS Toolkit",
-            QLineEdit.Normal,
-            get_python_venv_path(),
-        )
+    # def set_python_venv_path(self):
+    #     python_path, ok = QInputDialog.getText(
+    #         self.iface.mainWindow(),
+    #         "Set path to EIS Toolkit env",
+    #         "Path to Python environment with EIS Toolkit",
+    #         QLineEdit.Normal,
+    #         get_python_venv_path(),
+    #     )
 
-        if ok and python_path:
-            save_python_venv_path(python_path)
+    #     if ok and python_path:
+    #         save_python_venv_path(python_path)
 
     # def open_proxy_settings(self):
     #     self.proxy_settings_window = EISWizardProxySettings()

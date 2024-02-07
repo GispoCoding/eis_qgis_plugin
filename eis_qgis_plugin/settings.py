@@ -8,6 +8,6 @@ def get_python_env_path():
     return settings.value(_ENV_KEY, "")
 
 
-def save_python_venv_path(path):
+def save_python_env_path(path):
     settings = QgsSettings()
     settings.setValue(_ENV_KEY, path)
