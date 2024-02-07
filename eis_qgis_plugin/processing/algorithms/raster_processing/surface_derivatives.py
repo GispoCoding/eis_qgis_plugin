@@ -23,7 +23,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
             "input_raster",
             "output_raster",
             "parameters",
-            "scaling_factor"
+            "scaling_factor", 
             "slope_tolerance",
             "slope_gradient_unit",
             "slope_direction_unit",
@@ -39,13 +39,13 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[2], description="Output raster"
+                name=self.alg_parameters[1], description="Output raster"
             )
         )
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[3],
+                name=self.alg_parameters[2],
                 options=["G", "A"],
                 description="List of surface parameters to be calculated.",
             )
@@ -53,7 +53,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[4],
+                name=self.alg_parameters[3],
                 optional=True,
                 defaultValue=1,
                 description="Scaling factor to be applied to the raster data set. Default to 1.",
@@ -62,7 +62,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[5],
+                name=self.alg_parameters[4],
                 optional=True,
                 defaultValue=0,
                 description="Tolerance value for flat pixels. Default to 0.",
@@ -71,8 +71,8 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[4],
-                options=["degrees", "radians", "rise"],
+                name=self.alg_parameters[5],
+                options=["radians", "degrees", "rise"],
                 defaultValue="radians",
                 description="Unit of the slope gradient parameter. Default to radians.",
             )
@@ -80,8 +80,8 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[5],
-                options=["degrees", "radians"],
+                name=self.alg_parameters[6],
+                options=["radians", "degrees"],
                 defaultValue="radians",
                 description="Unit of the slope direction parameter. Default to radians.",
             )
@@ -89,7 +89,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[6],
+                name=self.alg_parameters[7],
                 options=["Horn", "Evans", "Young", "Zevenbergen"],
                 defaultValue="Horn",
                 description="Method for calculating the coefficients. Default to the Horn (1981) method.",
@@ -98,8 +98,8 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[4],
-                options=["Evans", "Young", "Zevenbergen"],
+                name=self.alg_parameters[8],
+                options=["Young", "Evans", "Zevenbergen"],
                 defaultValue="Young",
                 description="Method for calculating the coefficients. Default to the Young (1978) method.",
             )
