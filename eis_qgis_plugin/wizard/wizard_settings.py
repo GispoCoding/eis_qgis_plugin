@@ -1,11 +1,11 @@
 from qgis.core import QgsSettings
-from qgis.gui import QgsColorButton
+from qgis.gui import QgsColorButton, QgsFileWidget
 from qgis.PyQt.QtGui import QColor
-from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDialog, QLineEdit, QPushButton, QWidget
+from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDialog, QPushButton, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
-_VENV_PATH_SETTING = "eis_qgis_plugin/python_venv_path"
+_ENV_PATH_SETTING = "eis_qgis_plugin/python_env_path"
 _DOCK_SETTING = "eis_qgis_plugin/dock_setting"
 _LAYER_GROUP_SETTING = "eis_qgis_plugin/layer_group_setting"
 _CATEGORICAL_PALETTE_SETTING = "eis_qgis_plugin/categorical_palette_setting"
@@ -13,7 +13,7 @@ _CONTINUOUS_PALETTE_SETTING = "eis_qgis_plugin/continuous_palette_setting"
 _COLOR_SETTING = "eis_qgis_plugin/default_color_setting"
 
 DEFAULTS = {
-    _VENV_PATH_SETTING: "",
+    _ENV_PATH_SETTING: "",
     _DOCK_SETTING: False,
     _LAYER_GROUP_SETTING: False,
     _CATEGORICAL_PALETTE_SETTING: "dark",
@@ -27,7 +27,7 @@ FORM_CLASS: QDialog = load_ui("wizard_settings.ui")
 
 class EISWizardSettings(QWidget, FORM_CLASS):
 
-    toolkit_venv_path: QLineEdit
+    toolkit_env_path: QgsFileWidget
     dock_wizard_selection: QCheckBox
     layer_group_selection: QCheckBox
     categorical_palette_selection: QComboBox
@@ -36,6 +36,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
     save_settings_btn: QPushButton
     reset_settings_btn: QPushButton
+
 
 
     def __init__(self, parent=None) -> None:
@@ -50,8 +51,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.load()  # Initialize UI from settings
 
     # INDIVIDUAL GET MEHTODS
-    def get_toolkit_venv_path(self):
-        key = _VENV_PATH_SETTING
+    def get_toolkit_env_path(self):
+        key = _ENV_PATH_SETTING
         return self.settings.value(key, DEFAULTS[key])
 
     def get_dock_wizard_selection(self):
@@ -75,9 +76,9 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         return self.settings.value(key) == "true" if key else DEFAULTS[key]
 
     # INDIVIDUAL SET METHODS
-    def set_toolkit_venv_path(self):
-        path = self.toolkit_venv_path.text()
-        self.settings.setValue(_VENV_PATH_SETTING, path)
+    def set_toolkit_env_path(self):
+        path = self.toolkit_env_path.text()
+        self.settings.setValue(_ENV_PATH_SETTING, path)
 
     def set_dock_wizard_selection(self):
         value = self.dock_wizard_selection.isChecked()
@@ -101,7 +102,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
     def load(self):
         """Load settings and set selections accordingly."""
-        self.toolkit_venv_path.setText(self.get_toolkit_venv_path())
+        self.toolkit_env_path.setText(self.get_toolkit_env_path())
         self.dock_wizard_selection.setChecked(self.get_dock_wizard_selection())
         self.default_color_selection.setColor(self.get_default_color())
         self.categorical_palette_selection.setCurrentText(self.get_default_categorical_palette())
@@ -110,7 +111,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
     def save(self):
         """Save current selections."""
-        self.set_toolkit_venv_path()
+        self.set_toolkit_env_path()
         self.set_dock_wizard_selection()
         self.set_color_selection()
         self.set_categorical_palette_selection()
@@ -119,7 +120,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
     def reset_to_defaults(self):
         """Set selections to defaults. Does not save."""
-        self.toolkit_venv_path.setText(DEFAULTS[_VENV_PATH_SETTING])
+        self.toolkit_env_path.setText(DEFAULTS[_ENV_PATH_SETTING])
         self.dock_wizard_selection.setChecked(DEFAULTS[_DOCK_SETTING])
         self.default_color_selection.setColor(DEFAULTS[_COLOR_SETTING])
         self.categorical_palette_selection.setCurrentText(DEFAULTS[_CATEGORICAL_PALETTE_SETTING])
