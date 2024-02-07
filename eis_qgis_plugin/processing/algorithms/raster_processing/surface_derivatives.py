@@ -1,24 +1,35 @@
 from qgis.core import (
     QgsProcessingParameterEnum,
     QgsProcessingParameterNumber,
+    QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISFirstOrder(EISProcessingAlgorithm):
+class EISSurfaceDerivatives(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "first order surface attributes"
-        self._display_name = "First Order Surface Attributes"
+        self._name = "surface derivatives"
+        self._display_name = "Surface Derivatives"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Calculate the second order surface attributes."
+        self._short_help_string = "Calculate the first and/or second order surface attributes."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["raster", "parameters", "scaling_factor", "slope_tolerance", "slope_gradient_unit", "slope_direction_unit", "method"]
+        self.alg_parameters = [
+            "input_raster",
+            "output_raster",
+            "parameters",
+            "scaling_factor"
+            "slope_tolerance",
+            "slope_gradient_unit",
+            "slope_direction_unit",
+            "first_order_method",
+            "second_order_method"
+        ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -27,8 +38,14 @@ class EISFirstOrder(EISProcessingAlgorithm):
         )
 
         self.addParameter(
+            QgsProcessingParameterRasterDestination(
+                name=self.alg_parameters[2], description="Output raster"
+            )
+        )
+
+        self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[1],
+                name=self.alg_parameters[3],
                 options=["G", "A"],
                 description="List of surface parameters to be calculated.",
             )
@@ -36,7 +53,7 @@ class EISFirstOrder(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[2],
+                name=self.alg_parameters[4],
                 optional=True,
                 defaultValue=1,
                 description="Scaling factor to be applied to the raster data set. Default to 1.",
@@ -45,7 +62,7 @@ class EISFirstOrder(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[3],
+                name=self.alg_parameters[5],
                 optional=True,
                 defaultValue=0,
                 description="Tolerance value for flat pixels. Default to 0.",
@@ -76,5 +93,14 @@ class EISFirstOrder(EISProcessingAlgorithm):
                 options=["Horn", "Evans", "Young", "Zevenbergen"],
                 defaultValue="Horn",
                 description="Method for calculating the coefficients. Default to the Horn (1981) method.",
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                name=self.alg_parameters[4],
+                options=["Evans", "Young", "Zevenbergen"],
+                defaultValue="Young",
+                description="Method for calculating the coefficients. Default to the Young (1978) method.",
             )
         )

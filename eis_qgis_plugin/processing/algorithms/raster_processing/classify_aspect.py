@@ -1,5 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterEnum,
+    QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
 )
 
@@ -17,7 +18,12 @@ class EISClassifyAspect(EISProcessingAlgorithm):
         self._short_help_string = "Classify an aspect raster data set."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["raster", "unit", "num_classes"]
+        self.alg_parameters = [
+            "input_raster",
+            "output_raster",
+            "unit",
+            "num_classes"
+        ]
 
         self.addParameter(
             QgsProcessingParameterRasterLayer(
@@ -26,8 +32,14 @@ class EISClassifyAspect(EISProcessingAlgorithm):
         )
 
         self.addParameter(
+            QgsProcessingParameterRasterDestination(
+                name=self.alg_parameters[1], description="Output raster"
+            )
+        )
+
+        self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[1],
+                name=self.alg_parameters[2],
                 options=["degrees", "radians"],
                 defaultValue="radians",
                 description="The unit of the input raster.",
@@ -36,9 +48,9 @@ class EISClassifyAspect(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterEnum(
-                name=self.alg_parameters[2],
-                options=[8, 16],
-                defaultValue=8,
+                name=self.alg_parameters[3],
+                options=["8", "16"],
+                defaultValue="8",
                 description="The number of classes for discretization. Either 8 or 16 classes allowed.",
             )
         )
