@@ -315,13 +315,24 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             feedback = QgsProcessingFeedback()
 
         arguments, arguments_with_name = self.prepare_arguments(parameters, context)
-        eis_executable = os.path.join(
-            get_python_venv_path(), self.get_bin_folder(), "eis"
-        )
-        cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments + arguments_with_name
-        results = {}
 
+        # eis_executable = os.path.join(
+        #     get_python_venv_path(), self.get_bin_folder(), "eis"
+        # )
+        # cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments + arguments_with_name
+        
+        python_exe = os.path.join(get_python_venv_path(), self.get_bin_folder(), "python")
+        cmd = [
+            python_exe,
+            "-m",
+            "eis_toolkit.cli",
+            (self.name() + "_cli").replace("_", "-")
+        ] + arguments + arguments_with_name
+
+        # For debugging
         print(cmd)
+
+        results = {}
 
         try:
             process = subprocess.Popen(
