@@ -12,7 +12,7 @@ class EISClassifyAspect(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "classify aspect"
-        self._display_name = "Classify Aspect"
+        self._display_name = "Classify aspect"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = "Classify an aspect raster data set."

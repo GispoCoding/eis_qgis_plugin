@@ -13,7 +13,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "surface derivatives"
-        self._display_name = "Surface Derivatives"
+        self._display_name = "Surface derivatives"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = "Calculate the first and/or second order surface attributes."
@@ -56,7 +56,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
                 name=self.alg_parameters[3],
                 optional=True,
                 defaultValue=1,
-                description="Scaling factor to be applied to the raster data set. Default to 1.",
+                description="Scaling factor to be applied to the raster data set. Defaults to 1.",
             )
         )
 
@@ -65,7 +65,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
                 name=self.alg_parameters[4],
                 optional=True,
                 defaultValue=0,
-                description="Tolerance value for flat pixels. Default to 0.",
+                description="Tolerance value for flat pixels. Defaults to 0.",
             )
         )
 
@@ -74,7 +74,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
                 name=self.alg_parameters[5],
                 options=["radians", "degrees", "rise"],
                 defaultValue="radians",
-                description="Unit of the slope gradient parameter. Default to radians.",
+                description="Unit of the slope gradient parameter. Defaults to radians.",
             )
         )
 
@@ -83,7 +83,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
                 name=self.alg_parameters[6],
                 options=["radians", "degrees"],
                 defaultValue="radians",
-                description="Unit of the slope direction parameter. Default to radians.",
+                description="Unit of the slope direction parameter. Defaults to radians.",
             )
         )
 
@@ -92,7 +92,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
                 name=self.alg_parameters[7],
                 options=["Horn", "Evans", "Young", "Zevenbergen"],
                 defaultValue="Horn",
-                description="Method for calculating the coefficients. Default to the Horn (1981) method.",
+                description="Method for calculating the coefficients. Defaults to the Horn (1981) method.",
             )
         )
 
@@ -101,6 +101,6 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
                 name=self.alg_parameters[8],
                 options=["Young", "Evans", "Zevenbergen"],
                 defaultValue="Young",
-                description="Method for calculating the coefficients. Default to the Young (1978) method.",
+                description="Method for calculating the coefficients. Defaults to the Young (1978) method.",
             )
         )
