@@ -31,76 +31,76 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
             "second_order_method"
         ]
 
-        self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Input raster"
-            )
+        input_raster_param = QgsProcessingParameterRasterLayer(
+            name=self.alg_parameters[0], description="Input raster"
         )
+        input_raster_param.setHelp("The input raster data set.")
+        self.addParameter(input_raster_param)
 
-        self.addParameter(
-            QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[1], description="Output raster"
-            )
+        output_raster_param = QgsProcessingParameterRasterDestination(
+            name=self.alg_parameters[1], description="Output raster"
         )
+        output_raster_param.setHelp("The output raster data set.")
+        self.addParameter(output_raster_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[2],
-                options=["G", "A"],
-                description="List of surface parameters to be calculated.",
-            )
+        surfce_parameters_param = QgsProcessingParameterEnum(
+            name=self.alg_parameters[2],
+            options=["G", "A"],
+            description="Surface parameters"
         )
+        surfce_parameters_param.setHelp("The list of surface parameters to be calculated.")
+        self.addParameter(surfce_parameters_param)
 
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[3],
-                optional=True,
-                defaultValue=1,
-                description="Scaling factor to be applied to the raster data set. Defaults to 1.",
-            )
+        scaling_factor_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[3],
+            optional=True,
+            defaultValue=1,
+            description="Scaling factor"
         )
+        scaling_factor_param.setHelp("The scaling factor to be applied to the raster data set. Defaults to 1.")
+        self.addParameter(scaling_factor_param)
 
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[4],
-                optional=True,
-                defaultValue=0,
-                description="Tolerance value for flat pixels. Defaults to 0.",
-            )
+        slope_tolerance_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[4],
+            optional=True,
+            defaultValue=0,
+            description="Tolerance value"
         )
+        slope_tolerance_param.setHelp("The tolerance value for flat pixels. Defaults to 0.")
+        self.addParameter(slope_tolerance_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[5],
-                options=["radians", "degrees", "rise"],
-                defaultValue="radians",
-                description="Unit of the slope gradient parameter. Defaults to radians.",
-            )
+        slope_gradient_unit_param = QgsProcessingParameterEnum(
+            name=self.alg_parameters[5],
+            options=["radians", "degrees", "rise"],
+            defaultValue="radians",
+            description="Slope gradient"
         )
+        slope_gradient_unit_param.setHelp("The unit of the slope gradient parameter. Defaults to radians.")
+        self.addParameter(slope_gradient_unit_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[6],
-                options=["radians", "degrees"],
-                defaultValue="radians",
-                description="Unit of the slope direction parameter. Defaults to radians.",
-            )
+        slope_direction_unit_param = QgsProcessingParameterEnum(
+            name=self.alg_parameters[6],
+            options=["radians", "degrees"],
+            defaultValue="radians",
+            description="Slope direction"
         )
+        slope_direction_unit_param.setHelp("The unit of the slope direction parameter. Defaults to radians.")
+        self.addParameter(slope_direction_unit_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[7],
-                options=["Horn", "Evans", "Young", "Zevenbergen"],
-                defaultValue="Horn",
-                description="Method for calculating the coefficients. Defaults to the Horn (1981) method.",
-            )
+        first_order_method_param = QgsProcessingParameterEnum(
+            name=self.alg_parameters[7],
+            options=["Horn", "Evans", "Young", "Zevenbergen"],
+            defaultValue="Horn",
+            description="First order method"
         )
+        first_order_method_param.setHelp("The method for calculating the first order coefficients. Defaults to the Horn (1981) method.")
+        self.addParameter(first_order_method_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[8],
-                options=["Young", "Evans", "Zevenbergen"],
-                defaultValue="Young",
-                description="Method for calculating the coefficients. Defaults to the Young (1978) method.",
-            )
+        second_order_method_param = QgsProcessingParameterEnum(
+            name=self.alg_parameters[8],
+            options=["Young", "Evans", "Zevenbergen"],
+            defaultValue="Young",
+            description="Second order method"
         )
+        second_order_method_param.setHelp("The method for calculating the second order coefficients. Defaults to the Young (1978) method.")
+        self.addParameter(second_order_method_param)
