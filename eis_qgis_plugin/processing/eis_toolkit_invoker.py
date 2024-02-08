@@ -225,14 +225,18 @@ class EISToolkitInvoker:
         return results
 
 
-    def verify_validity(self) -> Tuple[bool, str]:
-        # Determine the Python executable based on OS
+    def check_environment_validity(self) -> Tuple[bool, str]:
+        """
+        Checks if EIS Toolkit can be found in the specified Python environment.
+
+        Probes the environment by opening Python using subprocess and trying to import EIS Toolkit.
+        
+        Returns:
+            True or false indicating whether EIS Toolkit was found.
+            Message describing verification results.
+        """
         python_executable = "python.exe" if os.name == "nt" else "python"
         python_path = os.path.join(self.python_env_path, self.get_bin_directory(), python_executable)
-
-        # Check if the Python executable exists
-        if not os.path.isfile(python_path):
-            return False, "The specified path does not contain a valid Python executable."
 
         # Attempt to import the toolkit using the specified Python executable
         try:
@@ -246,9 +250,9 @@ class EISToolkitInvoker:
                 universal_newlines=True
             )
             if 'Toolkit found' in result.stdout:
-                return True, "The toolkit is correctly installed in the specified environment."
+                return True, "Valid: EIS Toolkit found in the env."
             else:
-                return False, "The toolkit could not be found in the specified environment."
+                return False, "Invalid: Toolkit not found in the env."
         except subprocess.CalledProcessError as e:
             # Python command failed, likely because the toolkit is not installed
             return False, f"Failed to import the toolkit. Error: {e.stderr}"

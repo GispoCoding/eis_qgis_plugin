@@ -46,67 +46,66 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
         self.env_toolkit_validity_label: QLabel
         self.env_directory_validity_label: QLabel
-        self.verify_toolkit_env_path_btn: QPushButton
+        self.check_for_toolkit_btn: QPushButton
 
         self.settings = QgsSettings()
 
         self.save_settings_btn.clicked.connect(self.save)
         self.reset_settings_btn.clicked.connect(self.reset_to_defaults)
-        self.verify_toolkit_env_path_btn.clicked.connect(self.verify_toolkit_env_path)
+        self.check_for_toolkit_btn.clicked.connect(self.check_for_eis_toolkit)
         self.toolkit_env_path.fileChanged.connect(self.check_for_python_executable)
 
         self.load()  # Initialize UI from settings
 
 
-    def verify_toolkit_env_path(self):
-        toolkit_invoker = EISToolkitInvoker(self.toolkit_env_path.filePath())
-        result, message = toolkit_invoker.verify_validity()
+    def check_for_eis_toolkit(self) -> bool:
+        """
+        Checks if the selected Python environment has EIS Toolkit correctly installed.
+        
+        Updates a label to show whether the selected environment has EIS Toolkit installed.
+        """
+        env_path = self.toolkit_env_path.filePath()
+        if self.check_for_python_executable(env_path) is False:
+            self.env_toolkit_validity_label.setText("Invalid: The environment is not correctly configured.")
+            self.env_toolkit_validity_label.setStyleSheet("color: orange;")
+            return False
 
-        if result:
-            self.env_toolkit_validity_label.setText("Valid: EIS Toolkit found in the env.")
-            self.env_toolkit_validity_label.setStyleSheet("color: green;")
-        else:
-            self.env_toolkit_validity_label.setText("Invalid: Toolkit not found in the env.")
-            self.env_toolkit_validity_label.setStyleSheet("color: red;")
+        toolkit_invoker = EISToolkitInvoker(env_path)
+        result, message = toolkit_invoker.check_environment_validity()
 
+        self.env_toolkit_validity_label.setText(message)
+        self.env_toolkit_validity_label.setStyleSheet("color: green;" if result else "color: red;")
+        
+        return result
     
-    def check_for_python_executable(self, new_path):
+    def check_for_python_executable(self, env_path: str) -> bool:
+        """
+        Checks if a Python executable is found in the selected directory (i.e. if it is a Python env).
+        
+        Updates a label to show whether the selected directory is a valid Python environment directory.
+        """
         self.env_toolkit_validity_label.setText("-")
         self.env_toolkit_validity_label.setStyleSheet("color: black;")
-
-        if new_path == "":
-            self.env_directory_validity_label.setText("-")
-            self.env_directory_validity_label.setStyleSheet("color: black;")
 
         if os.name == "nt":
             python_exe = "Scripts/python.exe"
         else:
             python_exe = "bin/python"
 
-        exe_path = os.path.join(new_path, python_exe)
+        if env_path == "":
+            self.env_directory_validity_label.setText("-")
+            self.env_directory_validity_label.setStyleSheet("color: black;")
+            return False
+
+        exe_path = os.path.join(env_path, python_exe)
         if os.path.exists(exe_path):
             self.env_directory_validity_label.setText("Valid: Python executable found.")
             self.env_directory_validity_label.setStyleSheet("color: green;")
+            return True
         else:
             self.env_directory_validity_label.setText("Invalid: No Python executable found.")
             self.env_directory_validity_label.setStyleSheet("color: red;")
-
-
-    def getPythonExecutablePath(self, directoryPath):
-        """
-        Check for the presence of a Python executable in the given directory.
-        """
-        if os.name == "nt":
-            pythonExecutable = "python.exe"
-        else:
-            pythonExecutable = "python"
-        
-        # Construct the expected path to the executable
-        executablePath = os.path.join(directoryPath, self.get_bin_directory(), pythonExecutable)
-        
-        if os.path.exists(executablePath):
-            return executablePath
-        return None
+            return False
 
 
     # INDIVIDUAL GET MEHTODS
