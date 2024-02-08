@@ -43,7 +43,7 @@ class EISClassifyAspect(EISProcessingAlgorithm):
             defaultValue="radians",
             description="Unit",
         )
-        unit_param.setHelp("The unit of the input raster.")
+        unit_param.setHelp("The unit of the input raster. Defaults to radians.")
         self.addParameter(unit_param)
 
         num_classes_param = QgsProcessingParameterEnum(

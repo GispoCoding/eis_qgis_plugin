@@ -93,7 +93,9 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
             defaultValue="Horn",
             description="First order method"
         )
-        first_order_method_param.setHelp("The method for calculating the first order coefficients. Defaults to the Horn (1981) method.")
+        first_order_method_param.setHelp(
+            "The method for calculating the first order coefficients. Defaults to the Horn (1981) method."
+        )
         self.addParameter(first_order_method_param)
 
         second_order_method_param = QgsProcessingParameterEnum(
@@ -102,5 +104,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
             defaultValue="Young",
             description="Second order method"
         )
-        second_order_method_param.setHelp("The method for calculating the second order coefficients. Defaults to the Young (1978) method.")
+        second_order_method_param.setHelp(
+            "The method for calculating the second order coefficients. Defaults to the Young (1978) method."
+        )
         self.addParameter(second_order_method_param)
