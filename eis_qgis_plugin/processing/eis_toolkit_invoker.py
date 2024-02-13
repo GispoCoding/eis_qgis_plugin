@@ -230,7 +230,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
     def verify_toolkit(self) -> Tuple[bool, str]:
         try:
-            cmd = [self.docker_path, "run", "--rm", self.image_name, "python", "-c", "import eis_toolkit"]
+            cmd = [self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "-c", "import eis_toolkit"]
             subprocess.run(
                 cmd,
                 check=True,
