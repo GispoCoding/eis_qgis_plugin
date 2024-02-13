@@ -223,6 +223,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
+            return True, "Docker installation OK and image found."
         except subprocess.CalledProcessError:
             return False, f"Docker image '{self.image_name}' not found."
 
