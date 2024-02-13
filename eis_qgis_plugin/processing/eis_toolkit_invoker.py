@@ -21,7 +21,7 @@ class EISToolkitInvoker:
     RESULTS_PREFIX = "Results:"
     DEBUG = True
 
-    def __init__(self, env_type = "venv", venv_directory = None, docker_image_name = None):
+    def __init__(self, env_type = "venv", venv_directory = None, docker_path = None, docker_image_name = None):
         """
         Initializes the EISToolkitInvoker with the path to the Python environment and its type.
 
@@ -33,7 +33,7 @@ class EISToolkitInvoker:
         if env_type == "venv":
             self.environment_handler = VenvEnvironmentHandler(venv_directory)
         elif env_type == "docker":
-            self.environment_handler = DockerEnvironmentHandler(docker_image_name)
+            self.environment_handler = DockerEnvironmentHandler(docker_path, docker_image_name)
         else:
             raise ValueError(f"Unsupported environment type: {self.env_type}")
 
@@ -187,12 +187,13 @@ class EnvironmentHandler:
 
 class DockerEnvironmentHandler(EnvironmentHandler):
 
-    def __init__(self, image_name: str) -> None:
+    def __init__(self, docker_path: str, image_name: str) -> None:
+        self.docker_path = docker_path
         self.image_name = image_name
         
 
     def get_invocation_cmd(self) -> List[str]:
-        return ["docker", "run", "--rm", self.image_name]
+        return [self.docker_path, "run", "--rm", self.image_name]
 
 
     def verify_environment(self) -> Tuple[bool, str]:
@@ -201,7 +202,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
         # 1. Check if Docker is available
         try:
-            cmd = ["docker", "--version"]
+            cmd = [self.docker_path, "--version"]
             subprocess.run(
                 cmd,
                 check=True,
@@ -215,7 +216,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
         # 2. Check if the Docker image exists
         try:
-            cmd = ["docker", "image", "inspect", self.image_name]
+            cmd = [self.docker_path, "image", "inspect", self.image_name]
             subprocess.run(
                 cmd,
                 check=True,
@@ -228,7 +229,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
     def verify_toolkit(self) -> Tuple[bool, str]:
         try:
-            cmd = ["docker", "run", "--rm", self.image_name, "python", "-c", "import eis_toolkit"]
+            cmd = [self.docker_path, "run", "--rm", self.image_name, "python", "-c", "import eis_toolkit"]
             subprocess.run(
                 cmd,
                 check=True,

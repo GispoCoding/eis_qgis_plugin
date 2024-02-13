@@ -8,6 +8,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 _ENVIRONMENT_SELECTION_SETTING = "eis_qgis_plugin/environment_selection"
 _VENV_DIRECTORY_SETTING = "eis_qgis_plugin/venv_path"
+_DOCKER_PATH_SETTING = "eis_qgis_plugin/docker_path"
 _DOCKER_IMAGE_SETTING = "eis_qgis_plugin/docker_image_name"
 _DOCK_SETTING = "eis_qgis_plugin/dock_setting"
 _LAYER_GROUP_SETTING = "eis_qgis_plugin/layer_group_setting"
@@ -17,6 +18,7 @@ _COLOR_SETTING = "eis_qgis_plugin/default_color_setting"
 
 DEFAULTS = {
     _ENVIRONMENT_SELECTION_SETTING: "venv",
+    _DOCKER_PATH_SETTING: "",
     _VENV_DIRECTORY_SETTING: "",
     _DOCKER_IMAGE_SETTING: "",
     _DOCK_SETTING: False,
@@ -60,6 +62,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.venv_directory: QgsFileWidget
 
         self.docker_selection: QRadioButton
+        self.docker_path_label: QLabel
+        self.docker_path: QgsFileWidget
         self.docker_image_name_label: QLabel
         self.docker_image_name: QLineEdit
 
@@ -88,6 +92,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         if docker_selected:
             self.env_type = "docker"
 
+            self.docker_path.setEnabled(True)
+            self.docker_path_label.setEnabled(True)
             self.docker_image_name.setEnabled(True)
             self.docker_image_name_label.setEnabled(True)
 
@@ -96,6 +102,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         else:
             self.env_type = "venv"
 
+            self.docker_path.setEnabled(False)
+            self.docker_path_label.setEnabled(False)
             self.docker_image_name.setEnabled(False)
             self.docker_image_name_label.setEnabled(False)
 
@@ -105,11 +113,12 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
     def verify_environment_and_toolkit(self):
         venv_directory = self.venv_directory.filePath()
+        docker_path = self.docker_path.filePath()
         image_name = self.docker_image_name.text()
         
         self.reset_verification_labels()
     
-        toolkit_invoker = EISToolkitInvoker(self.env_type, venv_directory, image_name)
+        toolkit_invoker = EISToolkitInvoker(self.env_type, venv_directory, docker_path, image_name)
         env_result, env_message = toolkit_invoker.verify_environment()
         self.environment_validity_label.setText(env_message)
         if env_result:
@@ -133,6 +142,10 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
     def get_venv_directory(self):
         key = _VENV_DIRECTORY_SETTING
+        return self.settings.value(key, DEFAULTS[key])
+    
+    def get_docker_path(self):
+        key = _DOCKER_PATH_SETTING
         return self.settings.value(key, DEFAULTS[key])
     
     def get_docker_image_name(self):
@@ -167,6 +180,10 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         directory = self.venv_directory.filePath()
         self.settings.setValue(_VENV_DIRECTORY_SETTING, directory)
 
+    def set_docker_path(self):
+        path = self.docker_path.filePath()
+        self.settings.setValue(_DOCKER_PATH_SETTING, path)
+
     def set_docker_image_name(self):
         image_name = self.docker_image_name.text()
         self.settings.setValue(_DOCKER_IMAGE_SETTING, image_name)
@@ -196,6 +213,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.venv_selection.setChecked(self.get_environment_selection() == "venv")
         self.docker_selection.setChecked(self.get_environment_selection() == "docker")
         self.venv_directory.setFilePath(self.get_venv_directory())
+        self.docker_path.setFilePath(self.get_docker_path())
         self.docker_image_name.setText(self.get_docker_image_name())
         self.dock_wizard_selection.setChecked(self.get_dock_wizard_selection())
         self.default_color_selection.setColor(self.get_default_color())
@@ -207,6 +225,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         """Save current selections."""
         self.set_environment_selection()
         self.set_venv_directory()
+        self.set_docker_path()
         self.set_docker_image_name()
         self.set_dock_wizard_selection()
         self.set_color_selection()
@@ -219,6 +238,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.venv_selection.setChecked(DEFAULTS[_ENVIRONMENT_SELECTION_SETTING] == "venv")
         self.docker_selection.setChecked(DEFAULTS[_ENVIRONMENT_SELECTION_SETTING] == "docker")
         self.venv_directory.setFilePath(DEFAULTS[_VENV_DIRECTORY_SETTING])
+        self.docker_path.setFilePath(DEFAULTS[_DOCKER_PATH_SETTING])
         self.docker_image_name.setText(DEFAULTS[_DOCKER_IMAGE_SETTING])
         self.dock_wizard_selection.setChecked(DEFAULTS[_DOCK_SETTING])
         self.default_color_selection.setColor(DEFAULTS[_COLOR_SETTING])
