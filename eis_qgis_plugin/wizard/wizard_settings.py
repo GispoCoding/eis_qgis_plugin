@@ -11,6 +11,7 @@ _VENV_DIRECTORY_SETTING = "eis_qgis_plugin/venv_path"
 _DOCKER_PATH_SETTING = "eis_qgis_plugin/docker_path"
 _DOCKER_IMAGE_SETTING = "eis_qgis_plugin/docker_image_name"
 _DOCKER_HOST_FOLDER = "eis_qgis_plugin/docker_host_folder"
+_DOCKER_TEMP_FOLDER = "eis_qgis_plugin/docker_temp_folder"
 _DOCK_SETTING = "eis_qgis_plugin/dock_setting"
 _LAYER_GROUP_SETTING = "eis_qgis_plugin/layer_group_setting"
 _CATEGORICAL_PALETTE_SETTING = "eis_qgis_plugin/categorical_palette_setting"
@@ -23,6 +24,7 @@ DEFAULTS = {
     _VENV_DIRECTORY_SETTING: "",
     _DOCKER_IMAGE_SETTING: "",
     _DOCKER_HOST_FOLDER: "",
+    _DOCKER_TEMP_FOLDER: "",
     _DOCK_SETTING: False,
     _LAYER_GROUP_SETTING: False,
     _CATEGORICAL_PALETTE_SETTING: "dark",
@@ -70,6 +72,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.docker_image_name: QLineEdit
         self.docker_host_folder_label: QLabel
         self.docker_host_folder: QgsFileWidget
+        self.docker_temp_folder_label: QLabel
+        self.docker_temp_folder: QgsFileWidget
 
         self.toolkit_validity_label: QLabel
         self.environment_validity_label: QLabel
@@ -102,6 +106,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
             self.docker_image_name_label.setEnabled(True)
             self.docker_host_folder.setEnabled(True)
             self.docker_host_folder_label.setEnabled(True)
+            self.docker_temp_folder.setEnabled(True)
+            self.docker_temp_folder_label.setEnabled(True)
 
             self.venv_directory.setEnabled(False)
             self.venv_directory_label.setEnabled(False)
@@ -114,6 +120,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
             self.docker_image_name_label.setEnabled(False)
             self.docker_host_folder.setEnabled(False)
             self.docker_host_folder_label.setEnabled(False)
+            self.docker_temp_folder.setEnabled(False)
+            self.docker_temp_folder_label.setEnabled(False)
 
             self.venv_directory.setEnabled(True)
             self.venv_directory_label.setEnabled(True)
@@ -164,6 +172,10 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         key = _DOCKER_HOST_FOLDER
         return self.settings.value(key, DEFAULTS[key])
 
+    def get_docker_temp_folder(self):
+        key = _DOCKER_TEMP_FOLDER
+        return self.settings.value(key, DEFAULTS[key])
+
     def get_dock_wizard_selection(self):
         key = _DOCK_SETTING
         return self.settings.value(key, "") == "true" if key else DEFAULTS[key]
@@ -205,6 +217,10 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         folder = self.docker_host_folder.filePath()
         self.settings.setValue(_DOCKER_HOST_FOLDER, folder)
 
+    def set_docker_temp_folder(self):
+        folder = self.docker_temp_folder.filePath()
+        self.settings.setValue(_DOCKER_TEMP_FOLDER, folder)
+
     def set_dock_wizard_selection(self):
         selection = self.dock_wizard_selection.isChecked()
         self.settings.setValue(_DOCK_SETTING, "true" if selection else "")
@@ -233,6 +249,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.docker_path.setFilePath(self.get_docker_path())
         self.docker_image_name.setText(self.get_docker_image_name())
         self.docker_host_folder.setFilePath(self.get_docker_host_folder())
+        self.docker_temp_folder.setFilePath(self.get_docker_temp_folder())
         self.dock_wizard_selection.setChecked(self.get_dock_wizard_selection())
         self.default_color_selection.setColor(self.get_default_color())
         self.categorical_palette_selection.setCurrentText(self.get_default_categorical_palette())
@@ -246,6 +263,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.set_docker_path()
         self.set_docker_image_name()
         self.set_docker_host_folder()
+        self.set_docker_temp_folder()
         self.set_dock_wizard_selection()
         self.set_color_selection()
         self.set_categorical_palette_selection()
@@ -260,6 +278,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.docker_path.setFilePath(DEFAULTS[_DOCKER_PATH_SETTING])
         self.docker_image_name.setText(DEFAULTS[_DOCKER_IMAGE_SETTING])
         self.docker_host_folder.setFilePath(DEFAULTS[_DOCKER_HOST_FOLDER])
+        self.docker_temp_folder.setFilePath(DEFAULTS[_DOCKER_TEMP_FOLDER])
         self.dock_wizard_selection.setChecked(DEFAULTS[_DOCK_SETTING])
         self.default_color_selection.setColor(DEFAULTS[_COLOR_SETTING])
         self.categorical_palette_selection.setCurrentText(DEFAULTS[_CATEGORICAL_PALETTE_SETTING])

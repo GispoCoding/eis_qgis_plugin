@@ -5,22 +5,17 @@ import subprocess
 import time
 from typing import List, Tuple
 
-from qgis.core import (
-    QgsProcessingFeedback,
-    QgsProject,
-    QgsRasterLayer,
-)
+from qgis.core import QgsProcessingFeedback, QgsProject, QgsRasterLayer
+
+DEBUG = True
 
 
 class EISToolkitInvoker:
     """Class that handles communication between EIS QGIS plugin and EIS Toolkit."""
 
-    EIS_CLI_MODULE = "eis_toolkit.cli"
     PROGRESS_PREFIX = "Progress:"
     OUT_RASTERS_PREFIX = "Output rasters:"
     RESULTS_PREFIX = "Results:"
-    DEBUG = True
-    DOCKER_FOLDER_PATH = "/data_folder"
 
     def __init__(self, env_type = None, venv_directory = None, docker_path = None, docker_image_name = None):
         """
@@ -37,7 +32,8 @@ class EISToolkitInvoker:
         venv_directory = eis_settings.get_venv_directory() if venv_directory is None else venv_directory
         docker_path = eis_settings.get_docker_path() if docker_path is None else docker_path
         docker_image_name = eis_settings.get_docker_image_name() if docker_image_name is None else docker_image_name
-        self.host_folder = eis_settings.get_docker_host_folder()
+        host_folder = eis_settings.get_docker_host_folder()
+        temp_folder = eis_settings.get_docker_temp_folder()
 
         if env_type == "venv":
             self.environment_handler = VenvEnvironmentHandler(venv_directory)
@@ -45,8 +41,8 @@ class EISToolkitInvoker:
             self.environment_handler = DockerEnvironmentHandler(
                 docker_path,
                 docker_image_name,
-                self.host_folder,
-                self.DOCKER_FOLDER_PATH
+                host_folder,
+                temp_folder
             )
         else:
             raise ValueError(f"Unsupported environment type: {env_type}")
@@ -108,26 +104,11 @@ class EISToolkitInvoker:
             typer_args: List of arguments for the Typer CLI.
             typer_options: List of options for the Typer CLI.
         """
-        typer_args = [arg.replace("\\", "/") for arg in typer_args]
-        typer_options = [opt.replace("\\", "/") for opt in typer_options]
-        if isinstance(self.environment_handler, DockerEnvironmentHandler):
-            for arg in typer_args:
-                if "/" in arg:
-                    arg = arg.replace(self.host_folder, self.DOCKER_FOLDER_PATH)
-
-            for opt in typer_options:
-                if "/" in opt:
-                    opt = opt.replace(self.host_folder, self.DOCKER_FOLDER_PATH)
-
-        self.cmd = [
-            *self.environment_handler.get_invocation_cmd(),
-            self.EIS_CLI_MODULE,
-            self._format_algorithm_name(alg_name),
-            *typer_args,
-            *typer_options
-        ]
+        formatted_alg_name = self._format_algorithm_name(alg_name)
+        self.cmd = self.environment_handler.assemble_cli_cmd(formatted_alg_name, typer_args, typer_options)
         
-        if self.DEBUG:
+        if DEBUG:
+            print(f"Assembled command: {self.cmd}")
             logging.debug("Assembled CLI command: %s", self.cmd)
 
 
@@ -200,6 +181,11 @@ class EISToolkitInvoker:
 
 class EnvironmentHandler:
 
+    EIS_CLI_MODULE = "eis_toolkit.cli"
+
+    def assemble_cli_cmd() -> List[str]:
+        raise NotImplementedError
+    
     def get_invocation_cmd() -> List[str]:
         raise NotImplementedError
 
@@ -212,25 +198,71 @@ class EnvironmentHandler:
 
 class DockerEnvironmentHandler(EnvironmentHandler):
 
-    def __init__(self, docker_path: str, image_name: str, host_folder: str, docker_folder: str) -> None:
+    DOCKER_DATA_FOLDER = "/data_folder"
+    DOCKER_TEMP_FOLDER = "/temp"
+
+    def __init__(self, docker_path: str, image_name: str, host_folder: str, temp_folder: str) -> None:
         self.docker_path = docker_path
         self.image_name = image_name
         self.host_folder = host_folder
-        self.docker_folder = docker_folder
+        self.temp_folder = temp_folder
+
+        self.mount_host = False
+        self.mount_temp = False
+
+
+    def assemble_cli_cmd(self, alg_name: str, typer_args: List[str], typer_options: List[str]):
+        typer_args = self.modify_paths(typer_args)
+        typer_options = self.modify_paths(typer_options)
+
+        return [
+            *self.get_invocation_cmd(),
+            self.EIS_CLI_MODULE,
+            alg_name,
+            *typer_args,
+            *typer_options
+        ]
 
 
     def get_invocation_cmd(self) -> List[str]:
-        return [
+        mount_host_cmd = ["-v", f"{self.host_folder}:{self.DOCKER_DATA_FOLDER}"] if self.mount_host else []
+        mount_temp_cmd = ["-v", f"{self.temp_folder}:{self.DOCKER_TEMP_FOLDER}"] if self.mount_temp else []
+        if DEBUG:
+            print("Mounted host folder") if mount_host_cmd is not [] else print("Did not mount host folder")
+            print("Mounted temp folder") if mount_temp_cmd is not [] else print("Did not mount temp folder")
+        cmd = [
             self.docker_path,
             "run",
             "--rm",
-            "-v", f"{self.host_folder}:{self.docker_folder}",
+            *mount_host_cmd,
+            *mount_temp_cmd,
             self.image_name,
             "poetry",
             "run",
             "python",
             "-m"
         ]
+        return cmd
+
+
+    def modify_paths(self, arguments: List[str]) -> List[str]:
+        """Modify path arguments to match container directory and convert path Windows -> Unix."""
+        for i, argument in enumerate(arguments):
+            if "/" in argument or "\\" in argument:
+                if self.host_folder in argument:
+                    modified_path_argument = argument.replace(self.host_folder, self.DOCKER_DATA_FOLDER)
+                    self.mount_host = True
+                elif self.temp_folder in argument:
+                    modified_path_argument = argument.replace(self.temp_folder, self.DOCKER_TEMP_FOLDER)
+                    self.mount_temp = True
+                else:
+                    raise ValueError(f"Parameter path points to a folder not specified for Docker: {argument}")
+                modified_path_argument = modified_path_argument.replace("\\", "/")
+                arguments[i] = modified_path_argument
+                if DEBUG:
+                    print(f"Path: {argument} replaced with {modified_path_argument} for Docker call")
+
+        return arguments
 
 
     def verify_environment(self) -> Tuple[bool, str]:
@@ -283,7 +315,6 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
 class VenvEnvironmentHandler(EnvironmentHandler):
 
-    MODULE_FLAG = "-m"
     BIN_DIRECTORY = "Scripts" if os.name == "nt" else "bin"
     PYTHON_EXE = "python.exe" if os.name == "nt" else "python"
 
@@ -292,8 +323,18 @@ class VenvEnvironmentHandler(EnvironmentHandler):
         self.python_path = os.path.join(venv_directory, self.BIN_DIRECTORY, self.PYTHON_EXE)
 
 
+    def assemble_cli_cmd(self, alg_name: str, typer_args: List[str], typer_options: List[str]):
+        return [
+            *self.get_invocation_cmd(),
+            self.EIS_CLI_MODULE,
+            alg_name,
+            *typer_args,
+            *typer_options
+        ]
+
+
     def get_invocation_cmd(self) -> List[str]:
-        return [self.python_path, self.MODULE_FLAG]
+        return [self.python_path, "-m"]
 
 
     def verify_environment(self) -> Tuple[bool, str]:
