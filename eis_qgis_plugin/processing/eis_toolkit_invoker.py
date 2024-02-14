@@ -101,6 +101,9 @@ class EISToolkitInvoker:
             typer_args: List of arguments for the Typer CLI.
             typer_options: List of options for the Typer CLI.
         """
+        typer_args = [arg.replace("\\", "/") for arg in typer_args]
+        typer_options = [opt.replace("\\", "/") for opt in typer_options]
+
         self.cmd = [
             *self.environment_handler.get_invocation_cmd(),
             self.EIS_CLI_MODULE,
