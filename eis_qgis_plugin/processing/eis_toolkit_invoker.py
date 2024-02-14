@@ -11,6 +11,8 @@ from qgis.core import (
     QgsRasterLayer,
 )
 
+from ..wizard.wizard_settings import EISWizardSettings
+
 
 class EISToolkitInvoker:
     """Class that handles communication between EIS QGIS plugin and EIS Toolkit."""
@@ -21,7 +23,7 @@ class EISToolkitInvoker:
     RESULTS_PREFIX = "Results:"
     DEBUG = True
 
-    def __init__(self, env_type = "venv", venv_directory = None, docker_path = None, docker_image_name = None):
+    def __init__(self, env_type = None, venv_directory = None, docker_path = None, docker_image_name = None):
         """
         Initializes the EISToolkitInvoker with the path to the Python environment and its type.
 
@@ -30,12 +32,18 @@ class EISToolkitInvoker:
             env_type: Type of the Python environment. This determines how the CLI call is assembled.
             docker_image_name: 
         """
+        eis_settings = EISWizardSettings()
+        env_type = eis_settings.get_environment_selection() if env_type is None else env_type
+        venv_directory = eis_settings.get_venv_directory() if venv_directory is None else venv_directory
+        docker_path = eis_settings.get_docker_path() if docker_path is None else docker_path
+        docker_image_name = eis_settings.get_docker_image_name() if docker_image_name is None else docker_image_name
+
         if env_type == "venv":
             self.environment_handler = VenvEnvironmentHandler(venv_directory)
         elif env_type == "docker":
             self.environment_handler = DockerEnvironmentHandler(docker_path, docker_image_name)
         else:
-            raise ValueError(f"Unsupported environment type: {self.env_type}")
+            raise ValueError(f"Unsupported environment type: {env_type}")
 
         self.cmd = []
 
@@ -190,10 +198,10 @@ class DockerEnvironmentHandler(EnvironmentHandler):
     def __init__(self, docker_path: str, image_name: str) -> None:
         self.docker_path = docker_path
         self.image_name = image_name
-        
+
 
     def get_invocation_cmd(self) -> List[str]:
-        return [self.docker_path, "run", "--rm", self.image_name]
+        return [self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-m"]
 
 
     def verify_environment(self) -> Tuple[bool, str]:
@@ -230,7 +238,9 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
     def verify_toolkit(self) -> Tuple[bool, str]:
         try:
-            cmd = [self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "-c", "import eis_toolkit"]
+            cmd = [
+                self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-c", "import eis_toolkit"
+            ]
             subprocess.run(
                 cmd,
                 check=True,

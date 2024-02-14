@@ -29,8 +29,6 @@ from qgis.core import (
     QgsProcessingParameterVectorLayer,
 )
 
-from eis_qgis_plugin.settings import get_python_env_path
-
 from .eis_toolkit_invoker import EISToolkitInvoker
 
 
@@ -315,10 +313,10 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             feedback = QgsProcessingFeedback()
 
         typer_args, typer_options = self.prepare_arguments(parameters, context)
-
-        toolkit_invoker = EISToolkitInvoker(get_python_env_path())
-        toolkit_invoker.assemble_cli_call(self.name(), typer_args, typer_options)
-        results = toolkit_invoker.run(feedback)
+        
+        toolkit_invoker = EISToolkitInvoker()
+        toolkit_invoker.assemble_cli_command(self.name(), typer_args, typer_options)
+        results = toolkit_invoker.run_toolkit_command(feedback)
 
         self.get_results(results, parameters)
 
