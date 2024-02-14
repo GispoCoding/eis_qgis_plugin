@@ -2,6 +2,7 @@ from qgis.core import QgsSettings
 from qgis.gui import QgsColorButton, QgsFileWidget
 from qgis.PyQt.QtGui import QColor
 from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDialog, QLabel, QLineEdit, QPushButton, QRadioButton, QWidget
+from qgis.utils import iface
 
 from eis_qgis_plugin.processing.eis_toolkit_invoker import EISToolkitInvoker
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -270,6 +271,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.set_continuous_palette_selection()
         self.set_layer_group_selection()
 
+        iface.messageBar().pushSuccess("Success:", "Saved EIS QGIS plugin settings.")
+
     def reset_settings_to_default(self):
         """Set selections to defaults. Does not save."""
         self.venv_selection.setChecked(DEFAULTS[_ENVIRONMENT_SELECTION_SETTING] == "venv")
@@ -284,3 +287,5 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.categorical_palette_selection.setCurrentText(DEFAULTS[_CATEGORICAL_PALETTE_SETTING])
         self.continuous_palette_selection.setCurrentText(DEFAULTS[_CONTINUOUS_PALETTE_SETTING])
         self.layer_group_selection.setChecked(DEFAULTS[_LAYER_GROUP_SETTING])
+
+        iface.messageBar().pushInfo("Info:", "EIS QGIS plugin settings reset.")

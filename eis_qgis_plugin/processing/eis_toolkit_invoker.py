@@ -18,14 +18,7 @@ class EISToolkitInvoker:
     RESULTS_PREFIX = "Results:"
 
     def __init__(self, env_type = None, venv_directory = None, docker_path = None, docker_image_name = None):
-        """
-        Initializes the EISToolkitInvoker with the path to the Python environment and its type.
-
-        Args:
-            python_env_path: Path to the Python executable or environment.
-            env_type: Type of the Python environment. This determines how the CLI call is assembled.
-            docker_image_name: 
-        """
+        """Initializes the EISToolkitInvoker."""
         from ..wizard.wizard_settings import EISWizardSettings
         eis_settings = EISWizardSettings()
         env_type = eis_settings.get_environment_selection() if env_type is None else env_type
