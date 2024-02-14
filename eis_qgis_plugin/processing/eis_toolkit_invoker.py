@@ -20,6 +20,7 @@ class EISToolkitInvoker:
     OUT_RASTERS_PREFIX = "Output rasters:"
     RESULTS_PREFIX = "Results:"
     DEBUG = True
+    DOCKER_FOLDER_PATH = "/data_folder"
 
     def __init__(self, env_type = None, venv_directory = None, docker_path = None, docker_image_name = None):
         """
@@ -36,6 +37,7 @@ class EISToolkitInvoker:
         venv_directory = eis_settings.get_venv_directory() if venv_directory is None else venv_directory
         docker_path = eis_settings.get_docker_path() if docker_path is None else docker_path
         docker_image_name = eis_settings.get_docker_image_name() if docker_image_name is None else docker_image_name
+        self.host_folder = eis_settings.get_docker_host_folder()
 
         if env_type == "venv":
             self.environment_handler = VenvEnvironmentHandler(venv_directory)
@@ -103,6 +105,10 @@ class EISToolkitInvoker:
         """
         typer_args = [arg.replace("\\", "/") for arg in typer_args]
         typer_options = [opt.replace("\\", "/") for opt in typer_options]
+        if isinstance(self.environment_handler, DockerEnvironmentHandler):
+            for arg in typer_args:
+                if "/" in arg:
+                    arg = arg.replace(self.host_folder, self.DOCKER_FOLDER_PATH)
 
         self.cmd = [
             *self.environment_handler.get_invocation_cmd(),
@@ -203,7 +209,17 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
 
     def get_invocation_cmd(self) -> List[str]:
-        return [self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-m"]
+        return [
+            self.docker_path,
+            "run",
+            "--rm",
+            "-v", f"{self.host_folder}:{self.DOCKER_FOLDER_PATH}",
+            self.image_name,
+            "poetry",
+            "run",
+            "python",
+            "-m"
+        ]
 
 
     def verify_environment(self) -> Tuple[bool, str]:
