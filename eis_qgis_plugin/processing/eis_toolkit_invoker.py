@@ -42,7 +42,12 @@ class EISToolkitInvoker:
         if env_type == "venv":
             self.environment_handler = VenvEnvironmentHandler(venv_directory)
         elif env_type == "docker":
-            self.environment_handler = DockerEnvironmentHandler(docker_path, docker_image_name)
+            self.environment_handler = DockerEnvironmentHandler(
+                docker_path,
+                docker_image_name,
+                self.host_folder,
+                self.DOCKER_FOLDER_PATH
+            )
         else:
             raise ValueError(f"Unsupported environment type: {env_type}")
 
@@ -203,9 +208,11 @@ class EnvironmentHandler:
 
 class DockerEnvironmentHandler(EnvironmentHandler):
 
-    def __init__(self, docker_path: str, image_name: str) -> None:
+    def __init__(self, docker_path: str, image_name: str, host_folder: str, docker_folder: str) -> None:
         self.docker_path = docker_path
         self.image_name = image_name
+        self.host_folder = host_folder
+        self.docker_folder = docker_folder
 
 
     def get_invocation_cmd(self) -> List[str]:
@@ -213,7 +220,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
             self.docker_path,
             "run",
             "--rm",
-            "-v", f"{self.host_folder}:{self.DOCKER_FOLDER_PATH}",
+            "-v", f"{self.host_folder}:{self.docker_folder}",
             self.image_name,
             "poetry",
             "run",
