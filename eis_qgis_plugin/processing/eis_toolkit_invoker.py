@@ -115,6 +115,10 @@ class EISToolkitInvoker:
                 if "/" in arg:
                     arg = arg.replace(self.host_folder, self.DOCKER_FOLDER_PATH)
 
+            for opt in typer_options:
+                if "/" in opt:
+                    opt = opt.replace(self.host_folder, self.DOCKER_FOLDER_PATH)
+
         self.cmd = [
             *self.environment_handler.get_invocation_cmd(),
             self.EIS_CLI_MODULE,
