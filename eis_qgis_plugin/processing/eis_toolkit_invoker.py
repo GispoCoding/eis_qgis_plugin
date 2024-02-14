@@ -11,8 +11,6 @@ from qgis.core import (
     QgsRasterLayer,
 )
 
-from ..wizard.wizard_settings import EISWizardSettings
-
 
 class EISToolkitInvoker:
     """Class that handles communication between EIS QGIS plugin and EIS Toolkit."""
@@ -32,6 +30,7 @@ class EISToolkitInvoker:
             env_type: Type of the Python environment. This determines how the CLI call is assembled.
             docker_image_name: 
         """
+        from ..wizard.wizard_settings import EISWizardSettings
         eis_settings = EISWizardSettings()
         env_type = eis_settings.get_environment_selection() if env_type is None else env_type
         venv_directory = eis_settings.get_venv_directory() if venv_directory is None else venv_directory
