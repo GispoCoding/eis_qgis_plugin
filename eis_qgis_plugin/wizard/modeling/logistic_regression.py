@@ -1,34 +1,45 @@
 from qgis import processing
 from qgis.gui import QgsSpinBox
-from qgis.PyQt.QtWidgets import (
-    QComboBox,
-    QWidget,
-)
+from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
-from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.modeling.model_template import EISModel, ModelType
-
-FORM_CLASS: QWidget = load_ui("model/wizard_model_logistic_regression_2.ui")
+from eis_qgis_plugin.wizard.modeling.ml_model_template import EISModel, ModelType
 
 
-class EISWizardLogisticRegression(EISModel, FORM_CLASS):
+class EISWizardLogisticRegression(EISModel):
     """
     Class for logistic regression.
     """
-    penalty: QComboBox
-    max_iter: QgsSpinBox
-    solver: QComboBox
-    verbose: QgsSpinBox
-    random_state: QgsSpinBox
-
 
     def __init__(self, parent) -> None:
-        self.parameter_box_collapse_effect = 170
-        self.start_height = 591
-
         super().__init__(parent, ModelType.CLASSIFIER)
 
+        self.add_model_parameters()
+        self.add_general_model_parameters()
+
         super().initialize_classifier()
+
+    
+    def add_model_parameters(self):
+        """Add parameter widgets for Logistic Regression model."""
+        self.penalty_label = QLabel()
+        self.penalty_label.setText("Penalty")
+        self.penalty = QComboBox()
+        self.penalty.addItems(["l2", "l1", "elasicnet", "None"])
+        self.train_parameter_box.layout().addRow(self.penalty_label, self.penalty)
+
+        self.max_iter_label = QLabel()
+        self.max_iter_label.setText("Max iter")
+        self.max_iter = QgsSpinBox()
+        self.max_iter.setMinimum(1)
+        self.max_iter.setMaximum(1000)
+        self.max_iter.setValue(100)
+        self.train_parameter_box.layout().addRow(self.max_iter_label, self.max_iter)
+
+        self.solver_label = QLabel()
+        self.solver_label.setText("Solver")
+        self.solver = QComboBox()
+        self.solver.addItems(["lbfgs", "liblinear", "newton-cg", "newton-cholesky", "sag", "saga"])
+        self.train_parameter_box.layout().addRow(self.solver_label, self.solver)
 
 
     def set_tooltips(self):

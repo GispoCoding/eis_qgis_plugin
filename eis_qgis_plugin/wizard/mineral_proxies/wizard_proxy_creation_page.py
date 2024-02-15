@@ -3,9 +3,9 @@ from qgis import processing
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
-from ..explore.wizard_explore import EISWizardExplore
+# from ..explore. import EISWizardExplore
 
-FORM_CLASS: QWizardPage = load_ui("preprocess/wizard_proxy_creation.ui")
+FORM_CLASS: QWizardPage = load_ui("mineral_proxies/wizard_proxy_creation.ui")
 
 
 class EISWizardProxyCreation(QWizardPage, FORM_CLASS):
@@ -13,7 +13,7 @@ class EISWizardProxyCreation(QWizardPage, FORM_CLASS):
         super().__init__()
         self.setupUi(self)
 
-        self.open_explore_btn.clicked.connect(self.open_explore)
+        # self.open_explore_btn.clicked.connect(self.open_explore)
 
         self.extract_by_attribute_btn.clicked.connect(
             lambda: processing.execAlgorithmDialog("qgis:extractbyattribute", {})
@@ -39,6 +39,6 @@ class EISWizardProxyCreation(QWizardPage, FORM_CLASS):
         )
         # self.binarize_btn.clicked.connect(processing.execAlgorithmDialog("eis:", {}) )
 
-    def open_explore(self):
-        self.explore_window = EISWizardExplore(self)
-        self.explore_window.show()
+    # def open_explore(self):
+    #     self.explore_window = EISWizardExplore(self)
+    #     self.explore_window.show()

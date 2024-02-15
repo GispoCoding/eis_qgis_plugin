@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>571</width>
-    <height>594</height>
+    <width>561</width>
+    <height>639</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,7 +33,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="plot_data_box_2">
+    <widget class="QGroupBox" name="evidence_data_groupbox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
        <horstretch>0</horstretch>
@@ -41,30 +41,13 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Training data</string>
+      <string>Evidence data</string>
      </property>
-     <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="training_data_label">
-        <property name="text">
-         <string>X</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="y_label">
-        <property name="text">
-         <string>Y</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QgsMapLayerComboBox" name="y"/>
-      </item>
-      <item row="0" column="1">
-       <widget class="QTableWidget" name="training_data">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QTableWidget" name="evidence_data">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -75,6 +58,9 @@
           <height>75</height>
          </size>
         </property>
+        <attribute name="horizontalHeaderStretchLastSection">
+         <bool>false</bool>
+        </attribute>
         <column>
          <property name="text">
           <string>Data</string>
@@ -96,112 +82,32 @@
     </widget>
    </item>
    <item>
-    <widget class="QgsCollapsibleGroupBox" name="parameter_box">
+    <widget class="QGroupBox" name="label_data_groupbox">
+     <property name="title">
+      <string>Labels</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QgsMapLayerComboBox" name="label_data"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="parameter_box">
      <property name="title">
       <string>Model parameters</string>
      </property>
-     <property name="collapsed">
-      <bool>false</bool>
-     </property>
-     <layout class="QFormLayout" name="formLayout_3">
+     <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="penalty_label">
+       <widget class="QLabel" name="n_estimators_label">
         <property name="text">
-         <string>Penalty</string>
+         <string>N estimators</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="penalty">
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>l2</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>l1</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>elasicnet</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>None</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="max_iter_label">
-        <property name="text">
-         <string>Max iter</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="solver_label">
-        <property name="text">
-         <string>Solver</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="solver">
-        <item>
-         <property name="text">
-          <string>lbfgs</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>liblinear</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>newton-cg</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>newton-cholesky</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>sag</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>saga</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="verbose_label">
-        <property name="text">
-         <string>Verbose</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="random_state_label">
-        <property name="text">
-         <string>Random state</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QgsSpinBox" name="max_iter">
+       <widget class="QgsSpinBox" name="n_estimators">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -213,10 +119,54 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="criterion_label">
+        <property name="text">
+         <string>Criterion</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="criterion"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="max_depth_label">
+        <property name="text">
+         <string>Max depth</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QgsSpinBox" name="max_depth">
+        <property name="specialValueText">
+         <string>None</string>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>3</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="verbose_label">
+        <property name="text">
+         <string>Verbose</string>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="1">
        <widget class="QgsSpinBox" name="verbose">
         <property name="maximum">
          <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="random_state_label">
+        <property name="text">
+         <string>Random state</string>
         </property>
        </widget>
       </item>
@@ -240,11 +190,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QgsCollapsibleGroupBox" name="validation_box">
+    <widget class="QGroupBox" name="validation_box">
      <property name="title">
       <string>Validation settings</string>
      </property>
-     <layout class="QFormLayout" name="formLayout_2">
+     <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0">
        <widget class="QLabel" name="validation_method_label">
         <property name="text">
@@ -288,6 +238,22 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="1">
+       <widget class="QgsSpinBox" name="split_size">
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>99</number>
+        </property>
+        <property name="value">
+         <number>20</number>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="cv_folds_label">
         <property name="text">
@@ -318,22 +284,6 @@
       <item row="3" column="1">
        <widget class="QComboBox" name="validation_metric"/>
       </item>
-      <item row="1" column="1">
-       <widget class="QgsSpinBox" name="split_size">
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>99</number>
-        </property>
-        <property name="value">
-         <number>20</number>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -359,12 +309,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QgsCollapsibleGroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>qgscollapsiblegroupbox.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>QgsFileWidget</class>
    <extends>QWidget</extends>

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>995</width>
-    <height>791</height>
+    <width>870</width>
+    <height>836</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="modeling_tabs">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="model_data_preparation_tab">
       <attribute name="title">
-       <string>Model data preparation</string>
+       <string>Data preparation</string>
       </attribute>
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="label_129">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -36,7 +36,7 @@
         <string>Optional guidance based on model?</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="comboBox_4">
+      <widget class="QComboBox" name="comboBox_5">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -61,7 +61,7 @@
         </property>
        </item>
       </widget>
-      <widget class="QFrame" name="frame_2">
+      <widget class="QFrame" name="frame_3">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -82,7 +82,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QLabel" name="label_9">
+       <widget class="QLabel" name="label_130">
         <property name="geometry">
          <rect>
           <x>310</x>
@@ -95,7 +95,7 @@
          <string>Training data preparation</string>
         </property>
        </widget>
-       <widget class="QWidget" name="layoutWidget_5">
+       <widget class="QWidget" name="layoutWidget_18">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -104,51 +104,51 @@
           <height>213</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_13">
+        <layout class="QVBoxLayout" name="verticalLayout_36">
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="pushButton_11">
            <property name="text">
             <string>Binary</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_4">
+          <widget class="QPushButton" name="pushButton_16">
            <property name="text">
             <string>Min-max</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_7">
+          <widget class="QPushButton" name="pushButton_17">
            <property name="text">
             <string>Clip</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_5">
+          <widget class="QPushButton" name="pushButton_18">
            <property name="text">
             <string>Log</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_6">
+          <widget class="QPushButton" name="pushButton_19">
            <property name="text">
             <string>Winsorize</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_8">
+          <widget class="QPushButton" name="pushButton_20">
            <property name="text">
             <string>Z-score norm.</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_9">
+          <widget class="QPushButton" name="pushButton_21">
            <property name="text">
             <string>Sigmoid</string>
            </property>
@@ -156,7 +156,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_131">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -169,7 +169,7 @@
          <string>Data transformations</string>
         </property>
        </widget>
-       <widget class="Line" name="line_2">
+       <widget class="Line" name="line_7">
         <property name="geometry">
          <rect>
           <x>270</x>
@@ -182,7 +182,7 @@
          <enum>Qt::Vertical</enum>
         </property>
        </widget>
-       <widget class="QWidget" name="layoutWidget_6">
+       <widget class="QWidget" name="layoutWidget_19">
         <property name="geometry">
          <rect>
           <x>310</x>
@@ -191,9 +191,9 @@
           <height>151</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_14">
+        <layout class="QVBoxLayout" name="verticalLayout_37">
          <item>
-          <widget class="QPushButton" name="pushButton_12">
+          <widget class="QPushButton" name="pushButton_22">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -203,7 +203,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_13">
+          <widget class="QPushButton" name="pushButton_23">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -213,7 +213,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_14">
+          <widget class="QPushButton" name="pushButton_24">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -223,7 +223,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_15">
+          <widget class="QPushButton" name="pushButton_25">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -233,7 +233,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_10">
+          <widget class="QPushButton" name="pushButton_26">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -245,7 +245,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QLabel" name="label_13">
+      <widget class="QLabel" name="label_132">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -259,19 +259,24 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="feature_engineering_tab">
       <attribute name="title">
-       <string>Model training</string>
+       <string>Feature engineering</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_8">
+     </widget>
+     <widget class="QWidget" name="train_ml_model_tab">
+      <attribute name="title">
+       <string>Train ML model</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_38">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QHBoxLayout" name="horizontalLayout_28">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
+          <layout class="QVBoxLayout" name="verticalLayout_39">
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
+            <layout class="QVBoxLayout" name="verticalLayout_40">
              <item>
-              <widget class="QLabel" name="label_3">
+              <widget class="QLabel" name="label_133">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -293,7 +298,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBox_2">
+              <widget class="QComboBox" name="comboBox_3">
                <item>
                 <property name="text">
                  <string>Random forest – classifier</string>
@@ -324,7 +329,7 @@
             </layout>
            </item>
            <item>
-            <spacer name="verticalSpacer_2">
+            <spacer name="verticalSpacer_5">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -340,9 +345,9 @@
             </spacer>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
+            <layout class="QVBoxLayout" name="verticalLayout_41">
              <item>
-              <widget class="QLabel" name="label_5">
+              <widget class="QLabel" name="label_134">
                <property name="font">
                 <font>
                  <weight>75</weight>
@@ -355,37 +360,35 @@
               </widget>
              </item>
              <item>
-              <layout class="QFormLayout" name="formLayout_5">
+              <layout class="QFormLayout" name="formLayout_13">
                <item row="0" column="0">
-                <widget class="QLabel" name="lossLabel_2">
+                <widget class="QLabel" name="lossLabel_3">
                  <property name="text">
                   <string>Loss</string>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="QComboBox" name="lossComboBox_2">
-                 <item>
-                  <property name="text">
-                   <string>log_loss</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>exponential</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
                <item row="1" column="0">
-                <widget class="QLabel" name="learningRateLabel_2">
+                <widget class="QLabel" name="learningRateLabel_3">
                  <property name="text">
                   <string>Learning rate</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QgsDoubleSpinBox" name="learningRateQgsDoubleSpinBox_2">
+                <widget class="QgsDoubleSpinBox" name="learningRateQgsDoubleSpinBox_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>26</height>
+                  </size>
+                 </property>
                  <property name="minimum">
                   <double>0.000000000000000</double>
                  </property>
@@ -395,14 +398,26 @@
                 </widget>
                </item>
                <item row="2" column="0">
-                <widget class="QLabel" name="nEstimatorsLabel_2">
+                <widget class="QLabel" name="nEstimatorsLabel_3">
                  <property name="text">
                   <string>N estimators</string>
                  </property>
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QgsSpinBox" name="nEstimatorsQgsSpinBox_2">
+                <widget class="QgsSpinBox" name="nEstimatorsQgsSpinBox_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>26</height>
+                  </size>
+                 </property>
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -415,14 +430,26 @@
                 </widget>
                </item>
                <item row="3" column="0">
-                <widget class="QLabel" name="maxDepthLabel_2">
+                <widget class="QLabel" name="maxDepthLabel_3">
                  <property name="text">
                   <string>Max depth</string>
                  </property>
                 </widget>
                </item>
                <item row="3" column="1">
-                <widget class="QgsSpinBox" name="maxDepthQgsSpinBox_2">
+                <widget class="QgsSpinBox" name="maxDepthQgsSpinBox_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>26</height>
+                  </size>
+                 </property>
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -432,14 +459,26 @@
                 </widget>
                </item>
                <item row="4" column="0">
-                <widget class="QLabel" name="subsampleLabel_2">
+                <widget class="QLabel" name="subsampleLabel_3">
                  <property name="text">
                   <string>Subsample</string>
                  </property>
                 </widget>
                </item>
                <item row="4" column="1">
-                <widget class="QgsDoubleSpinBox" name="subsampleQgsDoubleSpinBox_2">
+                <widget class="QgsDoubleSpinBox" name="subsampleQgsDoubleSpinBox_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>26</height>
+                  </size>
+                 </property>
                  <property name="minimum">
                   <double>0.010000000000000</double>
                  </property>
@@ -451,14 +490,28 @@
                  </property>
                 </widget>
                </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="lossComboBox_3">
+                 <item>
+                  <property name="text">
+                   <string>log_loss</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>exponential</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
               </layout>
              </item>
             </layout>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_9">
+            <layout class="QVBoxLayout" name="verticalLayout_42">
              <item>
-              <widget class="QLabel" name="label_19">
+              <widget class="QLabel" name="label_135">
                <property name="font">
                 <font>
                  <weight>75</weight>
@@ -474,12 +527,12 @@
               </widget>
              </item>
              <item>
-              <widget class="QgsFileWidget" name="mQgsFileWidget_2"/>
+              <widget class="QgsFileWidget" name="mQgsFileWidget_3"/>
              </item>
             </layout>
            </item>
            <item>
-            <spacer name="verticalSpacer">
+            <spacer name="verticalSpacer_6">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -495,9 +548,9 @@
             </spacer>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
+            <layout class="QVBoxLayout" name="verticalLayout_43">
              <item>
-              <widget class="QLabel" name="label_7">
+              <widget class="QLabel" name="label_136">
                <property name="font">
                 <font>
                  <weight>75</weight>
@@ -510,35 +563,35 @@
               </widget>
              </item>
              <item>
-              <layout class="QFormLayout" name="formLayout_7">
+              <layout class="QFormLayout" name="formLayout_14">
                <item row="0" column="0">
-                <widget class="QLabel" name="label_10">
+                <widget class="QLabel" name="label_137">
                  <property name="text">
                   <string>X (data)</string>
                  </property>
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_3"/>
+                <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_6"/>
                </item>
                <item row="1" column="0">
-                <widget class="QLabel" name="label_4">
+                <widget class="QLabel" name="label_138">
                  <property name="text">
                   <string>y (labels)</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_4"/>
+                <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_7"/>
                </item>
               </layout>
              </item>
             </layout>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
+            <layout class="QVBoxLayout" name="verticalLayout_44">
              <item>
-              <widget class="QLabel" name="label_6">
+              <widget class="QLabel" name="label_139">
                <property name="font">
                 <font>
                  <weight>75</weight>
@@ -551,16 +604,16 @@
               </widget>
              </item>
              <item>
-              <layout class="QFormLayout" name="formLayout_6">
+              <layout class="QFormLayout" name="formLayout_15">
                <item row="0" column="0">
-                <widget class="QLabel" name="testMethodLabel_5">
+                <widget class="QLabel" name="testMethodLabel_7">
                  <property name="text">
                   <string>Test method</string>
                  </property>
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QComboBox" name="testMethodComboBox_5">
+                <widget class="QComboBox" name="testMethodComboBox_6">
                  <item>
                   <property name="text">
                    <string>Simple split</string>
@@ -589,14 +642,14 @@
                 </widget>
                </item>
                <item row="1" column="0">
-                <widget class="QLabel" name="testMethodLabel_6">
+                <widget class="QLabel" name="testMethodLabel_8">
                  <property name="text">
                   <string>Metrics</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QgsCheckableComboBox" name="mComboBox">
+                <widget class="QgsCheckableComboBox" name="mComboBox_2">
                  <property name="checkedItems">
                   <stringlist/>
                  </property>
@@ -643,14 +696,20 @@
                 </widget>
                </item>
                <item row="2" column="0">
-                <widget class="QLabel" name="simpleSplitSizeLabel_3">
+                <widget class="QLabel" name="simpleSplitSizeLabel_4">
                  <property name="text">
                   <string>Simple split size</string>
                  </property>
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimum">
                   <double>0.010000000000000</double>
                  </property>
@@ -663,14 +722,26 @@
                 </widget>
                </item>
                <item row="3" column="0">
-                <widget class="QLabel" name="crossValidationFoldsLabel_3">
+                <widget class="QLabel" name="crossValidationFoldsLabel_4">
                  <property name="text">
                   <string>Cross-validation folds</string>
                  </property>
                 </widget>
                </item>
                <item row="3" column="1">
-                <widget class="QgsSpinBox" name="crossValidationFoldsQgsSpinBox_3">
+                <widget class="QgsSpinBox" name="crossValidationFoldsQgsSpinBox_4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>26</height>
+                  </size>
+                 </property>
                  <property name="minimum">
                   <number>2</number>
                  </property>
@@ -684,7 +755,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="pushButton_27">
              <property name="text">
               <string>Start training</string>
              </property>
@@ -693,10 +764,10 @@
           </layout>
          </item>
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame_4">
            <property name="minimumSize">
             <size>
-             <width>600</width>
+             <width>500</width>
              <height>0</height>
             </size>
            </property>
@@ -706,33 +777,33 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_10">
+           <layout class="QVBoxLayout" name="verticalLayout_45">
             <item>
-             <widget class="QTabWidget" name="tabWidget_2">
+             <widget class="QTabWidget" name="tabWidget_4">
               <property name="currentIndex">
                <number>0</number>
               </property>
-              <widget class="QWidget" name="tab_4">
+              <widget class="QWidget" name="tab_6">
                <attribute name="title">
                 <string>Training log</string>
                </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_11">
+               <layout class="QVBoxLayout" name="verticalLayout_46">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_3">
+                 <layout class="QVBoxLayout" name="verticalLayout_47">
                   <item>
-                   <widget class="QTextBrowser" name="textBrowser"/>
+                   <widget class="QTextBrowser" name="textBrowser_2"/>
                   </item>
                   <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_4">
+                   <layout class="QHBoxLayout" name="horizontalLayout_29">
                     <item>
-                     <widget class="QLabel" name="label_14">
+                     <widget class="QLabel" name="label_140">
                       <property name="text">
                        <string>Progress</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QProgressBar" name="progressBar">
+                     <widget class="QProgressBar" name="progressBar_2">
                       <property name="value">
                        <number>24</number>
                       </property>
@@ -744,13 +815,13 @@
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="tab_5">
+              <widget class="QWidget" name="tab_7">
                <attribute name="title">
                 <string>Training results</string>
                </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_12">
+               <layout class="QVBoxLayout" name="verticalLayout_48">
                 <item>
-                 <widget class="QTableWidget" name="tableWidget">
+                 <widget class="QTableWidget" name="tableWidget_2">
                   <property name="alternatingRowColors">
                    <bool>true</bool>
                   </property>
@@ -927,7 +998,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="label">
+                 <widget class="QLabel" name="label_141">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -952,28 +1023,19 @@
         </layout>
        </item>
        <item>
-        <widget class="Line" name="line">
+        <widget class="Line" name="line_8">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
       </layout>
-      <zorder>layoutWidget</zorder>
-      <zorder>frame</zorder>
-      <zorder>label_7</zorder>
-      <zorder>layoutWidget_2</zorder>
-      <zorder>layoutWidget_4</zorder>
-      <zorder>layoutWidget</zorder>
-      <zorder>layoutWidget_3</zorder>
-      <zorder>label_6</zorder>
-      <zorder>line</zorder>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="predict_with_ml_model_tab">
       <attribute name="title">
-       <string>Predict</string>
+       <string>Predict with ML model</string>
       </attribute>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget_20">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -982,20 +1044,20 @@
          <height>27</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout_30">
         <item>
-         <widget class="QLabel" name="label_11">
+         <widget class="QLabel" name="label_142">
           <property name="text">
-           <string>Load model</string>
+           <string>Load ML model</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QgsFileWidget" name="mQgsFileWidget"/>
+         <widget class="QgsFileWidget" name="mQgsFileWidget_4"/>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget_21">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -1004,9 +1066,9 @@
          <height>27</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout" name="horizontalLayout_31">
         <item>
-         <widget class="QLabel" name="label_12">
+         <widget class="QLabel" name="label_143">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -1019,11 +1081,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_5"/>
+         <widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_8"/>
         </item>
        </layout>
       </widget>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="pushButton_28">
        <property name="geometry">
         <rect>
          <x>210</x>
@@ -1037,16 +1099,92 @@
        </property>
       </widget>
      </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
+     <widget class="QWidget" name="predict_tab">
+      <attribute name="title">
+       <string>Predict</string>
+      </attribute>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>80</y>
+         <width>131</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Model parameters</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>260</y>
+         <width>89</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Run</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>20</y>
+         <width>255</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Model type</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>Weights of evidence</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Fuzzy overlay</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="layoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>110</y>
+         <width>202</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>param1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -1066,6 +1204,7 @@
    <class>QgsFileWidget</class>
    <extends>QWidget</extends>
    <header>qgsfilewidget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QgsMapLayerComboBox</class>
@@ -1079,38 +1218,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
