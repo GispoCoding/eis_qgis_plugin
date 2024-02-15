@@ -272,7 +272,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
                 stderr=subprocess.PIPE
             )
         except FileNotFoundError:
-            return False, "Docker is not installed or not found in the system's PATH."
+            return False, f"Docker not found at '{self.docker_path}'"
         except subprocess.CalledProcessError as e:
             return False, f"Docker is installed but cannot be executed. Error: {e.stderr}"
 
