@@ -38,45 +38,54 @@ EIS QGIS Plugin is a product of the EIS Horizon EU project, which seeks to imple
 
 EIS QGIS Plugin uses [EIS Toolkit](https://github.com/GispoCoding/eis_toolkit) as its computational backend.
 
+> [!NOTE]  
+> EIS QGIS Plugin is still in active development. See [roadmap](#roadmap) for more details.
+
 
 ## Getting started
 TODO
 
+
 ### Prerequisites
-TODO
+- QGIS
 
 ### Installation
-TODO
+- Either:
+  - Download relase ZIP from GitHub
+  - Download from QGIS repo
+- Install EIS Toolkit
+- Configure install location / environment 
+
 
 ## Usage
+
+### EIS Wizard
+- Click EIS icon in plugins navbar (screenshot here)
+- Make sure EIS Toolkit is configured
+- Start working!
+- More info somewhere?
+
+
+### EIS Processing
+- You can use processing algorithms individually for maximum flexibility
+- Can leverage QGIS Model builder for custom workflows 
+
 
 ### EIS Wizard design
 The objective of EIS Wizard is to provide guidance and a convenient interface to use EIS Processing Algorithms in approriate ways. Since EIS Processing Algorithms already implement handy and concise interfaces for the tools, in some cases EIS Wizard will forward the user to run some processing algorithm, and in other cases another customized interface is created for the task.
 
-The current plan is that EIS Wizard will have the following pages:
+EIS Wizard will have at least the following pages:
 
-**Mineral system proxies**
-
-This page let's the user to choose their mineral system and study scale (custom option possible). A list of mineral deposit proxies is presented based on the selections and the user can process their raw data to produce a set of the proxies.
-
-**EDA (Explorative Data Analysis)**
-
-In EDA page, the user can produce basic plots of their data. Other exploratory methods and data inspection is also made available in this page.
-
-**Modeling**
-
-The Modeling page consists of preparing/preprocessing data for modeling, the model creation itself and model validation.
-
-**Settings**
-
-In settings page, users can customize the behaviour of EIS Wizard, for example the install location of EIS Toolkit, default values for some input fields and the UI.
-
-**About**
-
-About page has information about EIS QGIS Plugin and EIS project.
+- **Mineral system proxies**: This page let's the user to choose their mineral system and study scale (custom option possible). A list of mineral deposit proxies is presented based on the selections and the user can process their raw data to produce a set of the proxies.
+- **EDA (Explorative Data Analysis)**: In EDA page, the user can produce basic exploratory plots, calculate statistics and use various exploratory methods.
+- **Modeling**: The Modeling page facilitates model specific data preparation and running models. For machine learning models, training, application and testing are available separately.
+- **Settings**: In Settings page, users can customize the behaviour of EIS Wizard and define the environment with EIS Toolkit installation
+- **About**: The About page has information about EIS QGIS Plugin and EIS project.
 
 ## Roadmap
-TODO
+- Beta release in April 2024.
+- v1 release in TBD
+
 
 ## License
-Licensed under GPL 2 later.
+Licensed under GPL 2 or later.
