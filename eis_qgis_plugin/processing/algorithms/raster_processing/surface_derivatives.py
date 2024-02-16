@@ -12,7 +12,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "surface derivatives"
+        self._name = "surface_derivatives"
         self._display_name = "Surface derivatives"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
@@ -45,7 +45,21 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
 
         surfce_parameters_param = QgsProcessingParameterEnum(
             name=self.alg_parameters[2],
-            options=["G", "A"],
+            options=[
+                "G",
+                "A",
+                "planc",
+                "profc",
+                "profc_min",
+                "profc_max",
+                "longc",
+                "crosc",
+                "rot",
+                "K",
+                "genc",
+                "tangc"
+            ],
+            allowMultiple=True,
             description="Surface parameters"
         )
         surfce_parameters_param.setHelp("The list of surface parameters to be calculated.")
