@@ -11,6 +11,9 @@
   <a href="https://github.com/astral-sh/ruff">
     <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json"
   /></a>
+  <a href="https://github.com/GispoCoding/eis_qgis_plugin/actions/workflows/code-style.ym">
+    <img src="https://github.com/GispoCoding/eis_qgis_plugin/actions/workflows/code-style.yml/badge.svg?branch=master"
+  /></a>
   <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html">
     <img src="https://img.shields.io/badge/License-GPL_v2-blue.svg"
   /></a>
