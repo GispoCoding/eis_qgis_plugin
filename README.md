@@ -33,7 +33,7 @@
 </p>
 
 
-# Introduction
+## Introduction
 
 EIS (_Exploration Information Systems_) QGIS Plugin is a tool with graphical user interface for prospectivity mapping of critical raw materials.
 
