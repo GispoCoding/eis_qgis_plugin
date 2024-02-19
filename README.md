@@ -94,7 +94,7 @@ EIS Wizard is divided into different parts each with their own functionality.
 
 
 ### EIS Processing
-EIS Processing Algorithms allow using all EIS tools separately and freely. They can be used in combination with EIS Wizard to increase flexibility, or exclusively for those that don't want the guidance of EIS Wizard. If you don't have Processing Toolbox open in QGIS, it can opened by clicking **Processing** and selecting **Toolbox** (or with `CTRL+ALT+T` shortcut) To find EIS Processing Algorithms in Processing Toolbox, you can look for the **EIS** entry in the list or use the search bar.
+EIS Processing Algorithms allow using all EIS tools separately and freely. They can be used in combination with EIS Wizard to increase flexibility, or exclusively for those that don't want the guidance of EIS Wizard. If you don't have Processing Toolbox open in QGIS, it can opened by clicking **Processing** and selecting **Toolbox** (or with `CTRL+ALT+T` shortcut). To find EIS Processing Algorithms in Processing Toolbox, you can look for the **EIS** entry in the list or use the search bar.
 
 ![image](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/0e1e8b63-594e-4061-b0b5-b89ccb9bb6b5)
 
@@ -102,13 +102,13 @@ EIS Processing Algorithms can be launched by double-clicking an algorithm. In th
 
 ![image](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/6eabe812-5360-406b-a9ff-150e5a09f44e)
 
-
 > [!TIP]
 > EIS Processing Algorithms, like all algorithms in QGIS Processing Toolbox, can be used to create and save custom workflows in QGIS Model Designer. 
 
-
 ## Roadmap
-- Beta release in April 2024.
+- Milestone 1: Beta release 1 (April 2024). At this stage, the plugin should have the basic funtionalities required for a full MPM workflow implemented. Official testing phase begins. The plugin will be still under active development.
+- Milestone 2: Beta release 2 (October 2024). All features should be incorporated at this time and the plugin useful for actual MPM work. Testing will continue and potential bugs will be fixed and the user experience refined.
+- Milestone 3: Final release (April 2025). The plugin is considered complete and fully functional, and the EIS project ends. After this, the plugin will be maintained and bugs fixed, but majority of further work will lie on the shoulders of the open source community.
 
 
 ## Contributing
