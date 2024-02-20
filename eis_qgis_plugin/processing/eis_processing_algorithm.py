@@ -221,9 +221,20 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             # TODO
             elif isinstance(param, QgsProcessingParameterEnum):
-                # param_value = self.parameterAsEnumString(parameters, name, context).lower()  # Bugged in some QGIS v?
-                idx = self.parameterAsEnum(parameters, name, context)
-                param_value = param.options()[idx].lower()
+                if param.allowMultiple():
+                    indices = self.parameterAsEnums(parameters, name, context)
+                    for idx in indices:
+                        typer_options.append(param_name)
+                        typer_options.append(param.options()[idx])
+                    continue
+                else:
+                    # The following bugged in some QGIS v?
+                    # param_value = self.parameterAsEnumString(parameters, name, context)
+                    idx = self.parameterAsEnum(parameters, name, context)
+                    param_value = param.options()[idx]
+                    # NOTE: converting values to lowercase removed, algs will need to be updated
+                    # if len(param_value) > 1:
+                    #     param_value = param_value.lower()
 
             elif isinstance(param, QgsProcessingParameterCrs):
                 crs = str(self.parameterAsCrs(parameters, name, context))
