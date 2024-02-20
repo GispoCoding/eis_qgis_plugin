@@ -1,6 +1,6 @@
 from qgis.core import (
+    QgsProcessingParameterEnum,
     QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterEnum,    
     QgsProcessingParameterField,
     QgsProcessingParameterNumber,
     QgsProcessingParameterVectorDestination,
