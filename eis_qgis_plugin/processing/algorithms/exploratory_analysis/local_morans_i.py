@@ -24,29 +24,22 @@ class EISLocalMoransI(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
             "input_vector",
-            "output_vector",
             "column",
             "weight_type",
             "k",
             "permutations",
+            "output_vector",
         ]
 
         input_vector_param = QgsProcessingParameterFeatureSource(
             name=self.alg_parameters[0],
             description="Input geometries"
         )
-        input_vector_param.setHelp("Input geometries that contains the data to be examined with Local Moran's I.")
+        input_vector_param.setHelp("Input geometries that contain the data to be examined with Local Moran's I.")
         self.addParameter(input_vector_param)
 
-        output_vector_param = QgsProcessingParameterVectorDestination(
-            name=self.alg_parameters[1],
-            description="Output geometries"
-        )
-        output_vector_param.setHelp("Output for Local Moran's I calculation.")
-        self.addParameter(output_vector_param)
-
         column_param = QgsProcessingParameterField(
-            name=self.alg_parameters[2],
+            name=self.alg_parameters[1],
             description="Column",
             parentLayerParameterName=self.alg_parameters[0]
         )
@@ -54,7 +47,7 @@ class EISLocalMoransI(EISProcessingAlgorithm):
         self.addParameter(column_param)
 
         weight_type_param = QgsProcessingParameterEnum(
-            name=self.alg_parameters[3],
+            name=self.alg_parameters[2],
             description="Weight type",
             options=["queen", "knn"],
             defaultValue="queen"
@@ -63,18 +56,29 @@ class EISLocalMoransI(EISProcessingAlgorithm):
         self.addParameter(weight_type_param)
 
         k_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[4],
+            name=self.alg_parameters[3],
             description="k",
-            defaultValue="4"
+            defaultValue="4",
+            minValue="1"
         )
         k_param.setHelp("Number of nearest neighbors for the KNN weights matrix. Defaults to 4.")
         self.addParameter(k_param)
 
         permutations_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[5],
+            name=self.alg_parameters[4],
             description="Permutations",
-            defaultValue="999"
+            defaultValue="999",
+            minValue="100"
         )
         permutations_param.setHelp("Number of permutations for significance testing. Defaults to 999.")
         self.addParameter(permutations_param)
+
+        output_vector_param = QgsProcessingParameterVectorDestination(
+            name=self.alg_parameters[5],
+            description="Output geometries"
+        )
+        output_vector_param.setHelp(
+            "Output vector file with attributes for Local Moran's I statistic and p-value for the statistic."
+        )
+        self.addParameter(output_vector_param)
 
