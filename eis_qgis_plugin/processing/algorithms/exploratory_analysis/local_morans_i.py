@@ -58,8 +58,8 @@ class EISLocalMoransI(EISProcessingAlgorithm):
         k_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
             description="k",
-            defaultValue="4",
-            minValue="1"
+            defaultValue=4,
+            minValue=1
         )
         k_param.setHelp("Number of nearest neighbors for the KNN weights matrix. Defaults to 4.")
         self.addParameter(k_param)
@@ -67,8 +67,8 @@ class EISLocalMoransI(EISProcessingAlgorithm):
         permutations_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[4],
             description="Permutations",
-            defaultValue="999",
-            minValue="100"
+            defaultValue=999,
+            minValue=100
         )
         permutations_param.setHelp("Number of permutations for significance testing. Defaults to 999.")
         self.addParameter(permutations_param)
