@@ -35,7 +35,7 @@
 
 ## Introduction
 
-EIS (_Exploration Information Systems_) QGIS Plugin is a tool with graphical user interface for prospectivity mapping of critical raw materials.
+EIS (_Exploration Information System_) QGIS Plugin is a tool with graphical user interface for prospectivity mapping of critical raw materials.
 
 EIS QGIS Plugin is a product of the EIS Horizon EU project, which seeks to implement a modern and comprehensive collection of digital mineral exploration tools. EIS QGIS Plugin consists of two main components:
 - EIS Wizard, a comprehensive GUI plugin with guided processes and workflows for mineral prospectivity mapping
@@ -113,7 +113,7 @@ EIS Processing Algorithms can be launched by double-clicking an algorithm. In th
 
 ## Contributing
 EIS QGIS Plugin (and EIS Toolkit) are still in activate development by the core team, but feel free join and contribute in any way you like!
-- Ideas for new fetures are welcome, even if we have a vision of the final version and its extent in our mind
+- Ideas for new features are welcome, even if we already have a vision of the final version and its scope
 - Initial testing and bug hunting are helpful
 - If you wish to contribute by developing the plugin, read the CONTRIBUTING.MD for instructions
 
