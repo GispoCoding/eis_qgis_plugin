@@ -33,13 +33,13 @@ class EISReclassifyWithDefinedIntervals(EISProcessingAlgorithm):
         self.addParameter(input_raster_param)
 
         interval_size_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[2], description="Number of intervals"
+            name=self.alg_parameters[1], description="Number of intervals"
         )
         interval_size_param.setHelp("The number of intervals for Equal intervals.")
         self.addParameter(interval_size_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[6], description="Output raster"
+            name=self.alg_parameters[2], description="Output raster"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)
