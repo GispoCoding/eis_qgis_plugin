@@ -1,7 +1,7 @@
 from qgis.core import (
+    QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterString,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -32,7 +32,7 @@ class EISReclassifyWithNaturalBreaks(EISProcessingAlgorithm):
         input_raster_param.setHelp("The input raster data set.")
         self.addParameter(input_raster_param)
 
-        breaks_param = QgsProcessingParameterString(
+        breaks_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
             description="The number of classes"
         )
