@@ -2,6 +2,7 @@ from qgis.core import (
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterString,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -23,6 +24,7 @@ class EISReclassifyWithStandardDeviation(EISProcessingAlgorithm):
         self.alg_parameters = [
             "input_raster",
             "number_of_intervals",
+            "bands",
             "output_raster",
         ]
 
@@ -38,8 +40,16 @@ class EISReclassifyWithStandardDeviation(EISProcessingAlgorithm):
         interval_size_param.setHelp("The number of standard deviation.")
         self.addParameter(interval_size_param)
 
+        bands_param = QgsProcessingParameterString(
+            name=self.alg_parameters[2],
+            description="Bands",
+            optional=True,
+        )
+        bands_param.setHelp("The bands to be reclassified.")
+        self.addParameter(bands_param)
+
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[2], description="Output raster"
+            name=self.alg_parameters[3], description="Output raster"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)

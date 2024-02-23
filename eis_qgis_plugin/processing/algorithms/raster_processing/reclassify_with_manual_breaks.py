@@ -23,6 +23,7 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
         self.alg_parameters = [
             "input_raster",
             "breaks",
+            "bands",
             "output_raster",
         ]
 
@@ -42,8 +43,16 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
         )
         self.addParameter(breaks_param)
 
+        bands_param = QgsProcessingParameterString(
+            name=self.alg_parameters[2],
+            description="Bands",
+            optional=True,
+        )
+        bands_param.setHelp("The bands to be reclassified.")
+        self.addParameter(bands_param)
+
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[2], description="Output raster"
+            name=self.alg_parameters[3], description="Output raster"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)
