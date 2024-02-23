@@ -35,7 +35,9 @@ class EISReclassifyWithStandardDeviation(EISProcessingAlgorithm):
         self.addParameter(input_raster_param)
 
         interval_size_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[1], description="Number of standard deviations"
+            name=self.alg_parameters[1],
+            description="Number of standard deviations",
+            minValue=2,
         )
         interval_size_param.setHelp("The number of standard deviation.")
         self.addParameter(interval_size_param)

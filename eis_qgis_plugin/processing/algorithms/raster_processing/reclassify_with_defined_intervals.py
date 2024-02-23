@@ -1,8 +1,8 @@
 from qgis.core import (
+    QgsProcessingParameterBand,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterString,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -35,7 +35,9 @@ class EISReclassifyWithDefinedIntervals(EISProcessingAlgorithm):
         self.addParameter(input_raster_param)
 
         interval_size_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[1], description="Interval size"
+            name=self.alg_parameters[1],
+            description="Interval size",
+            minValue=1,
         )
         interval_size_param.setHelp("The interval size for Defined intervals.")
         self.addParameter(interval_size_param)

@@ -34,7 +34,9 @@ class EISReclassifyWithEqualIntervals(EISProcessingAlgorithm):
         self.addParameter(input_raster_param)
 
         interval_size_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[1], description="Number of intervals"
+            name=self.alg_parameters[1],
+            description="Number of intervals",
+            minValue=2,
         )
         interval_size_param.setHelp("The number of intervals for Equal intervals.")
         self.addParameter(interval_size_param)

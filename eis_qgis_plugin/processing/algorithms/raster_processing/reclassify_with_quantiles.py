@@ -36,7 +36,8 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
 
         quantiles_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
-            description="Quantiles"
+            description="Quantiles",
+            minValue=2,
         )
         quantiles_param.setHelp("The Quantiles for reclassification.")
         self.addParameter(quantiles_param)

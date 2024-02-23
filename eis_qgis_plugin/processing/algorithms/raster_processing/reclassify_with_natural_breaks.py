@@ -35,7 +35,8 @@ class EISReclassifyWithNaturalBreaks(EISProcessingAlgorithm):
 
         breaks_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
-            description="The number of classes"
+            description="The number of classes",
+            minValue=2,
         )
         breaks_param.setHelp("The number of classes for Natural breaks.")
         self.addParameter(breaks_param)
