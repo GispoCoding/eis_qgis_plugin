@@ -1,10 +1,9 @@
 from qgis.core import (
+    QgsProcessingParameterBand,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterString,
 )
-
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
@@ -41,7 +40,7 @@ class EISReclassifyWithNaturalBreaks(EISProcessingAlgorithm):
         breaks_param.setHelp("The number of classes for Natural breaks.")
         self.addParameter(breaks_param)
 
-        bands_param = QgsProcessingParameterString(
+        bands_param = QgsProcessingParameterBand(
             name=self.alg_parameters[2],
             description="Bands",
             optional=True,

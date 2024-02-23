@@ -1,4 +1,5 @@
 from qgis.core import (
+    QgsProcessingParameterBand,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterString,
@@ -43,7 +44,7 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
         )
         self.addParameter(breaks_param)
 
-        bands_param = QgsProcessingParameterString(
+        bands_param = QgsProcessingParameterBand(
             name=self.alg_parameters[2],
             description="Bands",
             optional=True,

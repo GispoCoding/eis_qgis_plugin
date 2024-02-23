@@ -1,10 +1,9 @@
 from qgis.core import (
+    QgsProcessingParameterBand,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterString,
 )
-
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
@@ -40,7 +39,7 @@ class EISReclassifyWithEqualIntervals(EISProcessingAlgorithm):
         interval_size_param.setHelp("The number of intervals for Equal intervals.")
         self.addParameter(interval_size_param)
 
-        bands_param = QgsProcessingParameterString(
+        bands_param = QgsProcessingParameterBand(
             name=self.alg_parameters[2],
             description="Bands",
             optional=True,

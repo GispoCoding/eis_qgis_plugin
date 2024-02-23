@@ -1,8 +1,8 @@
 from qgis.core import (
+    QgsProcessingParameterBand,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterString,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -41,7 +41,7 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
         quantiles_param.setHelp("The Quantiles for reclassification.")
         self.addParameter(quantiles_param)
 
-        bands_param = QgsProcessingParameterString(
+        bands_param = QgsProcessingParameterBand(
             name=self.alg_parameters[2],
             description="Bands",
             optional=True,

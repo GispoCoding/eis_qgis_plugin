@@ -40,7 +40,7 @@ class EISReclassifyWithDefinedIntervals(EISProcessingAlgorithm):
         interval_size_param.setHelp("The interval size for Defined intervals.")
         self.addParameter(interval_size_param)
 
-        bands_param = QgsProcessingParameterString(
+        bands_param = QgsProcessingParameterBand(
             name=self.alg_parameters[2],
             description="Bands",
             optional=True,
