@@ -44,7 +44,7 @@ class EISReclassifyWithStandardDeviation(EISProcessingAlgorithm):
 
         bands_param = QgsProcessingParameterBand(
             name=self.alg_parameters[2],
-            description="Bands",
+            description="Raster bands",
             optional=True,
         )
         bands_param.setHelp("The bands to be reclassified.")
