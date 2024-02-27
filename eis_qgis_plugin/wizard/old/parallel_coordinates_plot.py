@@ -176,7 +176,8 @@ class ParallelChart(QWidget, FORM_CLASS):
         from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
         from PyQt5.QtWidgets import QDialog, QVBoxLayout
-        from seaborn import barplot
+
+        from eis_qgis_plugin.libs.seaborn import barplot
 
         # self.plot_dialog = QDialog()
 

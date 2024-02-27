@@ -6,10 +6,11 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 from matplotlib.cm import ScalarMappable
 from matplotlib.path import Path
 from sklearn.preprocessing import LabelEncoder
+
+import eis_qgis_plugin.seaborn as sns
 
 # ! WIP !
 

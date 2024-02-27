@@ -1,4 +1,3 @@
-import seaborn as sns
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import (
     QgsColorButton,
@@ -11,6 +10,7 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
+import eis_qgis_plugin.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 

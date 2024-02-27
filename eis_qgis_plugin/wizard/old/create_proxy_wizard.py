@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
-import seaborn as sns
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsFieldComboBox, QgsFieldExpressionWidget, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QDialog, QSizePolicy, QVBoxLayout, QWizardPage
+
+import eis_qgis_plugin.seaborn as sns
 
 from ...explore.old.wizard_explore import EISWizardExplore
 
