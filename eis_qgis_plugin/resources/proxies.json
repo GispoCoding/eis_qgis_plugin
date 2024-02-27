@@ -324,7 +324,24 @@
     },
     "li-pegmatites": {
         "source": {
-
+            "Distance to intrusions": {
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Low",
+                    "deposit": "Low"
+                },
+                "keywords": ["geology", "lithology"],
+                "ui_template": "ui_1"
+            },
+            "Distance to X (li-pegmatites)": {
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Low",
+                    "deposit": "Low"
+                },
+                "keywords": ["geology", "lithology"],
+                "ui_template": "ui_1"
+            }
         },
         "pathway": {
 
@@ -332,10 +349,7 @@
         "depositional": {
 
         },
-        "timing_of_mineralisation": {
-
-        },
-        "modification/remomibilization": {
+        "mineralisation": {
 
         }
     },
@@ -349,13 +363,7 @@
         "depositional": {
 
         },
-        "timing_of_mineralisation": {
-
-        },
-        "mineralisation_remobilization": {
-
-        },
-        "other": {
+        "mineralisation": {
 
         }
     }
