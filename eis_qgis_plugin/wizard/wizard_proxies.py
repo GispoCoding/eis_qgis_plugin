@@ -63,8 +63,8 @@ class EISWizardProxies(QWidget, FORM_CLASS):
         self.bold_font.setBold(True)
 
         # Connect signals
-        self.scale_selection.currentTextChanged.connect(self.update)
-        self.mineral_system_selection.currentTextChanged.connect(self.update)
+        self.scale_selection.currentTextChanged.connect(self._on_scale_changed)
+        self.mineral_system_selection.currentTextChanged.connect(self._on_mineral_system_changed)
 
         self.proxy_info: Dict[str, Tuple[List[str], List[QWidget]]] = {}
         self.tab_widgets = [
@@ -76,7 +76,7 @@ class EISWizardProxies(QWidget, FORM_CLASS):
 
         # Initialize UI
         self.initialize_ui()
-        self.update()
+        self.create_tables()
 
         self.proxy_pages_widget.insertWidget(5, EISWizardProxyCreationGeneral())
         self.next_btn.clicked.connect(self.next_page)
@@ -120,44 +120,81 @@ class EISWizardProxies(QWidget, FORM_CLASS):
             tab.setLayout(tab_layout)
 
 
-    def update(self):
+    def _on_mineral_system_changed(self):
         self.clear_tables()
-        self.create_tables(
-            self.mineral_system_selection.currentText().lower(), self.scale_selection.currentText().lower()
+        self.create_tables()
+
+
+    def _on_scale_changed(self):
+        if self.mineral_system_selection.currentText().lower() != "custom":
+            self.clear_tables()
+            self.create_tables()
+
+
+    def get_proxies_custom(self, proxy_data: dict, category: str) -> dict:
+        """
+        Custom mineral system uses all proxies from all mineral systems.
+        
+        Duplicates are ignored. Proxies are sorted alphabetically.
+        """
+        proxies = {
+            **proxy_data["iocg"][category],
+            **proxy_data["li-pegmatites"][category],
+            **proxy_data["co-vms"][category]
+        }
+        return self.sort_proxies_alphabetically(proxies)
+       
+    
+    def sort_proxies_alphabetically(self, proxies: dict) -> dict:
+        return dict(
+            sorted(
+                proxies.items()
+            )
         )
 
 
-    def create_tables(self, mineral_system: str, scale: str):
+    def get_proxies(self, proxy_data: dict, mineral_system: str, category: str, scale: str) -> dict:
+        return self.sort_proxies_by_importance(proxy_data[mineral_system][category], scale)
+
+
+    def sort_proxies_by_importance(self, proxies: dict, scale: str) -> dict:
+        return dict(
+            sorted(
+                proxies.items(),
+                key=lambda proxy: IMPORTANCE_VALUES[proxy[1]["importance"][scale]]
+            )
+        )
+
+
+    def create_tables(self):
         """Create new tables for each tab with selected mineral system and scale."""
         with open(os.path.join(PLUGIN_PATH, "resources/proxies.json"), "r") as f:
             proxy_data = json.loads(f.read())
 
-        # Process each tab one by one
+        mineral_system = self.mineral_system_selection.currentText().lower()
+        scale = self.scale_selection.currentText().lower()
+
+        # Populate tab at a time
         for tab in self.tab_widgets:
             tab_name = tab.objectName()
             category = tab_name.split("_")[0]
             grid_layout, _ = self.grid_layouts[tab_name]
-            proxies = proxy_data[mineral_system][category]
-
-            # Sort proxies
-            sorted_proxies = dict(
-                sorted(
-                    proxies.items(),
-                    key=lambda proxy: IMPORTANCE_VALUES[proxy[1]["importance"][scale]]
-                    )
-                )
 
             # Create label row
             self.create_table_row(grid_layout, 0, "Proxy", "Importance", ["Keywords"], label=True)
 
+            if mineral_system == "custom":
+                sorted_proxies = self.get_proxies_custom(proxy_data, category)
+            else:
+                sorted_proxies = self.get_proxies(proxy_data, mineral_system, category, scale)
+
             # Create rows for the table
             for i, (proxy_name, proxy_details) in enumerate(sorted_proxies.items()):
-                i = i + 1  # Skip first row
                 self.create_table_row(
                     grid_layout=grid_layout,
-                    row=i,
+                    row=i+1,  # +1 because of label row
                     name=proxy_name,
-                    importance=proxy_details["importance"][scale],
+                    importance=proxy_details["importance"][scale] if mineral_system != "custom" else "",
                     keywords=proxy_details["keywords"],
                 )
 
@@ -174,7 +211,7 @@ class EISWizardProxies(QWidget, FORM_CLASS):
         """Create a new row in the proxy table."""
         # 0. Importance
         importance_label = QLabel("*")
-        if importance != "Importance":
+        if importance != "Importance" and importance != "":
             if IMPORTANCE_VALUES[importance] == 1:
                 importance_label.setStyleSheet("color: red;")
                 importance_label.setToolTip("Importance: High")
