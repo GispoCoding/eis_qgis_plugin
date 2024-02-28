@@ -5,7 +5,7 @@ from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsFieldComboBox, QgsFieldExpressionWidget, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QDialog, QSizePolicy, QVBoxLayout, QWizardPage
 
-import eis_qgis_plugin.seaborn as sns
+import eis_qgis_plugin.libs.seaborn as sns
 
 from ...explore.old.wizard_explore import EISWizardExplore
 

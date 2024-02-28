@@ -10,7 +10,7 @@ from matplotlib.cm import ScalarMappable
 from matplotlib.path import Path
 from sklearn.preprocessing import LabelEncoder
 
-import eis_qgis_plugin.seaborn as sns
+import eis_qgis_plugin.libs.seaborn as sns
 
 # ! WIP !
 
