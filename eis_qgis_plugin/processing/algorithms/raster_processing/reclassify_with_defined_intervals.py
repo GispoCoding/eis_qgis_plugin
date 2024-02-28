@@ -45,7 +45,7 @@ class EISReclassifyWithDefinedIntervals(EISProcessingAlgorithm):
         bands_param = QgsProcessingParameterBand(
             name=self.alg_parameters[2],
             description="Raster bands",
-            optional=True,
+            parentLayerParameterName=self.alg_parameters[0],
         )
         bands_param.setHelp("The bands to be reclassified.")
         self.addParameter(bands_param)
