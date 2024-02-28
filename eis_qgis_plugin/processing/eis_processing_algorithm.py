@@ -6,6 +6,7 @@ from qgis.core import (
     QgsProcessingContext,
     QgsProcessingFeedback,
     QgsProcessingOutputMultipleLayers,
+    QgsProcessingParameterBand,
     QgsProcessingParameterBoolean,
     QgsProcessingParameterCrs,
     QgsProcessingParameterDefinition,
@@ -132,7 +133,11 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         for name in self.alg_parameters:
             param = self.parameterDefinition(name)
             param_name = "--" + name.replace("_", "-")
-            if isinstance(param, QgsProcessingParameterBoolean):
+
+            if isinstance(param, QgsProcessingParameterBand):
+                param_value = str(self.parameterAsInt(parameters, name, context))
+
+            elif isinstance(param, QgsProcessingParameterBoolean):
                 if self.parameterAsBool(parameters, name, context):
                     typer_options.append(param_name)
                 else:
