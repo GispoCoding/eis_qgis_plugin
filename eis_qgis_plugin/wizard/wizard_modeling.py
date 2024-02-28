@@ -6,6 +6,7 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.modeling.fuzzy_overlay import EISWizardFuzzyOverlay
 from eis_qgis_plugin.wizard.modeling.gradient_boosting import EISWizardGradientBoosting
 from eis_qgis_plugin.wizard.modeling.logistic_regression import EISWizardLogisticRegression
 from eis_qgis_plugin.wizard.modeling.ml_model_template import ModelType
@@ -39,7 +40,8 @@ class EISWizardModeling(QWidget, FORM_CLASS):
             EISWizardRandomForest(self, ModelType.CLASSIFIER),
             EISWizardRandomForest(self, ModelType.REGRESSOR),
             EISWizardGradientBoosting(self, ModelType.CLASSIFIER),
-            EISWizardGradientBoosting(self, ModelType.REGRESSOR)
+            EISWizardGradientBoosting(self, ModelType.REGRESSOR),
+            EISWizardFuzzyOverlay(self)
         ]
 
         for i, page in enumerate(self.pages):

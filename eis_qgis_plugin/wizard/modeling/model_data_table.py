@@ -57,22 +57,37 @@ class ModelTrainingDataTable(QTableWidget):
     This table has "add" or "remove" buttons to control how many rows are used.
     """
 
-    def __init__(self, parent, row_height: int = 26):
+    def __init__(self, parent, add_tag_column: bool = True, row_height: int = 26):
         super().__init__(parent)
 
         self.row_height = row_height
+        self.tag_column = add_tag_column
 
-        self.setColumnCount(4)
-        self.setHorizontalHeaderLabels(["Tag", "Data", "Add", "Delete"])
-        self.setColumnWidth(0, 150)
-        self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.setColumnWidth(2, 50)
-        self.setColumnWidth(3, 50)
+        if add_tag_column:
+            self.init_with_tag()
+        else:
+            self.init_without_tag()
 
         self.setMinimumHeight(23)
 
         self.add_row()
 
+    def init_with_tag(self):
+        self.labels = ["Tag", "Data", "Add", "Delete"]
+        self.setColumnCount(len(self.labels))
+        self.setHorizontalHeaderLabels(self.labels)
+        self.setColumnWidth(0, 150)
+        self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.setColumnWidth(2, 50)
+        self.setColumnWidth(3, 50)
+
+    def init_without_tag(self):
+        self.labels = ["Data", "Add", "Delete"]
+        self.setColumnCount(len(self.labels))
+        self.setHorizontalHeaderLabels(self.labels)
+        self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.setColumnWidth(1, 50)
+        self.setColumnWidth(2, 50)
 
     def create_buttons(self):
         """Create "add" and "delete" buttons the table."""
@@ -104,7 +119,17 @@ class ModelTrainingDataTable(QTableWidget):
         self.setRowHeight(row_index, self.row_height)
         self.setMinimumHeight(self.minimumHeight() + self.row_height)
 
-        # Add widgets to row
+        # Add widgets
+        if self.tag_column:
+            self.add_row_widgets_tag(row_index)
+        else:
+            self.add_row_widgets_without_tag(row_index)
+
+        # Reset selection
+        self.clearSelection()
+
+
+    def add_row_widgets_tag(self, row_index: int):
         add_btn, remove_btn = self.create_buttons()
 
         self.setCellWidget(row_index, 0, QLineEdit())
@@ -114,8 +139,15 @@ class ModelTrainingDataTable(QTableWidget):
         self.setCellWidget(row_index, 2, add_btn)
         self.setCellWidget(row_index, 3, remove_btn)
 
-        # Reset selection
-        self.clearSelection()
+
+    def add_row_widgets_without_tag(self, row_index: int):
+        add_btn, remove_btn = self.create_buttons()
+
+        layer_selection = QgsMapLayerComboBox()
+        layer_selection.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        self.setCellWidget(row_index, 0, layer_selection)
+        self.setCellWidget(row_index, 1, add_btn)
+        self.setCellWidget(row_index, 2, remove_btn)
 
 
     def remove_row(self):
