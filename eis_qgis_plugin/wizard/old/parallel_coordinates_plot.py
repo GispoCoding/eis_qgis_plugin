@@ -17,7 +17,7 @@ from qgis.PyQt.QtWidgets import (
 from eis_qgis_plugin import pyqtgraph as pg
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
-from .plot_utils import generate_color_mapping, opacity_to_alpha
+from ..plot_utils import generate_color_mapping, opacity_to_alpha
 
 FORM_CLASS: QWidget = load_ui("explore/parallel_chart_tab.ui")
 
