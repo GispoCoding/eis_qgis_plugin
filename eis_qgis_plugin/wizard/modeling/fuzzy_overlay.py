@@ -35,6 +35,25 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
         self.membership_parameters_groupbox: QGroupBox
         self.membership_parameters_pages: QStackedWidget
 
+        self.gaussian_function_midpoint: QgsDoubleSpinBox
+        self.gaussian_function_spread: QgsDoubleSpinBox
+
+        self.large_function_midpoint: QgsDoubleSpinBox
+        self.large_function_spread: QgsDoubleSpinBox
+
+        self.linear_low_bound: QgsDoubleSpinBox
+        self.linear_high_bound: QgsDoubleSpinBox
+
+        self.near_function_midpoint: QgsDoubleSpinBox
+        self.near_function_spread: QgsDoubleSpinBox
+
+        self.power_low_bound: QgsDoubleSpinBox
+        self.power_high_bound: QgsDoubleSpinBox
+        self.power_function_exponent: QgsDoubleSpinBox
+
+        self.small_function_midpoint: QgsDoubleSpinBox
+        self.small_function_spread: QgsDoubleSpinBox
+
         self.reset_btn: QPushButton
         self.preview_btn: QPushButton
         self.run_membership_btn: QPushButton
@@ -69,7 +88,7 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
         self.input_raster_membership.setFilters(QgsMapLayerProxyModel.RasterLayer)
         self.output_raster_membership.setFilter("GeoTiff files (*.tif *.tiff)")
 
-        self.input_rasters_table = ModelTrainingDataTable(self, add_tag_column=False)
+        self.input_rasters_table = ModelTrainingDataTable(self, add_tag_column=False, inital_rows=2)
         self.fuzzy_rasters_layout.addWidget(self.input_rasters_table)
 
 
@@ -83,12 +102,41 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
 
 
     def _on_reset_clicked(self):
-        pass
+        """Reset parameters to defaults."""
+        membership_type = self.membership_type.currentText().lower()
+        if membership_type == "gaussian":
+            self.gaussian_function_midpoint.setValue(10)
+            self.gaussian_function_spread.setValue(0.01)
+
+        elif membership_type == "large":
+            self.large_function_midpoint.setValue(50)
+            self.large_function_spread.setValue(5)
+
+        elif membership_type == "linear":
+            self.linear_low_bound.setValue(0)
+            self.linear_high_bound.setValue(1)
+
+        elif membership_type == "near":
+            self.near_function_midpoint.setValue(50)
+            self.near_function_spread.setValue(5)
+
+        elif membership_type == "power":
+            self.power_low_bound.setValue(0)
+            self.power_high_bound.setValue(1)
+            self.power_function_exponent.setValue(2)
+
+        elif membership_type == "small":
+            self.small_function_midpoint.setValue(50)
+            self.small_function_spread.setValue(5)
+
 
     def _on_preview_clicked(self):
+        """Generate a graph of the selected membership function with current parameter values."""
         pass
 
+
     def _on_run_membership_clicked(self):
+        """Run the selected membership transformation function with current parameter values."""
         self.input_raster_membership.currentLayer()
         self.output_raster_membership.filePath()
         membership_type = self.membership_type.currentText().lower()
@@ -115,4 +163,5 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
 
 
     def _on_run_overlay_clicked(self):
+        """Run fuzzy overlay with the chosen method."""
         pass

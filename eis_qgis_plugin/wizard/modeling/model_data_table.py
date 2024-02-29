@@ -57,7 +57,7 @@ class ModelTrainingDataTable(QTableWidget):
     This table has "add" or "remove" buttons to control how many rows are used.
     """
 
-    def __init__(self, parent, add_tag_column: bool = True, row_height: int = 26):
+    def __init__(self, parent, add_tag_column: bool = True, inital_rows: int = 1, row_height: int = 26):
         super().__init__(parent)
 
         self.row_height = row_height
@@ -70,7 +70,8 @@ class ModelTrainingDataTable(QTableWidget):
 
         self.setMinimumHeight(23)
 
-        self.add_row()
+        for _ in range(inital_rows):
+            self.add_row()
 
     def init_with_tag(self):
         self.labels = ["Tag", "Data", "Add", "Delete"]
