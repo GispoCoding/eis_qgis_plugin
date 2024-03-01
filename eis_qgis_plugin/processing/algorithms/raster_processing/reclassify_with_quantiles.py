@@ -23,7 +23,7 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
             "input_raster",
-            "quantiles",
+            "number_of_quantiles",
             "bands",
             "output_raster",
         ]
