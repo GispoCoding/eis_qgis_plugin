@@ -44,10 +44,10 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
 
         bands_param = QgsProcessingParameterBand(
             name=self.alg_parameters[2],
-            description="Raster bands",
+            description="Raster band",
             parentLayerParameterName=self.alg_parameters[0],
         )
-        bands_param.setHelp("The bands to be reclassified.")
+        bands_param.setHelp("The band to be reclassified.")
         self.addParameter(bands_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
