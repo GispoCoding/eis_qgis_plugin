@@ -139,7 +139,7 @@
                   <item row="0" column="0">
                    <widget class="QLabel" name="label">
                     <property name="text">
-                     <string>Function midpoint</string>
+                     <string>Midpoint</string>
                     </property>
                    </widget>
                   </item>
@@ -156,7 +156,7 @@
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_2">
                     <property name="text">
-                     <string>Function spread</string>
+                     <string>Spread</string>
                     </property>
                    </widget>
                   </item>
@@ -177,7 +177,7 @@
                   <item row="0" column="0">
                    <widget class="QLabel" name="label999">
                     <property name="text">
-                     <string>Function midpoint</string>
+                     <string>Midpoint</string>
                     </property>
                    </widget>
                   </item>
@@ -194,7 +194,7 @@
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_4">
                     <property name="text">
-                     <string>Function spread</string>
+                     <string>Spread</string>
                     </property>
                    </widget>
                   </item>
@@ -215,7 +215,7 @@
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_5">
                     <property name="text">
-                     <string>Low fuzzy membership bound</string>
+                     <string>Lower bound</string>
                     </property>
                    </widget>
                   </item>
@@ -229,7 +229,7 @@
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_6">
                     <property name="text">
-                     <string>High fuzzy membership bound</string>
+                     <string>Upper bound</string>
                     </property>
                    </widget>
                   </item>
@@ -250,7 +250,7 @@
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_7">
                     <property name="text">
-                     <string>Function midpoint</string>
+                     <string>Midpoint</string>
                     </property>
                    </widget>
                   </item>
@@ -267,7 +267,7 @@
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_8">
                     <property name="text">
-                     <string>Function spread</string>
+                     <string>Spread</string>
                     </property>
                    </widget>
                   </item>
@@ -288,7 +288,7 @@
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_9">
                     <property name="text">
-                     <string>Low fuzzy membership bound</string>
+                     <string>Lower bound</string>
                     </property>
                    </widget>
                   </item>
@@ -302,7 +302,7 @@
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_10">
                     <property name="text">
-                     <string>High fuzzy membership bound</string>
+                     <string>Upper bound</string>
                     </property>
                    </widget>
                   </item>
@@ -319,7 +319,7 @@
                   <item row="2" column="0">
                    <widget class="QLabel" name="label_11">
                     <property name="text">
-                     <string>Membership function exponent</string>
+                     <string>Exponent</string>
                     </property>
                    </widget>
                   </item>
@@ -430,20 +430,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLabel" name="membership_graph_label">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Membership function graph</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QFrame" name="membership_graph_container">
+            <widget class="QFrame" name="membership_plot_container">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -560,6 +547,12 @@
                     </property>
                     <property name="decimals">
                      <number>3</number>
+                    </property>
+                    <property name="maximum">
+                     <double>1.000000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>0.500000000000000</double>
                     </property>
                    </widget>
                   </item>
