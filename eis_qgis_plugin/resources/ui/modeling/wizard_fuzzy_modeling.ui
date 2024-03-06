@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="fuzzy_modeling_tabs">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="fuzzy_membership_tab">
       <attribute name="title">

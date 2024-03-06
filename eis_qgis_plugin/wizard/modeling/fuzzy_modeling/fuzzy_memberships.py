@@ -114,7 +114,7 @@ class NearMembership(FuzzyMembership):
 
     @staticmethod
     def x_range(c: float, k: float) -> np.ndarray:
-        spread_factor = max(1 / k * 10, 0.1)  # Ensure there's always some range
+        spread_factor = max(1 / k * 10, 0.1)
         return np.linspace(c - spread_factor, c + spread_factor, num=500)
 
     @staticmethod
