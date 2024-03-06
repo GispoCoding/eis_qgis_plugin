@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Tuple
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -34,10 +34,10 @@ from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTa
     
 # )
 
-FORM_CLASS: QWidget = load_ui("modeling/wizard_fuzzy_overlay.ui")
+FORM_CLASS: QWidget = load_ui("modeling/wizard_fuzzy_modeling.ui")
 
 
-class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
+class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
     """
     Class for fuzzy overlay models.
     """
@@ -110,6 +110,7 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
 
 
     def initialize_memberships(self):
+        """Initializes all possible membership instances in a dictionary and links relevant widgets to them."""
         self.memberships = {
             "gaussian": GaussianMembership(
                 c = self.gaussian_function_midpoint,
@@ -141,6 +142,7 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
 
 
     def initialize_ui(self):
+        """UI-related initialization."""
         self.plot_layout = QVBoxLayout()
         self.membership_plot_container.setLayout(self.plot_layout)
 
@@ -152,49 +154,29 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
 
 
     def connect_signals(self):
+        """Connect signals emitted by widgets to functions."""
         self.reset_btn.clicked.connect(self._on_reset_clicked)
         self.preview_btn.clicked.connect(self._on_preview_clicked)
         self.run_membership_btn.clicked.connect(self._on_run_membership_clicked)
         self.run_overlay_btn.clicked.connect(self._on_run_overlay_clicked)
 
         self.membership_type.currentIndexChanged['int'].connect(self.membership_parameters_pages.setCurrentIndex)
-        self.and_method.stateChanged.connect(self._on_overlay_method_changed)
-        self.or_method.stateChanged.connect(self._on_overlay_method_changed)
-        self.sum_method.stateChanged.connect(self._on_overlay_method_changed)
-        self.product_method.stateChanged.connect(self._on_overlay_method_changed)
-        self.gamma_method.stateChanged.connect(self._on_overlay_method_changed)
-
-
-    def _on_overlay_method_changed(self, _ = None):
-        if self.and_method.isChecked():
-            self.active_overlay_method = "and"
-        elif self.or_method.isChecked():
-            self.active_overlay_method = "or"
-        elif self.sum_method.isChecked():
-            self.active_overlay_method = "sum"
-        elif self.product_method.isChecked():
-            self.active_overlay_method = "product"
-        elif self.gamma_method.isChecked():
-            self.active_overlay_method = "gamma"
 
 
     def get_active_membership(self) -> Tuple[str, FuzzyMembership]:
+        """Returns active fuzzy membership (name, class instance)."""
         membership_type = self.membership_type.currentText().lower()
         return membership_type, self.memberships[membership_type]
-    
-
-    def get_membership_param_values(self, membership_type: str) -> List[float]:
-        return [widget.value() for widget in self.membership_params[membership_type].keys()]
 
 
     def _on_reset_clicked(self):
-        """Reset parameters to defaults."""
+        """Reset active fuzzy membership parameters to defaults."""
         _, membership = self.get_active_membership()
         membership.reset_defaults()
 
 
     def _on_preview_clicked(self):
-        """Generate a graph of the selected membership function with current parameter values."""
+        """Create a plot of the selected membership function with its current parameter values."""
         self.plot()
 
 
@@ -223,7 +205,9 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
             self.active_overlay_method = "gamma"
         # TODO
 
+
     def plot(self):
+        """Create plot for membership function and handle related widget clearing and setting."""
         self.close_and_remove_plot()
         fig, ax = plt.subplots()
 
@@ -249,6 +233,7 @@ class EISWizardFuzzyOverlay(QWidget, FORM_CLASS):
 
 
     def close_and_remove_plot(self):
+        """Close and remove existing plots."""
         plt.close('all')
         for i in reversed(range(self.plot_layout.count())):
             widget = self.plot_layout.itemAt(i).widget()
