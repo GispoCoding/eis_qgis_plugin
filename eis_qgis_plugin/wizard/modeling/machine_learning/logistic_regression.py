@@ -1,11 +1,12 @@
-from qgis import processing
+from typing import Any, Dict
+
 from qgis.gui import QgsSpinBox
 from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
-from eis_qgis_plugin.wizard.modeling.ml_model_template import EISModel, ModelType
+from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model import EISMLModel, ModelType
 
 
-class EISWizardLogisticRegression(EISModel):
+class EISWizardLogisticRegression(EISMLModel):
     """
     Class for logistic regression.
     """
@@ -16,6 +17,7 @@ class EISWizardLogisticRegression(EISModel):
         self.add_model_parameters()
         self.add_general_model_parameters()
 
+        self.alg_name = "eis:logistic_regression_train"
         super().initialize_classifier()
 
     
@@ -40,6 +42,25 @@ class EISWizardLogisticRegression(EISModel):
         self.solver = QComboBox()
         self.solver.addItems(["lbfgs", "liblinear", "newton-cg", "newton-cholesky", "sag", "saga"])
         self.train_parameter_box.layout().addRow(self.solver_label, self.solver)
+
+
+    def get_parameter_values(self) -> Dict[str, Any]:
+        return {
+            'penalty': self.penalty.currentIndex(),
+            'max_iter': self.max_iter.value(),
+            'solver': self.solver.currentIndex()
+        }
+
+
+    def reset_parameters(self):
+        """Reset logistic regression parameters to defaults."""
+        super().reset_parameters()
+
+        self.penalty.setCurrentIndex(0)
+        self.max_iter.setValue(100)
+        self.solver.setCurrentIndex(0)
+        self.verbose.setValue(0)
+        self.random_state.setValue(-1)
 
 
     def set_tooltips(self):
@@ -69,47 +90,3 @@ class EISWizardLogisticRegression(EISModel):
         self.random_state.setToolTip(random_state_tip)
         self.random_state_label.setToolTip(random_state_tip)
 
-
-    def train_model(self, text_edit, progress_bar):
-        """
-        Train a logistic regression model.
-
-        Runs the EIS logistic_regression processing algorithm. Computation is done in EIS backend (EIS Toolkit).
-        """
-        # Skeleton
-
-        layers = self.get_training_layers()
-
-        if False:
-            processing.run(
-                "eis:logistic_regression",
-                {
-                    'input_data': layers,
-                    'labels': self.y.currentLayer(),
-
-                    'penalty': self.penalty.currentText(),
-                    'max_iter': self.max_iter.value(),
-                    'solver': self.solver.currentText(),
-                    'verbose': self.verbose.value(),
-                    'random_state': self.random_state.value(),
-                    'model_save_path': self.model_save_path.filePath(),
-
-                    'validation_method': self.validation_method.currentText(),
-                    'split_size': self.split_size.value(),
-                    'cv': self.cv_folds.value(),
-                    'validation_metric': self.validation_metric.currentText()
-                }
-            )
-
-        pass
-
-
-    def reset(self):
-        """Reset logistic regression parameters to defaults."""
-        super().reset()
-
-        self.penalty.setCurrentIndex(0)
-        self.max_iter.setValue(100)
-        self.solver.setCurrentIndex(0)
-        self.verbose.setValue(0)
-        self.random_state.setValue(-1)

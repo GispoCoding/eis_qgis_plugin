@@ -1,11 +1,12 @@
-from qgis import processing
+from typing import Any, Dict
+
 from qgis.gui import QgsSpinBox
 from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
-from eis_qgis_plugin.wizard.modeling.ml_model_template import EISModel, ModelType
+from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model import EISMLModel, ModelType
 
 
-class EISWizardRandomForest(EISModel):
+class EISWizardRandomForest(EISMLModel):
     """
     Class for random forest models.
     """
@@ -48,6 +49,39 @@ class EISWizardRandomForest(EISModel):
         self.train_parameter_box.layout().addRow(self.max_depth_label, self.max_depth)
 
 
+    def initialize_classifier(self):
+        """Initialize random forest classifier settings."""
+        self.alg_name = "eis:random_forest_classifier_train"
+        super().initialize_classifier()
+        self.criterion.addItems(["gini", "entropy", "log_loss"])
+
+
+    def initialize_regressor(self):
+        """Initialize random forest regressor settings."""
+        self.alg_name = "eis:random_forest_classifier_train"
+        super().initialize_regressor()
+        self.criterion.addItems(["squared_error", "absolute_error", "friedman_mse", "poisson"])
+
+
+    def get_parameter_values(self) -> Dict[str, Any]:
+        return {
+            'n_estimators': self.n_estimators.value(),
+            'criterion': self.criterion.currentIndex(),
+            'max_depth': self.max_depth.value()
+        }
+    
+
+    def reset_parameters(self):
+        """Reset random forest parameters to defaults."""
+        super().reset_parameters()
+
+        self.n_estimators.setValue(100)
+        self.criterion.setCurrentIndex(0)
+        self.max_depth.setValue(-1)
+        self.verbose.setValue(0)
+        self.random_state.setValue(-1)
+
+
     def set_tooltips(self):
         """Set tooltips for random forest parameters."""
         super().set_tooltips()
@@ -77,69 +111,3 @@ class EISWizardRandomForest(EISModel):
         random_state_tip = "Seed for random number generation."
         self.random_state.setToolTip(random_state_tip)
         self.random_state_label.setToolTip(random_state_tip)
-
-
-    def initialize_classifier(self):
-        """Initialize random forest classifier settings."""
-        super().initialize_classifier()
-        self.criterion.addItems(["gini", "entropy", "log_loss"])
-
-
-    def initialize_regressor(self):
-        """Initialize random forest regressor settings."""
-        super().initialize_regressor()
-        self.criterion.addItems(["squared_error", "absolute_error", "friedman_mse", "poisson"])
-
-
-    def train_model(self, text_edit, progress_bar):
-        """
-        Train a random forest model.
-
-        Runs the EIS random_forest_classifier or random_forest_regressor processing algorithm. Computation is
-        done in EIS backend (EIS Toolkit).
-        """
-        # Skeleton
-
-        alg = "eis:random_forest_" + "classifier" if self.model_type == ModelType.CLASSIFIER else "regressor"
-        layers = self.get_training_layers()
-
-        if False:
-            processing.run(
-                alg,
-                {
-                    'input_data': layers,
-                    'labels': self.y.currentLayer(),
-
-                    'n_estimators': self.n_estimators.value(),
-                    'criterion': self.criterion.currentText(),
-                    'max_depth': self.max_depth.value(),
-                    'verbose': self.verbose.value(),
-                    'random_state': self.random_state.value(),
-                    'model_save_path': self.model_save_path.filePath(),
-
-                    'validation_method': self.validation_method.currentText(),
-                    'split_size': self.split_size.value(),
-                    'cv': self.cv_folds.value(),
-                    'validation_metric': self.validation_metric.currentText()
-                }
-            )
-
-        # Testing
-        from time import sleep
-        for i in range(1, 101):
-            progress_bar.setValue(i)
-            if i % 10 == 0:
-                text_edit.append(f"Progress: {i}%")
-            sleep(0.05)
-        text_edit.append("Finished!")
-
-
-    def reset(self):
-        """Reset random forest parameters to defaults."""
-        super().reset()
-
-        self.n_estimators.setValue(0)
-        self.criterion.setCurrentIndex(0)
-        self.max_depth.setValue(3)
-        self.verbose.setValue(0)
-        self.random_state.setValue(-1)

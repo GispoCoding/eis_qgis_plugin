@@ -1,5 +1,9 @@
 from enum import Enum
+from os import PathLike
+from typing import Any, Dict, List, Union
 
+from qgis import processing
+from qgis.core import QgsMapLayer, QgsRasterLayer
 from qgis.gui import QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
 from qgis.PyQt.QtWidgets import (
     QComboBox,
@@ -16,7 +20,7 @@ from qgis.PyQt.QtWidgets import (
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable, ModelTrainingDataTable
 
-FORM_CLASS: QWidget = load_ui("modeling/wizard_ml_model_template.ui")
+FORM_CLASS: QWidget = load_ui("modeling/wizard_ml_model.ui")
 
 
 class ModelType(Enum):
@@ -61,8 +65,8 @@ MOCK_DATABASE = {
 }
 
 
-class EISModel(QWidget, FORM_CLASS):
-    """Parent class for model classes in EIS Wizard."""
+class EISMLModel(QWidget, FORM_CLASS):
+    """Parent class for ML model classes in EIS Wizard."""
 
     def __init__(self, parent, model_type) -> None:
         super().__init__(parent)
@@ -92,7 +96,7 @@ class EISModel(QWidget, FORM_CLASS):
 
         self.train_dummy_btn: QPushButton
         self.start_training_btn: QPushButton
-        self.train_reset_btn: QPushButton
+        self.reset_training_parameters_btn: QPushButton
 
         self.results_table: QTableWidget
 
@@ -136,7 +140,7 @@ class EISModel(QWidget, FORM_CLASS):
         # Connect signals
         self.validation_method.currentTextChanged.connect(self.update_validation_settings)
         self.start_training_btn.clicked.connect(self.train_model)
-        self.train_reset_btn.clicked.connect(self.reset_model)
+        self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
 
         self.train_dummy_btn.clicked.connect(self.train_dummy_model)
 
@@ -237,12 +241,44 @@ class EISModel(QWidget, FORM_CLASS):
             self.validation_metric.setEnabled(True)
 
 
-    def get_evidence_layers(self):
+    def get_evidence_layers(self) -> List[QgsRasterLayer]:
         """Get all layers currently selected in the evidence data table."""
         return [
-            self.train_evidence_data.cellWidget(row, 0).currentLayer() 
+            self.train_evidence_data.cellWidget(row, 1).currentLayer() 
             for row in range(self.train_evidence_data.rowCount())
         ]
+
+
+    def get_label_layer(self) -> QgsMapLayer:
+        return self.train_label_data.currentLayer()
+    
+
+    def get_output_file(self) -> Union[str, PathLike]:
+        return self.train_model_save_path.filePath()
+
+
+    def get_processing_algorithm_name(self) -> str:
+        return self.alg_name
+
+
+    def get_parameter_values(self) -> Dict[str, Any]:
+        raise NotImplementedError("'get_parameter_values' needs to be defined in child class.")
+    
+
+    def get_common_parameter_values(self) -> Dict[str, Any]:
+        return {
+            'verbose': self.verbose.value(),
+            'random_state': None if self.random_state.value() == -1 else self.random_state.value()
+        }
+    
+
+    def get_validation_settings(self) -> Dict[str, Any]:
+        return {
+            'validation_method': self.validation_method.currentIndex(),
+            'split_size': self.split_size.value() / 100,
+            'cv': self.cv_folds.value(),
+            'validation_metric': self.validation_metric.currentIndex()
+        }
 
 
     def train_dummy_model(self):
@@ -259,22 +295,33 @@ class EISModel(QWidget, FORM_CLASS):
             layer = self.train_evidence_data.cellWidget(row, 1).currentLayer()
             MOCK_DATABASE[name]["evidence_data"][tag] = layer
 
-        # MOCK_DATABASE[name] = {
-            
-        # }
-
 
     def train_model(self):
-        """Start training the model. Should be implemented in the child class."""
-        raise NotImplementedError("Train model needs to be defined in child class.")
+        """Trains the ML model. Runs corresponding processing algorithm."""
+        print(self.get_evidence_layers())
+        print(self.get_label_layer())
+        print(self.get_output_file())
+        print(self.get_parameter_values())
+        print(self.get_common_parameter_values())
+        print(self.get_validation_settings())
+
+        result = processing.run(
+            self.get_processing_algorithm_name(),
+            {
+                'input_rasters': self.get_evidence_layers(),
+                'target_labels': self.get_label_layer(),
+                'output_file': self.get_output_file(),
+                **self.get_parameter_values(),
+                **self.get_common_parameter_values(),
+                **self.get_validation_settings()
+            }
+        )
+
+        print(result)
 
 
-    def reset_model(self):
+    def reset_parameters(self):
         """Reset validation parameters to defaults and uncollapse group boxes."""
-        self.train_parameter_box.setCollapsed(False)
-        self.train_validation_box.setCollapsed(False)
-
-        # Validation settings
         self.validation_method.setCurrentIndex(0)
         self.split_size.setValue(20)
         self.cv_folds.setValue(5)

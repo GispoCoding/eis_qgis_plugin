@@ -573,7 +573,7 @@
            <item>
             <layout class="QHBoxLayout" name="reset_start_layout">
              <item>
-              <widget class="QPushButton" name="train_reset_btn">
+              <widget class="QPushButton" name="reset_training_parameters_btn">
                <property name="text">
                 <string>Reset</string>
                </property>
