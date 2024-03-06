@@ -40,7 +40,8 @@ exclude = [
     "dist",
     "node_modules",
     "venv",
-    "pyqtgraph"
+    "pyqtgraph",
+    "seaborn"
 ]
 per-file-ignores = {}
 
