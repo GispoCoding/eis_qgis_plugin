@@ -12,12 +12,14 @@ class EISWizardRandomForest(EISMLModel):
     """
 
     def __init__(self, parent, model_type) -> None:
+        self.model_type = model_type
+        self.name = "Random forest " + ("classifier" if model_type == ModelType.CLASSIFIER else "regressor")
+
         super().__init__(parent, model_type)
         
         self.add_model_parameters()
         self.add_general_model_parameters()
 
-        self.model_type = model_type  # Classifier or regressor
         if model_type == ModelType.CLASSIFIER:
             self.initialize_classifier()
         elif model_type == ModelType.REGRESSOR:

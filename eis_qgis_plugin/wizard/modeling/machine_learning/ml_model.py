@@ -10,14 +10,18 @@ from qgis.PyQt.QtWidgets import (
     QGroupBox,
     QLabel,
     QLineEdit,
+    QProgressBar,
     QPushButton,
+    QStackedWidget,
     QTableWidget,
     QTabWidget,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.modeling.machine_learning.modeling_feedback import EISModelingGUIFeedback
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable, ModelTrainingDataTable
 
 FORM_CLASS: QWidget = load_ui("modeling/wizard_ml_model.ui")
@@ -35,7 +39,8 @@ ROW_HEIGHT = 26
 
 DATABASE = {
     "rf_classifier_1": {
-        "type": "rf_classifier",
+        "model_name": "Random forest classifier",
+        "model_type": ModelType.CLASSIFIER,
         "path": "path_to_joblib_file",
         "evidence_data": {
             "Li_ppm": "path_to_layer",
@@ -53,7 +58,8 @@ DATABASE = {
         }
     },
     "rf_regressor_3": {
-        "type": "rf_regressor",
+        "model_name": "Random forest regressor",
+        "model_type": ModelType.REGRESSOR,
         "path": "path_to_joblib_file",
         "evidence_data": {
             "EM": "path_to_layer",
@@ -97,6 +103,9 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.start_training_btn: QPushButton
         self.reset_training_parameters_btn: QPushButton
 
+        self.training_log: QTextEdit
+        self.training_progress_bar: QProgressBar
+
         self.results_table: QTableWidget
 
         # Tab 2 - Model testing
@@ -106,6 +115,7 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.test_evidence_data_box: QGroupBox
         self.test_label_data_box: QGroupBox
         self.test_metrics_box: QGroupBox
+        self.test_metrics_stack: QStackedWidget
         self.test_reset_btn: QPushButton
         self.test_run_btn: QPushButton
 
@@ -144,18 +154,35 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.start_training_btn.clicked.connect(self.train_model)
         self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
 
+        # Create feedback instance for training
+        self.training_feedback = EISModelingGUIFeedback(self.training_log, self.training_progress_bar)
+
 
     def update_selectable_models(self, tab_index: int = None):
+        filtered_models = {}
+        for run_name, model_data in DATABASE.items():
+            model_name = model_data["model_name"]
+            if model_name == self.get_model_name():
+                filtered_models[run_name] = model_data
+
         self.application_model_selection.clear()
-        self.application_model_selection.addItems(list(DATABASE.keys()))
+        self.application_model_selection.addItems(filtered_models)
         self.test_model_selection.clear()
-        self.test_model_selection.addItems(list(DATABASE.keys()))
+        self.test_model_selection.addItems(filtered_models)
+
+
+    def _on_selected_model_changed(self, table: ModelDataTable, model_key: str):
+        self.update_data_table(table, model_key)
 
 
     def update_data_table(self, table: ModelDataTable, model_key: str):
+        if model_key == "":
+            return
         if model_key in DATABASE.keys():
             tags = list(DATABASE[model_key]["evidence_data"].keys())
             table.load_model(tags)
+        else:
+            raise Exception(f"Error finding key in model database: {model_key}.")
 
 
     def initialize_model_testing(self):
@@ -166,13 +193,13 @@ class EISMLModel(QWidget, FORM_CLASS):
         # Connect signals
         self.test_run_btn.clicked.connect(self.test_model)
         self.test_model_selection.currentTextChanged.connect(
-            lambda key: self.update_data_table(self.test_evidence_data, key)
+            lambda key: self._on_selected_model_changed(self.test_evidence_data, key)
         )
-        
+
         # Initialize model selection and table with data for first model
         self.update_selectable_models()
         if self.test_model_selection.count() > 0:
-            self.update_data_table(self.test_evidence_data, self.test_model_selection.currentText())
+            self._on_selected_model_changed(self.test_evidence_data, self.test_model_selection.currentText())
 
 
     def initialize_model_application(self):
@@ -183,13 +210,15 @@ class EISMLModel(QWidget, FORM_CLASS):
         # Connect signals
         self.application_run_btn.clicked.connect(self.apply_model)
         self.application_model_selection.currentTextChanged.connect(
-            lambda key: self.update_data_table(self.application_evidence_data, key)
+            lambda key: self._on_selected_model_changed(self.application_evidence_data, key)
         )
 
         # Initialize table with data for first model
         self.update_selectable_models()  # Could be removed, already initialized in initialize_model_testing
         if self.application_model_selection.count() > 0:
-            self.update_data_table(self.application_evidence_data, self.application_model_selection.currentText())
+            self._on_selected_model_changed(
+                self.application_evidence_data, self.application_model_selection.currentText()
+            )
 
 
     def initialize_classifier(self):
@@ -209,7 +238,7 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.verbose_label.setText("Verbose")
         self.verbose = QgsSpinBox()
         self.verbose.setMinimum(0)
-        self.verbose.setMaximum(1)
+        self.verbose.setMaximum(2)
         self.train_parameter_box.layout().addRow(self.verbose_label, self.verbose)
 
         self.random_state_label = QLabel()
@@ -268,8 +297,16 @@ class EISMLModel(QWidget, FORM_CLASS):
         return self.train_model_save_path.filePath()
     
 
+    def get_training_run_name(self) -> str:
+        return self.train_model_name.text()
+
+
     def get_model_name(self) -> str:
         return self.name
+    
+
+    def get_model_type(self) -> str:
+        return self.model_type
 
 
     def get_processing_algorithm_name(self) -> str:
@@ -297,9 +334,10 @@ class EISMLModel(QWidget, FORM_CLASS):
 
 
     def save_training_run_to_model_database(self, execution_time: Optional[float] = None):
-        training_run_name = self.train_model_name.text()
+        training_run_name = self.get_training_run_name()
         DATABASE[training_run_name] = {
-            "model_type": self.get_model_name(),
+            "model_name": self.get_model_name(),
+            "model_type": self.get_model_type(),
             "file": self.get_output_file(),
             "evidence_data": self.get_evidence_layers_with_tags(),
             "labels_data": self.get_label_layer(),
@@ -334,7 +372,8 @@ class EISMLModel(QWidget, FORM_CLASS):
                 **self.get_parameter_values(),
                 **self.get_common_parameter_values(),
                 **self.get_validation_settings()
-            }
+            },
+            feedback=self.training_feedback
         )
 
         if result:

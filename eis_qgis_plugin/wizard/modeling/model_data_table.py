@@ -1,3 +1,5 @@
+from typing import List
+
 from qgis.core import QgsApplication, QgsMapLayerProxyModel
 from qgis.gui import QgsMapLayerComboBox
 from qgis.PyQt.QtGui import QIcon
@@ -28,7 +30,7 @@ class ModelDataTable(QTableWidget):
         self.setMaximumHeight(23)
 
 
-    def load_model(self, tags):
+    def load_model(self, tags: List[str]):
         """Load information about the selected model (number of rows/layers and corresponding tags)."""
         # Remove all previous rows
         self.setRowCount(0)

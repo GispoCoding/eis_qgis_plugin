@@ -12,12 +12,14 @@ class EISWizardGradientBoosting(EISMLModel):
     """
 
     def __init__(self, parent, model_type) -> None:
+        self.model_type = model_type
+        self.name = "Gradient boosting " + "classifier" if model_type == ModelType.CLASSIFIER else "regressor"
+
         super().__init__(parent, model_type)
 
         self.add_model_parameters()
         self.add_general_model_parameters()
 
-        self.model_type = model_type
         if model_type == ModelType.CLASSIFIER:
             self.initialize_classifier()
         elif model_type == ModelType.REGRESSOR:
@@ -68,7 +70,6 @@ class EISWizardGradientBoosting(EISMLModel):
 
     def initialize_classifier(self):
         """Initialize gradient boosting classifier settings."""
-        self.name = "Gradient boosting classifier"
         self.alg_name = "eis:gradient_boosting_classifier_train"
         super().initialize_classifier()
         self.loss.addItems(["log_loss", "exponential"])
@@ -76,7 +77,6 @@ class EISWizardGradientBoosting(EISMLModel):
 
     def initialize_regressor(self):
         """Initialize gradient boosting regressor settings."""
-        self.name = "Gradient boosting regressor"
         self.alg_name = "eis:gradient_boosting_regressor_train"
         super().initialize_regressor()
         self.loss.addItems(["squared_error", "absolute_error", "huber", "quantile"])

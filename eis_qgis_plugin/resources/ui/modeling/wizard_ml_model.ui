@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="modeling_tabs">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="data_preparation_tab">
       <attribute name="title">
@@ -495,6 +495,24 @@
                 <layout class="QVBoxLayout" name="verticalLayout_18">
                  <item>
                   <widget class="QTextEdit" name="training_log">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
                    <property name="autoFormatting">
                     <set>QTextEdit::AutoNone</set>
                    </property>
@@ -675,9 +693,9 @@ p, li { white-space: pre-wrap; }
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
-               <widget class="QStackedWidget" name="metrics_stacked_widget">
+               <widget class="QStackedWidget" name="test_metrics_stack">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="classification_metrics_page">
                  <layout class="QVBoxLayout" name="verticalLayout_5">

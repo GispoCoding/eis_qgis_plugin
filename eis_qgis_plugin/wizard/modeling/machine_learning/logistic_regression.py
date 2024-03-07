@@ -12,13 +12,14 @@ class EISWizardLogisticRegression(EISMLModel):
     """
 
     def __init__(self, parent) -> None:
+        self.name = "Logistic regression"
+        self.alg_name = "eis:logistic_regression_train"
+
         super().__init__(parent, ModelType.CLASSIFIER)
 
         self.add_model_parameters()
         self.add_general_model_parameters()
 
-        self.name = "Logistic regression"
-        self.alg_name = "eis:logistic_regression_train"
         super().initialize_classifier()
 
     
