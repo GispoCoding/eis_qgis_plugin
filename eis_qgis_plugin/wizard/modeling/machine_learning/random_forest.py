@@ -51,6 +51,7 @@ class EISWizardRandomForest(EISMLModel):
 
     def initialize_classifier(self):
         """Initialize random forest classifier settings."""
+        self.name = "Random forest classifier"
         self.alg_name = "eis:random_forest_classifier_train"
         super().initialize_classifier()
         self.criterion.addItems(["gini", "entropy", "log_loss"])
@@ -58,6 +59,7 @@ class EISWizardRandomForest(EISMLModel):
 
     def initialize_regressor(self):
         """Initialize random forest regressor settings."""
+        self.name = "Random forest regressor"
         self.alg_name = "eis:random_forest_classifier_train"
         super().initialize_regressor()
         self.criterion.addItems(["squared_error", "absolute_error", "friedman_mse", "poisson"])
@@ -78,8 +80,6 @@ class EISWizardRandomForest(EISMLModel):
         self.n_estimators.setValue(100)
         self.criterion.setCurrentIndex(0)
         self.max_depth.setValue(-1)
-        self.verbose.setValue(0)
-        self.random_state.setValue(-1)
 
 
     def set_tooltips(self):
@@ -100,14 +100,3 @@ class EISWizardRandomForest(EISMLModel):
         )
         self.max_depth.setToolTip(max_depth_tip)
         self.max_depth_label.setToolTip(max_depth_tip)
-
-        verbose_tip = (
-            "Specifies if modeling progress and performance should be printed."
-            " 0 doesn't print, values 1 or above will produce prints."
-        )
-        self.verbose.setToolTip(verbose_tip)
-        self.verbose_label.setToolTip(verbose_tip)
-
-        random_state_tip = "Seed for random number generation."
-        self.random_state.setToolTip(random_state_tip)
-        self.random_state_label.setToolTip(random_state_tip)

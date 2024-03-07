@@ -1,6 +1,6 @@
 from enum import Enum
 from os import PathLike
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 from qgis import processing
 from qgis.core import QgsMapLayer, QgsRasterLayer
@@ -33,7 +33,7 @@ REGRESSOR_METRICS = ["MSE", "RMSE", "MAE"]
 
 ROW_HEIGHT = 26
 
-MOCK_DATABASE = {
+DATABASE = {
     "rf_classifier_1": {
         "type": "rf_classifier",
         "path": "path_to_joblib_file",
@@ -94,7 +94,6 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.cv_folds: QgsSpinBox
         self.validation_metric: QComboBox
 
-        self.train_dummy_btn: QPushButton
         self.start_training_btn: QPushButton
         self.reset_training_parameters_btn: QPushButton
 
@@ -137,24 +136,25 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.train_evidence_data = ModelTrainingDataTable(self)
         self.train_evidence_data_layout.addWidget(self.train_evidence_data)
 
+        # Set filter to output file
+        self.train_model_save_path.setFilter("Joblib files (*.joblib)")
+
         # Connect signals
         self.validation_method.currentTextChanged.connect(self.update_validation_settings)
         self.start_training_btn.clicked.connect(self.train_model)
         self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
 
-        self.train_dummy_btn.clicked.connect(self.train_dummy_model)
-
 
     def update_selectable_models(self, tab_index: int = None):
         self.application_model_selection.clear()
-        self.application_model_selection.addItems(list(MOCK_DATABASE.keys()))
+        self.application_model_selection.addItems(list(DATABASE.keys()))
         self.test_model_selection.clear()
-        self.test_model_selection.addItems(list(MOCK_DATABASE.keys()))
+        self.test_model_selection.addItems(list(DATABASE.keys()))
 
 
     def update_data_table(self, table: ModelDataTable, model_key: str):
-        if model_key in MOCK_DATABASE.keys():
-            tags = list(MOCK_DATABASE[model_key]["evidence_data"].keys())
+        if model_key in DATABASE.keys():
+            tags = list(DATABASE[model_key]["evidence_data"].keys())
             table.load_model(tags)
 
 
@@ -164,6 +164,7 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.test_evidence_data_layout.addWidget(self.test_evidence_data)
 
         # Connect signals
+        self.test_run_btn.clicked.connect(self.test_model)
         self.test_model_selection.currentTextChanged.connect(
             lambda key: self.update_data_table(self.test_evidence_data, key)
         )
@@ -180,6 +181,7 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.application_evidence_data_layout.addWidget(self.application_evidence_data)
 
         # Connect signals
+        self.application_run_btn.clicked.connect(self.apply_model)
         self.application_model_selection.currentTextChanged.connect(
             lambda key: self.update_data_table(self.application_evidence_data, key)
         )
@@ -247,14 +249,27 @@ class EISMLModel(QWidget, FORM_CLASS):
             self.train_evidence_data.cellWidget(row, 1).currentLayer() 
             for row in range(self.train_evidence_data.rowCount())
         ]
+    
+
+    def get_evidence_layers_with_tags(self) -> List[str]:
+        """Gets evidence layers with tags as dictionary (tags keys, layers values)."""
+        table = self.train_evidence_data
+        return {
+            table.cellWidget(row, 0).text(): table.cellWidget(row, 1).currentLayer()
+            for row in range(table.rowCount())
+        }
 
 
     def get_label_layer(self) -> QgsMapLayer:
         return self.train_label_data.currentLayer()
-    
+
 
     def get_output_file(self) -> Union[str, PathLike]:
         return self.train_model_save_path.filePath()
+    
+
+    def get_model_name(self) -> str:
+        return self.name
 
 
     def get_processing_algorithm_name(self) -> str:
@@ -263,14 +278,14 @@ class EISMLModel(QWidget, FORM_CLASS):
 
     def get_parameter_values(self) -> Dict[str, Any]:
         raise NotImplementedError("'get_parameter_values' needs to be defined in child class.")
-    
+
 
     def get_common_parameter_values(self) -> Dict[str, Any]:
         return {
             'verbose': self.verbose.value(),
             'random_state': None if self.random_state.value() == -1 else self.random_state.value()
         }
-    
+
 
     def get_validation_settings(self) -> Dict[str, Any]:
         return {
@@ -281,32 +296,37 @@ class EISMLModel(QWidget, FORM_CLASS):
         }
 
 
-    def train_dummy_model(self):
-        name = self.train_model_name.text()
-        if not name:
-            return  # TODO improve
-        
-        MOCK_DATABASE[name] = {
-            "evidence_data": {}
+    def save_training_run_to_model_database(self, execution_time: Optional[float] = None):
+        training_run_name = self.train_model_name.text()
+        DATABASE[training_run_name] = {
+            "model_type": self.get_model_name(),
+            "file": self.get_output_file(),
+            "evidence_data": self.get_evidence_layers_with_tags(),
+            "labels_data": self.get_label_layer(),
+            "parameters": {
+                **self.get_common_parameter_values(),
+                **self.get_parameter_values(),
+                **self.get_validation_settings()
+            },
+            "training_execution_time": execution_time
         }
-        
+
+
+    def check_ready_for_training(self):
+        if not self.train_model_name.text():
+            raise Exception("No name specified")
         for row in range(self.train_evidence_data.rowCount()):
             tag = self.train_evidence_data.cellWidget(row, 0).text()
-            layer = self.train_evidence_data.cellWidget(row, 1).currentLayer()
-            MOCK_DATABASE[name]["evidence_data"][tag] = layer
+            if not tag:
+                raise Exception("Tag(s) missing for evidence layers")
 
 
     def train_model(self):
         """Trains the ML model. Runs corresponding processing algorithm."""
-        print(self.get_evidence_layers())
-        print(self.get_label_layer())
-        print(self.get_output_file())
-        print(self.get_parameter_values())
-        print(self.get_common_parameter_values())
-        print(self.get_validation_settings())
-
+        self.check_ready_for_training()
+        alg_name = self.get_processing_algorithm_name()
         result = processing.run(
-            self.get_processing_algorithm_name(),
+            alg_name,
             {
                 'input_rasters': self.get_evidence_layers(),
                 'target_labels': self.get_label_layer(),
@@ -317,11 +337,23 @@ class EISMLModel(QWidget, FORM_CLASS):
             }
         )
 
-        print(result)
+        if result:
+            self.save_training_run_to_model_database()
+
+
+    def test_model(self):
+        pass
+
+
+    def apply_model(self):
+        pass
 
 
     def reset_parameters(self):
-        """Reset validation parameters to defaults and uncollapse group boxes."""
+        """Reset common and validation parameters to defaults."""
+        self.verbose.setValue(0)
+        self.random_state.setValue(-1)
+
         self.validation_method.setCurrentIndex(0)
         self.split_size.setValue(20)
         self.cv_folds.setValue(5)
@@ -329,7 +361,7 @@ class EISMLModel(QWidget, FORM_CLASS):
 
 
     def set_tooltips(self):
-        """Set tooltips for the validation parameters."""
+        """Set tooltips for the common and validation parameters."""
         evidence_data_tooltip = "Evidence layers for training the model."
         self.train_evidence_data.setToolTip(evidence_data_tooltip)
         self.train_evidence_data_box.setToolTip(evidence_data_tooltip)
@@ -337,6 +369,17 @@ class EISMLModel(QWidget, FORM_CLASS):
         label_data_tooltip = "Layer with target labels for training."
         self.train_label_data.setToolTip(label_data_tooltip)
         self.train_label_data_box.setToolTip(label_data_tooltip)
+
+        verbose_tip = (
+            "Specifies if modeling progress and performance should be printed."
+            " 0 doesn't print, values 1 or above will produce prints."
+        )
+        self.verbose.setToolTip(verbose_tip)
+        self.verbose_label.setToolTip(verbose_tip)
+
+        random_state_tip = "Seed for random number generation."
+        self.random_state.setToolTip(random_state_tip)
+        self.random_state_label.setToolTip(random_state_tip)
 
         validation_method_tip = (
             "Validation method to use. 'split' divides data into two parts, 'kfold_cv'"

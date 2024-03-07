@@ -17,6 +17,7 @@ class EISWizardLogisticRegression(EISMLModel):
         self.add_model_parameters()
         self.add_general_model_parameters()
 
+        self.name = "Logistic regression"
         self.alg_name = "eis:logistic_regression_train"
         super().initialize_classifier()
 
@@ -59,8 +60,6 @@ class EISWizardLogisticRegression(EISMLModel):
         self.penalty.setCurrentIndex(0)
         self.max_iter.setValue(100)
         self.solver.setCurrentIndex(0)
-        self.verbose.setValue(0)
-        self.random_state.setValue(-1)
 
 
     def set_tooltips(self):
@@ -78,15 +77,3 @@ class EISWizardLogisticRegression(EISMLModel):
         solver_tip = "Algorithm to use in the optimization problem."
         self.solver.setToolTip(solver_tip)
         self.solver_label.setToolTip(solver_tip)
-
-        verbose_tip = (
-            "Specifies if modeling progress and performance should be printed."
-            " 0 doesn't print, values 1 or above will produce prints."
-        )
-        self.verbose.setToolTip(verbose_tip)
-        self.verbose_label.setToolTip(verbose_tip)
-
-        random_state_tip = "Seed for random number generation."
-        self.random_state.setToolTip(random_state_tip)
-        self.random_state_label.setToolTip(random_state_tip)
-

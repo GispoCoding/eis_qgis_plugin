@@ -10,14 +10,6 @@ class EISWizardGradientBoosting(EISMLModel):
     """
     Class for gradient boosting models.
     """
-    loss: QComboBox
-    learning_rate: QgsDoubleSpinBox
-    n_estimators: QgsSpinBox
-    max_depth: QgsSpinBox
-    subsample: QgsDoubleSpinBox
-    verbose: QgsSpinBox
-    random_state: QgsSpinBox
-
 
     def __init__(self, parent, model_type) -> None:
         super().__init__(parent, model_type)
@@ -76,6 +68,7 @@ class EISWizardGradientBoosting(EISMLModel):
 
     def initialize_classifier(self):
         """Initialize gradient boosting classifier settings."""
+        self.name = "Gradient boosting classifier"
         self.alg_name = "eis:gradient_boosting_classifier_train"
         super().initialize_classifier()
         self.loss.addItems(["log_loss", "exponential"])
@@ -83,6 +76,7 @@ class EISWizardGradientBoosting(EISMLModel):
 
     def initialize_regressor(self):
         """Initialize gradient boosting regressor settings."""
+        self.name = "Gradient boosting regressor"
         self.alg_name = "eis:gradient_boosting_regressor_train"
         super().initialize_regressor()
         self.loss.addItems(["squared_error", "absolute_error", "huber", "quantile"])
@@ -106,8 +100,6 @@ class EISWizardGradientBoosting(EISMLModel):
         self.n_estimators.setValue(100)
         self.max_depth.setValue(3)
         self.subsample.setValue(1)
-        self.verbose.setValue(0)
-        self.random_state.setValue(-1)
 
 
     def set_tooltips(self):
@@ -146,13 +138,10 @@ class EISWizardGradientBoosting(EISMLModel):
         self.subsample.setToolTip(subsample_tip)
         self.subsample_label.setToolTip(subsample_tip)
 
+        # Override common verbose tooltip for Gradient boosting models
         verbose_tip = (
             "Specifies if modeling progress and performance should be printed. 0 doesn't print,"
             " 1 prints once in a while depending on the number of tress, 2 or above will print for every tree."
         )
         self.verbose.setToolTip(verbose_tip)
         self.verbose_label.setToolTip(verbose_tip)
-
-        random_state_tip = "Seed for random number generation."
-        self.random_state.setToolTip(random_state_tip)
-        self.random_state_label.setToolTip(random_state_tip)
