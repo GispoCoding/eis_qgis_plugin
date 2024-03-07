@@ -39,7 +39,7 @@ class EISGammaFilter(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Size",
             minValue=0.1,
-            defaultValue=1,
+            defaultValue=3,
         )
         window_size_param.setHelp(
             '''
