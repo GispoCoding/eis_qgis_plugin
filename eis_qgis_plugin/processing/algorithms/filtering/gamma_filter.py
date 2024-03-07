@@ -37,7 +37,7 @@ class EISGammaFilter(EISProcessingAlgorithm):
 
         window_size_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
-            description="Gamma Noise Variation",
+            description="Size",
             minValue=0.1,
             defaultValue=1,
         )
