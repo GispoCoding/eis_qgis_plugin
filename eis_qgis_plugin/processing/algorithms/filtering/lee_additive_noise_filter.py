@@ -32,19 +32,19 @@ class EISLeeAdditiveNoiseFilter(EISProcessingAlgorithm):
         input_raster_param.setHelp("The input raster data set.")
         self.addParameter(input_raster_param)
 
-        noise_var_param = QgsProcessingParameterNumber(
+        window_size_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
             description="Size",
             minValue=1,
             defaultValue=3,
         )
-        noise_var_param.setHelp(
+        window_size_param.setHelp(
             '''
             The size of the filter window.
             E.g., 3 means a 3x3 window. Default to 3.
             '''
         )
-        self.addParameter(noise_var_param)
+        self.addParameter(window_size_param)
 
         window_size_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],

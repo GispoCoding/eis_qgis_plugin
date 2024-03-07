@@ -58,19 +58,19 @@ class EISGaussianFilter(EISProcessingAlgorithm):
         )
         self.addParameter(truncate_param)
 
-        size_param = QgsProcessingParameterNumber(
+        window_size_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
             description="Size",
             optional=True,
         )
-        size_param.setHelp(
+        window_size_param.setHelp(
             '''
             The size of the filter window. E.g., 3 means a 3x3 window.
             If size is not None, it overrides the dynamic size calculation based on sigma and truncate.
             Default to None.
             '''
         )
-        self.addParameter(size_param)
+        self.addParameter(window_size_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[4], description="Output raster"
