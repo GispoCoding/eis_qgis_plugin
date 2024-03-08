@@ -139,6 +139,8 @@ class EISMLModel(QWidget, FORM_CLASS):
         # Tab 3 - Model application
         self.application_model_selection: QComboBox
         self.application_run_name: QLineEdit
+        self.application_output_raster: QgsFileWidget
+
         self.application_evidence_data_layout: QVBoxLayout
         self.application_evidence_data_box: QGroupBox
         self.application_reset_btn: QPushButton
@@ -244,6 +246,8 @@ class EISMLModel(QWidget, FORM_CLASS):
                 self.application_evidence_data, self.application_model_selection.currentText()
             )
 
+        self.application_output_raster.setFilter("GeoTiff files (*.tif *.tiff)")
+
 
     def initialize_classifier(self):
         """Initialize general settings of a classifier model."""
@@ -304,12 +308,21 @@ class EISMLModel(QWidget, FORM_CLASS):
         return self.test_label_data.currentLayer()
 
 
-    def get_test_output_raster(self) -> QgsMapLayer:
+    def get_test_output_raster(self) -> str:
         return self.test_output_raster.filePath()
+    
+
+    def get_application_output_raster(self) -> str:
+        return self.application_output_raster.filePath()
 
 
     def get_test_model_file(self) -> Union[str, PathLike]:
         model_name = self.test_model_selection.currentText()
+        return DATABASE[model_name]["file"]
+
+
+    def get_application_model_file(self):
+        model_name = self.application_model_selection.currentText()
         return DATABASE[model_name]["file"]
 
 
@@ -422,10 +435,12 @@ class EISMLModel(QWidget, FORM_CLASS):
 
 
     def apply_model(self):
-        processing.run(
+        processing.runAndLoadResults(
             PREDICTION_ALG_NAME,
             {
-
+                "input_rasters": self.application_evidence_data.get_layers(),
+                "model_file": self.get_application_model_file(),
+                "output_raster": self.get_application_output_raster()
             }
         )
 
