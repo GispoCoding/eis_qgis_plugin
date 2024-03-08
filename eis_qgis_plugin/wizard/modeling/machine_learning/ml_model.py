@@ -3,9 +3,10 @@ from os import PathLike
 from typing import Any, Dict, List, Optional, Union
 
 from qgis import processing
-from qgis.core import QgsMapLayer, QgsRasterLayer
+from qgis.core import QgsMapLayer
 from qgis.gui import QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
 from qgis.PyQt.QtWidgets import (
+    QCheckBox,
     QComboBox,
     QGroupBox,
     QLabel,
@@ -34,6 +35,9 @@ class ModelType(Enum):
 
 CLASSIFIER_METRICS = ["Accuracy", "Precision", "Recall", "F1", "AUC"]
 REGRESSOR_METRICS = ["MSE", "RMSE", "MAE"]
+
+TESTING_ALG_NAME = "eis:evaluate_trained_model"
+PREDICTION_ALG_NAME = "eis:predict_with_trained_model"
 
 ROW_HEIGHT = 26
 
@@ -111,13 +115,26 @@ class EISMLModel(QWidget, FORM_CLASS):
         # Tab 2 - Model testing
         self.test_model_selection: QComboBox
         self.test_run_name: QLineEdit
+        self.test_output_raster: QgsFileWidget
+
         self.test_evidence_data_layout: QVBoxLayout
         self.test_evidence_data_box: QGroupBox
+        self.test_label_data: QgsMapLayerComboBox
         self.test_label_data_box: QGroupBox
         self.test_metrics_box: QGroupBox
         self.test_metrics_stack: QStackedWidget
         self.test_reset_btn: QPushButton
         self.test_run_btn: QPushButton
+
+        self.accuracy_checkbox: QCheckBox
+        self.precision_checkbox: QCheckBox
+        self.recall_checkbox: QCheckBox
+        self.f1_checkbox: QCheckBox
+        self.auc_checkbox: QCheckBox
+        self.mse_checkbox: QCheckBox
+        self.rmse_checkbox: QCheckBox
+        self.mae_checkbox: QCheckBox
+        self.r2_checkbox: QCheckBox
 
         # Tab 3 - Model application
         self.application_model_selection: QComboBox
@@ -201,6 +218,13 @@ class EISMLModel(QWidget, FORM_CLASS):
         if self.test_model_selection.count() > 0:
             self._on_selected_model_changed(self.test_evidence_data, self.test_model_selection.currentText())
 
+        self.test_output_raster.setFilter("GeoTiff files (*.tif *.tiff)")
+
+        self.test_metrics_in_order = [
+            self.accuracy_checkbox, self.precision_checkbox, self.recall_checkbox, self.f1_checkbox,
+            self.auc_checkbox, self.mse_checkbox, self.rmse_checkbox, self.mae_checkbox, self.r2_checkbox
+            ]
+
 
     def initialize_model_application(self):
         # Create data table and add it
@@ -272,28 +296,24 @@ class EISMLModel(QWidget, FORM_CLASS):
             self.validation_metric.setEnabled(True)
 
 
-    def get_evidence_layers(self) -> List[QgsRasterLayer]:
-        """Get all layers currently selected in the evidence data table."""
-        return [
-            self.train_evidence_data.cellWidget(row, 1).currentLayer() 
-            for row in range(self.train_evidence_data.rowCount())
-        ]
+    def get_training_label_layer(self) -> QgsMapLayer:
+        return self.train_label_data.currentLayer()
     
 
-    def get_evidence_layers_with_tags(self) -> List[str]:
-        """Gets evidence layers with tags as dictionary (tags keys, layers values)."""
-        table = self.train_evidence_data
-        return {
-            table.cellWidget(row, 0).text(): table.cellWidget(row, 1).currentLayer()
-            for row in range(table.rowCount())
-        }
+    def get_test_label_layer(self) -> QgsMapLayer:
+        return self.test_label_data.currentLayer()
 
 
-    def get_label_layer(self) -> QgsMapLayer:
-        return self.train_label_data.currentLayer()
+    def get_test_output_raster(self) -> QgsMapLayer:
+        return self.test_output_raster.filePath()
 
 
-    def get_output_file(self) -> Union[str, PathLike]:
+    def get_test_model_file(self) -> Union[str, PathLike]:
+        model_name = self.test_model_selection.currentText()
+        return DATABASE[model_name]["file"]
+
+
+    def get_training_output_file(self) -> Union[str, PathLike]:
         return self.train_model_save_path.filePath()
     
 
@@ -319,18 +339,26 @@ class EISMLModel(QWidget, FORM_CLASS):
 
     def get_common_parameter_values(self) -> Dict[str, Any]:
         return {
-            'verbose': self.verbose.value(),
-            'random_state': None if self.random_state.value() == -1 else self.random_state.value()
+            "verbose": self.verbose.value(),
+            "random_state": None if self.random_state.value() == -1 else self.random_state.value()
         }
 
 
     def get_validation_settings(self) -> Dict[str, Any]:
         return {
-            'validation_method': self.validation_method.currentIndex(),
-            'split_size': self.split_size.value() / 100,
-            'cv': self.cv_folds.value(),
-            'validation_metric': self.validation_metric.currentIndex()
+            "validation_method": self.validation_method.currentIndex(),
+            "split_size": self.split_size.value() / 100,
+            "cv": self.cv_folds.value(),
+            "validation_metric": self.validation_metric.currentIndex()
         }
+
+
+    def get_test_metric(self) -> List[int]:
+        metric_indices = []
+        for i, checkbox in enumerate(self.test_metrics_in_order):
+            if checkbox.isChecked():
+                metric_indices.append(i)
+        return metric_indices
 
 
     def save_training_run_to_model_database(self, execution_time: Optional[float] = None):
@@ -338,9 +366,9 @@ class EISMLModel(QWidget, FORM_CLASS):
         DATABASE[training_run_name] = {
             "model_name": self.get_model_name(),
             "model_type": self.get_model_type(),
-            "file": self.get_output_file(),
-            "evidence_data": self.get_evidence_layers_with_tags(),
-            "labels_data": self.get_label_layer(),
+            "file": self.get_training_output_file(),
+            "evidence_data": self.train_evidence_data.get_tagged_layers(),
+            "labels_data": self.get_training_label_layer(),
             "parameters": {
                 **self.get_common_parameter_values(),
                 **self.get_parameter_values(),
@@ -366,9 +394,9 @@ class EISMLModel(QWidget, FORM_CLASS):
         result = processing.run(
             alg_name,
             {
-                'input_rasters': self.get_evidence_layers(),
-                'target_labels': self.get_label_layer(),
-                'output_file': self.get_output_file(),
+                "input_rasters": self.train_evidence_data.get_layers(),
+                "target_labels": self.get_training_label_layer(),
+                "output_file": self.get_training_output_file(),
                 **self.get_parameter_values(),
                 **self.get_common_parameter_values(),
                 **self.get_validation_settings()
@@ -381,11 +409,25 @@ class EISMLModel(QWidget, FORM_CLASS):
 
 
     def test_model(self):
-        pass
+        processing.runAndLoadResults(
+            TESTING_ALG_NAME,
+            {
+                "input_rasters": self.test_evidence_data.get_layers(),
+                "target_labels": self.get_test_label_layer(),
+                "model_file": self.get_test_model_file(),
+                "validation_metric": self.get_test_metric(),
+                "output_raster": self.get_test_output_raster()
+            }
+        )
 
 
     def apply_model(self):
-        pass
+        processing.run(
+            PREDICTION_ALG_NAME,
+            {
+
+            }
+        )
 
 
     def reset_parameters(self):

@@ -1,6 +1,6 @@
-from typing import List
+from typing import Dict, List
 
-from qgis.core import QgsApplication, QgsMapLayerProxyModel
+from qgis.core import QgsApplication, QgsMapLayerProxyModel, QgsRasterLayer
 from qgis.gui import QgsMapLayerComboBox
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QHeaderView, QLabel, QLineEdit, QPushButton, QSizePolicy, QTableWidget
@@ -52,6 +52,15 @@ class ModelDataTable(QTableWidget):
             self.setRowHeight(i, self.row_height)
 
 
+    def get_tags(self) -> List[str]:
+        [self.cellWidget(row, 0).currentLayer() for row in range(self.rowCount())]
+
+
+    def get_layers(self) -> List[QgsRasterLayer]:
+        return [self.cellWidget(row, 1).currentLayer() for row in range(self.rowCount())]
+    
+
+
 class ModelTrainingDataTable(QTableWidget):
     """
     Class for displaying model data (evidence layers/data) in training phase.
@@ -74,6 +83,21 @@ class ModelTrainingDataTable(QTableWidget):
         self.setMinimumHeight(23)
 
         self.add_row()
+
+
+    def get_tags(self) -> List[str]:
+        [self.cellWidget(row, 0).currentLayer() for row in range(self.rowCount())]
+
+
+    def get_layers(self) -> List[QgsRasterLayer]:
+        return [self.cellWidget(row, 1).currentLayer() for row in range(self.rowCount())]
+    
+
+    def get_tagged_layers(self) -> Dict[str, QgsRasterLayer]:
+        return {
+            self.cellWidget(row, 0).text(): self.cellWidget(row, 1).currentLayer()
+            for row in range(self.rowCount())
+        }
 
 
     def create_buttons(self):

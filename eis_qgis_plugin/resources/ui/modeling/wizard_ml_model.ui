@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="modeling_tabs">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="data_preparation_tab">
       <attribute name="title">
@@ -602,7 +602,7 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="test_model_run_name_input"/>
+              <widget class="QLineEdit" name="test_run_name"/>
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="test_model_selection_label">
@@ -613,6 +613,20 @@ p, li { white-space: pre-wrap; }
              </item>
              <item row="0" column="1">
               <widget class="QComboBox" name="test_model_selection"/>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Output raster</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QgsFileWidget" name="test_output_raster">
+               <property name="storageMode">
+                <enum>QgsFileWidget::SaveFile</enum>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -774,6 +788,19 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="reset_run_layout">
              <item>
               <widget class="QPushButton" name="test_reset_btn">
@@ -821,19 +848,6 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
             </layout>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>
