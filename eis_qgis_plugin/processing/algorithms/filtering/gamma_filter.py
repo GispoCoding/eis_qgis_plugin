@@ -12,7 +12,7 @@ class EISGammaFilter(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "gamma_filter"
-        self._display_name = "Gamma Filter"
+        self._display_name = "Gamma filter"
         self._group = "Filtering"
         self._group_id = "filtering"
         self._short_help_string = '''

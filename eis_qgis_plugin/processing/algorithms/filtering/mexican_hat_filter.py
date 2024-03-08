@@ -13,7 +13,7 @@ class EISMexicanHatFilter(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "mexican_hat_filter"
-        self._display_name = "Mexican Hat Filter"
+        self._display_name = "Mexican hat filter"
         self._group = "Filtering"
         self._group_id = "filtering"
         self._short_help_string = "Apply a Mexican hat filter to the input raster"

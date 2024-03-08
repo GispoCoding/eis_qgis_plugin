@@ -40,7 +40,7 @@ class EISFocalFilter(EISProcessingAlgorithm):
             defaultValue="mean",
         )
         method_param.setHelp(
-            "The method to use for filtering. Can be either 'mean' or 'median'. Default to 'mean'."
+            "The method to use for filtering. Can be either 'mean' or 'median'."
         )
         self.addParameter(method_param)
 
@@ -51,7 +51,7 @@ class EISFocalFilter(EISProcessingAlgorithm):
             defaultValue=3,
         )
         size_param.setHelp(
-            "The size of the filter window. E.g., 3 means a 3x3 window. Default to 3."
+            "The size of the filter window. E.g., 3 means a 3x3 window."
         )
         self.addParameter(size_param)
            
@@ -62,7 +62,7 @@ class EISFocalFilter(EISProcessingAlgorithm):
             defaultValue="circle",
         )
         shape_param.setHelp(
-            "The shape of the filter window. Can be either 'square' or 'circle'. Default to 'circle'."
+            "The shape of the filter window. Can be either 'square' or 'circle'."
         )
         self.addParameter(shape_param)
 

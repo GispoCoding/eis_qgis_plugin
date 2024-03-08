@@ -12,7 +12,7 @@ class EISKuanFilter(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "kuan_filter"
-        self._display_name = "Kuan Filter"
+        self._display_name = "Kuan filter"
         self._group = "Filtering"
         self._group_id = "filtering"
         self._short_help_string = '''

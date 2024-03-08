@@ -12,7 +12,7 @@ class EISLeeAdditiveNoiseFilter(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "lee_additive_noise_filter"
-        self._display_name = "Lee Additive Noise Filter"
+        self._display_name = "Lee additive noise filter"
         self._group = "Filtering"
         self._group_id = "filtering"
         self._short_help_string = "Apply a Lee filter considering additive noise components to the input raster"

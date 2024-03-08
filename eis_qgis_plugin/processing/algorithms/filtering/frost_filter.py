@@ -12,7 +12,7 @@ class EISFrostFilter(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "frost_filter"
-        self._display_name = "Frost Filter"
+        self._display_name = "Frost filter"
         self._group = "Filtering"
         self._group_id = "filtering"
         self._short_help_string = '''

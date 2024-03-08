@@ -12,7 +12,7 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "lee_enhanced_filter"
-        self._display_name = "Lee Enhanced Filter"
+        self._display_name = "Lee enhanced filter"
         self._group = "Filtering"
         self._group_id = "filtering"
         self._short_help_string = "Apply a Lee filter considering multiplicative noise components to the input raster"
