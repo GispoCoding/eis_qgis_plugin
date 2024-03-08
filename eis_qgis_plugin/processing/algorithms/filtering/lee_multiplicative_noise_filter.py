@@ -63,14 +63,16 @@ class EISLeeMultiplicativeNoiseFilter(EISProcessingAlgorithm):
 
         n_looks_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
-            description="Multiplicative Noise Variation",
+            description="Number of looks",
             minValue=1,
             defaultValue=1,
         )
         n_looks_param.setHelp(
             '''
             Number of looks to estimate the noise variation.
-            Higher values result in higher smoothing. Default to 1.
+            Higher values result in higher smoothing.
+            Low values may result in focal mean filtering.
+            Default to 1.
             '''
         )
         self.addParameter(n_looks_param)

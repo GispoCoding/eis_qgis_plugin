@@ -50,7 +50,7 @@ class EISKuanFilter(EISProcessingAlgorithm):
 
         n_looks_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],
-            description="Number of looks to estimate the noise variation.",
+            description="Number of looks.",
             minValue=1,
             defaultValue=1,
         )

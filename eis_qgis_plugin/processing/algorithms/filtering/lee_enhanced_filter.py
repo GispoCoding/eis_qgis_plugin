@@ -49,7 +49,7 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
 
         n_looks_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],
-            description="Multiplicative Noise Variation",
+            description="Number of looks.",
             minValue=1,
             defaultValue=1,
         )
@@ -65,7 +65,7 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
 
         damping_factor = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
-            description="Multiplicative Noise Variation",
+            description="Damping factor",
             minValue=0.1,
             defaultValue=1,
             type=QgsProcessingParameterNumber.Double,

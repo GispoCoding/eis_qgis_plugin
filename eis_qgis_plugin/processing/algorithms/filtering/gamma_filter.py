@@ -51,7 +51,7 @@ class EISGammaFilter(EISProcessingAlgorithm):
 
         n_looks_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],
-            description="Gamma Noise Variation",
+            description="Number of looks.",
             minValue=1,
             defaultValue=1,
         )
