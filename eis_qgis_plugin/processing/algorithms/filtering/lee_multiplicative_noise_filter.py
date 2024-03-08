@@ -41,7 +41,7 @@ class EISLeeMultiplicativeNoiseFilter(EISProcessingAlgorithm):
         window_size_param.setHelp(
             '''
             The size of the filter window.
-            E.g., 3 means a 3x3 window. Default to 3.
+            E.g., 3 means a 3x3 window.
             '''
         )
         self.addParameter(window_size_param)
@@ -55,7 +55,7 @@ class EISLeeMultiplicativeNoiseFilter(EISProcessingAlgorithm):
         noise_var_param.setHelp(
             '''
             The size of the filter window.
-            E.g., 3 means a 3x3 window. Default to 3.
+            E.g., 3 means a 3x3 window.
             '''
         )
         self.addParameter(noise_var_param)
@@ -71,13 +71,12 @@ class EISLeeMultiplicativeNoiseFilter(EISProcessingAlgorithm):
             Number of looks to estimate the noise variation.
             Higher values result in higher smoothing.
             Low values may result in focal mean filtering.
-            Default to 1.
             '''
         )
         self.addParameter(n_looks_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[4], description="Output Raster"
+            name=self.alg_parameters[4], description="Output raster"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)

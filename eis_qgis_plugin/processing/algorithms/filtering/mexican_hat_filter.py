@@ -54,7 +54,7 @@ class EISMexicanHatFilter(EISProcessingAlgorithm):
         truncate_param.setHelp(
             '''
             The truncation factor for the gaussian kernel based on the sigma value.
-            Only if size is not given. Default to 4.0.
+            Only if size is not given.
             E.g., for sigma = 1 and truncate = 4.0, the kernel size is 9x9.
             '''
         )
@@ -68,7 +68,6 @@ class EISMexicanHatFilter(EISProcessingAlgorithm):
         size_param.setHelp(
             '''
             The size of the filter window. E.g., 3 means a 3x3 window.
-            Default to None.
             '''
         )
         self.addParameter(size_param)
@@ -82,7 +81,7 @@ class EISMexicanHatFilter(EISProcessingAlgorithm):
         direction_param.setHelp(
             '''
             The direction of calculating the kernel values.
-            Can be either 'rectangular' or 'circular'. Default to 'circular'.
+            Can be either 'rectangular' or 'circular'.
             '''
         )
         self.addParameter(direction_param)

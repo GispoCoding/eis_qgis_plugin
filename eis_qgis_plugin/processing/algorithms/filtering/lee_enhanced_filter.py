@@ -41,14 +41,14 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
         window_size_param.setHelp(
             '''
             The size of the filter window.
-            E.g., 3 means a 3x3 window. Default to 3.
+            E.g., 3 means a 3x3 window.
             '''
         )
         self.addParameter(window_size_param)
 
         n_looks_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],
-            description="Number of looks.",
+            description="Number of looks",
             minValue=1,
             defaultValue=1,
         )
@@ -57,7 +57,6 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
             Number of looks to estimate the noise variation.
             Higher values result in higher smoothing.
             Low values may result in focal mean filtering.
-            Default to 1.
             '''
         )
         self.addParameter(n_looks_param)
@@ -74,13 +73,12 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
             Extent of exponential damping effect on filtering.
             Larger damping values preserve edges better but smooths less.
             Smaller values produce more smoothing.
-            Default to 1.
             '''
         )
         self.addParameter(damping_factor)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[4], description="Output Raster"
+            name=self.alg_parameters[4], description="Output raster"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)

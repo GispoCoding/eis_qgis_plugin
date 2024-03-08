@@ -45,7 +45,7 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
         window_size_param.setHelp(
             '''
             The size of the filter window.
-            E.g., 3 means a 3x3 window. Default to 3.
+            E.g., 3 means a 3x3 window.
             '''
         )
         self.addParameter(window_size_param)
@@ -57,7 +57,7 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
             defaultValue=0.25,
             type=QgsProcessingParameterNumber.Double,
         )
-        add_noise_var_param.setHelp("The additive noise variation. Default to 0.25.")
+        add_noise_var_param.setHelp("The additive noise variation.")
         self.addParameter(add_noise_var_param)
 
         add_noise_mean_param = QgsProcessingParameterNumber(
@@ -66,7 +66,7 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
             defaultValue=0,
             type=QgsProcessingParameterNumber.Double,
         )
-        add_noise_mean_param.setHelp("The additive noise mean. Default to 0.")
+        add_noise_mean_param.setHelp("The additive noise mean.")
         self.addParameter(add_noise_mean_param)
 
         mult_noise_mean_param = QgsProcessingParameterNumber(
@@ -76,11 +76,11 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
             defaultValue=1.0,
             type=QgsProcessingParameterNumber.Double,
         )
-        mult_noise_mean_param.setHelp("The multiplicative noise mean. Default to 1.")
+        mult_noise_mean_param.setHelp("The multiplicative noise mean.")
         self.addParameter(mult_noise_mean_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[5], description="Output Raster"
+            name=self.alg_parameters[5], description="Output raster"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)

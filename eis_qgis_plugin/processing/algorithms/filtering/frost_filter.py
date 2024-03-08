@@ -43,7 +43,7 @@ class EISFrostFilter(EISProcessingAlgorithm):
         window_size_param.setHelp(
             '''
             The size of the filter window.
-            E.g., 3 means a 3x3 window. Default to 3.
+            E.g., 3 means a 3x3 window.
             '''
         )
         self.addParameter(window_size_param)
@@ -60,13 +60,12 @@ class EISFrostFilter(EISProcessingAlgorithm):
             Extent of exponential damping effect on filtering.
             Larger damping values preserve edges better but smooths less.
             Smaller values produce more smoothing.
-            Default to 1.
             '''
         )
         self.addParameter(damping_factor)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[3], description="Output Raster"
+            name=self.alg_parameters[3], description="Output raster"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)
