@@ -1,7 +1,8 @@
 from typing import Tuple
 
 import numpy as np
-from qgis.core import QgsMapLayer
+from qgis import processing
+from qgis.core import QgsRasterLayer
 from qgis.gui import QgsDoubleSpinBox
 
 
@@ -48,9 +49,19 @@ class GaussianMembership(FuzzyMembership):
         return np.exp(-((x - c) ** 2) / (2 * sigma ** 2))
 
     @staticmethod
-    def compute(c: float, sigma: float, input_raster: QgsMapLayer, output_raster: str):
-        # TODO
-        pass
+    def compute(c: float, sigma: float, input_raster: QgsRasterLayer, output_raster: str):
+        # NOTE: We are using QGIS native algorithm here before EIS Toolkit includes fuzzy memberships
+        processing.runAndLoadResults(
+            "native:fuzzifyrastergaussianmembership",
+            {
+                'INPUT': input_raster,
+                'BAND': 1,
+                'FUZZYMIDPOINT': c,
+                'FUZZYSPREAD': sigma,
+                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+            }
+        )
+
 
 
 class LargeMembership(FuzzyMembership):
@@ -73,9 +84,18 @@ class LargeMembership(FuzzyMembership):
         return 1 / (1 + np.exp(-k * (x - c)))
     
     @staticmethod
-    def compute(c: float, k: float, input_raster: QgsMapLayer, output_raster: str):
-        # TODO
-        pass
+    def compute(c: float, k: float, input_raster: QgsRasterLayer, output_raster: str):
+        # NOTE: We are using QGIS native algorithm here before EIS Toolkit includes fuzzy memberships
+        processing.runAndLoadResults(
+            "native:fuzzifyrasterlargemembership",
+            {
+                'INPUT': input_raster,
+                'BAND': 1,
+                'FUZZYMIDPOINT': c,
+                'FUZZYSPREAD': k,
+                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+            }
+        )
 
 
 class LinearMembership(FuzzyMembership):
@@ -97,9 +117,18 @@ class LinearMembership(FuzzyMembership):
         return np.clip((x - a) / (b - a), 0, 1)
     
     @staticmethod
-    def compute(a: float, b: float, input_raster: QgsMapLayer, output_raster: str):
-        # TODO
-        pass
+    def compute(a: float, b: float, input_raster: QgsRasterLayer, output_raster: str):
+        # NOTE: We are using QGIS native algorithm here before EIS Toolkit includes fuzzy memberships
+        processing.runAndLoadResults(
+            "native:fuzzifyrasterlinearmembership",
+            {
+                'INPUT': input_raster,
+                'BAND': 1,
+                'FUZZYLOWBOUND': a,
+                'FUZZYHIGHBOUND': b,
+                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+            }
+        )
 
 
 class NearMembership(FuzzyMembership):
@@ -107,7 +136,7 @@ class NearMembership(FuzzyMembership):
     def __init__(self, c: QgsDoubleSpinBox, k: QgsDoubleSpinBox):
         self.c = c
         self.k = k
-        self.defaults = {self.c: 50, self.k: 5}
+        self.defaults = {self.c: 50, self.k: 0.01}
 
     def get_param_values(self) -> Tuple[float, float]:
         return self.c.value(), self.k.value()
@@ -122,9 +151,18 @@ class NearMembership(FuzzyMembership):
         return np.exp(-k * (x - c) ** 2)
     
     @staticmethod
-    def compute(c: float, k: float, input_raster: QgsMapLayer, output_raster: str):
-        # TODO
-        pass
+    def compute(c: float, k: float, input_raster: QgsRasterLayer, output_raster: str):
+        # NOTE: We are using QGIS native algorithm here before EIS Toolkit includes fuzzy memberships
+        processing.runAndLoadResults(
+            "native:fuzzifyrasternearmembership",
+            {
+                'INPUT': input_raster,
+                'BAND': 1,
+                'FUZZYMIDPOINT': c,
+                'FUZZYSPREAD': k,
+                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+            }
+        )
     
 
 class PowerMembership(FuzzyMembership):
@@ -147,9 +185,19 @@ class PowerMembership(FuzzyMembership):
         return np.clip(1 - ((x - a) / (b - a)) ** alpha, 0, 1)
     
     @staticmethod
-    def compute(a: float, b: float, input_raster: QgsMapLayer, output_raster: str):
-        # TODO
-        pass
+    def compute(a: float, b: float, alpha: float, input_raster: QgsRasterLayer, output_raster: str):
+        # NOTE: We are using QGIS native algorithm here before EIS Toolkit includes fuzzy memberships
+        processing.runAndLoadResults(
+            "native:fuzzifyrasterpowermembership",
+            {
+                'INPUT': input_raster,
+                'BAND': 1,
+                'FUZZYLOWBOUND': a,
+                'FUZZYHIGHBOUND': b,
+                'FUZZYEXPONENT': alpha,
+                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+            }
+        )
 
 
 class SmallMembership(FuzzyMembership):
@@ -175,6 +223,15 @@ class SmallMembership(FuzzyMembership):
         return 1 - self._large_membership_function(x, c, k)
     
     @staticmethod
-    def compute(c: float, k: float, input_raster: QgsMapLayer, output_raster: str):
-        # TODO
-        pass
+    def compute(c: float, k: float, input_raster: QgsRasterLayer, output_raster: str):
+        # NOTE: We are using QGIS native algorithm here before EIS Toolkit includes fuzzy memberships
+        processing.runAndLoadResults(
+            "native:fuzzifyrastersmallmembership",
+            {
+                'INPUT': input_raster,
+                'BAND': 1,
+                'FUZZYMIDPOINT': c,
+                'FUZZYSPREAD': k,
+                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+            }
+        )

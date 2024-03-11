@@ -97,8 +97,6 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
 
         self.run_overlay_btn = QPushButton()
 
-        self.active_overlay_method = self._on_overlay_method_changed()
-
         # INITIALIZE MEMBERSHIPS AND LINK WIDGETS
         self.initialize_memberships()
 
