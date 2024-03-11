@@ -24,6 +24,7 @@ from qgis.PyQt.QtWidgets import (
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.machine_learning.modeling_feedback import EISModelingGUIFeedback
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable, ModelTrainingDataTable
+from eis_qgis_plugin.wizard.modeling.model_utils import set_file_widget_placeholder_text
 
 FORM_CLASS: QWidget = load_ui("modeling/wizard_ml_model.ui")
 
@@ -40,6 +41,8 @@ TESTING_ALG_NAME = "eis:evaluate_trained_model"
 PREDICTION_ALG_NAME = "eis:predict_with_trained_model"
 
 ROW_HEIGHT = 26
+
+TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
 
 DATABASE = {
     "rf_classifier_1": {
@@ -73,6 +76,7 @@ DATABASE = {
         },
     },
 }
+
 
 
 class EISMLModel(QWidget, FORM_CLASS):
@@ -220,6 +224,7 @@ class EISMLModel(QWidget, FORM_CLASS):
         if self.test_model_selection.count() > 0:
             self._on_selected_model_changed(self.test_evidence_data, self.test_model_selection.currentText())
 
+        set_file_widget_placeholder_text(self.test_output_raster)
         self.test_output_raster.setFilter("GeoTiff files (*.tif *.tiff)")
 
         self.test_metrics_in_order = [
@@ -246,6 +251,7 @@ class EISMLModel(QWidget, FORM_CLASS):
                 self.application_evidence_data, self.application_model_selection.currentText()
             )
 
+        set_file_widget_placeholder_text(self.application_output_raster)
         self.application_output_raster.setFilter("GeoTiff files (*.tif *.tiff)")
 
 
@@ -309,11 +315,13 @@ class EISMLModel(QWidget, FORM_CLASS):
 
 
     def get_test_output_raster(self) -> str:
-        return self.test_output_raster.filePath()
+        fp = self.test_output_raster.filePath()
+        return fp if fp != "" else TEMPORARY_OUTPUT
     
 
     def get_application_output_raster(self) -> str:
-        return self.application_output_raster.filePath()
+        fp = self.application_output_raster.filePath()
+        return fp if fp != "" else TEMPORARY_OUTPUT
 
 
     def get_test_model_file(self) -> Union[str, PathLike]:

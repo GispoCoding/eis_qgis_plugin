@@ -564,13 +564,13 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="output_raster_box">
+            <widget class="QGroupBox" name="output_raster_overlay_box">
              <property name="title">
               <string>Output raster</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
-               <widget class="QgsFileWidget" name="output_raster"/>
+               <widget class="QgsFileWidget" name="output_raster_overlay"/>
               </item>
              </layout>
             </widget>
