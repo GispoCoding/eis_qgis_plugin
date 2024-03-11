@@ -45,7 +45,7 @@ class EISGaussianFilter(EISProcessingAlgorithm):
         truncate_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],
             description="Truncate",
-            minValue=1.0,
+            minValue=0.001,
             defaultValue=4.0,
             type=QgsProcessingParameterNumber.Double,
         )
