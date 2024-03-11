@@ -35,7 +35,7 @@ class EISGaussianFilter(EISProcessingAlgorithm):
         sigma_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
             description="Sigma",
-            minValue=1.0,
+            minValue=0.001,
             defaultValue=1.0,
             type=QgsProcessingParameterNumber.Double,
         )
