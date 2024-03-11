@@ -336,4 +336,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         self.get_results(results, parameters)
 
+        feedback.setProgress(100)
+
         return results

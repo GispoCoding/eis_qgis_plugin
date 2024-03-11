@@ -25,7 +25,7 @@ class EISGradientBoostingRegressor(EISProcessingAlgorithm):
             "input_rasters",
             "target_labels",
             "validation_method",
-            "validation_metric",
+            "validation_metrics",
             "split_size",
             "cv_folds",
             "loss",
@@ -62,9 +62,10 @@ class EISGradientBoostingRegressor(EISProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterEnum(
                 name=self.alg_parameters[3],
-                description="Validation metric",
+                description="Validation metrics",
                 options=["mse", "rmse", "mae", "r2"],
-                defaultValue="mse"
+                defaultValue="mse",
+                allowMultiple=True
             )
         )
 
