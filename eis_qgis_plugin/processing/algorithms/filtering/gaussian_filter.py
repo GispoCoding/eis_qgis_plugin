@@ -61,6 +61,7 @@ class EISGaussianFilter(EISProcessingAlgorithm):
         window_size_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
             description="Size",
+            minValue=3,
             optional=True,
         )
         window_size_param.setHelp(

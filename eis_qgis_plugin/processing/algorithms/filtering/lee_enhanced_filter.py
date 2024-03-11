@@ -35,7 +35,7 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
         window_size_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
             description="Size",
-            minValue=1,
+            minValue=3,
             defaultValue=3,
         )
         window_size_param.setHelp(
