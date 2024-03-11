@@ -152,7 +152,7 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         set_file_widget_placeholder_text(self.output_raster_membership)
 
         # Overlay
-        self.input_rasters_table = ModelTrainingDataTable(self, add_tag_column=False, inital_rows=2)
+        self.input_rasters_table = ModelTrainingDataTable(self, add_tag_column=False, inital_rows=2, min_rows=2)
         self.fuzzy_rasters_layout.addWidget(self.input_rasters_table)
 
         self.output_raster_overlay.setFilter("GeoTiff files (*.tif *.tiff)")

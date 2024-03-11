@@ -70,11 +70,19 @@ class ModelTrainingDataTable(QTableWidget):
     This table has "add" or "remove" buttons to control how many rows are used.
     """
 
-    def __init__(self, parent, add_tag_column: bool = True, inital_rows: int = 1, row_height: int = 26):
+    def __init__(
+        self,
+        parent,
+        add_tag_column: bool = True,
+        inital_rows: int = 1,
+        row_height: int = 26,
+        min_rows: int = 1
+    ):
         super().__init__(parent)
 
         self.row_height = row_height
         self.tag_column = add_tag_column
+        self.min_rows = min_rows
 
         if add_tag_column:
             self.init_with_tag()
@@ -190,7 +198,7 @@ class ModelTrainingDataTable(QTableWidget):
     def remove_row(self):
         """Remove selected row from the table."""
         rows = self.rowCount()
-        if rows == 1:  # Can't remove the last row
+        if rows == self.min_rows:  # Can't remove the last row
             return
         selection = self.selectedIndexes()
         row_index = rows - 1 if len(selection) <= 0 else selection[0].row()
