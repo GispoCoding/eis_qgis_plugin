@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from qgis import processing
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsDoubleSpinBox, QgsFileWidget, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import (
@@ -29,7 +30,7 @@ from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     SmallMembership,
 )
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
-from eis_qgis_plugin.wizard.modeling.model_utils import set_file_widget_placeholder_text
+from eis_qgis_plugin.wizard.modeling.model_utils import TEMPORARY_OUTPUT, set_file_widget_placeholder_text
 
 # from eis_qgis_plugin.processing.algorithms.prediction.fuzzy_overlay import (
     
@@ -96,7 +97,7 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         self.output_raster_overlay_box: QGroupBox
         self.output_raster_overlay: QgsFileWidget
 
-        self.run_overlay_btn = QPushButton()
+        self.run_overlay_btn: QPushButton
 
         # INITIALIZE MEMBERSHIPS AND LINK WIDGETS
         self.initialize_memberships()
@@ -174,6 +175,11 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         return membership_type, self.memberships[membership_type]
 
 
+    def get_overlay_output_raster(self) -> str:
+        fp = self.output_raster_overlay.filePath()
+        return fp if fp != "" else TEMPORARY_OUTPUT
+
+
     def _on_reset_clicked(self):
         """Reset active fuzzy membership parameters to defaults."""
         _, membership = self.get_active_membership()
@@ -189,6 +195,7 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         """Run the selected membership transformation function with current parameter values."""
         _, membership = self.get_active_membership()
         params = membership.get_param_values()
+        print(self.output_raster_membership.filePath())
         membership.compute(
             *params,
             self.input_raster_membership.currentLayer(), 
@@ -198,17 +205,29 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
 
     def _on_run_overlay_clicked(self):
         """Run fuzzy overlay with the chosen method."""
+        # The order here needs to match the order of overlay methods in processing algorithm
         if self.and_method.isChecked():
-            self.active_overlay_method = "and"
+            overlay_method_index = 0  # And
         elif self.or_method.isChecked():
-            self.active_overlay_method = "or"
+            overlay_method_index = 1  # Or
         elif self.sum_method.isChecked():
-            self.active_overlay_method = "sum"
+            overlay_method_index = 2  # Sum
         elif self.product_method.isChecked():
-            self.active_overlay_method = "product"
+            overlay_method_index = 3  # Product
         elif self.gamma_method.isChecked():
-            self.active_overlay_method = "gamma"
-        # TODO
+            overlay_method_index = 4  # Gamma
+        else:
+            raise Exception("No overlay method selected, cannot run fuzzy ovelay.")
+
+        processing.runAndLoadResults(
+            "eis:fuzzy_overlay",
+            {
+                'input_rasters': self.input_rasters_table.get_layers(),
+                'overlay_method': overlay_method_index,
+                'gamma': self.gamma_value.value(),
+                'output_raster': self.get_overlay_output_raster()
+            }
+        )
 
 
     def plot(self):

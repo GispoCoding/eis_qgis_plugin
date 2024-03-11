@@ -86,6 +86,7 @@ class ModelTrainingDataTable(QTableWidget):
         for _ in range(inital_rows):
             self.add_row()
 
+
     def init_with_tag(self):
         self.labels = ["Tag", "Data", "Add", "Delete"]
         self.setColumnCount(len(self.labels))
@@ -95,6 +96,7 @@ class ModelTrainingDataTable(QTableWidget):
         self.setColumnWidth(2, 50)
         self.setColumnWidth(3, 50)
 
+
     def init_without_tag(self):
         self.labels = ["Data", "Add", "Delete"]
         self.setColumnCount(len(self.labels))
@@ -103,15 +105,21 @@ class ModelTrainingDataTable(QTableWidget):
         self.setColumnWidth(1, 50)
         self.setColumnWidth(2, 50)
 
+
     def get_tags(self) -> List[str]:
+        if not self.tag_column:
+            raise NotImplementedError("The model data table was initialized without tag column.")
         [self.cellWidget(row, 0).currentLayer() for row in range(self.rowCount())]
 
 
     def get_layers(self) -> List[QgsRasterLayer]:
-        return [self.cellWidget(row, 1).currentLayer() for row in range(self.rowCount())]
+        layer_col = 1 if self.tag_column else 0
+        return [self.cellWidget(row, layer_col).currentLayer() for row in range(self.rowCount())]
     
 
     def get_tagged_layers(self) -> Dict[str, QgsRasterLayer]:
+        if not self.tag_column:
+            raise NotImplementedError("The model data table was initialized without tag column.")
         return {
             self.cellWidget(row, 0).text(): self.cellWidget(row, 1).currentLayer()
             for row in range(self.rowCount())

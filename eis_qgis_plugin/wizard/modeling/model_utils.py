@@ -1,6 +1,8 @@
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLineEdit
 
+TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
+
 
 def set_file_widget_placeholder_text(
     file_widget: QgsFileWidget, placeholder_text = "[Save to temporary file]"
