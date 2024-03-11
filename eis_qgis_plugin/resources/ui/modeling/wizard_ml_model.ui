@@ -38,325 +38,183 @@
             <height>795</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_11">
+          <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
-            <widget class="QGroupBox" name="groupBox">
-             <property name="title">
-              <string>&quot;Feature engineering&quot; ?</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_9">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <item>
-                 <layout class="QFormLayout" name="formLayout">
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="data_transformations_label">
-                    <property name="text">
-                     <string>Data transformations</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QComboBox" name="binarize_mode">
-                    <item>
-                     <property name="text">
-                      <string>Binarize</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Clip</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Normalize</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Z-score normalize</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Min-max scale</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Winsorize</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Sigmoid transform</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Logarithmic transform</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="coda_transformations_label">
-                    <property name="text">
-                     <string>CoDa transformations</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QComboBox" name="coda_mode">
-                    <item>
-                     <property name="text">
-                      <string>ALR</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Inverse ALR</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>CLR</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Inverse CLR</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Single ILR</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Pairwise logratio</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Single PLR</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>PLR</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="encode_data_label">
-                    <property name="text">
-                     <string>Encode data</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QComboBox" name="encode_mode">
-                    <item>
-                     <property name="text">
-                      <string>One-hot encode</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Encode labels</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="data_cleaning_label">
-                    <property name="text">
-                     <string>Data cleaning</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QComboBox" name="data_cleaning_mode">
-                    <item>
-                     <property name="text">
-                      <string>Remove missing data</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Impute missing data</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Harmonize nodata</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="discretize_label">
-                    <property name="text">
-                     <string>Discretize/bin data</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="1">
-                   <widget class="QComboBox" name="discretize_mode">
-                    <item>
-                     <property name="text">
-                      <string>Manual breaks</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Defined intervals</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Equal intervals</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Quantiles</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Natural breaks</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Geometric intervals</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Standard deviation</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_4">
-                  <item>
-                   <widget class="QPushButton" name="data_cleaning_btn">
-                    <property name="text">
-                     <string>Open</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="data_transformations_btn">
-                    <property name="text">
-                     <string>Open</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="coda_transformations_btn">
-                    <property name="text">
-                     <string>Open</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="encode_data_btn">
-                    <property name="text">
-                     <string>Open</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="discretize_data_btn">
-                    <property name="text">
-                     <string>Open</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <layout class="QFormLayout" name="formLayout">
+               <item row="0" column="0">
+                <widget class="QLabel" name="data_cleaning_label">
+                 <property name="text">
+                  <string>Data cleaning</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="data_cleaning_mode">
+                 <item>
+                  <property name="text">
+                   <string>Remove missing data</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Impute missing data</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Harmonize nodata</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="data_transformations_label">
+                 <property name="text">
+                  <string>Data transformations</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="binarize_mode">
+                 <item>
+                  <property name="text">
+                   <string>Binarize</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Clip</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Normalize</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Z-score normalize</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Min-max scale</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Winsorize</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Sigmoid transform</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Logarithmic transform</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="encode_data_label">
+                 <property name="text">
+                  <string>Encode data</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QComboBox" name="encode_mode">
+                 <item>
+                  <property name="text">
+                   <string>One-hot encode</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Encode labels</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QPushButton" name="data_cleaning_btn">
+                 <property name="text">
+                  <string>Open</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="data_transformations_btn">
+                 <property name="text">
+                  <string>Open</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="encode_data_btn">
+                 <property name="text">
+                  <string>Open</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_2">
-             <property name="title">
-              <string>Training data tools</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_10">
-              <item>
-               <layout class="QFormLayout" name="formLayout_2">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_5">
-                  <property name="text">
-                   <string>Balance data</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QPushButton" name="balance_data_btn">
-                  <property name="text">
-                   <string>Open</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_6">
-                  <property name="text">
-                   <string>Split data</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QPushButton" name="split_data_btn">
-                  <property name="text">
-                   <string>Open</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_7">
-                  <property name="text">
-                   <string>Sample data</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QPushButton" name="sample_data_btn">
-                  <property name="text">
-                   <string>Open</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="feature_creation_label">
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>(Feature creation?)</string>
-             </property>
-            </widget>
+            <layout class="QFormLayout" name="formLayout_2">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>Balance data</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QPushButton" name="balance_data_btn">
+               <property name="text">
+                <string>Open</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Split data</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="split_data_btn">
+               <property name="text">
+                <string>Open</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Sample data</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="sample_data_btn">
+               <property name="text">
+                <string>Open</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <spacer name="verticalSpacer">
@@ -433,6 +291,22 @@
               </widget>
              </item>
             </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
            </item>
            <item>
             <widget class="QGroupBox" name="train_evidence_data_box">
@@ -542,14 +416,14 @@
                </widget>
               </item>
               <item row="3" column="0">
-               <widget class="QLabel" name="validation_metric_label">
+               <widget class="QLabel" name="validation_metrics_label">
                 <property name="text">
                  <string>Metric</string>
                 </property>
                </widget>
               </item>
               <item row="3" column="1">
-               <widget class="QComboBox" name="validation_metric"/>
+               <widget class="QComboBox" name="validation_metrics"/>
               </item>
               <item row="1" column="1">
                <widget class="QgsSpinBox" name="split_size">
@@ -573,7 +447,7 @@
            <item>
             <layout class="QHBoxLayout" name="reset_start_layout">
              <item>
-              <widget class="QPushButton" name="train_reset_btn">
+              <widget class="QPushButton" name="reset_training_parameters_btn">
                <property name="text">
                 <string>Reset</string>
                </property>
@@ -591,13 +465,6 @@
                 </size>
                </property>
               </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="train_dummy_btn">
-               <property name="text">
-                <string>Train dummy model</string>
-               </property>
-              </widget>
              </item>
              <item>
               <widget class="QPushButton" name="start_training_btn">
@@ -628,6 +495,24 @@
                 <layout class="QVBoxLayout" name="verticalLayout_18">
                  <item>
                   <widget class="QTextEdit" name="training_log">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
                    <property name="autoFormatting">
                     <set>QTextEdit::AutoNone</set>
                    </property>
@@ -717,7 +602,7 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="test_model_run_name_input"/>
+              <widget class="QLineEdit" name="test_run_name"/>
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="test_model_selection_label">
@@ -729,7 +614,37 @@ p, li { white-space: pre-wrap; }
              <item row="0" column="1">
               <widget class="QComboBox" name="test_model_selection"/>
              </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Output raster</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QgsFileWidget" name="test_output_raster">
+               <property name="storageMode">
+                <enum>QgsFileWidget::SaveFile</enum>
+               </property>
+              </widget>
+             </item>
             </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
            </item>
            <item>
             <widget class="QGroupBox" name="test_evidence_data_box">
@@ -769,14 +684,32 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <widget class="QGroupBox" name="metrics_box">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>500</height>
+              </size>
+             </property>
              <property name="title">
               <string>Metrics</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
-               <widget class="QStackedWidget" name="metrics_stacked_widget">
+               <widget class="QStackedWidget" name="test_metrics_stack">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="classification_metrics_page">
                  <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -941,7 +874,7 @@ p, li { white-space: pre-wrap; }
             <height>795</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_20">
+          <layout class="QVBoxLayout" name="verticalLayout_10">
            <item>
             <layout class="QFormLayout" name="model_application_info_layout">
              <item row="1" column="0">
@@ -964,7 +897,37 @@ p, li { white-space: pre-wrap; }
              <item row="0" column="1">
               <widget class="QComboBox" name="application_model_selection"/>
              </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Output raster</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QgsFileWidget" name="application_output_raster">
+               <property name="storageMode">
+                <enum>QgsFileWidget::SaveFile</enum>
+               </property>
+              </widget>
+             </item>
             </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
            </item>
            <item>
             <widget class="QGroupBox" name="application_evidence_data_box">

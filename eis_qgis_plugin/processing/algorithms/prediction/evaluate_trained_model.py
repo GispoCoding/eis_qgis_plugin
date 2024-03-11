@@ -52,7 +52,8 @@ class EISEvaluateTrainedModel(EISProcessingAlgorithm):
                 name=self.alg_parameters[3],
                 description="Evaluation metric",
                 options=["accuracy", "precision", "recall", "f1", "auc", "mse", "rmse", "mae", "r2"],
-                defaultValue="accuracy"
+                defaultValue="accuracy",
+                allowMultiple=True
             )
         )
 

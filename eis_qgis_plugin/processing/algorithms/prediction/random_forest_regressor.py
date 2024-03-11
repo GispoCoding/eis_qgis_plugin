@@ -25,10 +25,11 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
             "input_rasters",
             "target_labels",
             "validation_method",
-            "validation_metric",
+            "validation_metrics",
             "split_size",
             "cv_folds",
             "n_estimators",
+            "criterion",
             "max_depth",
             "verbose",
             "random_state",
@@ -59,9 +60,10 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterEnum(
                 name=self.alg_parameters[3],
-                description="Validation metric",
+                description="Validation metrics",
                 options=["mse", "rmse", "mae", "r2"],
-                defaultValue="mse"
+                defaultValue="mse",
+                allowMultiple=True
             )
         )
 
@@ -95,8 +97,17 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterNumber(
+            QgsProcessingParameterEnum(
                 name=self.alg_parameters[7],
+                description="Criterion",
+                options=["squared_error", "absolute_error", "friedman_mse", "poisson"],
+                defaultValue="squared_error"
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                name=self.alg_parameters[8],
                 description="Max depth",
                 optional=True,
                 minValue=1
@@ -106,7 +117,7 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[8],
+                name=self.alg_parameters[9],
                 description="Verbose",
                 defaultValue=0,
                 minValue=0,
@@ -116,7 +127,7 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                name=self.alg_parameters[9],
+                name=self.alg_parameters[10],
                 description="Random state",
                 optional=True,
                 minValue=0
@@ -125,7 +136,7 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[10],
+                name=self.alg_parameters[11],
                 description="Output model",
                 fileFilter='.joblib (*.joblib)'
             )

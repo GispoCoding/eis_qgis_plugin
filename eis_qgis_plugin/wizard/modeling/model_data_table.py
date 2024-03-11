@@ -1,4 +1,6 @@
-from qgis.core import QgsApplication, QgsMapLayerProxyModel
+from typing import Dict, List
+
+from qgis.core import QgsApplication, QgsMapLayerProxyModel, QgsRasterLayer
 from qgis.gui import QgsMapLayerComboBox
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QHeaderView, QLabel, QLineEdit, QPushButton, QSizePolicy, QTableWidget
@@ -28,7 +30,7 @@ class ModelDataTable(QTableWidget):
         self.setMaximumHeight(23)
 
 
-    def load_model(self, tags):
+    def load_model(self, tags: List[str]):
         """Load information about the selected model (number of rows/layers and corresponding tags)."""
         # Remove all previous rows
         self.setRowCount(0)
@@ -48,6 +50,15 @@ class ModelDataTable(QTableWidget):
             self.setCellWidget(i, 1, layer_selection)
 
             self.setRowHeight(i, self.row_height)
+
+
+    def get_tags(self) -> List[str]:
+        [self.cellWidget(row, 0).currentLayer() for row in range(self.rowCount())]
+
+
+    def get_layers(self) -> List[QgsRasterLayer]:
+        return [self.cellWidget(row, 1).currentLayer() for row in range(self.rowCount())]
+    
 
 
 class ModelTrainingDataTable(QTableWidget):
@@ -72,6 +83,21 @@ class ModelTrainingDataTable(QTableWidget):
         self.setMinimumHeight(23)
 
         self.add_row()
+
+
+    def get_tags(self) -> List[str]:
+        [self.cellWidget(row, 0).currentLayer() for row in range(self.rowCount())]
+
+
+    def get_layers(self) -> List[QgsRasterLayer]:
+        return [self.cellWidget(row, 1).currentLayer() for row in range(self.rowCount())]
+    
+
+    def get_tagged_layers(self) -> Dict[str, QgsRasterLayer]:
+        return {
+            self.cellWidget(row, 0).text(): self.cellWidget(row, 1).currentLayer()
+            for row in range(self.rowCount())
+        }
 
 
     def create_buttons(self):
