@@ -102,7 +102,7 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.validation_method: QComboBox
         self.split_size: QgsSpinBox
         self.cv_folds: QgsSpinBox
-        self.validation_metric: QComboBox
+        self.validation_metrics: QComboBox
 
         self.start_training_btn: QPushButton
         self.reset_training_parameters_btn: QPushButton
@@ -251,14 +251,14 @@ class EISMLModel(QWidget, FORM_CLASS):
 
     def initialize_classifier(self):
         """Initialize general settings of a classifier model."""
-        self.validation_metric.clear()
-        self.validation_metric.addItems(CLASSIFIER_METRICS)
+        self.validation_metrics.clear()
+        self.validation_metrics.addItems(CLASSIFIER_METRICS)
 
 
     def initialize_regressor(self):
         """Initialize general settings of a regressor model."""
-        self.validation_metric.clear()
-        self.validation_metric.addItems(REGRESSOR_METRICS)
+        self.validation_metrics.clear()
+        self.validation_metrics.addItems(REGRESSOR_METRICS)
 
 
     def add_general_model_parameters(self):
@@ -285,19 +285,19 @@ class EISMLModel(QWidget, FORM_CLASS):
         if method == "split":
             self.split_size.setEnabled(True)
             self.cv_folds.setEnabled(False)
-            self.validation_metric.setEnabled(True)
+            self.validation_metrics.setEnabled(True)
         elif method == "leave-one-out cv":
             self.split_size.setEnabled(False)
             self.cv_folds.setEnabled(False)
-            self.validation_metric.setEnabled(True)
+            self.validation_metrics.setEnabled(True)
         elif method == "none":
             self.split_size.setEnabled(False)
             self.cv_folds.setEnabled(False)
-            self.validation_metric.setEnabled(False)
+            self.validation_metrics.setEnabled(False)
         else:
             self.split_size.setEnabled(False)
             self.cv_folds.setEnabled(True)
-            self.validation_metric.setEnabled(True)
+            self.validation_metrics.setEnabled(True)
 
 
     def get_training_label_layer(self) -> QgsMapLayer:
@@ -362,7 +362,7 @@ class EISMLModel(QWidget, FORM_CLASS):
             "validation_method": self.validation_method.currentIndex(),
             "split_size": self.split_size.value() / 100,
             "cv": self.cv_folds.value(),
-            "validation_metric": self.validation_metric.currentIndex()
+            "validation_metrics": [self.validation_metrics.currentIndex()]
         }
 
 
@@ -496,5 +496,5 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.cv_folds_label.setToolTip(cv_folds_tip)
 
         validation_metric_tip = "Metric to use for scoring the model."
-        self.validation_metric.setToolTip(validation_metric_tip)
-        self.validation_metric_label.setToolTip(validation_metric_tip)
+        self.validation_metrics.setToolTip(validation_metric_tip)
+        self.validation_metrics_label.setToolTip(validation_metric_tip)

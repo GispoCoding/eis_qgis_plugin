@@ -25,7 +25,7 @@ class EISRandomForestClassifier(EISProcessingAlgorithm):
             "input_rasters",
             "target_labels",
             "validation_method",
-            "validation_metric",
+            "validation_metrics",
             "split_size",
             "cv_folds",
             "n_estimators",
@@ -60,9 +60,10 @@ class EISRandomForestClassifier(EISProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterEnum(
                 name=self.alg_parameters[3],
-                description="Validation metric",
+                description="Validation metrics",
                 options=["accuracy", "precision", "recall", "f1", "auc"],
-                defaultValue="accuracy"
+                defaultValue="accuracy",
+                allowMultiple=True
             )
         )
 

@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="modeling_tabs">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="data_preparation_tab">
       <attribute name="title">
@@ -416,14 +416,14 @@
                </widget>
               </item>
               <item row="3" column="0">
-               <widget class="QLabel" name="validation_metric_label">
+               <widget class="QLabel" name="validation_metrics_label">
                 <property name="text">
                  <string>Metric</string>
                 </property>
                </widget>
               </item>
               <item row="3" column="1">
-               <widget class="QComboBox" name="validation_metric"/>
+               <widget class="QComboBox" name="validation_metrics"/>
               </item>
               <item row="1" column="1">
                <widget class="QgsSpinBox" name="split_size">
