@@ -5,7 +5,6 @@ from qgis.gui import QgsMapLayerComboBox
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QHeaderView, QLabel, QLineEdit, QPushButton, QSizePolicy, QTableWidget
 
-HEADER_ROW_HEIGHT = 23
 
 class ModelDataTable(QTableWidget):
     """
@@ -14,6 +13,9 @@ class ModelDataTable(QTableWidget):
     This table does not have "add" or "remove" buttons, but creates as many rows as the selected model
     used in training phase.
     """
+
+    HEADER_ROW_HEIGHT = 23
+
 
     def __init__(self, parent, row_height: int = 26) -> None:
         super().__init__(parent)
@@ -37,8 +39,8 @@ class ModelDataTable(QTableWidget):
 
         # Set table size according to number of evidence layers / rows
         nr_of_rows = len(tags)
-        self.setMinimumHeight(HEADER_ROW_HEIGHT + nr_of_rows * self.row_height)
-        self.setMaximumHeight(HEADER_ROW_HEIGHT + nr_of_rows * self.row_height)
+        self.setMinimumHeight(self.HEADER_ROW_HEIGHT + nr_of_rows * self.row_height)
+        self.setMaximumHeight(self.HEADER_ROW_HEIGHT + nr_of_rows * self.row_height)
 
         for i, tag in enumerate(tags):
             self.insertRow(i)
