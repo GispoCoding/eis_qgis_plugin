@@ -64,7 +64,7 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
         damping_factor = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
             description="Damping factor",
-            minValue=0.1,
+            minValue=0.001,
             defaultValue=1,
             type=QgsProcessingParameterNumber.Double,
         )
