@@ -28,7 +28,7 @@ class EISDbscan(EISProcessingAlgorithm):
         input_vector_param = QgsProcessingParameterFeatureSource(
             name=self.alg_parameters[0], description="Input vector"
         )
-        input_vector_param.setHelp("Vector file containing the input data.")
+        input_vector_param.setHelp("Input vector file with features to be clustered.")
         self.addParameter(input_vector_param)
 
         max_distance_param = QgsProcessingParameterNumber(
@@ -38,8 +38,8 @@ class EISDbscan(EISProcessingAlgorithm):
             defaultValue=0.5,
             type=QgsProcessingParameterNumber.Double,
         )
-        max_distance_param.setHelp("The maximum distance between two samples for one to " +
-            "be considered as in the neighborhood of the other.")
+        max_distance_param.setHelp(
+            "The maximum distance between two samples for one to be considered as in the neighborhood of the other.")
         self.addParameter(max_distance_param)
 
         min_samples_param = QgsProcessingParameterNumber(
@@ -53,5 +53,6 @@ class EISDbscan(EISProcessingAlgorithm):
         output_vector_param = QgsProcessingParameterVectorDestination(
             name=self.alg_parameters[3], description="Output vector"
         )
-        output_vector_param.setHelp("Output vector file")
+        output_vector_param.setHelp(
+            "Output vector file with 2 new columns: cluster label and core point column (1 = core point).")
         self.addParameter(output_vector_param)
