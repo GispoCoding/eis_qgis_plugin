@@ -49,6 +49,7 @@ class EISLeeAdditiveNoiseFilter(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Additive Noise Variation",
             defaultValue=0.25,
+            minValue=0,
             type=QgsProcessingParameterNumber.Double,
         )
         add_noise_var_param.setHelp("The additive noise variation.")

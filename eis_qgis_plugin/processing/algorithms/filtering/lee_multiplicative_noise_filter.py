@@ -49,7 +49,7 @@ class EISLeeMultiplicativeNoiseFilter(EISProcessingAlgorithm):
         noise_var_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],
             description="Multiplicative Noise Variation",
-            minValue=1,
+            minValue=0,
             defaultValue=3,
         )
         noise_var_param.setHelp(

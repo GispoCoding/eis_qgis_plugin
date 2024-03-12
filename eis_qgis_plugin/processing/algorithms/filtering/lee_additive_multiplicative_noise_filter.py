@@ -63,6 +63,7 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
             name=self.alg_parameters[3],
             description="Additive Noise Mean",
             defaultValue=0,
+            minValue=0,
             type=QgsProcessingParameterNumber.Double,
         )
         add_noise_mean_param.setHelp("The additive noise mean.")
@@ -72,6 +73,7 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
             name=self.alg_parameters[4],
             description="Multiplicative Noise Mean",
             defaultValue=1.0,
+            minValue=0,
             type=QgsProcessingParameterNumber.Double,
         )
         mult_noise_mean_param.setHelp("The multiplicative noise mean.")
