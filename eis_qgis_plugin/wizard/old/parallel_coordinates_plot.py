@@ -17,7 +17,7 @@ from qgis.PyQt.QtWidgets import (
 from eis_qgis_plugin import pyqtgraph as pg
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
-from .plot_utils import generate_color_mapping, opacity_to_alpha
+from ..plot_utils import generate_color_mapping, opacity_to_alpha
 
 FORM_CLASS: QWidget = load_ui("explore/parallel_chart_tab.ui")
 
@@ -176,7 +176,8 @@ class ParallelChart(QWidget, FORM_CLASS):
         from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
         from PyQt5.QtWidgets import QDialog, QVBoxLayout
-        from seaborn import barplot
+
+        from eis_qgis_plugin.libs.seaborn import barplot
 
         # self.plot_dialog = QDialog()
 

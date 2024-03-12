@@ -1,30 +1,48 @@
-from qgis.PyQt.QtWidgets import QDialog, QTableWidget, QWidget
+from qgis.PyQt.QtWidgets import (
+    QComboBox,
+    QDialog,
+    QStackedWidget,
+    QWidget,
+)
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-
-# from eis_qgis_plugin.wizard.explore.wizard_explore import EISWizardExplore
-# from eis_qgis_plugin.wizard.preprocess.wizard_preprocess import EISWizardPreprocess
+from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy import EISWizardFuzzyModeling
+from eis_qgis_plugin.wizard.modeling.machine_learning.gradient_boosting import EISWizardGradientBoosting
+from eis_qgis_plugin.wizard.modeling.machine_learning.logistic_regression import EISWizardLogisticRegression
+from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model import ModelType
+from eis_qgis_plugin.wizard.modeling.machine_learning.random_forest import EISWizardRandomForest
 
 FORM_CLASS: QDialog = load_ui("wizard_modeling.ui")
 
 
 class EISWizardModeling(QWidget, FORM_CLASS):
-    table: QTableWidget
+    """
+    Class for the whole modeling view.
+    
+    Views for each model type are created separately and added to the stacked widget.
+    """
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
-        # headers = ["Precision", "Recall", "Accuracy", "Support"]
-        # self.table.setHorizontalHeaderLabels(headers)
-        # self.table.setDisabled(True)
-        # self.table.
+        self.model_selection: QComboBox
+        self.model_pages: QStackedWidget
 
-        # self.layer_tree = QgsLayerTreeView()
+        self.model_selection.currentIndexChanged['int'].connect(self.model_pages.setCurrentIndex)
+        self.initialize_model_pages()
+    
 
-        # WORKING?
-        # root = QgsProject.instance().layerTreeRoot()
-        # model = QgsLayerTreeModel(root)
-        # view = QgsLayerTreeView()
-        # view.setModel(model)
-        # view.show()
+    def initialize_model_pages(self):
+        """Create pages for each model type in the stacked widget."""
+        self.pages = [
+            EISWizardLogisticRegression(self),
+            EISWizardRandomForest(self, ModelType.CLASSIFIER),
+            EISWizardRandomForest(self, ModelType.REGRESSOR),
+            EISWizardGradientBoosting(self, ModelType.CLASSIFIER),
+            EISWizardGradientBoosting(self, ModelType.REGRESSOR),
+            EISWizardFuzzyModeling(self)
+        ]
+
+        for i, page in enumerate(self.pages):
+            self.model_pages.insertWidget(i, page)

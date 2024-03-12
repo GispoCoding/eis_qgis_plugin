@@ -1,11 +1,12 @@
-import seaborn as sns
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
 from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 
+import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
-FORM_CLASS: QWidget = load_ui("wizard_plot_pairplot.ui")
+FORM_CLASS: QWidget = load_ui("explore/wizard_plot_pairplot.ui")
 
 KIND_MAPPING = {"histogram": "hist", "scatterplot": "scatter", "kde": "kde", "regression": "reg"}
 DIAG_KIND_MAPPING = {"auto": "auto", "histogram": "hist", "kde": "kde", "none": "None"}
@@ -35,13 +36,15 @@ class EISWizardPairplot(EISPlot, FORM_CLASS):
 
         super().__init__(parent)
 
+        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+
         self.select_all_btn.clicked.connect(self.fields.selectAll)
         self.deselect_all_btn.clicked.connect(self.fields.clearSelection)
 
 
     def update_layer(self, layer):
         """Update (set/add items) widgets based on selected layer."""
-        if layer is None:
+        if layer is None or not isinstance(layer, QgsVectorLayer):
             return
 
         self.fields.addItems(field.name() for field in layer.fields())

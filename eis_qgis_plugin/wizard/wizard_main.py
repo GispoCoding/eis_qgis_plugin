@@ -1,14 +1,13 @@
-import os
 
 from qgis.gui import QgsDockWidget
-from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import PLUGIN_PATH
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
+from eis_qgis_plugin.wizard.wizard_modeling import EISWizardModeling
 from eis_qgis_plugin.wizard.wizard_plot import EISWizardPlotting
 from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
+from eis_qgis_plugin.wizard.wizard_results import EISWizardResults
 from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 
 
@@ -16,6 +15,9 @@ class EISWizardDialog(QDialog):
 
     def __init__(self) -> None:
         super().__init__()
+
+        # Default size
+        self.resize(1000, 850)
 
         self.content = EISWizard()
 
@@ -56,33 +58,33 @@ class EISWizard(QWidget, FORM_CLASS):
         # # Icon: <a href="https://www.flaticon.com/free-icons/project-management"
         # # title="project management icons">Project management icons created by the best icon - Flaticon</a>
 
-        item = self.menu_widget.item(0)
-        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/preprocessing.png")))
-        # Icon: <a href="https://www.flaticon.com/free-icons/processing"
-        # title="processing icons">Processing icons created by Vectorslab - Flaticon</a>
+        # item = self.menu_widget.item(0)
+        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/preprocessing.png")))
+        # # Icon: <a href="https://www.flaticon.com/free-icons/processing"
+        # # title="processing icons">Processing icons created by Vectorslab - Flaticon</a>
 
-        item = self.menu_widget.item(1)
-        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/eda.png")))
-        # Icon: <a href="https://www.flaticon.com/free-icons/data-analysis"
-        # title="data analysis icons">Data analysis icons created by HAJICON - Flaticon</a>
+        # item = self.menu_widget.item(1)
+        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/eda.png")))
+        # # Icon: <a href="https://www.flaticon.com/free-icons/data-analysis"
+        # # title="data analysis icons">Data analysis icons created by HAJICON - Flaticon</a>
 
-        item = self.menu_widget.item(2)
-        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png")))
-        # Icon by Icons8
+        # item = self.menu_widget.item(2)
+        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png")))
+        # # Icon by Icons8
 
-        item = self.menu_widget.item(3)
-        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg")))
-        # Icon by Icons8
+        # item = self.menu_widget.item(4)
+        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg")))
+        # # Icon by Icons8
 
-        item = self.menu_widget.item(4)
-        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/about.svg")))
-        # Icon by Icons8
+        # item = self.menu_widget.item(5)
+        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/about.svg")))
+        # # Icon by Icons8
 
         # Add pages
 
         # Create Settings page first
         self.settings_page = EISWizardSettings(self)
-        self.pages_widget.insertWidget(3, self.settings_page)
+        self.pages_widget.insertWidget(4, self.settings_page)
 
         self.proxies_page = EISWizardProxies(self)
         self.pages_widget.insertWidget(0, self.proxies_page)
@@ -90,12 +92,15 @@ class EISWizard(QWidget, FORM_CLASS):
         self.explore_page = EISWizardPlotting(self)
         self.pages_widget.insertWidget(1, self.explore_page)
 
-        # self.model_page = EISWizardModeling(self)
-        # self.pages_widget.insertWidget(2, self.model_page)
-        self.pages_widget.insertWidget(2, QWidget())
+        self.model_page = EISWizardModeling(self)
+        self.pages_widget.insertWidget(2, self.model_page)
+        # self.pages_widget.insertWidget(2, QWidget())
+
+        self.results_page = EISWizardResults(self)
+        self.pages_widget.insertWidget(3, self.results_page)
 
         self.about_page = EISWizardAbout(self)
-        self.pages_widget.insertWidget(4, self.about_page)
+        self.pages_widget.insertWidget(5, self.about_page)
 
         # Set menu
         self.menu_widget.setMinimumWidth(

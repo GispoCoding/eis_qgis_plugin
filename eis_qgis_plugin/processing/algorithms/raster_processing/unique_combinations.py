@@ -26,7 +26,7 @@ class EISUniqueCombinations(EISProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterMultipleLayers(
                 name=self.alg_parameters[0],
-                description="Input raster or rasters",
+                description="Input rasters",
                 layerType=QgsProcessing.TypeRaster,
             )
         )

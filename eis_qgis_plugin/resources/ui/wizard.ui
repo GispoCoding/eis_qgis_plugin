@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>811</width>
+    <width>928</width>
     <height>854</height>
    </rect>
   </property>
@@ -83,6 +83,11 @@ QListWidget::item::selected {
      <item>
       <property name="text">
        <string>Modeling</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Results</string>
       </property>
      </item>
      <item>

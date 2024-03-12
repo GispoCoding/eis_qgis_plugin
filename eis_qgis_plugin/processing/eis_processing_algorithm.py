@@ -1,15 +1,15 @@
-import json
 import os
-import subprocess
-import time
-from typing import Dict, List
+from typing import Any, Dict, List, Optional, Tuple
 
 from qgis.core import (
     QgsProcessingAlgorithm,
+    QgsProcessingContext,
     QgsProcessingFeedback,
     QgsProcessingOutputMultipleLayers,
+    QgsProcessingParameterBand,
     QgsProcessingParameterBoolean,
     QgsProcessingParameterCrs,
+    QgsProcessingParameterDefinition,
     QgsProcessingParameterEnum,
     QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSink,
@@ -30,7 +30,7 @@ from qgis.core import (
     QgsProcessingParameterVectorLayer,
 )
 
-from eis_qgis_plugin.settings import get_python_venv_path
+from .eis_toolkit_invoker import EISToolkitInvoker
 
 
 class EISProcessingAlgorithm(QgsProcessingAlgorithm):
@@ -46,67 +46,117 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self.alg_parameters: List[str] = []
 
     def name(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the unique name (ID) of the processing algorithm.
+        """
         return self._name
 
     def displayName(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the display name of the processing algorithm.
+        """
         return self._display_name
 
     def group(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the display name of the group the processing algorithm belongs to.
+        """
         return self._group
 
     def groupId(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the group ID of the processing algorithm.
+        """
         return self._group_id
 
     def shortHelpString(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Returns the short help string of the processing algorithm.
+        """
         return self._short_help_string
 
     def createInstance(self):
+        """
+        QgsProcessingAlgorithm method.
+
+        Creates instance of the processing algorithm class.
+        """
         return self.__class__()
 
     def initAlgorithm(self, config=None):
-        raise Exception("Not implemented in the child class!")
+        """
+        QgsProcessingAlgorithm method.
 
-    def prepare_arguments(self, parameters: Dict, context):
-        args = []
+        Initializes the algorithm by defining its parameters. Implemented in child
+        classes for EISProcessingAlgorithms.
+        """
+        raise Exception("initAlgorithm is not implemented in the child class!")
+
+    def prepare_arguments(
+        self,
+        parameters: Dict[str, QgsProcessingParameterDefinition],
+        context: QgsProcessingContext
+    ) -> Tuple[List[str], List[str]]:
+        """
+        Prepare arguments to call EIS Toolkit CLI.
+
+        Iterates all parameters of the algorithm and creates command-line arguments
+        to be delivered to EIS Toolkit. Most parameter values are delivered with their
+        name as Typer options.
+
+        See https://typer.tiangolo.com/ for more information about the used CLI package.
+
+        Returns:
+            List of arguments (a list with only parameter values, non-empty only if
+            QgsProcessingParameterMultipleLayers is present) and list where every other element is
+            parameter name and every other is the parameter value (of the preceding parameter name).
+        """
+
+        typer_args = []  # These parameters are delivered without the parameter name tag (as Typer arguments)
+        typer_options = []  # These parameters are delivered with their name ()
 
         # By default, all parameters are passed as Typer options (parameter name needs to be delivered
         # prefixed with --)
 
-        # TODO: Check if all these work with optional parameters (arg evaluating to None)
-
-        # NOTE: Because of the above, flag mapping is likely to be deleted
-        # flag_mapping = {
-        #     "resampling_method": "--resampling-method",
-        #     "output_raster": "--output-raster-file",
-        #     "same_extent": "--same-extent",
-        #     "crs": "--crs",
-        #     # Add more mappings as needed
-        # }
+        # TODO: Check if all these work with optional parameters (param_value evaluating to None)
 
         for name in self.alg_parameters:
             param = self.parameterDefinition(name)
             param_name = "--" + name.replace("_", "-")
-            # flag = flag_mapping.get(name)
-            if isinstance(param, QgsProcessingParameterBoolean):
+
+            if isinstance(param, QgsProcessingParameterBand):
+                param_value = str(self.parameterAsInt(parameters, name, context))
+
+            elif isinstance(param, QgsProcessingParameterBoolean):
                 if self.parameterAsBool(parameters, name, context):
-                    args.append(param_name)
+                    typer_options.append(param_name)
                 else:
-                    args.append(param_name[:2] + "no-" + param_name[2:])
+                    typer_options.append(param_name[:2] + "no-" + param_name[2:])
                 continue
 
             elif isinstance(param, QgsProcessingParameterString):
-                arg = self.parameterAsString(parameters, name, context).lower()
+                param_value = self.parameterAsString(parameters, name, context).lower()
 
             elif isinstance(param, QgsProcessingParameterNumber):
-                if not self.parameterAsString(parameters, name, context):  # Arg is None
+                if not self.parameterAsString(parameters, name, context):  # param_value is None
                     continue
                 if param.dataType() == QgsProcessingParameterNumber.Integer:
-                    arg = str(self.parameterAsInt(parameters, name, context))
+                    param_value = str(self.parameterAsInt(parameters, name, context))
                 else:
-                    arg = str(self.parameterAsDouble(parameters, name, context))
+                    param_value = str(self.parameterAsDouble(parameters, name, context))
 
             elif isinstance(param, QgsProcessingParameterExtent):
-                if not self.parameterAsString(parameters, name, context):  # Arg is None
+                if not self.parameterAsString(parameters, name, context):  # param_value is None
                     continue
                 extents = (
                     self.parameterAsString(parameters, name, context)
@@ -114,43 +164,50 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                     .strip()
                     .split(",")
                 )
-                args.append(param_name)
-                [args.append(coord) for coord in extents]
+                typer_options.append(param_name)
+                [typer_options.append(coord) for coord in extents]
                 continue
 
             elif isinstance(param, QgsProcessingParameterField):
-                arg = self.parameterAsString(parameters, name, context)
+                if param.allowMultiple():
+                    fields = self.parameterAsFields(parameters, name, context)
+                    for field in fields:
+                        typer_args.append(param_name)
+                        typer_args.append(field)
+                    continue
+                else:
+                    param_value = self.parameterAsString(parameters, name, context)
 
             elif isinstance(param, QgsProcessingParameterMapLayer):
                 layer = self.parameterAsLayer(parameters, name, context)
                 if not layer:
                     continue
-                arg = os.path.normpath(layer.source())
+                param_value = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterRasterLayer):
                 layer = self.parameterAsRasterLayer(parameters, name, context)
                 if not layer:
                     continue
-                arg = os.path.normpath(layer.source())
+                param_value = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterFeatureSource):
                 layer = self.parameterAsVectorLayer(parameters, name, context)
                 if not layer:
                     continue
-                arg = os.path.normpath(layer.source())
+                param_value = os.path.normpath(layer.source())
 
             elif isinstance(param, QgsProcessingParameterVectorLayer):
                 layer = self.parameterAsVectorLayer(parameters, name, context)
                 if not layer:
                     continue
-                arg = os.path.normpath(layer.source())
+                param_value = os.path.normpath(layer.source())
 
+            # Multiple layers input needs to be the first delivered to the CLI always
             elif isinstance(param, QgsProcessingParameterMultipleLayers):
                 layers = self.parameterAsLayerList(parameters, name, context)
                 if not layers:
                     continue
-                args.append(param_name)
-                [args.append(os.path.normpath(layer.source())) for layer in layers]
+                [typer_args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
 
             # TODO check if works
@@ -158,28 +215,41 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 coords = self.parameterAsPoint(parameters, name, context)
                 if not coords:
                     continue
-                args.append(param_name)
-                args.append(str(coords.x()))
-                args.append(str(coords.y()))
+                typer_options.append(param_name)
+                typer_options.append(str(coords.x()))
+                typer_options.append(str(coords.y()))
                 continue
 
             # TODO check if works
             elif isinstance(param, QgsProcessingParameterFile):
-                arg = self.parameterAsFile(parameters, name, context)
+                param_value = self.parameterAsFile(parameters, name, context)
 
             # TODO
             elif isinstance(param, QgsProcessingParameterEnum):
-                arg = self.parameterAsEnumString(parameters, name, context).lower()
+                if param.allowMultiple():
+                    indices = self.parameterAsEnums(parameters, name, context)
+                    for idx in indices:
+                        typer_options.append(param_name)
+                        typer_options.append(param.options()[idx])
+                    continue
+                else:
+                    # The following bugged in some QGIS v?
+                    # param_value = self.parameterAsEnumString(parameters, name, context)
+                    idx = self.parameterAsEnum(parameters, name, context)
+                    param_value = param.options()[idx]
+                    # NOTE: converting values to lowercase removed, algs will need to be updated
+                    # if len(param_value) > 1:
+                    #     param_value = param_value.lower()
 
             elif isinstance(param, QgsProcessingParameterCrs):
                 crs = str(self.parameterAsCrs(parameters, name, context))
                 if not crs:
                     continue
-                arg = str(crs.split("EPSG:")[-1][:-1])
+                param_value = str(crs.split("EPSG:")[-1][:-1])
 
             # TODO (remove? broken parameter type in some API versions)
             elif isinstance(param, QgsProcessingParameterMatrix):
-                arg = [
+                param_value = [
                     str(item)
                     for item in self.parameterAsMatrix(parameters, name, context)
                 ]
@@ -187,7 +257,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             elif isinstance(
                 param, QgsProcessingParameterRasterDestination
             ) or isinstance(param, QgsProcessingParameterVectorDestination):
-                arg = os.path.normpath(
+                param_value = os.path.normpath(
                     self.parameterAsOutputLayer(parameters, name, context)
                 )
 
@@ -197,116 +267,75 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             # TODO
             elif isinstance(param, QgsProcessingOutputMultipleLayers):
-                arg = self.parameterAsLayerList
+                param_value = self.parameterAsLayerList
                 raise Exception("Not implemented yet")
 
             elif isinstance(param, QgsProcessingParameterFileDestination):
-                arg = os.path.normpath(
+                param_value = os.path.normpath(
                     self.parameterAsFileOutput(parameters, name, context)
                 )
 
-            # TODO
             elif isinstance(param, QgsProcessingParameterFolderDestination):
-                raise Exception("Not implemented yet")
+                param_value = os.path.normpath(
+                    self.parameterAsString(parameters, name, context)
+                )
+                # Create the folder if it doesn't exist. TBD if this is the best practice
+                if not os.path.exists(param_value):
+                    os.makedirs(param_value)
 
             else:
                 raise Exception(
                     f"Parameter ({param_name}) conversion failed, parameter is unknown type."
                 )
 
-            # if flag:
-            #     args.append(flag)
-            if not arg:
+            if not param_value:
                 continue
 
             # NOTE: Attempt to exclude some extra details that might come with layer file path for example
-            if "|" in arg:
-                arg = arg.split("|")[0]
+            if "|" in param_value:
+                param_value = param_value.split("|")[0]
 
-            args.append(param_name)
-            args.append(arg)
+            typer_options.append(param_name)
+            typer_options.append(param_value)
 
-        return args
+        return typer_args, typer_options
 
-    def get_bin_folder(self):
-        if os.name == "nt":  # Windows
-            return "Scripts"
-        else:
-            return "bin"
 
-    def processAlgorithm(self, parameters, context, feedback):
-        """
-        Here is where the processing itself takes place.
-        """
-
-        if feedback is None:
-            feedback = QgsProcessingFeedback()
-
-        arguments = self.prepare_arguments(parameters, context)
-        eis_executable = os.path.join(
-            get_python_venv_path(), self.get_bin_folder(), "eis"
-        )
-        cmd = [eis_executable, (self.name() + "_cli").replace("_", "-")] + arguments
-        results = {}
-
-        try:
-            process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True,
-            )
-            # progress_regex = re.compile(r"(\d+)%")
-            progress_prefix = "Progress:"
-            results_prefix = "Results:"
-
-            while process.poll() is None:
-                stdout = process.stdout.readline().strip()
-
-                # progress_match = progress_regex.search(stdout)
-                # if progress_match:
-                if progress_prefix in stdout:
-                    # progress = int(progress_match.group(1))
-                    progress = int(stdout.split(":")[1].strip()[:-1])
-                    feedback.setProgress(progress)
-                    feedback.pushInfo(f"Progress: {progress}%")
-                elif results_prefix in stdout:
-                    # Extract the JSON part
-                    json_str = stdout.split(results_prefix)[-1].strip()
-
-                    # Deserialize the JSON-formatted string to a Python dict
-                    output_dict = json.loads(json_str)
-
-                    for key, value in output_dict.items():
-                        results[key] = value
-                else:
-                    feedback.pushInfo(stdout)
-
-                time.sleep(0.05)
-
-            stdout, stderr = process.communicate()
-
-            if process.returncode != 0:
-                feedback.reportError(
-                    f"EIS Toolkit algorithm execution failed with error: {stderr}"
-                )
-            else:
-                feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
-
-        except Exception as e:
-            feedback.reportError(f"Failed to run the command. Error: {str(e)}")
-            try:
-                process.terminate()
-            except UnboundLocalError:
-                pass
-            return {}
-
-        # Fetch results
+    def get_results(self, results: dict, parameters: Dict[str, QgsProcessingParameterDefinition]):
         for output in self.outputDefinitions():
             output_name = output.name()
             if output_name in parameters:
                 results[output_name] = parameters[output_name]
             elif output.type() == "outputBoolean":
-                results[output_name] = stdout.strip().lower() == "true"
+                results[output_name] = results["result"]
+
+
+    def processAlgorithm(
+        self,
+        parameters: Dict[str, QgsProcessingParameterDefinition],
+        context: QgsProcessingContext,
+        feedback: Optional[QgsProcessingFeedback]
+    ) -> Dict[str, Any]:
+        """
+        QgsProcessingAlgorithm method.
+
+        Defined commonly for all EISProcessingAlgorithms. A command to EIS Toolkit CLI is
+        constructed using `prepare_arguments` and `assemble_cli_call` of EISToolkitInvoker.
+        
+        EISToolkitInvoker will handle the actual communication with EIS Toolkit.
+        """
+
+        if feedback is None:
+            feedback = QgsProcessingFeedback()
+
+        typer_args, typer_options = self.prepare_arguments(parameters, context)
+        
+        toolkit_invoker = EISToolkitInvoker()
+        toolkit_invoker.assemble_cli_command(self.name(), typer_args, typer_options)
+        results = toolkit_invoker.run_toolkit_command(feedback)
+
+        self.get_results(results, parameters)
+
+        feedback.setProgress(100)
 
         return results
