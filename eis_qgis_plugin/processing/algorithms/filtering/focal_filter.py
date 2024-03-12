@@ -44,16 +44,20 @@ class EISFocalFilter(EISProcessingAlgorithm):
         )
         self.addParameter(method_param)
 
-        size_param = QgsProcessingParameterNumber(
+        window_size_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],
             description="Size",
-            minValue=1,
+            minValue=3,
             defaultValue=3,
         )
-        size_param.setHelp(
-            "The size of the filter window. E.g., 3 means a 3x3 window."
+        window_size_param.setHelp(
+            '''
+            The size of the filter window. 
+            E.g., 3 means a 3x3 window. 
+            Only odd numbers are allowed.
+            '''
         )
-        self.addParameter(size_param)
+        self.addParameter(window_size_param)
            
         shape_param = QgsProcessingParameterEnum(
             name=self.alg_parameters[3],

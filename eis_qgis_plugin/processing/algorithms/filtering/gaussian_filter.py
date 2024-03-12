@@ -68,6 +68,7 @@ class EISGaussianFilter(EISProcessingAlgorithm):
             '''
             The size of the filter window. E.g., 3 means a 3x3 window.
             If size is not None, it overrides the dynamic size calculation based on sigma and truncate.
+            Only odd numbers are allowed.
             '''
         )
         self.addParameter(window_size_param)

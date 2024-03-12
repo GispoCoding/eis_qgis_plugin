@@ -38,7 +38,7 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
 
         window_size_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
-            description="Additive and Multiplicative Noise Variation",
+            description="Size",
             minValue=3,
             defaultValue=3,
         )
@@ -46,6 +46,7 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
             '''
             The size of the filter window.
             E.g., 3 means a 3x3 window.
+            Only odd numbers are allowed.
             '''
         )
         self.addParameter(window_size_param)
@@ -54,6 +55,7 @@ class EISLeeAdditiveMultiplicativeNoiseFilter(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Additive Noise Variation",
             defaultValue=0.25,
+            minValue=0,
             type=QgsProcessingParameterNumber.Double,
         )
         add_noise_var_param.setHelp("The additive noise variation.")

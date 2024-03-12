@@ -40,8 +40,9 @@ class EISLeeEnhancedFilter(EISProcessingAlgorithm):
         )
         window_size_param.setHelp(
             '''
-            The size of the filter window.
-            E.g., 3 means a 3x3 window.
+            The size of the filter window. 
+            E.g., 3 means a 3x3 window. 
+            Only odd numbers are allowed.
             '''
         )
         self.addParameter(window_size_param)
