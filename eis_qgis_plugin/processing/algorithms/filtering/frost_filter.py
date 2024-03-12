@@ -51,7 +51,7 @@ class EISFrostFilter(EISProcessingAlgorithm):
         damping_factor = QgsProcessingParameterNumber(
             name=self.alg_parameters[2],
             description="Damping factor",
-            minValue=0.001,
+            minValue=0,
             defaultValue=1.0,
             type=QgsProcessingParameterNumber.Double,
         )
