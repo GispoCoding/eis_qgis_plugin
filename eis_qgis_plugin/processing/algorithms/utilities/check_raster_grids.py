@@ -33,7 +33,7 @@ class EISCheckRasterGrids(EISProcessingAlgorithm):
             QgsProcessingParameterBoolean(
                 name=self.alg_parameters[1],
                 description="Same extent",
-                defaultValue=False,
+                defaultValue=True,
             )
         )
 
