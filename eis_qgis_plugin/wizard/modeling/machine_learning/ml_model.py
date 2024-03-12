@@ -24,7 +24,7 @@ from qgis.PyQt.QtWidgets import (
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.machine_learning.modeling_feedback import EISModelingGUIFeedback
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable, ModelTrainingDataTable
-from eis_qgis_plugin.wizard.modeling.model_utils import set_file_widget_placeholder_text
+from eis_qgis_plugin.wizard.modeling.model_utils import TEMPORARY_OUTPUT, set_file_widget_placeholder_text
 
 FORM_CLASS: QWidget = load_ui("modeling/wizard_ml_model.ui")
 
@@ -42,7 +42,6 @@ PREDICTION_ALG_NAME = "eis:predict_with_trained_model"
 
 ROW_HEIGHT = 26
 
-TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
 
 DATABASE = {
     "rf_classifier_1": {
