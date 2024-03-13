@@ -1,4 +1,4 @@
-from qgis.core import QgsProcessingParameterFeatureSource, QgsProcessingParameterVectorDestination
+from qgis.core import QgsProcessing, QgsProcessingParameterFeatureSource, QgsProcessingParameterVectorDestination
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
@@ -11,21 +11,21 @@ class EISExtractSharedLines(EISProcessingAlgorithm):
         self._display_name = "Extract shared lines"
         self._group = "Vector processing"
         self._group_id = "vector_processing"
-        self._short_help_string = "Extract shared lines"
+        self._short_help_string = "Extract shared lines between polygon features."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_vector", "output_vector"]
 
-        self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0],
-                description="Input vector layer",
-                # types=[QgsProcessing.TypeVectorPolygon]
-            )
+        input_vector_param = QgsProcessingParameterFeatureSource(
+            name=self.alg_parameters[0],
+            description="Input vector",
+            types=[QgsProcessing.TypeVectorPolygon]
         )
+        input_vector_param.setHelp("Input vector with polygon features.")
+        self.addParameter(input_vector_param)
 
-        self.addParameter(
-            QgsProcessingParameterVectorDestination(
-                name=self.alg_parameters[1], description="Output"
-            )
+        output_vector_param = QgsProcessingParameterVectorDestination(
+            name=self.alg_parameters[1], description="Output vector"
         )
+        output_vector_param.setHelp("Output vector layer with the shared lines.")
+        self.addParameter(output_vector_param)
