@@ -40,7 +40,7 @@ class EISClassifyAspect(EISProcessingAlgorithm):
         unit_param = QgsProcessingParameterEnum(
             name=self.alg_parameters[2],
             options=["degrees", "radians"],
-            defaultValue="radians",
+            defaultValue=1,
             description="Unit",
         )
         unit_param.setHelp("The unit of the input raster. Defaults to radians.")
@@ -49,7 +49,7 @@ class EISClassifyAspect(EISProcessingAlgorithm):
         num_classes_param = QgsProcessingParameterEnum(
             name=self.alg_parameters[3],
             options=["8", "16"],
-            defaultValue="8",
+            defaultValue=0,
             description="Number of classes",
         )
         num_classes_param.setHelp("The number of classes for discretization. Either 8 or 16 classes allowed.")

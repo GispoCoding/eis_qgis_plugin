@@ -1,4 +1,4 @@
-from qgis.core import QgsProcessingParameterFeatureSource, QgsProcessingParameterVectorDestination
+from qgis.core import QgsProcessing, QgsProcessingParameterFeatureSource, QgsProcessingParameterVectorDestination
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
@@ -16,16 +16,16 @@ class EISCalculateGeometry(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_vector", "output_vector"]
 
-        self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0],
-                description="Input vector layer",
-                # types=[QgsProcessing.TypeVectorPolygon]
-            )
+        input_vector_param = QgsProcessingParameterFeatureSource(
+            name=self.alg_parameters[0],
+            description="Input vector",
+            types=[QgsProcessing.TypeVectorPolygon, QgsProcessing.TypeVectorLine]
         )
+        input_vector_param.setHelp("Input vector file with line or polygon features.")
+        self.addParameter(input_vector_param)
 
-        self.addParameter(
-            QgsProcessingParameterVectorDestination(
-                name=self.alg_parameters[1], description="Output"
-            )
+        output_vector = QgsProcessingParameterVectorDestination(
+            name=self.alg_parameters[1], description="Output vector"
         )
+        output_vector.setHelp("Output vector with calculation results.")
+        self.addParameter(output_vector)
