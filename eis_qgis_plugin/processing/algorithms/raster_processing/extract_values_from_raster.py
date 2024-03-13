@@ -1,9 +1,7 @@
 from qgis.core import (
-    QgsProcessing,
     QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterFileDestination,
-    QgsProcessingParameterMultipleLayers,
-    QgsProcessingParameterString,
+    QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterVectorDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -14,44 +12,33 @@ class EISExtractValuesFromRaster(EISProcessingAlgorithm):
         super().__init__()
 
         self._name = "extract_values_from_raster"
-        self._display_name = "Extract values from raster"
+        self._display_name = "Extract values from raster (WIP)"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Extract values from raster"
+        self._short_help_string = "Extract values from raster. To be refactored."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
             "input_raster",
-            "input_vectors",
-            "column_names",
-            "output_file",
+            "geometries",
+            "output_vector",
         ]
 
         self.addParameter(
-            QgsProcessingParameterMultipleLayers(
+            QgsProcessingParameterRasterLayer(
                 name=self.alg_parameters[0],
-                description="Input rasters",
-                layerType=QgsProcessing.TypeRaster,
+                description="Input raster",
             )
         )
 
         self.addParameter(
             QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[1], description="Vector layer"
+                name=self.alg_parameters[1], description="Extraction locations"
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterString(
-                name=self.alg_parameters[2],
-                multiLine=True,
-                description="Raster column names",
-                optional=True,
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterFileDestination(
-                name=self.alg_parameters[3], description="Output file"
+            QgsProcessingParameterVectorDestination(
+                name=self.alg_parameters[2], description="Output vector"
             )
         )
