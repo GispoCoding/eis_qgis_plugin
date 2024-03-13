@@ -23,7 +23,7 @@
       <attribute name="title">
        <string>Model data preparation</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_16">
+      <layout class="QVBoxLayout" name="verticalLayout_11">
        <item>
         <widget class="QScrollArea" name="scrollArea_3">
          <property name="widgetResizable">
@@ -38,183 +38,82 @@
             <height>795</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_9">
+          <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <layout class="QFormLayout" name="formLayout">
-               <item row="0" column="0">
-                <widget class="QLabel" name="data_cleaning_label">
-                 <property name="text">
-                  <string>Data cleaning</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QComboBox" name="data_cleaning_mode">
-                 <item>
-                  <property name="text">
-                   <string>Remove missing data</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Impute missing data</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Harmonize nodata</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="data_transformations_label">
-                 <property name="text">
-                  <string>Data transformations</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QComboBox" name="binarize_mode">
-                 <item>
-                  <property name="text">
-                   <string>Binarize</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Clip</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Normalize</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Z-score normalize</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Min-max scale</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Winsorize</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Sigmoid transform</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Logarithmic transform</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="encode_data_label">
-                 <property name="text">
-                  <string>Encode data</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QComboBox" name="encode_mode">
-                 <item>
-                  <property name="text">
-                   <string>One-hot encode</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Encode labels</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_4">
-               <item>
-                <widget class="QPushButton" name="data_cleaning_btn">
-                 <property name="text">
-                  <string>Open</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="data_transformations_btn">
-                 <property name="text">
-                  <string>Open</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="encode_data_btn">
-                 <property name="text">
-                  <string>Open</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>Raster preparation</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>Resample raster</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_8">
+                <property name="text">
+                 <string>Reproject raster</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Unify rasters</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
            <item>
-            <layout class="QFormLayout" name="formLayout_2">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>Balance data</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QPushButton" name="balance_data_btn">
-               <property name="text">
-                <string>Open</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_6">
-               <property name="text">
-                <string>Split data</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QPushButton" name="split_data_btn">
-               <property name="text">
-                <string>Open</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_7">
-               <property name="text">
-                <string>Sample data</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="sample_data_btn">
-               <property name="text">
-                <string>Open</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string>Data transformations</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_20">
+              <item>
+               <widget class="QLabel" name="label_9">
+                <property name="text">
+                 <string>TBD</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="title">
+              <string>Label preparation</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_16">
+              <item>
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>One-hot encode</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_5">
+                <property name="text">
+                 <string>Number encode</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>Balance data</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
            <item>
             <spacer name="verticalSpacer">
@@ -224,7 +123,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>288</height>
+               <height>40</height>
               </size>
              </property>
             </spacer>
