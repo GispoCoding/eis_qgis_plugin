@@ -52,7 +52,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="scale_selection_label">
          <property name="text">
-          <string>Scale</string>
+          <string>Study scale</string>
          </property>
         </widget>
        </item>
@@ -112,7 +112,7 @@
        </widget>
        <widget class="QWidget" name="pathway_tab">
         <attribute name="title">
-         <string>Active/structural pathways</string>
+         <string>Pathways</string>
         </attribute>
        </widget>
        <widget class="QWidget" name="depositional_tab">

@@ -63,14 +63,14 @@
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <layout class="QFormLayout" name="output_raster_settings_layout">
-        <item row="0" column="0">
+        <item row="1" column="0">
          <widget class="QLabel" name="output_raster_settings_label">
           <property name="text">
            <string>Output raster settings</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="1" column="1">
          <widget class="QComboBox" name="output_raster_settings">
           <item>
            <property name="text">
@@ -82,6 +82,16 @@
             <string>Define manually</string>
            </property>
           </item>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QgsFileWidget" name="output_raster_path"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="output_raster_path_label">
+          <property name="text">
+           <string>Output raster path</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -190,11 +200,11 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="run_btn_layout">
+    <layout class="QHBoxLayout" name="btn_layout">
      <item>
-      <widget class="QPushButton" name="run_btn">
+      <widget class="QPushButton" name="back_btn">
        <property name="text">
-        <string>Run</string>
+        <string>Back</string>
        </property>
       </widget>
      </item>
@@ -210,6 +220,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="run_btn">
+       <property name="text">
+        <string>Run</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -250,6 +267,11 @@
    <class>QgsFieldExpressionWidget</class>
    <extends>QWidget</extends>
    <header>qgsfieldexpressionwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsFileWidget</class>
+   <extends>QWidget</extends>
+   <header>qgsfilewidget.h</header>
   </customwidget>
   <customwidget>
    <class>QgsMapLayerComboBox</class>

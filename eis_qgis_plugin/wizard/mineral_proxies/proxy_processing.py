@@ -6,6 +6,7 @@ from qgis.gui import (
     QgsExtentGroupBox,
     QgsFieldComboBox,
     QgsFieldExpressionWidget,
+    QgsFileWidget,
     QgsMapLayerComboBox,
     QgsRasterBandComboBox,
 )
@@ -25,14 +26,17 @@ FORM_CLASS_3 = load_ui("mineral_proxies/proxy_workflow3_define_anomaly.ui")
 
 class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
 
-    def __init__(self, parent: Optional[QWidget] = None) -> None:
+    def __init__(self, proxy_manager: QWidget, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+
+        self.proxy_manager = proxy_manager
 
         # DELCARE TYPES
         self.vector_layer: QgsMapLayerComboBox
         self.selection: QgsFieldExpressionWidget
-
+    
+        self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
         self.output_raster_settings_pages: QStackedWidget
         self.base_raster: QgsMapLayerComboBox
@@ -40,6 +44,7 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         self.nodata: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
+        self.back_btn: QPushButton
         self.run_btn: QPushButton
 
         # Set filters
@@ -49,10 +54,15 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         # Connect signals
         self.vector_layer.layerChanged.connect(self.selection.setLayer)
         self.output_raster_settings.currentIndexChanged.connect(self.output_raster_settings_pages.setCurrentIndex)
+        self.back_btn.clicked.connect(self.back)
         self.run_btn.clicked.connect(self.run)
 
         # Initialize layer selection
         self.selection.setLayer(self.vector_layer.currentLayer())
+
+    
+    def back(self):
+        self.proxy_manager.return_from_proxy_processing()
 
 
     def run(self):
@@ -62,9 +72,11 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
 
 class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
 
-    def __init__(self, parent: Optional[QWidget] = None) -> None:
+    def __init__(self, proxy_manager: QWidget, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+
+        self.proxy_manager = proxy_manager
 
         # DELCARE TYPES
         self.vector_layer: QgsMapLayerComboBox
@@ -77,6 +89,7 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
         self.variogram_model: QComboBox
         self.coordinates_type: QComboBox
 
+        self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
         self.output_raster_settings_pages: QStackedWidget
         self.base_raster: QgsMapLayerComboBox
@@ -84,6 +97,7 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
         self.nodata: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
+        self.back_btn: QPushButton
         self.run_btn: QPushButton
 
         # Set filters
@@ -94,10 +108,15 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
         self.vector_layer.layerChanged.connect(self.attribute.setLayer)
         self.interpolation_method.currentIndexChanged.connect(self.interpolation_method_pages.setCurrentIndex)
         self.output_raster_settings.currentIndexChanged.connect(self.output_raster_settings_pages.setCurrentIndex)
+        self.back_btn.clicked.connect(self.back)
         self.run_btn.clicked.connect(self.run)
 
         # Initialize layer selection
         self.attribute.setLayer(self.vector_layer.currentLayer())
+
+
+    def back(self):
+        self.proxy_manager.return_from_proxy_processing()
 
 
     def run(self):
@@ -107,9 +126,11 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
 
 class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
 
-    def __init__(self, parent: Optional[QWidget] = None) -> None:
+    def __init__(self, proxy_manager: QWidget, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        
+        self.proxy_manager = proxy_manager
 
         # DELCARE TYPES
         self.raster_layer: QgsMapLayerComboBox
@@ -118,6 +139,7 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         self.anomaly_threshold: QgsDoubleSpinBox
         self.threshold_criteria: QComboBox
 
+        self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
         self.output_raster_settings_pages: QStackedWidget
         self.base_raster: QgsMapLayerComboBox
@@ -125,6 +147,7 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         self.nodata: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
+        self.back_btn: QPushButton
         self.run_btn: QPushButton
 
         # Set filters
@@ -134,10 +157,15 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         # Connect signals
         self.raster_layer.layerChanged.connect(self.band.setLayer)
         self.output_raster_settings.currentIndexChanged.connect(self.output_raster_settings_pages.setCurrentIndex)
+        self.back_btn.clicked.connect(self.back)
         self.run_btn.clicked.connect(self.run)
 
         # Initialize layer selection
         self.band.setLayer(self.raster_layer.currentLayer())
+
+
+    def back(self):
+        self.proxy_manager.return_from_proxy_processing()
 
 
     def run(self):

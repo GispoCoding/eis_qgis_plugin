@@ -30,7 +30,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
     CATEGORY_COLORS = {
         "geology": "sandybrown",
         "geophysics": "blue",
-        "geochemistry": "orange",
+        "geochemistry": "green",
     }
     IMPORTANCES = {
         "High": {"value": 1, "style_sheet": "color: red;", "tooltip": "Importance: High"},
@@ -40,10 +40,17 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
     }
 
 
-    def __init__(self, parent: Optional[QWidget] = None, color_importance = True, color_category = True) -> None:
+    def __init__(
+        self,
+        proxy_manager: QWidget,
+        parent: Optional[QWidget] = None,
+        color_importance = True,
+        color_category = True
+    ) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
+        self.proxy_manager = proxy_manager
         self.color_importance = color_importance
         self.color_category = color_category
 
@@ -172,7 +179,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
     def create_table_for_category(self, proxies, mineral_system, scale, grid_layout):
         # Create label row
-        self.create_table_row(grid_layout, 0, "Proxy", "Importance", ["Keywords"], label=True)
+        self.create_table_row(grid_layout, 0, "Proxy", "Importance", "Category", label=True)
 
         # Create proxy rows
         for i, (proxy_name, proxy_details) in enumerate(proxies.items()):
@@ -181,7 +188,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
                 row=i+1,  # +1 because of label row
                 name=proxy_name,
                 importance=proxy_details["importance"][scale] if mineral_system != "custom" else "",
-                keywords=proxy_details["keywords"],
+                category=proxy_details["category"],
             )
 
 
@@ -204,7 +211,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         row: int,
         name: str,
         importance: str,
-        keywords: List[str],
+        category: str,
         label=False,
     ):
         """Create a new row in the proxy table."""
@@ -227,45 +234,42 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         name_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         grid_layout.addWidget(name_label, row, 1)
 
-        # 2. Keywords label
+        # 2. Category label
         if self.color_category:
-            keywords_label = QLabel()
-            keywords_text = ""
-
-            for word in keywords:
-                if word in self.CATEGORY_COLORS.keys():
-                    keywords_text += (
-                        f"<span style='color: {self.CATEGORY_COLORS[word]};'>{word}</span>, "
-                    )
-                else:
-                    keywords_text += f"{word}, "
-            keywords_text = keywords_text[:-2]
-            keywords_label.setText("<html><body>" + keywords_text + "</body></html>")
+            category_label = QLabel()
+            category_text = ""
+            if category in self.CATEGORY_COLORS.keys():
+                category_text += (
+                    f"<span style='color: {self.CATEGORY_COLORS[category]};'>{category}</span>, "
+                )
+            else:
+                category_text += f"{category}, "
+            category_text = category_text[:-2]
+            category_label.setText("<html><body>" + category_text + "</body></html>")
         else:
-            keywords_label = QLabel(", ".join(keywords))
-        keywords_label.setWordWrap(True)
-        grid_layout.addWidget(keywords_label, row, 2)
+            category_label = QLabel(category)
+        category_label.setWordWrap(True)
+        grid_layout.addWidget(category_label, row, 2)
 
         if label:
             name_label.setFont(self.bold_font)
-            keywords_label.setFont(self.bold_font)
+            category_label.setFont(self.bold_font)
         else:
             # 3. Process button
             process_button = QPushButton("Process")
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            # process_button.clicked.connect(lambda: self.open_proxy_creation(name_label.text()))
-            process_button.clicked.connect(lambda: self.open_proxy_creation_page_1())
+            process_button.clicked.connect(lambda: self.proxy_manager.enter_proxy_processing(category))
             grid_layout.addWidget(process_button, row, 3)
 
-            self.proxy_info[name] = (keywords, [name_label, importance_label, keywords_label, process_button])
+            self.proxy_info[name] = (category, [name_label, importance_label, category_label, process_button])
 
 
     def filter_proxies(self, search_text: str):
         """Updates proxy table based on search."""
-        for proxy_name, (keywords, widgets) in self.proxy_info.items():
+        for proxy_name, (category, widgets) in self.proxy_info.items():
             if (
                 search_text.lower() in proxy_name.lower()
-                or any(search_text.lower() in word.lower() for word in keywords)
+                or any(search_text.lower() in word.lower() for word in category)
             ):
                 [widget.show() for widget in widgets]
             else:
