@@ -7,120 +7,112 @@
                     "camp": "Low",
                     "deposit": "Low"
                 },
-                "keywords": ["geology", "lithology"],
-                "ui_template": "ui_1"
+                "category": "geology"
             },"Distance to albitized country rocks": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geology", "lithology", "mineralogy"]
+                "category": "geology"
             },"Distance to felsic (meta)volcanic rocks and subvolcanic rocks": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "-"
                 },
-                "keywords": ["geology", "lithology"]
+                "category": "geology"
             },"Distance to high concentrations of Na, K or Mg+-Fe": {
                 "importance": {
                     "regional": "Low",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Distance to high conductivity anomalies": {
                 "importance": {
                     "regional": "High",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geophysics"]
+                "category": "geophysics"
             },"Distance to high Fe concentrations": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geochemistry"]
-            },"Distance to Fe-oxides mapped from high magnetic anomalies": {
-                "importance": {
-                    "regional": "High",
-                    "camp": "Moderate",
-                    "deposit": "Low"
-                },
-                "keywords": ["geophysics"]
+                "category": "geochemistry"
             },"Distance to Fe-oxides mapped from high density anomalies": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geophysics"]
+                "category": "geophysics"
             },"Distance to Fe-oxides (includes both magnetite and hematite minerals; or any other Fe-oxides related mineral of the interest of the users)": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geology", "lithology", "mineralogy"]
+                "category": "geology"
             },"Distance to magmatic intrusion of the relevant age (age from geology and radiometric data; distance from geophysical data)": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geology", "geophysics"]
+                "category": "geology"
             },"Distance to rock units displaying alkaline magma signature": {
                 "importance": {
                     "regional": "High",
                     "camp": "Low",
                     "deposit": "Low"
                 },
-                "keywords": []
+                "category": "geochemistry"
             },"Greenschist to mid-Amphibolite facies metamorphosed host rocks": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geology"]
+                "category": "geology"
             },"Syn- to late-orogenic back arc closure related intrusions": {
                 "importance": {
                     "regional": "High",
                     "camp": "Low",
                     "deposit": "Low"
                 },
-                "keywords": ["geology", "geochemistry"]
+                "category": "geology"
             },"Distance to high Fe3O4 concentration": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Distance to high concentrations of Co-REEs": {
                 "importance": {
                     "regional": "High",
                     "camp": "High",
                     "deposit": "-"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Distance to magmatism contemporary with mineralisation (within 5 km buffer)": {
                 "importance": {
                     "regional": "High",
                     "camp": "-",
                     "deposit": "-"
                 },
-                "keywords": ["geology"]
+                "category": "geology"
             },"Distance to mafic (and felsic) subvolcanic/intrusion rocks": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "-"
                 },
-                "keywords": ["geology", "lithology"]
+                "category": "geology"
             }
         },
         "pathway": {
@@ -130,56 +122,56 @@
                     "camp": "High",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geology", "structures"]
+                "category": "geology"
             },"Distance to high order structrues, interpretated from gravity worms": {
                 "importance": {
                     "regional": "High",
                     "camp": "High",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geophysics", "gravity"]
+                "category": "geophysics"
             },"Distance to lower order structures": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geology", "structures"]
+                "category": "geology"
             },"Distance to lower order structrues, interpretated from pseudo gravity worms": {
                 "importance": {
                     "regional": "Low",
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geophysics", "gravity"]
+                "category": "geophysics"
             },"Distance to kinks, offsets and breaks (interpretation from magnetic data, e.g. gradient)": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geology", "magnetics", "structures"]
+                "category": "geology"
             },"Distance to high density structure (interpretation of high density structures derived from geological map or airborne VLF)": {
                 "importance": {
                     "regional":"Moderate",
                     "camp": "Moderate",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geology", "structures", "airborne VLF"]
+                "category": "geology"
             },"Distance to crustal boundary (interpretation from  solid geology, seismic reflection, passive seismic, granity, magnetic data)": {
                 "importance": {
                     "regional": "High",
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geophysics", "structures", "gravimetry", "magnetics", "seismics"]
+                "category": "geophysics"
             },"Distance to intensity of structure": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geology"]
+                "category": "geology"
             }
         },
         "depositional": {
@@ -189,112 +181,112 @@
                 "camp": "Moderate",
                 "deposit": "Moderate"
             },
-            "keywords": ["geology"]
+            "category": "geology"
             },"K-anomalies in till": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "Low"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Magnetic highs": {
                 "importance": {
                     "regional": "High",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geophysics", "magnetics"]
+                "category": "geophysics"
             },"Elevated V in till": {
                 "importance":{
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Elevated Ba, Co, Cu, P, Au in till": {
                 "importance": {
                     "regional": "-",
                     "camp": "-",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Elevated Au, Ba, Co, Cu, La, P in till": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "-"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Radiometric U and/or Th anomalies": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "Moderate",
                     "deposit": "Moderate"
                 },
-                "keywords": ["geophysics", "radiometry"]
+                "category": "geophysics"
             },"Distance to high-magnetic field anomalies": {
                 "importance": {
                     "regional": "High",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geophysics", "magnetics"]
+                "category": "geophysics"
             },"Presence of carbonate horizons in metavolcanic rocks": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geology"]
+                "category": "geology"
             },"Distance to high concentrations of REE, Fe": {
                 "importance": {
                     "regional": "-",
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Massive magnetite": {
                 "importance": {
                     "regional": "-",
                     "camp": "Low",
                     "deposit": "Low"
                 },
-                "keywords": ["geology"]
+                "category": "geology"
             },"Massive magnetite and vonsenite": {
                 "importance": {
                     "regional": "High",
                     "camp": "-",
                     "deposit": "-"
                 },
-                "keywords": ["geology"]
+                "category": "geology"
             },"Ca-Fe metasomatism, Distance high Ca-Fe molar proportions relative to Na, K, and Mg": {
                 "importance": {
                     "regional": "-",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             },"Distance to rock units displaying -sodic alteration signature -potassic and/or calcic alteration signature": {
                 "importance": {
                     "regional": "Moderate",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geology", "geochemistry"]
+                "category": "geology"
             },"Low Ti signature in Fe-oxides": {
                 "importance": {
                     "regional": "Low",
                     "camp": "Low",
                     "deposit": "High"
                 },
-                "keywords": ["geology", "geochemistry"]
+                "category": "geology"
             },"Distance to (Sub) economic Cu-Au concentrations": {
                 "importance": {
                     "regional": "Low",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geology", "geochemistry"]
+                "category": "geology"
             }
         },
         "mineralisation": {
@@ -304,21 +296,21 @@
                     "camp": "Moderate",
                     "deposit": "High"
                 },
-                "keywords": ["geology", "structures", "magnetics"]
+                "category": "geology"
             },"Distance to structures of high density/intensity": {
                 "importance": {
                     "regional": "-",
                     "camp": "-",
                     "deposit": "Low"
                 },
-                "keywords": ["geology", "faults", "structures"]
+                "category": "geology"
             },"Distance to elevated REE, Fe, Cu, Co, Au, Bi, Mo anomalies": {
                 "importance": {
                     "regional": "High",
                     "camp": "High",
                     "deposit": "High"
                 },
-                "keywords": ["geochemistry"]
+                "category": "geochemistry"
             }
         }
     },
@@ -330,8 +322,7 @@
                     "camp": "Low",
                     "deposit": "Low"
                 },
-                "keywords": ["geology", "lithology"],
-                "ui_template": "ui_1"
+                "category": "geology"
             },
             "Distance to X (li-pegmatites)": {
                 "importance": {
@@ -339,8 +330,7 @@
                     "camp": "Low",
                     "deposit": "Low"
                 },
-                "keywords": ["geology", "lithology"],
-                "ui_template": "ui_1"
+                "category": "geology"
             }
         },
         "pathway": {
