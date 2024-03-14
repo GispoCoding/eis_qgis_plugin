@@ -7,6 +7,7 @@ from qgis.gui import (
     QgsFieldComboBox,
     QgsFieldExpressionWidget,
     QgsMapLayerComboBox,
+    QgsRasterBandComboBox,
 )
 from qgis.PyQt.QtWidgets import (
     QComboBox,
@@ -19,6 +20,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 FORM_CLASS_1 = load_ui("mineral_proxies/proxy_workflow1_dist_to_features.ui")
 FORM_CLASS_2 = load_ui("mineral_proxies/proxy_workflow2_interpolation.ui")
+FORM_CLASS_3 = load_ui("mineral_proxies/proxy_workflow3_define_anomaly.ui")
 
 
 class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
@@ -96,6 +98,46 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
 
         # Initialize layer selection
         self.attribute.setLayer(self.vector_layer.currentLayer())
+
+
+    def run(self):
+        print("Run clicked")
+
+
+
+class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
+
+    def __init__(self, parent: Optional[QWidget] = None) -> None:
+        super().__init__(parent)
+        self.setupUi(self)
+
+        # DELCARE TYPES
+        self.raster_layer: QgsMapLayerComboBox
+        self.band: QgsRasterBandComboBox
+
+        self.anomaly_threshold: QgsDoubleSpinBox
+        self.threshold_criteria: QComboBox
+
+        self.output_raster_settings: QComboBox
+        self.output_raster_settings_pages: QStackedWidget
+        self.base_raster: QgsMapLayerComboBox
+        self.pixel_size: QgsDoubleSpinBox
+        self.nodata: QgsDoubleSpinBox
+        self.extent: QgsExtentGroupBox
+
+        self.run_btn: QPushButton
+
+        # Set filters
+        self.raster_layer.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
+
+        # Connect signals
+        self.raster_layer.layerChanged.connect(self.band.setLayer)
+        self.output_raster_settings.currentIndexChanged.connect(self.output_raster_settings_pages.setCurrentIndex)
+        self.run_btn.clicked.connect(self.run)
+
+        # Initialize layer selection
+        self.band.setLayer(self.raster_layer.currentLayer())
 
 
     def run(self):
