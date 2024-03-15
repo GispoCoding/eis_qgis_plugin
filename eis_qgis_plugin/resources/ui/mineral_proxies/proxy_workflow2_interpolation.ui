@@ -88,6 +88,12 @@
       </item>
       <item>
        <widget class="QStackedWidget" name="interpolation_method_pages">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -201,6 +207,12 @@
    </item>
    <item>
     <widget class="QGroupBox" name="output_box">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>Output</string>
      </property>
@@ -228,6 +240,9 @@
           </item>
          </widget>
         </item>
+        <item row="0" column="1">
+         <widget class="QgsFileWidget" name="output_raster_path"/>
+        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="output_raster_path_label">
           <property name="text">
@@ -235,17 +250,16 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QgsFileWidget" name="output_raster_path">
-          <property name="storageMode">
-           <enum>QgsFileWidget::SaveFile</enum>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>
        <widget class="QStackedWidget" name="output_raster_settings_pages">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -386,7 +400,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>25</height>
+       <height>1000</height>
       </size>
      </property>
     </spacer>
