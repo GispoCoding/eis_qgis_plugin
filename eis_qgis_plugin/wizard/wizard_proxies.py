@@ -7,6 +7,7 @@ from qgis.PyQt.QtWidgets import (
 from eis_qgis_plugin.wizard.mineral_proxies.proxy_processing import (
     EISWizardProxyDefineAnomaly,
     EISWizardProxyDistanceToFeatures,
+    EISWizardProxyInterpolateAndDefineAnomaly,
     EISWizardProxyInterpolation,
 )
 from eis_qgis_plugin.wizard.mineral_proxies.proxy_view import EISWizardProxyView
@@ -17,7 +18,8 @@ class EISWizardProxies(QWidget):
     CATEGORY_PROCESS_MAP = {
         "geochemistry": EISWizardProxyInterpolation,
         "geology": EISWizardProxyDistanceToFeatures,
-        "geophysics": EISWizardProxyDefineAnomaly
+        "geophysics": EISWizardProxyDefineAnomaly,
+        "test": EISWizardProxyInterpolateAndDefineAnomaly
     }
 
     def __init__(self, parent=None) -> None:
