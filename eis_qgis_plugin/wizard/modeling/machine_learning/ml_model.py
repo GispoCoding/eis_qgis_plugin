@@ -21,6 +21,7 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
+from eis_qgis_plugin.model_manager import ModelManager
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.machine_learning.modeling_feedback import EISModelingGUIFeedback
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable, ModelTrainingDataTable
@@ -29,9 +30,9 @@ from eis_qgis_plugin.wizard.modeling.model_utils import TEMPORARY_OUTPUT, set_fi
 FORM_CLASS: QWidget = load_ui("modeling/wizard_ml_model.ui")
 
 
-class ModelType(Enum):
-    CLASSIFIER = 1
-    REGRESSOR = 2
+class ModelType(str, Enum):
+    CLASSIFIER = "classifier"
+    REGRESSOR = "regressor"
 
 
 CLASSIFIER_METRICS = ["Accuracy", "Precision", "Recall", "F1", "AUC"]
@@ -181,11 +182,13 @@ class EISMLModel(QWidget, FORM_CLASS):
 
 
     def update_selectable_models(self, tab_index: int = None):
+        models = ModelManager.get_all_models()
         filtered_models = {}
-        for run_name, model_data in DATABASE.items():
-            model_name = model_data["model_name"]
-            if model_name == self.get_model_name():
-                filtered_models[run_name] = model_data
+        for model in models:
+            model_info = ModelManager.get_model_info(model)
+            print(model_info)
+            if model_info["model_name"] == self.get_model_name():
+                filtered_models[model] = model_info
 
         self.application_model_selection.clear()
         self.application_model_selection.addItems(filtered_models)
@@ -200,9 +203,11 @@ class EISMLModel(QWidget, FORM_CLASS):
     def update_data_table(self, table: ModelDataTable, model_key: str):
         if model_key == "":
             return
-        if model_key in DATABASE.keys():
-            tags = list(DATABASE[model_key]["evidence_data"].keys())
-            table.load_model(tags)
+        if model_key in ModelManager.get_all_models():
+        # if model_key in DATABASE.keys():
+            info = ModelManager.get_model_info(model_key)
+            print(info)
+            table.load_model(info["tags"])
         else:
             raise Exception(f"Error finding key in model database: {model_key}.")
 
@@ -212,6 +217,7 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.test_evidence_data = ModelDataTable(self)
         self.test_evidence_data_layout.addWidget(self.test_evidence_data)
 
+        ModelManager.remove_model_info_all()
         # Connect signals
         self.test_run_btn.clicked.connect(self.test_model)
         self.test_model_selection.currentTextChanged.connect(
@@ -383,12 +389,14 @@ class EISMLModel(QWidget, FORM_CLASS):
 
     def save_training_run_to_model_database(self, execution_time: Optional[float] = None):
         training_run_name = self.get_training_run_name()
-        DATABASE[training_run_name] = {
+        print(self.train_evidence_data.get_tags())
+        model_info = {
             "model_name": self.get_model_name(),
             "model_type": self.get_model_type(),
-            "file": self.get_training_output_file(),
-            "evidence_data": self.train_evidence_data.get_tagged_layers(),
-            "labels_data": self.get_training_label_layer(),
+            "model_file": self.get_training_output_file(),
+            "tags": self.train_evidence_data.get_tags(),
+            "evidence_data": [layer.source() for layer in self.train_evidence_data.get_layers()],
+            "labels_data": self.get_training_label_layer().source(),
             "parameters": {
                 **self.get_common_parameter_values(),
                 **self.get_parameter_values(),
@@ -396,6 +404,9 @@ class EISMLModel(QWidget, FORM_CLASS):
             },
             "training_execution_time": execution_time
         }
+
+        ModelManager.save_model_info(training_run_name, model_info)
+        # DATABASE[training_run_name] = model_info
 
 
     def check_ready_for_training(self):
