@@ -117,7 +117,7 @@ class ModelTrainingDataTable(QTableWidget):
     def get_tags(self) -> List[str]:
         if not self.tag_column:
             raise NotImplementedError("The model data table was initialized without tag column.")
-        [self.cellWidget(row, 0).currentLayer() for row in range(self.rowCount())]
+        return [self.cellWidget(row, 0).text() for row in range(self.rowCount())]
 
 
     def get_layers(self) -> List[QgsRasterLayer]:
