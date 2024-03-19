@@ -1,5 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterCrs,
+    QgsProcessingParameterExtent,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
@@ -30,10 +31,7 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
         self.alg_parameters = [
             "constant_value",
             "template_raster",
-            "coord_west",
-            "coord_north",
-            "coord_east",
-            "coord_south",
+            "extent",
             "target_epsg",
             "target_pixel_size",
             "raster_width",
@@ -58,51 +56,21 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
         template_raster_param.setHelp("An optional raster to use as a template for the output.")
         self.addParameter(template_raster_param)
 
-        coord_west_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[2],
-            description="Western coordinate",
-            optional=True,
-            type=QgsProcessingParameterNumber.Double,
+        extent_param = QgsProcessingParameterExtent(
+            name=self.alg_parameters[2], description="Raster extent", optional=True
         )
-        coord_west_param.setHelp("The western coordinate of the output raster in [m].")
-        self.addParameter(coord_west_param)
-
-        coord_north_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[3],
-            description="Northern coordinate",
-            optional=True,
-            type=QgsProcessingParameterNumber.Double,
-        )
-        coord_north_param.setHelp("The northern coordinate of the output raster in [m].")
-        self.addParameter(coord_north_param)
-
-        coord_east_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[4],
-            description="Eastern coordinate",
-            optional=True,
-            type=QgsProcessingParameterNumber.Double,
-        )
-        coord_east_param.setHelp("The eastern coordinate of the output raster in [m].")
-        self.addParameter(coord_east_param)
-
-        coord_south_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[5],
-            description="Southern coordinate",
-            optional=True,
-            type=QgsProcessingParameterNumber.Double,
-        )
-        coord_south_param.setHelp("The southern coordinate of the output raster in [m].")
-        self.addParameter(coord_south_param)
+        extent_param.setHelp("The extent of the output raster.")
+        self.addParameter(extent_param)
 
         target_epsg_param = QgsProcessingParameterCrs(
-            name=self.alg_parameters[6],
+            name=self.alg_parameters[3],
             description="Coordinate system",
         )
         target_epsg_param.setHelp("The EPSG code for the output raster.")
         self.addParameter(target_epsg_param)
 
         target_pixel_size_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[7],
+            name=self.alg_parameters[4],
             description="Target pixel size",
             optional=True,
         )
@@ -110,7 +78,7 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
         self.addParameter(target_pixel_size_param)
 
         raster_width_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[8],
+            name=self.alg_parameters[5],
             description="Raster width",
             optional=True,
         )
@@ -118,7 +86,7 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
         self.addParameter(raster_width_param)
 
         raster_height_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[9],
+            name=self.alg_parameters[6],
             description="Raster height",
             optional=True,
         )
@@ -126,7 +94,7 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
         self.addParameter(raster_height_param)
 
         nodata_value_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[10],
+            name=self.alg_parameters[7],
             description="Nodata value",
             optional=True,
             type=QgsProcessingParameterNumber.Double,
@@ -135,7 +103,7 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
         self.addParameter(nodata_value_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[11], description="Output raster"
+            name=self.alg_parameters[8], description="Output raster"
         )
         output_raster_param.setHelp("The Output raster.")
         self.addParameter(output_raster_param)
