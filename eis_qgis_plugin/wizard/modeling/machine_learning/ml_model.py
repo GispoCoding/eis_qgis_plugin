@@ -21,10 +21,10 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
-from eis_qgis_plugin.model_manager import ModelManager
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.modeling.machine_learning.modeling_feedback import EISModelingGUIFeedback
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable, ModelTrainingDataTable
+from eis_qgis_plugin.wizard.modeling.model_feedback import EISModelGUIFeedback
+from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.modeling.model_utils import TEMPORARY_OUTPUT, set_file_widget_placeholder_text
 
 FORM_CLASS: QWidget = load_ui("modeling/wizard_ml_model.ui")
@@ -178,7 +178,7 @@ class EISMLModel(QWidget, FORM_CLASS):
         self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
 
         # Create feedback instance for training
-        self.training_feedback = EISModelingGUIFeedback(self.training_log, self.training_progress_bar)
+        self.training_feedback = EISModelGUIFeedback(self.training_log, self.training_progress_bar)
 
 
     def update_selectable_models(self, tab_index: int = None):
