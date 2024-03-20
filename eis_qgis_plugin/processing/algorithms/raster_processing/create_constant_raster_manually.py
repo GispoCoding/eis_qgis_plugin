@@ -1,9 +1,7 @@
 from qgis.core import (
     QgsProcessingParameterCrs,
-    QgsProcessingParameterExtent,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
-    QgsProcessingParameterRasterLayer,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
