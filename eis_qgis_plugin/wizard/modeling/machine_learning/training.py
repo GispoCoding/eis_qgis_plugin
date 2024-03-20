@@ -52,6 +52,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
         self.start_training_btn: QPushButton
         self.reset_training_parameters_btn: QPushButton
+        self.generate_tags_btn: QPushButton
 
         self.training_log: QTextEdit
         self.training_progress_bar: QProgressBar
@@ -69,6 +70,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.validation_method.currentTextChanged.connect(self.update_validation_settings)
         self.start_training_btn.clicked.connect(self.train_model)
         self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
+        self.generate_tags_btn.clicked.connect(self.train_evidence_data.generate_tags)
        
 
     def initialize_classifier(self):

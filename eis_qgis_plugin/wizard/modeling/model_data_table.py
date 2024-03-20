@@ -132,6 +132,14 @@ class ModelTrainingDataTable(QTableWidget):
             self.cellWidget(row, 0).text(): self.cellWidget(row, 1).currentLayer()
             for row in range(self.rowCount())
         }
+    
+
+    def generate_tags(self):
+        if not self.tag_column:
+            raise NotImplementedError("The model data table was initialized without tag column.")
+        for row in range(self.rowCount()):
+            layer_name = self.cellWidget(row, 1).currentLayer().name()
+            self.cellWidget(row, 0).setText(layer_name)
 
 
     def create_buttons(self):
