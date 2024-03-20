@@ -9,23 +9,15 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISCreateConstantRaster(EISProcessingAlgorithm):
+class EISCreateConstantRasterFromTemplate(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "create_constant_raster"
-        self._display_name = "Create constant raster"
+        self._name = "create_constant_raster_from_template"
+        self._display_name = "Create constant raster from template"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = '''Create a constant raster based on a user-defined value.
-            Provide 3 methods for raster creation:
-            1. Set extent and coordinate system based on a template raster.
-            2. Set extent from origin, based on the western and northern coordinates and the pixel size.
-            3. Set extent from bounds, based on western, northern, eastern and southern points.
-
-            Always provide values for height and width for the last two options, which correspond to
-            the desired number of pixels for rows and columns.
-        '''
+        self._short_help_string = "Create a constant raster based on a template raster."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
@@ -34,8 +26,6 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
             "extent",
             "target_epsg",
             "target_pixel_size",
-            "raster_width",
-            "raster_height",
             "nodata_value",
             "output_raster",
         ]
@@ -77,24 +67,8 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
         target_pixel_size_param.setHelp("The pixel size of the output raster.")
         self.addParameter(target_pixel_size_param)
 
-        raster_width_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[5],
-            description="Raster width",
-            optional=True,
-        )
-        raster_width_param.setHelp("The width of the output raster.")
-        self.addParameter(raster_width_param)
-
-        raster_height_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[6],
-            description="Raster height",
-            optional=True,
-        )
-        raster_height_param.setHelp("The height of the output raster.")
-        self.addParameter(raster_height_param)
-
         nodata_value_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[7],
+            name=self.alg_parameters[5],
             description="Nodata value",
             optional=True,
             type=QgsProcessingParameterNumber.Double,
@@ -103,7 +77,7 @@ class EISCreateConstantRaster(EISProcessingAlgorithm):
         self.addParameter(nodata_value_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[8], description="Output raster"
+            name=self.alg_parameters[6], description="Output raster"
         )
         output_raster_param.setHelp("The Output raster.")
         self.addParameter(output_raster_param)
