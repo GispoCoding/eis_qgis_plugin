@@ -87,7 +87,7 @@ QListWidget::item::selected {
      </item>
      <item>
       <property name="text">
-       <string>Results</string>
+       <string>History</string>
       </property>
      </item>
      <item>

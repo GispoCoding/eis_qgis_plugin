@@ -25,7 +25,7 @@ class EISEvaluateTrainedModel(EISProcessingAlgorithm):
             "input_rasters",
             "target_labels",
             "model_file",
-            "validation_metric",
+            "validation_metrics",
             "output_raster"
         ]
 

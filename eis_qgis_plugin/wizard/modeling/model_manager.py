@@ -2,37 +2,21 @@ import json
 from typing import List
 
 from qgis.core import QgsProject
+from qgis.PyQt.QtCore import QObject, pyqtSignal
 
 
-class ModelManager:
+class ModelManager(QObject):
 
     BASE_KEY = "models"
     ALL_MODELS_KEY = "all_models"
     SCOPE = "eis"
 
-    def __init__(self):
-        pass
+    models_updated = pyqtSignal()
+
 
     @classmethod
     def _get_key(self, id):
         return f"{self.BASE_KEY}/{id}"
-
-    @classmethod
-    def save_model_info(self, id: str, info: dict):
-        key = self._get_key(id)
-        model_info_json = json.dumps(info)
-        proj = QgsProject.instance()
-        proj.writeEntry(self.SCOPE, key, model_info_json)
-
-        models = self.get_all_models()
-        models.append(id)
-        proj.writeEntry(self.SCOPE, self.ALL_MODELS_KEY, models)
-
-        print(f"Saved model info with key {id}. Info: {info}")
-        print(f"Model info json: {model_info_json}")
-
-        info_retrieved = self.get_model_info(id)
-        print(f"Retrieved info: {info_retrieved}")
 
     @classmethod
     def get_model_info(self, id):
@@ -59,8 +43,21 @@ class ModelManager:
             infos[model] = info
         return infos
 
-    @classmethod
-    def remove_model_info(self, id):
+    def save_model_info(self, id: str, info: dict):
+        key = self._get_key(id)
+        model_info_json = json.dumps(info)
+        proj = QgsProject.instance()
+        proj.writeEntry(self.SCOPE, key, model_info_json)
+
+        models = self.get_all_models()
+        models.append(id)
+        proj.writeEntry(self.SCOPE, self.ALL_MODELS_KEY, models)
+
+        print(f"Saved model info with key {id}. Info: {info}")
+
+        self.models_updated.emit()
+
+    def remove_model_info(self, id, emit=True):
         key = self._get_key(id)
         proj = QgsProject.instance()
         proj.removeEntry(self.SCOPE, key)
@@ -71,8 +68,13 @@ class ModelManager:
 
         print(f"Removed model {id}")
 
-    @classmethod
+        if emit:
+            self.models_updated.emit()
+
+
     def remove_model_info_all(self):
         models = self.get_all_models()
         for model in models:
-            self.remove_model_info(model)
+            self.remove_model_info(model, emit=False)
+
+        self.models_updated.emit()

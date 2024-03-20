@@ -3,7 +3,8 @@ from typing import Any, Dict
 from qgis.gui import QgsSpinBox
 from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
-from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model import EISMLModel, ModelType
+from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model_main import EISMLModel
+from eis_qgis_plugin.wizard.modeling.model_utils import ModelType
 
 
 class EISWizardRandomForest(EISMLModel):
@@ -15,10 +16,11 @@ class EISWizardRandomForest(EISMLModel):
         self.model_type = model_type
         self.name = "Random forest " + ("classifier" if model_type == ModelType.CLASSIFIER else "regressor")
 
-        super().__init__(parent, model_type)
+        super().__init__(parent, self.name, model_type)
         
+        self.training_tab = super().get_training_tab()
+        self.training_tab.add_common_parameters()
         self.add_model_parameters()
-        self.add_general_model_parameters()
 
         if model_type == ModelType.CLASSIFIER:
             self.initialize_classifier()
@@ -34,13 +36,12 @@ class EISWizardRandomForest(EISMLModel):
         self.n_estimators.setMinimum(1)
         self.n_estimators.setMaximum(1000)
         self.n_estimators.setValue(100)
-        self.train_parameter_box.layout().addRow(self.n_estimators_label, self.n_estimators)
+        self.training_tab.add_parameter_row(self.n_estimators_label, self.n_estimators)
 
         self.criterion_label = QLabel()
         self.criterion_label.setText("Criterion")
         self.criterion = QComboBox()
-        
-        self.train_parameter_box.layout().addRow(self.criterion_label, self.criterion)
+        self.training_tab.add_parameter_row(self.criterion_label, self.criterion)
 
         self.max_depth_label = QLabel()
         self.max_depth_label.setText("Max depth")
@@ -48,14 +49,14 @@ class EISWizardRandomForest(EISMLModel):
         self.max_depth.setMinimum(0)
         self.max_depth.setMaximum(1000)
         self.max_depth.setValue(3)
-        self.train_parameter_box.layout().addRow(self.max_depth_label, self.max_depth)
+        self.training_tab.add_parameter_row(self.max_depth_label, self.max_depth)
 
 
     def initialize_classifier(self):
         """Initialize random forest classifier settings."""
         self.name = "Random forest classifier"
         self.alg_name = "eis:random_forest_classifier_train"
-        super().initialize_classifier()
+        self.training_tab.initialize_classifier()
         self.criterion.addItems(["gini", "entropy", "log_loss"])
 
 
@@ -63,7 +64,7 @@ class EISWizardRandomForest(EISMLModel):
         """Initialize random forest regressor settings."""
         self.name = "Random forest regressor"
         self.alg_name = "eis:random_forest_classifier_train"
-        super().initialize_regressor()
+        self.training_tab.initialize_regressor()
         self.criterion.addItems(["squared_error", "absolute_error", "friedman_mse", "poisson"])
 
 
@@ -77,7 +78,7 @@ class EISWizardRandomForest(EISMLModel):
 
     def reset_parameters(self):
         """Reset random forest parameters to defaults."""
-        super().reset_parameters()
+        self.training_tab.reset_parameters()
 
         self.n_estimators.setValue(100)
         self.criterion.setCurrentIndex(0)
@@ -86,7 +87,7 @@ class EISWizardRandomForest(EISMLModel):
 
     def set_tooltips(self):
         """Set tooltips for random forest parameters."""
-        super().set_tooltips()
+        self.training_tab.set_tooltips()
 
         n_estimators_tip = "The number of trees in the forest."
         self.n_estimators.setToolTip(n_estimators_tip)

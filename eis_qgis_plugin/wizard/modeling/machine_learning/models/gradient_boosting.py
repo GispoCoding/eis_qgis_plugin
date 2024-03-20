@@ -3,7 +3,8 @@ from typing import Any, Dict
 from qgis.gui import QgsDoubleSpinBox, QgsSpinBox
 from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
-from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model import EISMLModel, ModelType
+from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model_main import EISMLModel
+from eis_qgis_plugin.wizard.modeling.model_utils import ModelType
 
 
 class EISWizardGradientBoosting(EISMLModel):
@@ -13,12 +14,13 @@ class EISWizardGradientBoosting(EISMLModel):
 
     def __init__(self, parent, model_type) -> None:
         self.model_type = model_type
-        self.name = "Gradient boosting " + "classifier" if model_type == ModelType.CLASSIFIER else "regressor"
+        self.name = "Gradient boosting " + ("classifier" if model_type == ModelType.CLASSIFIER else "regressor")
 
-        super().__init__(parent, model_type)
+        super().__init__(parent, self.name, model_type)
 
+        self.training_tab = super().get_training_tab()
+        self.training_tab.add_common_parameters()
         self.add_model_parameters()
-        self.add_general_model_parameters()
 
         if model_type == ModelType.CLASSIFIER:
             self.initialize_classifier()
@@ -32,7 +34,7 @@ class EISWizardGradientBoosting(EISMLModel):
         self.loss_label.setText("Loss")
         self.loss = QComboBox()
         self.loss.addItems([])
-        self.train_parameter_box.layout().addRow(self.loss_label, self.loss)
+        self.training_tab.add_parameter_row(self.loss_label, self.loss)
 
         self.learning_rate_label = QLabel()
         self.learning_rate_label.setText("Learning rate")
@@ -40,7 +42,7 @@ class EISWizardGradientBoosting(EISMLModel):
         self.learning_rate.setMinimum(0.01)
         self.learning_rate.setMaximum(99.99)
         self.learning_rate.setValue(0.1)
-        self.train_parameter_box.layout().addRow(self.learning_rate_label, self.learning_rate)
+        self.training_tab.add_parameter_row(self.learning_rate_label, self.learning_rate)
 
         self.n_estimators_label = QLabel()
         self.n_estimators_label.setText("N estimators")
@@ -48,7 +50,7 @@ class EISWizardGradientBoosting(EISMLModel):
         self.n_estimators.setMinimum(1)
         self.n_estimators.setMaximum(1000)
         self.n_estimators.setValue(100)
-        self.train_parameter_box.layout().addRow(self.n_estimators_label, self.n_estimators)
+        self.training_tab.add_parameter_row(self.n_estimators_label, self.n_estimators)
 
         self.max_depth_label = QLabel()
         self.max_depth_label.setText("Max depth")
@@ -56,7 +58,7 @@ class EISWizardGradientBoosting(EISMLModel):
         self.max_depth.setMinimum(0)
         self.max_depth.setMaximum(1000)
         self.max_depth.setValue(3)
-        self.train_parameter_box.layout().addRow(self.max_depth_label, self.max_depth)
+        self.training_tab.add_parameter_row(self.max_depth_label, self.max_depth)
 
         self.subsample_label = QLabel()
         self.subsample_label.setText("Subsample")
@@ -65,20 +67,20 @@ class EISWizardGradientBoosting(EISMLModel):
         self.subsample.setMaximum(1.0)
         self.subsample.setValue(1.0)
         self.subsample.setDecimals(2)
-        self.train_parameter_box.layout().addRow(self.subsample_label, self.subsample)
+        self.training_tab.add_parameter_row(self.subsample_label, self.subsample)
 
 
     def initialize_classifier(self):
         """Initialize gradient boosting classifier settings."""
         self.alg_name = "eis:gradient_boosting_classifier_train"
-        super().initialize_classifier()
+        self.training_tab.initialize_classifier()
         self.loss.addItems(["log_loss", "exponential"])
 
 
     def initialize_regressor(self):
         """Initialize gradient boosting regressor settings."""
         self.alg_name = "eis:gradient_boosting_regressor_train"
-        super().initialize_regressor()
+        self.training_tab.initialize_regressor()
         self.loss.addItems(["squared_error", "absolute_error", "huber", "quantile"])
 
 
@@ -93,7 +95,7 @@ class EISWizardGradientBoosting(EISMLModel):
 
     def reset_parameters(self):
         """Reset gradient boosting parameters to defaults."""
-        super().reset_parameters()
+        self.training_tab.reset_parameters()
 
         self.loss.setCurrentIndex(0)
         self.learning_rate.setValue(0.1)
@@ -104,7 +106,7 @@ class EISWizardGradientBoosting(EISMLModel):
 
     def set_tooltips(self):
         """Set tooltips for gradient boosting parameters."""
-        super().set_tooltips()
+        self.training_tab.set_tooltips()
 
         loss_tip = "The loss function to be optimized."
         self.loss.setToolTip(loss_tip)
