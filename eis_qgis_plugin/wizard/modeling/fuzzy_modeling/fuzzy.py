@@ -20,6 +20,7 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils import TEMPORARY_OUTPUT, set_file_widget_placeholder_text
 from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     FuzzyMembership,
     GaussianMembership,
@@ -30,7 +31,6 @@ from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     SmallMembership,
 )
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
-from eis_qgis_plugin.wizard.modeling.model_utils import TEMPORARY_OUTPUT, set_file_widget_placeholder_text
 
 # from eis_qgis_plugin.processing.algorithms.prediction.fuzzy_overlay import (
     
