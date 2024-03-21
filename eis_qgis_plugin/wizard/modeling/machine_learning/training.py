@@ -86,10 +86,12 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
 
     def add_parameter_row(self, label, widget):
+        """Add parameter row to the parameter box layout."""
         self.train_parameter_box.layout().addRow(label, widget)
 
 
     def add_common_parameters(self):
+        """Add common parameters to the parameter box."""
         self.verbose_label = QLabel()
         self.verbose_label.setText("Verbose")
         self.verbose = QgsSpinBox()
@@ -163,7 +165,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
 
     def train_model(self):
-        """Trains the ML model. Runs corresponding processing algorithm."""
+        """Trains the ML model. Runs the corresponding processing algorithm."""
         self.check_ready_for_training()
 
         model_parameters = {
@@ -189,8 +191,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
 
     def save_info(self, model_parameters: dict, execution_time: Optional[float] = None):
-        print("Name: ", self.model_main.get_model_name())
-        print("Type: ", self.model_main.get_model_type())
+        """Save model info with ModelManager."""
         model_info = {
             "model_name": self.model_main.get_model_name(),
             "model_type": self.model_main.get_model_type(),
