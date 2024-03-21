@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>746</width>
-    <height>752</height>
+    <height>751</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="proxy_pages_widget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="proxy_selection_page">
       <layout class="QVBoxLayout" name="verticalLayout_2">

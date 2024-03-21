@@ -33,7 +33,7 @@ from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTa
 from eis_qgis_plugin.wizard.modeling.model_utils import TEMPORARY_OUTPUT, set_placeholder_text
 
 # from eis_qgis_plugin.processing.algorithms.prediction.fuzzy_overlay import (
-    
+
 # )
 
 FORM_CLASS: QWidget = load_ui("modeling/wizard_fuzzy_modeling.ui")
