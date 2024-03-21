@@ -16,6 +16,7 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import PLUGIN_PATH
@@ -36,7 +37,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         "High": {"value": 1, "style_sheet": "color: red;", "tooltip": "Importance: High"},
         "Moderate": {"value": 2, "style_sheet": "color: orange;", "tooltip": "Importance: Moderate"},
         "Low": {"value": 3, "style_sheet": "color: green;", "tooltip": "Importance: Low"},
-        "-": {"value": 4, "style_sheet": "color: black;", "tooltip": "Importance not defined"}
+        "-": {"value": 4, "style_sheet": "color: black;", "tooltip": "Importance: Not defined"}
     }
 
 
@@ -179,7 +180,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
     def create_table_for_category(self, proxies, mineral_system, scale, grid_layout):
         # Create label row
-        self.create_table_row(grid_layout, 0, "Proxy", "Importance", "Category", label=True)
+        self.create_table_row(grid_layout, 0, "Proxy", "Importance", "Category", "Workflow", label=True)
 
         # Create proxy rows
         for i, (proxy_name, proxy_details) in enumerate(proxies.items()):
@@ -189,12 +190,20 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
                 name=proxy_name,
                 importance=proxy_details["importance"][scale] if mineral_system != "custom" else "",
                 category=proxy_details["category"],
+                workflow=proxy_details["workflow"]
             )
 
 
     def create_tables(self):
         """Create new tables for each tab with selected mineral system and scale."""
         mineral_system, scale = self.get_proxy_view_settings()
+        # 2 mineral systems not implemented yet, display messages
+        if mineral_system == "li-pegmatites (not implemented)":
+            iface.messageBar().pushWarning("Error: ", "Li-Pegmatites proxies are not included in EIS QGIS plugin yet.")
+            return
+        elif mineral_system == "co-vms (not implemented)":
+            iface.messageBar().pushWarning("Error: ", "Co-VMS proxies are not included in EIS QGIS plugin yet.")
+            return
 
         # Populate tab at a time
         for category in self.PROXY_CATEGORIES:
@@ -212,6 +221,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         name: str,
         importance: str,
         category: str,
+        workflow: str,
         label=False,
     ):
         """Create a new row in the proxy table."""
@@ -258,7 +268,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             # 3. Process button
             process_button = QPushButton("Process")
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            process_button.clicked.connect(lambda: self.proxy_manager.enter_proxy_processing(category))
+            process_button.clicked.connect(lambda: self.proxy_manager.enter_proxy_processing(int(workflow)))
             grid_layout.addWidget(process_button, row, 3)
 
             self.proxy_info[name] = (category, [name_label, importance_label, category_label, process_button])
