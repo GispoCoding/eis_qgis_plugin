@@ -3,11 +3,12 @@ from qgis.gui import QgsDockWidget
 from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
+from eis_qgis_plugin.wizard.wizard_history import EISWizardHistory
 from eis_qgis_plugin.wizard.wizard_modeling import EISWizardModeling
 from eis_qgis_plugin.wizard.wizard_plot import EISWizardPlotting
 from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
-from eis_qgis_plugin.wizard.wizard_results import EISWizardResults
 from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 
 
@@ -80,6 +81,8 @@ class EISWizard(QWidget, FORM_CLASS):
         # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/about.svg")))
         # # Icon by Icons8
 
+        self.model_manager = ModelManager()
+
         # Add pages
 
         # Create Settings page first
@@ -92,12 +95,12 @@ class EISWizard(QWidget, FORM_CLASS):
         self.explore_page = EISWizardPlotting(self)
         self.pages_widget.insertWidget(1, self.explore_page)
 
-        self.model_page = EISWizardModeling(self)
+        self.model_page = EISWizardModeling(self, self.model_manager)
         self.pages_widget.insertWidget(2, self.model_page)
         # self.pages_widget.insertWidget(2, QWidget())
 
-        self.results_page = EISWizardResults(self)
-        self.pages_widget.insertWidget(3, self.results_page)
+        self.history_page = EISWizardHistory(self, self.model_manager)
+        self.pages_widget.insertWidget(3, self.history_page)
 
         self.about_page = EISWizardAbout(self)
         self.pages_widget.insertWidget(5, self.about_page)

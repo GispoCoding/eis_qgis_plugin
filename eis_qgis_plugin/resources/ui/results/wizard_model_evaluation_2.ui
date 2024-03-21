@@ -71,18 +71,13 @@
       </spacer>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_2">
+      <widget class="QComboBox" name="model_selection">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <item>
-        <property name="text">
-         <string>rf_1</string>
-        </property>
-       </item>
       </widget>
      </item>
     </layout>
@@ -107,9 +102,9 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="model_type">
         <property name="text">
-         <string>Random forest classifier</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -121,9 +116,9 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_2">
+       <widget class="QLineEdit" name="model_file">
         <property name="text">
-         <string>rf_1.joblib</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -137,7 +132,7 @@
       <item row="2" column="1">
        <widget class="QLineEdit" name="lineEdit_3">
         <property name="text">
-         <string>Trained</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -151,7 +146,7 @@
       <item row="3" column="1">
        <widget class="QLineEdit" name="lineEdit_4">
         <property name="text">
-         <string>09:58</string>
+         <string/>
         </property>
        </widget>
       </item>

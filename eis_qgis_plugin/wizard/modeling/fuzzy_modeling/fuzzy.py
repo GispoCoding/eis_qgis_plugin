@@ -20,7 +20,6 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import TEMPORARY_OUTPUT, set_file_widget_placeholder_text
 from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     FuzzyMembership,
     GaussianMembership,
@@ -31,9 +30,10 @@ from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     SmallMembership,
 )
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
+from eis_qgis_plugin.wizard.modeling.model_utils import TEMPORARY_OUTPUT, set_placeholder_text
 
 # from eis_qgis_plugin.processing.algorithms.prediction.fuzzy_overlay import (
-    
+
 # )
 
 FORM_CLASS: QWidget = load_ui("modeling/wizard_fuzzy_modeling.ui")
@@ -149,14 +149,14 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
 
         self.input_raster_membership.setFilters(QgsMapLayerProxyModel.RasterLayer)
         self.output_raster_membership.setFilter("GeoTiff files (*.tif *.tiff)")
-        set_file_widget_placeholder_text(self.output_raster_membership)
+        set_placeholder_text(self.output_raster_membership)
 
         # Overlay
         self.input_rasters_table = ModelTrainingDataTable(self, add_tag_column=False, inital_rows=2, min_rows=2)
         self.fuzzy_rasters_layout.addWidget(self.input_rasters_table)
 
         self.output_raster_overlay.setFilter("GeoTiff files (*.tif *.tiff)")
-        set_file_widget_placeholder_text(self.output_raster_overlay)
+        set_placeholder_text(self.output_raster_overlay)
 
 
     def connect_signals(self):
