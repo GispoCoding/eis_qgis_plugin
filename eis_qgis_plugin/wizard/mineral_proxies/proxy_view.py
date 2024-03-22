@@ -180,7 +180,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
     def create_table_for_category(self, proxies, mineral_system, scale, grid_layout):
         # Create label row
-        self.create_table_row(grid_layout, 0, "Proxy", "Importance", "Category", "Workflow", label=True)
+        self.create_table_row(grid_layout, 0, "Proxy", "Importance", "Category", "", "", label=True)
 
         # Create proxy rows
         for i, (proxy_name, proxy_details) in enumerate(proxies.items()):
@@ -190,7 +190,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
                 name=proxy_name,
                 importance=proxy_details["importance"][scale] if mineral_system != "custom" else "",
                 category=proxy_details["category"],
-                workflow=proxy_details["workflow"]
+                workflow=proxy_details["workflow"],
+                mineral_system=mineral_system
             )
 
 
@@ -222,6 +223,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         importance: str,
         category: str,
         workflow: str,
+        mineral_system: str,
         label=False,
     ):
         """Create a new row in the proxy table."""
@@ -268,7 +270,11 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             # 3. Process button
             process_button = QPushButton("Process")
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            process_button.clicked.connect(lambda: self.proxy_manager.enter_proxy_processing(int(workflow)))
+            process_button.clicked.connect(
+                lambda: self.proxy_manager.enter_proxy_processing(
+                    mineral_system, category, name, int(workflow)
+                )
+            )
             grid_layout.addWidget(process_button, row, 3)
 
             self.proxy_info[name] = (category, [name_label, importance_label, category_label, process_button])

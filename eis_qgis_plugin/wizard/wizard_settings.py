@@ -193,7 +193,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         key = _CONTINUOUS_PALETTE_SETTING
         return self.settings.value(key, DEFAULTS[key])
 
-    def get_layer_group_selection(self):
+    def get_layer_group_selection(self) -> bool:
         key = _LAYER_GROUP_SETTING
         return self.settings.value(key) == "true" if key else DEFAULTS[key]
 

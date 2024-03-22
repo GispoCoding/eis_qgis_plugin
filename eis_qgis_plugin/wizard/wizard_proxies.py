@@ -40,8 +40,8 @@ class EISWizardProxies(QWidget):
         self.setLayout(layout)
 
 
-    def enter_proxy_processing(self, workflow: int):
-        processing_page = self.WORKFLOW_MAP[workflow](proxy_manager=self)
+    def enter_proxy_processing(self, mineral_system: str, category: str, proxy_name: str, workflow: int):
+        processing_page = self.WORKFLOW_MAP[workflow](self, mineral_system, category, proxy_name)
         self.proxy_pages.addWidget(processing_page)
         self.proxy_pages.setCurrentIndex(1)
 

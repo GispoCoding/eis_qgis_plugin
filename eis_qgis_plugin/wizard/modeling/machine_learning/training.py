@@ -19,8 +19,8 @@ from qgis.PyQt.QtWidgets import (
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
-from eis_qgis_plugin.wizard.modeling.model_feedback import EISModelGUIFeedback
 from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, set_filter
+from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 
 FORM_CLASS: QWidget = load_ui("modeling/training.ui")
 
@@ -62,7 +62,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         # Initialize
         self.train_evidence_data = ModelTrainingDataTable(self)
         self.train_evidence_data_layout.addWidget(self.train_evidence_data)
-        self.training_feedback = EISModelGUIFeedback(self.training_log, self.training_progress_bar)
+        self.training_feedback = EISProcessingFeedback(self.training_log, self.training_progress_bar)
 
         set_filter(self.train_model_save_path, "joblib")
 

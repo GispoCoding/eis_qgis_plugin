@@ -14,3 +14,4 @@ homepage=https://github.com/GispoCoding/eis_qgis_plugin
 category=Plugins
 experimental=True
 deprecated=False
+hasProcessingProvider=yes
