@@ -4,6 +4,8 @@ from qgis.core import Qgis, QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QSizePolicy, QWidget
 
+from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
+
 
 class EISPlot(QWidget):
     """Template / parent class for plot classes in EIS Wizard."""
@@ -28,8 +30,6 @@ class EISPlot(QWidget):
         # Save original widget size and connect groupbox collapse signal to resizing
         self.parameter_box.collapsedStateChanged.connect(self.resize_parameter_box)
 
-        # Save reference to settings page
-        self.settings_page = self.parent().parent().settings_page
         self.reset()
 
     def update_layer(self, layer: QgsMapLayer):
@@ -49,7 +49,7 @@ class EISPlot(QWidget):
 
     def set_deafult_color(self):
         """Fetch default color from settings and set color widget selection."""
-        self.color.setColor(self.settings_page.get_default_color())
+        self.color.setColor(EISSettingsManager.get_default_color())
 
     def resize_parameter_box(self, collapsed: bool):
         """Resize self and the parent widget (QStackedWidget) according to collapse signal."""
