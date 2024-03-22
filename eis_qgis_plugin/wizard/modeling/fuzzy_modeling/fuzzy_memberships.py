@@ -9,9 +9,14 @@ from qgis.gui import QgsDoubleSpinBox
 class FuzzyMembership:
     """Parent class for fuzzy memberships."""
     
-    def x_range():
+    def x_range_static():
         """Generate x-coordinate values for plotting based on membership and parameters."""
-        raise NotImplementedError("x_range method should be implemented in child class.")
+        raise NotImplementedError("x_range_static method should be implemented in child class.")
+    
+    @staticmethod
+    def x_range_dynamic(min: float, max: float) -> np.ndarray:
+        """Generate x-coordinate values for plotting based on given min and max values."""
+        return np.linspace(min, max, num=500)
 
     def membership_function():
         """Fuzzy membership function."""
@@ -41,7 +46,7 @@ class GaussianMembership(FuzzyMembership):
         return self.c.value(), self.sigma.value() 
 
     @staticmethod
-    def x_range(c: float, sigma: float) -> np.ndarray:
+    def x_range_static(c: float, sigma: float) -> np.ndarray:
         return np.linspace(c - 4*sigma, c + 4*sigma, num=500)
     
     @staticmethod
@@ -58,7 +63,7 @@ class GaussianMembership(FuzzyMembership):
                 'BAND': 1,
                 'FUZZYMIDPOINT': c,
                 'FUZZYSPREAD': sigma,
-                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+                'OUTPUT': output_raster
             }
         )
 
@@ -75,7 +80,7 @@ class LargeMembership(FuzzyMembership):
         return self.c.value(), self.k.value()
 
     @staticmethod
-    def x_range(c: float, k: float) -> np.ndarray:
+    def x_range_static(c: float, k: float) -> np.ndarray:
         spread_factor = 1 / k * 10
         return np.linspace(c - spread_factor, c + spread_factor, num=500)
 
@@ -93,7 +98,7 @@ class LargeMembership(FuzzyMembership):
                 'BAND': 1,
                 'FUZZYMIDPOINT': c,
                 'FUZZYSPREAD': k,
-                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+                'OUTPUT': output_raster
             }
         )
 
@@ -109,7 +114,7 @@ class LinearMembership(FuzzyMembership):
         return self.a.value(), self.b.value()
 
     @staticmethod
-    def x_range(a: float, b: float) -> np.ndarray:
+    def x_range_static(a: float, b: float) -> np.ndarray:
         return np.linspace(a, b, num=500)
 
     @staticmethod
@@ -126,7 +131,7 @@ class LinearMembership(FuzzyMembership):
                 'BAND': 1,
                 'FUZZYLOWBOUND': a,
                 'FUZZYHIGHBOUND': b,
-                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+                'OUTPUT': output_raster
             }
         )
 
@@ -142,9 +147,10 @@ class NearMembership(FuzzyMembership):
         return self.c.value(), self.k.value()
 
     @staticmethod
-    def x_range(c: float, k: float) -> np.ndarray:
+    def x_range_static(c: float, k: float) -> np.ndarray:
         spread_factor = max(1 / k * 10, 0.1)
         return np.linspace(c - spread_factor, c + spread_factor, num=500)
+
 
     @staticmethod
     def membership_function(x: np.ndarray, c: float, k: float) -> np.ndarray:
@@ -160,7 +166,7 @@ class NearMembership(FuzzyMembership):
                 'BAND': 1,
                 'FUZZYMIDPOINT': c,
                 'FUZZYSPREAD': k,
-                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+                'OUTPUT': output_raster
             }
         )
     
@@ -177,7 +183,7 @@ class PowerMembership(FuzzyMembership):
         return self.a.value(), self.b.value(), self.alpha.value()
 
     @staticmethod
-    def x_range(a: float, b: float, _) -> np.ndarray:
+    def x_range_static(a: float, b: float, _) -> np.ndarray:
         return np.linspace(a, b, num=500)
 
     @staticmethod
@@ -195,7 +201,7 @@ class PowerMembership(FuzzyMembership):
                 'FUZZYLOWBOUND': a,
                 'FUZZYHIGHBOUND': b,
                 'FUZZYEXPONENT': alpha,
-                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+                'OUTPUT': output_raster
             }
         )
 
@@ -211,7 +217,7 @@ class SmallMembership(FuzzyMembership):
         return self.c.value(), self.k.value(),
 
     @staticmethod
-    def x_range(c: float, k: float) -> np.ndarray:
+    def x_range_static(c: float, k: float) -> np.ndarray:
         spread_factor = 1 / k * 10
         return np.linspace(c - spread_factor, c + spread_factor, num=500)
 
@@ -232,6 +238,6 @@ class SmallMembership(FuzzyMembership):
                 'BAND': 1,
                 'FUZZYMIDPOINT': c,
                 'FUZZYSPREAD': k,
-                'OUTPUT': output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+                'OUTPUT': output_raster
             }
         )

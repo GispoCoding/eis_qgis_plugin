@@ -19,7 +19,8 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import TEMPORARY_OUTPUT, set_file_widget_placeholder_text
+from eis_qgis_plugin.utils import set_file_widget_placeholder_text
+from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
 from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 
 FORM_CLASS_1 = load_ui("mineral_proxies/proxy_workflow1_dist_to_features.ui")
@@ -116,13 +117,12 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
 
     def run(self):
         # TODO: Handle case where base raster is not used. Needs modifications to ALG/CLI
-        output_raster = self.output_raster_path.filePath()
         result = processing.run(
             self.ALG_NAME,
             {
                 "input_raster": self.base_raster.currentLayer(),
                 "geometries": self.vector_layer.currentLayer(),  # SELECTION NOT INCLUDED!
-                "output_raster": output_raster if output_raster != "" else TEMPORARY_OUTPUT
+                "output_raster": get_output_path(self.output_raster_path)
             }
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
@@ -235,7 +235,6 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
 
 
     def run(self):
-        output_raster = self.output_raster_path.filePath()
         interpolation_alg, interpolation_params = self.get_interpolation_alg_and_parameters()
         result = processing.run(
             interpolation_alg,
@@ -246,7 +245,7 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
                 # TODO: Add base raster, ALG/CLI needs adjustments
                 "resolution": self.pixel_size.value(),
                 "extent": self.get_extent(),
-                "output_raster": output_raster if output_raster != "" else TEMPORARY_OUTPUT
+                "output_raster": get_output_path(self.output_raster_path)
             }
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
@@ -480,7 +479,6 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
 
 
     def run_interpolate(self):
-        output_raster = self.output_raster_path.filePath()
         interpolation_alg, interpolation_params = self.get_interpolation_alg_and_parameters()
         result = processing.run(
             interpolation_alg,
@@ -491,7 +489,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
                 # TODO: Add base raster, ALG/CLI needs adjustments
                 "resolution": self.pixel_size.value(),
                 "extent": self.get_extent(),
-                "output_raster": output_raster if output_raster != "" else TEMPORARY_OUTPUT
+                "output_raster": get_output_path(self.output_raster_path)
             }
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)

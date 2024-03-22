@@ -5,7 +5,7 @@ import seaborn as sns
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from qgis import processing
-from qgis.core import QgsMapLayerProxyModel
+from qgis.core import QgsMapLayerProxyModel, QgsRasterLayer
 from qgis.gui import QgsDoubleSpinBox, QgsFileWidget, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import (
     QCheckBox,
@@ -30,7 +30,7 @@ from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     SmallMembership,
 )
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
-from eis_qgis_plugin.wizard.modeling.model_utils import TEMPORARY_OUTPUT, set_placeholder_text
+from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_placeholder_text
 
 # from eis_qgis_plugin.processing.algorithms.prediction.fuzzy_overlay import (
 
@@ -175,11 +175,6 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         return membership_type, self.memberships[membership_type]
 
 
-    def get_overlay_output_raster(self) -> str:
-        fp = self.output_raster_overlay.filePath()
-        return fp if fp != "" else TEMPORARY_OUTPUT
-
-
     def _on_reset_clicked(self):
         """Reset active fuzzy membership parameters to defaults."""
         _, membership = self.get_active_membership()
@@ -195,11 +190,10 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         """Run the selected membership transformation function with current parameter values."""
         _, membership = self.get_active_membership()
         params = membership.get_param_values()
-        print(self.output_raster_membership.filePath())
         membership.compute(
             *params,
             self.input_raster_membership.currentLayer(), 
-            self.output_raster_membership.filePath()
+            get_output_path(self.output_raster_membership)
         )
 
 
@@ -225,9 +219,15 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
                 'input_rasters': self.input_rasters_table.get_layers(),
                 'overlay_method': overlay_method_index,
                 'gamma': self.gamma_value.value(),
-                'output_raster': self.get_overlay_output_raster()
+                'output_raster': get_output_path(self.output_raster_overlay)
             }
         )
+
+
+    @staticmethod
+    def get_selected_raster_range(layer: QgsRasterLayer) -> Tuple[float, float]:
+        stats = layer.dataProvider().bandStatistics(1)
+        return stats.minimumValue, stats.maximumValue
 
 
     def plot(self):
@@ -237,16 +237,17 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
 
         membership_type, membership = self.get_active_membership()
         params = membership.get_param_values()
-        x_values = membership.x_range(*params)
+        min_value, max_value = self.get_selected_raster_range(self.input_raster_membership.currentLayer())
+        x_values = membership.x_range_dynamic(min_value, max_value)
         sns.lineplot(
             x=x_values,
             y=membership.membership_function(x_values, *params),
             color="green",
             ax=ax,
         )
-        plt.xlabel('x')
-        plt.ylabel('Membership value')
-        plt.title(f'{membership_type.capitalize()} Membership Function')
+        plt.xlabel('Input raster value')
+        plt.ylabel('Output membership raster value')
+        plt.title(f'{membership_type.capitalize()} membership')
 
         canvas = FigureCanvas(fig)
         canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
