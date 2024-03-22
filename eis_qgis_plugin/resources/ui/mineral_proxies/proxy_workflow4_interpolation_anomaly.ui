@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>749</width>
-    <height>758</height>
+    <height>783</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,16 +22,28 @@
      <widget class="QWidget" name="interpolation_page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
+        <widget class="QLabel" name="proxy_name_label">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Proxy: </string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLabel" name="heading_label_2">
+          <widget class="QLabel" name="heading">
            <property name="font">
             <font>
-             <pointsize>16</pointsize>
+             <pointsize>15</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>Interpolation</string>
+            <string>Workflow: Interpolate features</string>
            </property>
           </widget>
          </item>
@@ -52,7 +64,7 @@
           <widget class="QLabel" name="heading_label">
            <property name="font">
             <font>
-             <pointsize>16</pointsize>
+             <pointsize>15</pointsize>
             </font>
            </property>
            <property name="text">
@@ -463,16 +475,28 @@
      <widget class="QWidget" name="anomaly_page">
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
+        <widget class="QLabel" name="proxy_name_label2">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Proxy: </string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="heading_label_3">
            <property name="font">
             <font>
-             <pointsize>16</pointsize>
+             <pointsize>15</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>Define anomaly</string>
+            <string>Workflow: Define anomaly</string>
            </property>
           </widget>
          </item>
@@ -493,7 +517,7 @@
           <widget class="QLabel" name="heading_label_4">
            <property name="font">
             <font>
-             <pointsize>16</pointsize>
+             <pointsize>15</pointsize>
             </font>
            </property>
            <property name="text">
@@ -839,6 +863,7 @@
    <class>QgsFileWidget</class>
    <extends>QWidget</extends>
    <header>qgsfilewidget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QgsMapLayerComboBox</class>

@@ -11,12 +11,7 @@ from qgis.gui import (
     QgsMapLayerComboBox,
     QgsRasterBandComboBox,
 )
-from qgis.PyQt.QtWidgets import (
-    QComboBox,
-    QPushButton,
-    QStackedWidget,
-    QWidget,
-)
+from qgis.PyQt.QtWidgets import QComboBox, QLabel, QPushButton, QStackedWidget, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import set_file_widget_placeholder_text
@@ -77,6 +72,8 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         # DELCARE TYPES
         self.vector_layer: QgsMapLayerComboBox
         self.selection: QgsFieldExpressionWidget
+
+        self.proxy_name_label: QLabel
     
         self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
@@ -101,8 +98,9 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         self.back_btn.clicked.connect(self.back)
         self.run_btn.clicked.connect(self.run)
 
-        # Initialize layer selection
+        # Initialize
         self.selection.setLayer(self.vector_layer.currentLayer())
+        self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
     
 
     def on_output_raster_settings_changed(self, i):
@@ -344,6 +342,9 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         # DELCARE TYPES
         self.workflow_pages: QStackedWidget
 
+        self.proxy_name_label: QLabel
+        self.proxy_name_label2: QLabel
+
         # INTERPOLATION PAGE
         self.vector_layer: QgsMapLayerComboBox
         self.attribute: QgsFieldComboBox
@@ -420,8 +421,9 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.run_btn.clicked.connect(self.run_interpolate)
         self.next_btn.clicked.connect(self.next)
 
-        # Initialize layer selection
+        # Initialize
         self.attribute.setLayer(self.vector_layer.currentLayer())
+        self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
 
 
     def initialize_anomaly_page(self):
@@ -440,8 +442,9 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.anomaly_run_btn.clicked.connect(self.run_define_anomaly)
         self.finish_btn.clicked.connect(self.finish)
 
-        # Initialize layer selection
+        # Initialize
         self.band.setLayer(self.raster_layer.currentLayer())
+        self.proxy_name_label2.setText(self.proxy_name_label2.text() + self.proxy_name)
 
 
     def on_output_raster_settings_changed(self, i):
