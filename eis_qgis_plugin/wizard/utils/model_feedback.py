@@ -2,7 +2,7 @@ from qgis.core import QgsProcessingFeedback
 from qgis.PyQt.QtWidgets import QProgressBar, QTextEdit
 
 
-class EISModelGUIFeedback(QgsProcessingFeedback):
+class EISProcessingFeedback(QgsProcessingFeedback):
 
     PROGRESS_PREFIX = "Progress:"  # Should be same as in EISToolkitInvoker
     ERROR_PREFIX = "ValueError:"

@@ -1,7 +1,7 @@
 from typing import Optional
 
 from qgis import processing
-from qgis.core import QgsMapLayerProxyModel
+from qgis.core import QgsMapLayerProxyModel, QgsProject, QgsRasterLayer
 from qgis.gui import (
     QgsDoubleSpinBox,
     QgsExtentGroupBox,
@@ -20,6 +20,7 @@ from qgis.PyQt.QtWidgets import (
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import TEMPORARY_OUTPUT, set_file_widget_placeholder_text
+from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 
 FORM_CLASS_1 = load_ui("mineral_proxies/proxy_workflow1_dist_to_features.ui")
 FORM_CLASS_2 = load_ui("mineral_proxies/proxy_workflow2_interpolation.ui")
@@ -27,14 +28,49 @@ FORM_CLASS_3 = load_ui("mineral_proxies/proxy_workflow3_define_anomaly.ui")
 FORM_CLASS_4 = load_ui("mineral_proxies/proxy_workflow4_interpolation_anomaly.ui")
 
 
+MINERAL_SYSTEM_GROUP_NAMES = {
+    "iocg": "Mineral system proxies - IOCG",
+    "li-pegmatite": "Mineral system proxies - Li-Pegmatites",
+    "co-vms": "Mineral system proxies - Co-VMS",
+    "custom": "Mineral system proxies - Custom"
+}
+
+
+def add_output_layer_to_group(layer, mineral_system: str, category: str):
+    QgsProject.instance().addMapLayer(layer, False)
+    root = QgsProject.instance().layerTreeRoot()
+    mineral_system_group_name = MINERAL_SYSTEM_GROUP_NAMES[mineral_system]
+    mineral_system_group = root.findGroup(mineral_system_group_name)
+    if not mineral_system_group:
+        mineral_system_group = root.addGroup(mineral_system_group_name)
+    
+    category_name = category.capitalize()
+    category_subgroup = mineral_system_group.findGroup(category_name)
+    if not category_subgroup:
+        category_subgroup = mineral_system_group.addGroup(category_name)
+    
+    category_subgroup.addLayer(layer)
+
+
+
 class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
 
     ALG_NAME = "eis:distance_computation"
 
-    def __init__(self, proxy_manager: QWidget, parent: Optional[QWidget] = None) -> None:
+    def __init__(
+        self,
+        proxy_manager: QWidget,
+        mineral_system: str,
+        category: str,
+        proxy_name: str,
+        parent: Optional[QWidget] = None
+    ) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
+        self.mineral_system = mineral_system
+        self.category = category
+        self.proxy_name = proxy_name
         self.proxy_manager = proxy_manager
 
         # DELCARE TYPES
@@ -81,7 +117,7 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
     def run(self):
         # TODO: Handle case where base raster is not used. Needs modifications to ALG/CLI
         output_raster = self.output_raster_path.filePath()
-        processing.runAndLoadResults(
+        result = processing.run(
             self.ALG_NAME,
             {
                 "input_raster": self.base_raster.currentLayer(),
@@ -89,16 +125,33 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
                 "output_raster": output_raster if output_raster != "" else TEMPORARY_OUTPUT
             }
         )
+        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
+        if EISWizardSettings().get_layer_group_selection():
+            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+        else:
+            QgsProject.instance().addMapLayer(output_layer, True)
+
+
 
 class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
 
     IDW_ALG_NAME = "eis:idw_interpolation"
     KRIGING_ALG_NAME = "eis:kriging_interpolation"
 
-    def __init__(self, proxy_manager: QWidget, parent: Optional[QWidget] = None) -> None:
+    def __init__(
+        self,
+        proxy_manager: QWidget,
+        mineral_system: str,
+        category: str,
+        proxy_name: str,
+        parent: Optional[QWidget] = None
+    ) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
+        self.mineral_system = mineral_system
+        self.category = category
+        self.proxy_name = proxy_name
         self.proxy_manager = proxy_manager
 
         # DELCARE TYPES
@@ -184,7 +237,7 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
     def run(self):
         output_raster = self.output_raster_path.filePath()
         interpolation_alg, interpolation_params = self.get_interpolation_alg_and_parameters()
-        processing.runAndLoadResults(
+        result = processing.run(
             interpolation_alg,
             {
                 "input_vector": self.vector_layer.currentLayer(),
@@ -193,17 +246,32 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
                 # TODO: Add base raster, ALG/CLI needs adjustments
                 "resolution": self.pixel_size.value(),
                 "extent": self.get_extent(),
-                "output_raster": output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+                "output_raster": output_raster if output_raster != "" else TEMPORARY_OUTPUT
             }
         )
+        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
+        if EISWizardSettings().get_layer_group_selection():
+            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+        else:
+            QgsProject.instance().addMapLayer(output_layer, True)
 
 
 class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
 
-    def __init__(self, proxy_manager: QWidget, parent: Optional[QWidget] = None) -> None:
+    def __init__(
+        self,
+        proxy_manager: QWidget,
+        mineral_system: str,
+        category: str,
+        proxy_name: str,
+        parent: Optional[QWidget] = None
+    ) -> None:
         super().__init__(parent)
         self.setupUi(self)
         
+        self.mineral_system = mineral_system
+        self.category = category
+        self.proxy_name = proxy_name
         self.proxy_manager = proxy_manager
 
         # DELCARE TYPES
@@ -259,10 +327,19 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
     IDW_ALG_NAME = "eis:idw_interpolation"
     KRIGING_ALG_NAME = "eis:kriging_interpolation"
 
-    def __init__(self, proxy_manager: QWidget, parent: Optional[QWidget] = None) -> None:
+    def __init__(self,
+        proxy_manager: QWidget,
+        mineral_system: str,
+        category: str,
+        proxy_name: str,
+        parent: Optional[QWidget] = None
+    ) -> None:
         super().__init__(parent)
         self.setupUi(self)
         
+        self.mineral_system = mineral_system
+        self.category = category
+        self.proxy_name = proxy_name
         self.proxy_manager = proxy_manager
 
         # DELCARE TYPES
@@ -405,7 +482,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
     def run_interpolate(self):
         output_raster = self.output_raster_path.filePath()
         interpolation_alg, interpolation_params = self.get_interpolation_alg_and_parameters()
-        processing.runAndLoadResults(
+        result = processing.run(
             interpolation_alg,
             {
                 "input_vector": self.vector_layer.currentLayer(),
@@ -414,9 +491,14 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
                 # TODO: Add base raster, ALG/CLI needs adjustments
                 "resolution": self.pixel_size.value(),
                 "extent": self.get_extent(),
-                "output_raster": output_raster if output_raster != "" else 'TEMPORARY_OUTPUT'
+                "output_raster": output_raster if output_raster != "" else TEMPORARY_OUTPUT
             }
         )
+        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
+        if EISWizardSettings().get_layer_group_selection():
+            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+        else:
+            QgsProject.instance().addMapLayer(output_layer, True)
 
 
     def run_define_anomaly(self):
