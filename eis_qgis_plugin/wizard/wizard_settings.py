@@ -1,4 +1,5 @@
-from qgis.gui import QgsColorButton, QgsFileWidget
+from qgis.core import QgsMapLayerProxyModel
+from qgis.gui import QgsColorButton, QgsFileWidget, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDialog, QLabel, QLineEdit, QPushButton, QRadioButton, QWidget
 from qgis.utils import iface
 
@@ -35,6 +36,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
         self.check_for_toolkit_btn: QPushButton
 
+        self.default_base_raster: QgsMapLayerComboBox
         self.dock_wizard_selection: QCheckBox
         self.layer_group_selection: QCheckBox
         self.categorical_palette_selection: QComboBox
@@ -55,6 +57,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.venv_directory.fileChanged.connect(self.reset_verification_labels)
 
         # Initialize
+        self.default_base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
         self._on_environment_type_changed(self.docker_selection.isChecked())
         self.load_settings()  # Initialize UI from settings
 
@@ -155,6 +158,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.categorical_palette_selection.setCurrentText(EISSettingsManager.get_default_categorical_palette())
         self.continuous_palette_selection.setCurrentText(EISSettingsManager.get_default_continuous_palette())
         self.layer_group_selection.setChecked(EISSettingsManager.get_layer_group_selection())
+        self.default_base_raster.setLayer(EISSettingsManager.get_default_base_raster())
 
 
     def save_settings(self):
@@ -170,6 +174,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         EISSettingsManager.set_categorical_palette_selection(self.categorical_palette_selection.currentText())
         EISSettingsManager.set_continuous_palette_selection(self.continuous_palette_selection.currentText())
         EISSettingsManager.set_layer_group_selection(self.layer_group_selection.isChecked())
+        EISSettingsManager.set_default_base_raster(self.default_base_raster.currentLayer())
 
         iface.messageBar().pushSuccess("Success:", "Saved EIS QGIS plugin settings.")
 
@@ -190,5 +195,6 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.categorical_palette_selection.setCurrentText(defaults[EISSettingsManager.CATEGORICAL_PALETTE_SETTING])
         self.continuous_palette_selection.setCurrentText(defaults[EISSettingsManager.CONTINUOUS_PALETTE_SETTING])
         self.layer_group_selection.setChecked(defaults[EISSettingsManager.LAYER_GROUP_SETTING])
+        self.default_base_raster.setLayer(defaults[EISSettingsManager.DEFAULT_BASE_RASTER])
 
         iface.messageBar().pushInfo("Info:", "EIS QGIS plugin settings reset.")

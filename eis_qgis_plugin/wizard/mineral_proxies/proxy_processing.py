@@ -16,7 +16,7 @@ from qgis.PyQt.QtWidgets import QComboBox, QLabel, QPushButton, QStackedWidget, 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import set_file_widget_placeholder_text
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
-from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
+from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS_1 = load_ui("mineral_proxies/proxy_workflow1_dist_to_features.ui")
 FORM_CLASS_2 = load_ui("mineral_proxies/proxy_workflow2_interpolation.ui")
@@ -89,6 +89,9 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         # Set filters
         self.vector_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
         self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        default_base_raster = EISSettingsManager.get_default_base_raster()
+        if default_base_raster is not None:
+            self.base_raster.setLayer(default_base_raster)
 
         set_file_widget_placeholder_text(self.output_raster_path)
 
@@ -124,7 +127,7 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
             }
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-        if EISWizardSettings().get_layer_group_selection():
+        if EISSettingsManager.get_layer_group_selection():
             add_output_layer_to_group(output_layer, self.mineral_system, self.category)
         else:
             QgsProject.instance().addMapLayer(output_layer, True)
@@ -177,6 +180,9 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
         # Set filters
         self.vector_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
         self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        default_base_raster = EISSettingsManager.get_default_base_raster()
+        if default_base_raster is not None:
+            self.base_raster.setLayer(default_base_raster)
 
         set_file_widget_placeholder_text(self.output_raster_path)
 
@@ -247,7 +253,7 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
             }
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-        if EISWizardSettings().get_layer_group_selection():
+        if EISSettingsManager.get_layer_group_selection():
             add_output_layer_to_group(output_layer, self.mineral_system, self.category)
         else:
             QgsProject.instance().addMapLayer(output_layer, True)
@@ -410,6 +416,9 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         # Set filters
         self.vector_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
         self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        default_base_raster = EISSettingsManager.get_default_base_raster()
+        if default_base_raster is not None:
+            self.base_raster.setLayer(default_base_raster)
 
         set_file_widget_placeholder_text(self.output_raster_path)
 
@@ -430,6 +439,9 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         # Set filters
         self.raster_layer.setFilters(QgsMapLayerProxyModel.RasterLayer)
         self.anomaly_base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        default_base_raster = EISSettingsManager.get_default_base_raster()
+        if default_base_raster is not None:
+            self.anomaly_base_raster.setLayer(default_base_raster)
 
         set_file_widget_placeholder_text(self.anomaly_output_raster_path)
 
@@ -496,7 +508,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
             }
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-        if EISWizardSettings().get_layer_group_selection():
+        if EISSettingsManager.get_layer_group_selection():
             add_output_layer_to_group(output_layer, self.mineral_system, self.category)
         else:
             QgsProject.instance().addMapLayer(output_layer, True)
