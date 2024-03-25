@@ -1,6 +1,6 @@
 from typing import Optional
 
-from qgis.core import QgsMapLayer, QgsSettings
+from qgis.core import QgsRasterLayer, QgsSettings
 from qgis.PyQt.QtGui import QColor
 
 
@@ -99,7 +99,7 @@ class EISSettingsManager:
         return QgsSettings().value(key, self.DEFAULTS[key])
 
     @classmethod
-    def get_default_base_raster(self) -> Optional[QgsMapLayer]:
+    def get_default_base_raster(self) -> Optional[QgsRasterLayer]:
         key = self.DEFAULT_BASE_RASTER
         return QgsSettings().value(key, self.DEFAULTS[key])
 
@@ -150,5 +150,5 @@ class EISSettingsManager:
         QgsSettings().setValue(self.LAYER_GROUP_SETTING, selection)
 
     @classmethod
-    def set_default_base_raster(self, base_raster: Optional[QgsMapLayer]):
+    def set_default_base_raster(self, base_raster: Optional[QgsRasterLayer]):
         QgsSettings().setValue(self.DEFAULT_BASE_RASTER, base_raster)
