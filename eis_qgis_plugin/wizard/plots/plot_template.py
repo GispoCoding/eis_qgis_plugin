@@ -10,14 +10,15 @@ from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 class EISPlot(QWidget):
     """Template / parent class for plot classes in EIS Wizard."""
 
-    layer: QgsMapLayerComboBox
-    parameter_box: QgsCollapsibleGroupBox
-
-    color: QgsColorButton
-
-    collapsed_height: int
-
     def __init__(self, parent) -> None:
+
+        # DELCARE TYPES
+        self.layer: QgsMapLayerComboBox
+        self.parameter_box: QgsCollapsibleGroupBox
+        self.color: QgsColorButton
+        self.collapsed_height: int
+
+        # Initialize
         super().__init__(parent)
         self.setupUi(self)
 

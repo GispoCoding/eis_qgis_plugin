@@ -1,5 +1,5 @@
 from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
-from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox
+from qgis.gui import QgsFieldComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 
 import eis_qgis_plugin.libs.seaborn as sns
@@ -20,24 +20,23 @@ class EISWizardPairplot(EISPlot, FORM_CLASS):
     producing the plot.
     """
 
-    layer: QgsMapLayerComboBox
-    fields: QListWidget
-
-    color_field: QgsFieldComboBox
-    kind: QComboBox
-    diagonal_kind: QComboBox
-
-    select_all_btn: QPushButton
-    deselect_all_btn: QPushButton
-
-
     def __init__(self, parent=None) -> None:
-        self.collapsed_height = 270
+        
+        # DECLARE TYPES
+        self.fields: QListWidget
 
+        self.color_field: QgsFieldComboBox
+        self.kind: QComboBox
+        self.diagonal_kind: QComboBox
+
+        self.select_all_btn: QPushButton
+        self.deselect_all_btn: QPushButton
+
+        # Initialize
+        self.collapsed_height = 270
         super().__init__(parent)
 
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
-
         self.select_all_btn.clicked.connect(self.fields.selectAll)
         self.deselect_all_btn.clicked.connect(self.fields.clearSelection)
 
