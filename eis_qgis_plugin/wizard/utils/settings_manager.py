@@ -1,4 +1,6 @@
-from qgis.core import QgsSettings
+from typing import Optional
+
+from qgis.core import QgsMapLayer, QgsSettings
 from qgis.PyQt.QtGui import QColor
 
 
@@ -23,6 +25,7 @@ class EISSettingsManager:
     CATEGORICAL_PALETTE_SETTING = "eis_qgis_plugin/categorical_palette_setting"
     CONTINUOUS_PALETTE_SETTING = "eis_qgis_plugin/continuous_palette_setting"
     COLOR_SETTING = "eis_qgis_plugin/default_color_setting"
+    DEFAULT_BASE_RASTER = "eis_qgis_plugin/default_base_raster"
 
     DEFAULTS = {
         ENVIRONMENT_SELECTION_SETTING: "venv",
@@ -35,7 +38,8 @@ class EISSettingsManager:
         LAYER_GROUP_SETTING: False,
         CATEGORICAL_PALETTE_SETTING: "dark",
         CONTINUOUS_PALETTE_SETTING: "viridis",
-        COLOR_SETTING: QColor(0, 45, 179)
+        COLOR_SETTING: QColor(0, 45, 179),
+        DEFAULT_BASE_RASTER: None
     }
 
     # GETTERS
@@ -72,7 +76,7 @@ class EISSettingsManager:
     @classmethod
     def get_dock_wizard_selection(self) -> bool:
         key = self.DOCK_SETTING
-        return QgsSettings().value(key, "") == "true" if key else self.DEFAULTS[key]
+        return QgsSettings().value(key, self.DEFAULTS[key])
 
     @classmethod
     def get_default_color(self) -> QColor:
@@ -92,7 +96,12 @@ class EISSettingsManager:
     @classmethod
     def get_layer_group_selection(self) -> bool:
         key = self.LAYER_GROUP_SETTING
-        return QgsSettings().value(key) == "true" if key else self.DEFAULTS[key]
+        return QgsSettings().value(key, self.DEFAULTS[key])
+
+    @classmethod
+    def get_default_base_raster(self) -> Optional[QgsMapLayer]:
+        key = self.DEFAULT_BASE_RASTER
+        return QgsSettings().value(key, self.DEFAULTS[key])
 
 
     # SETTERS
@@ -122,7 +131,7 @@ class EISSettingsManager:
     
     @classmethod
     def set_dock_wizard_selection(self, selection: bool):
-        QgsSettings().setValue(self.DOCK_SETTING, "true" if selection else "")
+        QgsSettings().setValue(self.DOCK_SETTING, selection)
     
     @classmethod
     def set_color_selection(self, color: QColor):
@@ -138,4 +147,8 @@ class EISSettingsManager:
     
     @classmethod
     def set_layer_group_selection(self, selection: bool):
-        QgsSettings().setValue(self.LAYER_GROUP_SETTING, "true" if selection else "")
+        QgsSettings().setValue(self.LAYER_GROUP_SETTING, selection)
+
+    @classmethod
+    def set_default_base_raster(self, base_raster: Optional[QgsMapLayer]):
+        QgsSettings().setValue(self.DEFAULT_BASE_RASTER, base_raster)
