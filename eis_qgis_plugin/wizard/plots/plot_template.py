@@ -102,6 +102,14 @@ class EISPlot(QWidget):
             raise Exception(f"Datatype conversion to Numpy failed. Raster dtype: {qgis_dtype}")
 
         return dtype
+    
+    @staticmethod
+    def vector_layer_to_numpy(layer: QgsVectorLayer, *fields):
+        data = np.array([
+            [feature[field] for field in fields]
+            for feature in layer.getFeatures()
+        ])
+        return data
 
     @staticmethod
     def vector_layer_to_df(layer: QgsVectorLayer, *fields) -> pd.DataFrame:
