@@ -11,6 +11,7 @@ from eis_qgis_plugin.wizard.plots.histogram import EISWizardHistogram
 from eis_qgis_plugin.wizard.plots.kde import EISWizardKde
 from eis_qgis_plugin.wizard.plots.lineplot import EISWizardLineplot
 from eis_qgis_plugin.wizard.plots.pairplot import EISWizardPairplot
+from eis_qgis_plugin.wizard.plots.parallel_coordinates import EISWizardParallelCoordinatesPlot
 from eis_qgis_plugin.wizard.plots.scatterplot import EISWizardScatterplot
 
 FORM_CLASS: QWidget = load_ui("explore/wizard_plot.ui")
@@ -54,7 +55,8 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
             EISWizardLineplot(self),
             EISWizardBarplot(self),
             EISWizardBoxplot(self),
-            EISWizardPairplot(self)
+            EISWizardPairplot(self),
+            EISWizardParallelCoordinatesPlot(self)
         ]
 
         for i, page in enumerate(self.pages):
@@ -81,6 +83,8 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
         fig, ax = plt.subplots()
         if isinstance(page, EISWizardPairplot):
             fig = page.plot(ax)
+        elif isinstance(page, EISWizardParallelCoordinatesPlot):
+            page.plot(ax, fig)
         else:
             page.plot(ax)
 
