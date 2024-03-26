@@ -1,5 +1,6 @@
 from typing import Tuple
 
+import matplotlib.colors as mcolors
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
@@ -126,6 +127,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         if color_field_type == "continuous":
             color_data_prepared = color_data
             norm = plt.Normalize(np.min(color_data), np.max(color_data))
+            palette_name = self.get_default_continuous_palette()
 
         elif color_field_type == "categorical":
             n_categories = len(np.unique(color_data))
@@ -136,21 +138,17 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
             encoder = LabelEncoder()
             color_data_prepared = encoder.fit_transform(color_data)
             norm = plt.Normalize(min(color_data_prepared), max(color_data_prepared))
+            palette_name = self.get_default_categorical_palette()
 
         else:
             raise ValueError(f"Unknown color field type: {color_field_type}")
         
-        palette_name = self._get_default_palette(color_field_type)
         cmap = sns.color_palette(palette_name, as_cmap=True)
+        if isinstance(cmap, list):
+            colors = cmap[:len(set(color_data_prepared))]  # Take the first N colors
+            cmap = mcolors.LinearSegmentedColormap.from_list("custom_colormap", colors)
 
         return color_data_prepared, cmap, norm, np.min(color_data), np.max(color_data)
-
-
-    def _get_default_palette(self, color_data_numeric: bool) -> str:
-        if color_data_numeric:
-            return "Spectral"
-        else:
-            return "bright"
 
 
     def prepare_plot(self, ax, data, y_min, y_max, data_labels):
@@ -176,8 +174,8 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         color_column_name = self.color_field.currentField()
         color_field_type = self.color_field_type.currentText().lower()
         if color_field_type == "categorical":
-            # Create legend for categorical color data
             unique_categories = np.unique(color_data)
+            # Create legend for categorical color data
             legend_handles = [
                 patches.Patch(color=cmap(norm(i)), label=category) for i, category in enumerate(unique_categories)
             ]

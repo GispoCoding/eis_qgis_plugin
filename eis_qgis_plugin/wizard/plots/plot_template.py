@@ -52,6 +52,14 @@ class EISPlot(QWidget):
         """Fetch default color from settings and set color widget selection."""
         self.color.setColor(EISSettingsManager.get_default_color())
 
+    @staticmethod
+    def get_default_categorical_palette() -> str:
+        return EISSettingsManager.get_default_categorical_palette()
+
+    @staticmethod
+    def get_default_continuous_palette() -> str:
+        return EISSettingsManager.get_default_continuous_palette()
+
     def resize_parameter_box(self, collapsed: bool):
         """Resize self and the parent widget (QStackedWidget) according to collapse signal."""
         if collapsed:
