@@ -190,11 +190,11 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.docker_image_name.setText(defaults[EISSettingsManager.DOCKER_IMAGE_SETTING])
         self.docker_host_folder.setFilePath(defaults[EISSettingsManager.DOCKER_HOST_FOLDER])
         self.docker_temp_folder.setFilePath(defaults[EISSettingsManager.DOCKER_TEMP_FOLDER])
-        self.dock_wizard_selection.setChecked(defaults[EISSettingsManager.DOCK_SETTING])
+        self.dock_wizard_selection.setChecked(defaults[EISSettingsManager.DOCK_SETTING] == "true")
         self.default_color_selection.setColor(defaults[EISSettingsManager.COLOR_SETTING])
         self.categorical_palette_selection.setCurrentText(defaults[EISSettingsManager.CATEGORICAL_PALETTE_SETTING])
         self.continuous_palette_selection.setCurrentText(defaults[EISSettingsManager.CONTINUOUS_PALETTE_SETTING])
-        self.layer_group_selection.setChecked(defaults[EISSettingsManager.LAYER_GROUP_SETTING])
+        self.layer_group_selection.setChecked(defaults[EISSettingsManager.LAYER_GROUP_SETTING] == "true")
         self.default_base_raster.setLayer(defaults[EISSettingsManager.DEFAULT_BASE_RASTER])
 
         iface.messageBar().pushInfo("Info:", "EIS QGIS plugin settings reset.")

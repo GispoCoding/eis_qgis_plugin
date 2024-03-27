@@ -36,9 +36,9 @@ class EISSettingsManager:
         DOCKER_TEMP_FOLDER: "",
         DOCK_SETTING: "false",
         LAYER_GROUP_SETTING: "false",
-        CATEGORICAL_PALETTE_SETTING: "dark",
+        CATEGORICAL_PALETTE_SETTING: "bright",
         CONTINUOUS_PALETTE_SETTING: "viridis",
-        COLOR_SETTING: QColor(0, 45, 179),
+        COLOR_SETTING: QColor(72, 172, 50),
         DEFAULT_BASE_RASTER: None
     }
 
@@ -181,7 +181,7 @@ class EISSettingsManager:
     
     @classmethod
     def reset_dock_wizard_selection(self):
-        QgsSettings().setValue(self.DOCK_SETTING, self.DEFAULTS[self.DOCK_SETTING])
+        QgsSettings().setValue(self.DOCK_SETTING, self.DEFAULTS[self.DOCK_SETTING] == "true")
     
     @classmethod
     def reset_color_selection(self):
@@ -197,7 +197,7 @@ class EISSettingsManager:
     
     @classmethod
     def reset_layer_group_selection(self):
-        QgsSettings().setValue(self.LAYER_GROUP_SETTING, self.DEFAULTS[self.LAYER_GROUP_SETTING])
+        QgsSettings().setValue(self.LAYER_GROUP_SETTING, self.DEFAULTS[self.LAYER_GROUP_SETTING] == "true")
 
     @classmethod
     def reset_default_base_raster(self):
