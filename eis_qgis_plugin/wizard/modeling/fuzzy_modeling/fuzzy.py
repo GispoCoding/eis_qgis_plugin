@@ -1,6 +1,7 @@
 from typing import Tuple
 
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -239,9 +240,13 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         params = membership.get_param_values()
         min_value, max_value = self.get_selected_raster_range(self.input_raster_membership.currentLayer())
         x_values = membership.x_range_dynamic(min_value, max_value)
+        y_values = membership.membership_function(x_values, *params)
+        if isinstance(y_values, pd.DataFrame) or isinstance(y_values, pd.Series):
+            y_values = y_values.to_numpy()
+
         sns.lineplot(
             x=x_values,
-            y=membership.membership_function(x_values, *params),
+            y=y_values,
             color="green",
             ax=ax,
         )
