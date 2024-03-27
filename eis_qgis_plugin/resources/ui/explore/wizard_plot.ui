@@ -94,7 +94,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Parallel coordinates (NOT IMPLEMENTED)</string>
+             <string>Parallel coordinates</string>
             </property>
            </item>
           </widget>

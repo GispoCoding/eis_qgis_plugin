@@ -1,202 +1,240 @@
-from typing import Optional, Tuple
+from typing import Tuple
 
-import matplotlib
 import matplotlib.colors as mcolors
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from matplotlib.cm import ScalarMappable
 from matplotlib.path import Path
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
+from qgis.gui import QgsColorButton, QgsFieldComboBox
+from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
+from qgis.utils import iface
 from sklearn.preprocessing import LabelEncoder
 
 import eis_qgis_plugin.libs.seaborn as sns
+from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
 
-# ! WIP !
-
-def _normalize_data(data: np.ndarray) -> Tuple[np.ndarray, float, float]:
-    y_min = np.nanmin(data, axis=0)
-    y_max = np.nanmax(data, axis=0)
-    dy = y_max - y_min
-    y_min -= dy * 0.05
-    y_max += dy * 0.05
-    dy = y_max - y_min
-
-    normalized_data = np.zeros_like(data)
-    normalized_data[:, 0] = data[:, 0]
-    normalized_data[:, 1:] = (data[:, 1:] - y_min[1:]) / dy[1:] * dy[0] + y_min[0]
-
-    return normalized_data, y_min, y_max
+FORM_CLASS: QWidget = load_ui("explore/wizard_plot_parallel_coordinates.ui")
 
 
-def _get_default_palette(color_data_numeric: bool) -> str:
-    if color_data_numeric:
-        return "Spectral"
-    else:
-        return "bright"
+class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
+    """
+    Class for EIS parallel coordinate plots.
 
-
-def _plot_parallel_coordinates(
-    data: np.ndarray,
-    data_labels: np.ndarray,
-    color_data: np.ndarray,
-    color_column_name: str,
-    plot_title: Optional[str],
-    palette_name: Optional[str],
-    curved_lines: bool,
-) -> matplotlib.figure.Figure:
-
-    fig, main_axis = plt.subplots()
-
-    # If color_data is not numeric, encode the color data to create colors from palette correctly
-    if not np.issubdtype(type(color_data[0]), np.number):
-        color_data_numeric = False
-        label_encoder = LabelEncoder()
-        color_data = list(label_encoder.fit_transform(color_data))
-    else:
-        label_encoder = None
-        color_data_numeric = True
-
-    # If palette name is not provided, go with the default
-    palette_name = _get_default_palette(color_data_numeric) if not palette_name else palette_name
-
-    # Normalize data for drawing lines
-    normalized_data, y_min, y_max = _normalize_data(data)
-
-    # Set style
-    axes_list = [main_axis] + [main_axis.twinx() for _ in range(normalized_data.shape[1] - 1)]
-    for i, axis in enumerate(axes_list):
-        axis.set_ylim(y_min[i], y_max[i])
-        axis.spines["top"].set_visible(False)
-        axis.spines["bottom"].set_visible(False)
-        if axis != main_axis:
-            axis.spines["right"].set_visible(False)
-            axis.yaxis.set_ticks_position("left")
-            axis.spines["left"].set_position(("axes", i / (normalized_data.shape[1] - 1)))
-
-    main_axis.set_xlim(0, normalized_data.shape[1] - 1)
-    main_axis.set_xticks(range(normalized_data.shape[1]))
-    main_axis.set_xticklabels(data_labels, fontsize=10)
-    main_axis.tick_params(axis="x", which="major", pad=7)
-    main_axis.spines["right"].set_visible(False)
-    main_axis.xaxis.tick_top()
-    main_axis.set_title("Parallel Coordinates Plot" if plot_title is None else plot_title, fontsize=18)
-
-    # Create colors
-    norm = plt.Normalize(min(color_data), max(color_data))
-    cmap = sns.color_palette(palette_name, as_cmap=True)
-
-    if isinstance(cmap, list):
-        num_categories = len(set(color_data))
-        colors = cmap[:num_categories]  # Take the first N colors
-        cmap = mcolors.LinearSegmentedColormap.from_list("custom_colormap", colors)
-    elif not color_data_numeric:
-        num_categories = len(set(color_data))
-        colors = cmap(np.linspace(0, 1, num_categories))
-        cmap = mcolors.LinearSegmentedColormap.from_list("custom_colormap", colors)
-
-    if not color_data_numeric:
-        # Create the legend for categorical data
-        color_boxes = [
-            patches.Patch(color=colors[i], label=label_encoder.inverse_transform([i])[0]) for i in range(num_categories)
-        ]
-        plt.legend(handles=color_boxes, title=color_column_name, loc="best")
-    else:
-        # Create the colorbar for numerical data
-        colorbar_mappable = ScalarMappable(cmap=cmap, norm=norm)
-        colorbar_mappable.set_array([])
-        # colorbar = plt.colorbar(colorbar_mappable)
-        # colorbar.set_label(color_column_name, fontsize=14)
-
-    # Draw lines
-    for i in range(data.shape[0]):
-        color = cmap(norm(color_data[i]))
-        if curved_lines:
-            x = np.linspace(0, len(normalized_data) - 1, len(normalized_data) * 3 - 2, endpoint=True)
-            y = np.repeat(normalized_data[i, :], 3)[1:-1]
-
-            control_points = list(zip(x, y))
-            codes = [Path.MOVETO] + [Path.CURVE4 for _ in range(len(control_points) - 1)]
-            path = Path(control_points, codes)
-
-            curve_patch = patches.PathPatch(path, facecolor="none", edgecolor=color, lw=1, alpha=0.5)
-            main_axis.add_patch(curve_patch)
-        else:
-            main_axis.plot(range(normalized_data.shape[1]), normalized_data[i, :], c=color, lw=1, alpha=0.5)
-
-    plt.tight_layout()
-    return fig
-
-
-def plot_parallel_coordinates(
-    df: pd.DataFrame,
-    color_column_name: str,
-    plot_title: Optional[str] = None,
-    palette_name: Optional[str] = None,
-    curved_lines: bool = True,
-) -> matplotlib.figure.Figure:
-    """Plot a parallel coordinates plot.
-
-    Automatically removes all rows containing null/nan values. Tries to convert columns to numeric
-    to be able to plot them. If more than 8 columns are present (after numeric filtering), keeps only
-    the first 8 to plot.
-
-    Args:
-        df: The DataFrame to plot.
-        color_column_name: The name of the column in df to use for color encoding.
-        plot_title: The title for the plot. Default is None.
-        palette_name: The name of the color palette to use. Default is None.
-        curved_lines: If True, the plot will have curved instead of straight lines. Default is True.
-
-    Returns:
-        A matplotlib figure containing the parallel coordinates plot.
-
-    Raises:
-        EmptyDataFrameException: Raised when the DataFrame is empty.
-        InvalidColumnException: Raised when the color column is not found in the DataFrame.
-        InconsistentDataTypesException: Raised when the color column has multiple data types.
+    Initialized from a UI file. Responsible for updating widgets and
+    producing the plot.
     """
 
-    if df.empty:
-        raise Exception("The input DataFrame is empty.")
+    def __init__(self, parent=None) -> None:
+        
+        # DECLARE TYPES
+        self.fields: QListWidget
 
-    if color_column_name not in df.columns:
-        raise Exception(
-            f"The provided color column {color_column_name} is not found in the DataFrame."
-        )
+        self.color_field: QgsFieldComboBox
+        self.color_field_type: QComboBox
+        self.line_type: QComboBox
+        self.color: QgsColorButton
 
-    df = df.convert_dtypes()
-    df = df.apply(pd.to_numeric, errors="ignore")
+        self.select_all_btn: QPushButton
+        self.deselect_all_btn: QPushButton
 
-    color_data = df[color_column_name].to_numpy()
-    if len(set([type(elem) for elem in color_data])) != 1:
-        raise Exception(
-            "The color column should have a consistent datatype. Multiple data types detected in the color column."
-        )
+        # Initialize
+        self.collapsed_height = 270
+        super().__init__(parent)
 
-    df = df.select_dtypes(include=np.number)
+        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.select_all_btn.clicked.connect(self.fields.selectAll)
+        self.deselect_all_btn.clicked.connect(self.fields.clearSelection)
 
-    # Drop non-numeric columns and the column used for coloring
-    columns_to_drop = [color_column_name]
-    for column in df.columns.values:
-        if df[column].isnull().all():
-            columns_to_drop.append(column)
-    df = df.loc[:, ~df.columns.isin(columns_to_drop)]
+        self.update_layer(self.layer.currentLayer())
 
-    # Keep only first 8 columns if more are still present
-    if len(df.columns.values) > 8:
-        df = df.iloc[:, :8]
 
-    data_labels = df.columns.values
-    data = df.to_numpy()
+    def update_layer(self, layer):
+        """Update (set/add items) widgets based on selected layer."""
+        if layer is None or not isinstance(layer, QgsVectorLayer):
+            return
 
-    fig = _plot_parallel_coordinates(
-        data=data,
-        data_labels=data_labels,
-        color_data=color_data,
-        color_column_name=color_column_name,
-        plot_title=plot_title,
-        palette_name=palette_name,
-        curved_lines=curved_lines,
-    )
-    return fig
+        for field in layer.fields():
+            if field.isNumeric():
+                self.fields.addItem(field.name())
+
+        self.color_field.setLayer(layer)
+
+
+    def reset(self):
+        """Reset parameters to defaults."""
+        super().reset()
+
+        self.color_field.setField("")
+        self.line_type.setCurrentIndex(0)
+
+
+    def plot(self, ax, fig):
+        # 1 Prepare and check data
+        data, field_names, y_min, y_max = self.prepare_data()
+        color_data, color_field_type, cmap, norm, color_min, color_max = self.prepare_color_data()
+        if not self.perform_checks(field_names, color_data, color_field_type):
+            return
+
+        # 2 Prepare plot
+        self.prepare_plot(ax, data, y_min, y_max, field_names)
+        if color_data is not None:
+            self.prepare_legend(ax, fig, color_data, color_field_type, cmap, norm, color_min, color_max)
+
+        # 3 Draw
+        self.draw(ax, data, color_data, cmap, norm)
+
+
+    def perform_checks(self, fields, color_data, color_field_type) -> bool:
+        ok = True
+        if len(fields) > 8:
+            iface.messageBar().pushCritical("Error: ", "Cannot select more than 6 fields.")
+            ok = False
+        n_categories = len(np.unique(color_data))
+        if n_categories > 8 and color_field_type == "categorical":
+            iface.messageBar().pushCritical(
+                "Error: ",
+                f"Categorical color column can have at most 8 unique values, {n_categories} categories detected."
+            )
+            ok = False
+        return ok
+
+
+    def prepare_data(self):
+        # Get input values
+        layer = self.layer.currentLayer()
+        fields = [item.text() for item in self.fields.selectedItems()]
+
+        # Get data as Numpy array
+        data = self.vector_layer_to_numpy(layer, *fields)
+        data, y_min, y_max = self._normalize_data(data)
+
+        return data, fields, y_min, y_max
+
+
+    def _normalize_data(self, data: np.ndarray) -> Tuple[np.ndarray, float, float]:
+        y_min = np.nanmin(data, axis=0)
+        y_max = np.nanmax(data, axis=0)
+        dy = y_max - y_min
+        y_min -= dy * 0.05
+        y_max += dy * 0.05
+        dy = y_max - y_min
+
+        normalized_data = np.zeros_like(data)
+        normalized_data[:, 0] = data[:, 0]
+        normalized_data[:, 1:] = (data[:, 1:] - y_min[1:]) / dy[1:] * dy[0] + y_min[0]
+
+        return normalized_data, y_min, y_max
+
+
+    def prepare_color_data(self):
+        layer = self.layer.currentLayer()
+        color_column_name = self.color_field.currentField()
+        if not color_column_name:
+            color = self.color.color().getRgbF()
+            return None, None, color, None, None, None
+    
+        color_field_type = self.color_field_type.currentText().lower()
+
+        color_data = np.array([feature[color_column_name] for feature in layer.getFeatures()], dtype=np.float32)
+
+        if color_field_type == "continuous":
+            color_data_prepared = color_data
+            norm = plt.Normalize(np.min(color_data), np.max(color_data))
+            palette_name = self.get_default_continuous_palette()
+
+        elif color_field_type == "categorical":
+            encoder = LabelEncoder()
+            color_data_prepared = encoder.fit_transform(color_data)
+            norm = plt.Normalize(min(color_data_prepared), max(color_data_prepared))
+            palette_name = self.get_default_categorical_palette()
+
+        else:
+            raise ValueError(f"Unknown color field type: {color_field_type}")
+        
+        cmap = sns.color_palette(palette_name, as_cmap=True)
+        if isinstance(cmap, list):
+            colors = cmap[:len(set(color_data_prepared))]  # Take the first N colors
+            cmap = mcolors.LinearSegmentedColormap.from_list("custom_colormap", colors)
+
+        return color_data_prepared, color_field_type, cmap, norm, np.min(color_data), np.max(color_data)
+
+
+    def prepare_plot(self, ax, data, y_min, y_max, data_labels):
+        axes_list = [ax] + [ax.twinx() for _ in range(data.shape[1] - 1)]
+        for i, axis in enumerate(axes_list):
+            axis.set_ylim(y_min[i], y_max[i])
+            axis.spines["top"].set_visible(False)
+            axis.spines["bottom"].set_visible(False)
+            if axis != ax:
+                axis.spines["right"].set_visible(False)
+                axis.yaxis.set_ticks_position("left")
+                axis.spines["left"].set_position(("axes", i / (data.shape[1] - 1)))
+
+        ax.set_xlim(0, data.shape[1] - 1)
+        ax.set_xticks(range(data.shape[1]))
+        ax.set_xticklabels(data_labels, fontsize=10)
+        ax.tick_params(axis="x", which="major", pad=7)
+        ax.spines["right"].set_visible(False)
+        ax.xaxis.tick_top()
+    
+
+    def prepare_legend(self, ax, fig, color_data, color_field_type, cmap, norm, color_min, color_max):
+        color_column_name = self.color_field.currentField()
+        if color_field_type == "categorical":
+            unique_categories = np.unique(color_data)
+            # Create legend for categorical color data
+            legend_handles = [
+                patches.Patch(color=cmap(norm(i)), label=category) for i, category in enumerate(unique_categories)
+            ]
+            ax.legend(handles=legend_handles, title=color_column_name, bbox_to_anchor=(1.05, 1), loc='upper left')
+        else:
+            # Create colorbar for continuous color data
+            scalar_mappable = ScalarMappable(norm=norm, cmap=cmap)
+            scalar_mappable.set_array(color_data)
+            colorbar = plt.colorbar(scalar_mappable, ax=ax, orientation='vertical')
+            colorbar.set_label(color_column_name)
+
+            # scalar_mappable = ScalarMappable(norm=norm, cmap=cmap)
+            # scalar_mappable.set_array(color_data)  # Use original color data here
+            # colorbar = fig.colorbar(scalar_mappable, ax=ax, orientation='vertical', fraction=0.046, pad=0.04)
+            # colorbar.set_label(color_column_name)
+            # colorbar.set_ticks([norm(color_min), norm(color_max)])
+            # colorbar.set_ticklabels([f"{color_min:.2f}", f"{color_max:.2f}"])
+
+            # divider = make_axes_locatable(ax)
+            # cax = divider.append_axes("right", size="5%", pad=0.25)
+
+            # # Create and display the colorbar in the newly added axes
+            # scalar_mappable = ScalarMappable(norm=norm, cmap=cmap)
+            # scalar_mappable.set_array([])
+            # cbar = plt.colorbar(scalar_mappable, cax=cax)
+            # cbar.set_label(color_column_name)
+            # cbar.set_ticks([norm(color_min), norm(color_max)])
+            # cbar.set_ticklabels([f"{color_min:.2f}", f"{color_max:.2f}"])
+
+
+    def draw(self, ax, data, color_data, cmap, norm):
+        curved_lines = self.line_type.currentIndex() == 0
+
+        for i in range(data.shape[0]):
+            if color_data is None:
+                color = cmap  # Static color
+            else:
+                color = cmap(norm(color_data[i]))
+            if curved_lines:
+                x = np.linspace(0, len(data) - 1, len(data) * 3 - 2, endpoint=True)
+                y = np.repeat(data[i, :], 3)[1:-1]
+
+                control_points = list(zip(x, y))
+                codes = [Path.MOVETO] + [Path.CURVE4 for _ in range(len(control_points) - 1)]
+                path = Path(control_points, codes)
+
+                curve_patch = patches.PathPatch(path, facecolor="none", edgecolor=color, lw=1, alpha=0.5)
+                ax.add_patch(curve_patch)
+            else:
+                ax.plot(range(data.shape[1]), data[i, :], c=color, lw=1, alpha=0.5)
+
+        plt.tight_layout()

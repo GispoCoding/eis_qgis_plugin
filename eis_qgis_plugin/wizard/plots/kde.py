@@ -1,9 +1,7 @@
 from qgis.core import QgsMapLayer
 from qgis.gui import (
-    QgsCollapsibleGroupBox,
     QgsColorButton,
     QgsFieldComboBox,
-    QgsMapLayerComboBox,
     QgsOpacityWidget,
     QgsRasterBandComboBox,
 )
@@ -24,23 +22,22 @@ class EISWizardKde(EISPlot, FORM_CLASS):
     producing the plot.
     """
 
-    layer: QgsMapLayerComboBox
-    raster_X: QgsRasterBandComboBox
-    vector_X: QgsFieldComboBox
-
-    parameter_box: QgsCollapsibleGroupBox
-    color_field: QgsFieldComboBox
-    color: QgsColorButton
-    opacity: QgsOpacityWidget
-    log_scale: QComboBox
-    fill: QComboBox
-    multiple: QComboBox
-    bw_adjust: QDoubleSpinBox
-
-
     def __init__(self, parent=None) -> None:
-        self.collapsed_height = 170
 
+        # DECLARE TYPES
+        self.raster_X: QgsRasterBandComboBox
+        self.vector_X: QgsFieldComboBox
+
+        self.color_field: QgsFieldComboBox
+        self.color: QgsColorButton
+        self.opacity: QgsOpacityWidget
+        self.log_scale: QComboBox
+        self.fill: QComboBox
+        self.multiple: QComboBox
+        self.bw_adjust: QDoubleSpinBox
+
+        # Initialize
+        self.collapsed_height = 170
         super().__init__(parent)
 
 

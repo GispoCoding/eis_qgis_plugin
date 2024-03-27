@@ -10,14 +10,15 @@ from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 class EISPlot(QWidget):
     """Template / parent class for plot classes in EIS Wizard."""
 
-    layer: QgsMapLayerComboBox
-    parameter_box: QgsCollapsibleGroupBox
-
-    color: QgsColorButton
-
-    collapsed_height: int
-
     def __init__(self, parent) -> None:
+
+        # DELCARE TYPES
+        self.layer: QgsMapLayerComboBox
+        self.parameter_box: QgsCollapsibleGroupBox
+        self.color: QgsColorButton
+        self.collapsed_height: int
+
+        # Initialize
         super().__init__(parent)
         self.setupUi(self)
 
@@ -50,6 +51,14 @@ class EISPlot(QWidget):
     def set_deafult_color(self):
         """Fetch default color from settings and set color widget selection."""
         self.color.setColor(EISSettingsManager.get_default_color())
+
+    @staticmethod
+    def get_default_categorical_palette() -> str:
+        return EISSettingsManager.get_default_categorical_palette()
+
+    @staticmethod
+    def get_default_continuous_palette() -> str:
+        return EISSettingsManager.get_default_continuous_palette()
 
     def resize_parameter_box(self, collapsed: bool):
         """Resize self and the parent widget (QStackedWidget) according to collapse signal."""
@@ -98,9 +107,17 @@ class EISPlot(QWidget):
         elif qgis_dtype == Qgis.UInt32:
             dtype = np.uint32
         else:
-            raise Exception(f"Datatype conversion to Numpy failed. Raster dtype: {qgis_dtype}")
+            raise Exception(f"Datatype conversion to Numpy failed. QGIS datatype: {qgis_dtype}")
 
         return dtype
+    
+    @staticmethod
+    def vector_layer_to_numpy(layer: QgsVectorLayer, *fields):
+        data = np.array([
+            [feature[field] for field in fields]
+            for feature in layer.getFeatures()
+        ])
+        return data
 
     @staticmethod
     def vector_layer_to_df(layer: QgsVectorLayer, *fields) -> pd.DataFrame:

@@ -1,5 +1,5 @@
 from qgis.core import QgsMapLayerProxyModel
-from qgis.gui import QgsColorButton, QgsFieldComboBox, QgsMapLayerComboBox
+from qgis.gui import QgsColorButton, QgsFieldComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QWidget
 
 import eis_qgis_plugin.libs.seaborn as sns
@@ -17,20 +17,19 @@ class EISWizardBoxplot(EISPlot, FORM_CLASS):
     producing the plot.
     """
 
-    layer: QgsMapLayerComboBox
-    X: QgsFieldComboBox
-    Y: QgsFieldComboBox
-
-    color_field: QgsFieldComboBox
-    color: QgsColorButton
-    log_scale: QComboBox
-
-
     def __init__(self, parent=None) -> None:
+        
+        # DECLARE TYPES
+        self.X: QgsFieldComboBox
+        self.Y: QgsFieldComboBox
+
+        self.color_field: QgsFieldComboBox
+        self.color: QgsColorButton
+        self.log_scale: QComboBox
+
+        # Initialize
         self.collapsed_height = 200
-
         super().__init__(parent)
-
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
 
 

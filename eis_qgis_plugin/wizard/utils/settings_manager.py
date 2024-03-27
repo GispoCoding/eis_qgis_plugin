@@ -34,8 +34,8 @@ class EISSettingsManager:
         DOCKER_IMAGE_SETTING: "",
         DOCKER_HOST_FOLDER: "",
         DOCKER_TEMP_FOLDER: "",
-        DOCK_SETTING: False,
-        LAYER_GROUP_SETTING: False,
+        DOCK_SETTING: "false",
+        LAYER_GROUP_SETTING: "false",
         CATEGORICAL_PALETTE_SETTING: "dark",
         CONTINUOUS_PALETTE_SETTING: "viridis",
         COLOR_SETTING: QColor(0, 45, 179),
@@ -76,7 +76,7 @@ class EISSettingsManager:
     @classmethod
     def get_dock_wizard_selection(self) -> bool:
         key = self.DOCK_SETTING
-        return QgsSettings().value(key, self.DEFAULTS[key])
+        return QgsSettings().value(key, self.DEFAULTS[key]).lower() == "true"
 
     @classmethod
     def get_default_color(self) -> QColor:
@@ -96,7 +96,7 @@ class EISSettingsManager:
     @classmethod
     def get_layer_group_selection(self) -> bool:
         key = self.LAYER_GROUP_SETTING
-        return QgsSettings().value(key, self.DEFAULTS[key])
+        return QgsSettings().value(key, self.DEFAULTS[key]).lower() == "true"
 
     @classmethod
     def get_default_base_raster(self) -> Optional[QgsRasterLayer]:
@@ -131,7 +131,7 @@ class EISSettingsManager:
     
     @classmethod
     def set_dock_wizard_selection(self, selection: bool):
-        QgsSettings().setValue(self.DOCK_SETTING, selection)
+        QgsSettings().setValue(self.DOCK_SETTING, "true" if selection else "false")
     
     @classmethod
     def set_color_selection(self, color: QColor):
@@ -147,8 +147,78 @@ class EISSettingsManager:
     
     @classmethod
     def set_layer_group_selection(self, selection: bool):
-        QgsSettings().setValue(self.LAYER_GROUP_SETTING, selection)
+        QgsSettings().setValue(self.LAYER_GROUP_SETTING, "true" if selection else "false")
 
     @classmethod
     def set_default_base_raster(self, base_raster: Optional[QgsRasterLayer]):
         QgsSettings().setValue(self.DEFAULT_BASE_RASTER, base_raster)
+
+
+    # RESETS
+    @classmethod
+    def reset_environment_selection(self):
+        QgsSettings().setValue(self.ENVIRONMENT_SELECTION_SETTING, self.DEFAULTS[self.ENVIRONMENT_SELECTION_SETTING])
+
+    @classmethod
+    def reset_venv_directory(self):
+        QgsSettings().setValue(self.VENV_DIRECTORY_SETTING, self.DEFAULTS[self.VENV_DIRECTORY_SETTING])
+
+    @classmethod
+    def reset_docker_path(self):
+       QgsSettings().setValue(self.DOCKER_PATH_SETTING, self.DEFAULTS[self.DOCKER_PATH_SETTING])
+
+    @classmethod
+    def reset_docker_image_name(self):
+        QgsSettings().setValue(self.DOCKER_IMAGE_SETTING, self.DEFAULTS[self.DOCKER_IMAGE_SETTING])
+
+    @classmethod
+    def reset_docker_host_folder(self):
+        QgsSettings().setValue(self.DOCKER_HOST_FOLDER, self.DEFAULTS[self.DOCKER_HOST_FOLDER])
+    
+    @classmethod
+    def reset_docker_temp_folder(self):
+        QgsSettings().setValue(self.DOCKER_TEMP_FOLDER, self.DEFAULTS[self.DOCKER_TEMP_FOLDER])
+    
+    @classmethod
+    def reset_dock_wizard_selection(self):
+        QgsSettings().setValue(self.DOCK_SETTING, self.DEFAULTS[self.DOCK_SETTING])
+    
+    @classmethod
+    def reset_color_selection(self):
+        QgsSettings().setValue(self.COLOR_SETTING, self.DEFAULTS[self.COLOR_SETTING])
+    
+    @classmethod
+    def reset_categorical_palette_selection(self):
+        QgsSettings().setValue(self.CATEGORICAL_PALETTE_SETTING, self.DEFAULTS[self.CATEGORICAL_PALETTE_SETTING])
+    
+    @classmethod
+    def reset_continuous_palette_selection(self):
+        QgsSettings().setValue(self.CONTINUOUS_PALETTE_SETTING, self.DEFAULTS[self.CONTINUOUS_PALETTE_SETTING])
+    
+    @classmethod
+    def reset_layer_group_selection(self):
+        QgsSettings().setValue(self.LAYER_GROUP_SETTING, self.DEFAULTS[self.LAYER_GROUP_SETTING])
+
+    @classmethod
+    def reset_default_base_raster(self):
+        QgsSettings().setValue(self.DEFAULT_BASE_RASTER, self.DEFAULTS[self.DEFAULT_BASE_RASTER])
+
+
+    @classmethod
+    def reset_all(self):
+        self.reset_environment_selection()
+        self.reset_venv_directory()
+        self.reset_docker_path()
+        self.reset_docker_image_name()
+        self.reset_docker_host_folder()
+        self.reset_docker_temp_folder()
+        self.reset_dock_wizard_selection()
+        self.reset_color_selection()
+        self.reset_categorical_palette_selection()
+        self.reset_continuous_palette_selection()
+        self.reset_layer_group_selection()
+        self.reset_default_base_raster()
+
+        print(self.get_dock_wizard_selection())
+        print(type(self.get_dock_wizard_selection()))
+        print("All EIS settings reset.")

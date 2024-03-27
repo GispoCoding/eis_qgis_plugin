@@ -2,7 +2,6 @@ from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import (
     QgsColorButton,
     QgsFieldComboBox,
-    QgsMapLayerComboBox,
     QgsOpacityWidget,
 )
 from qgis.PyQt.QtWidgets import (
@@ -25,23 +24,22 @@ class EISWizardBarplot(EISPlot, FORM_CLASS):
     producing the plot.
     """
 
-    layer: QgsMapLayerComboBox
-    X: QgsFieldComboBox
-    Y: QgsFieldComboBox
-
-    color_field: QgsFieldComboBox
-    color: QgsColorButton
-    opacity: QgsOpacityWidget
-    log_scale: QComboBox
-    estimator: QComboBox
-    errorbars: QComboBox
-
-
     def __init__(self, parent=None) -> None:
+
+        # DECLARE TYPES
+        self.X: QgsFieldComboBox
+        self.Y: QgsFieldComboBox
+
+        self.color_field: QgsFieldComboBox
+        self.color: QgsColorButton
+        self.opacity: QgsOpacityWidget
+        self.log_scale: QComboBox
+        self.estimator: QComboBox
+        self.errorbars: QComboBox
+
+        # Initialize
         self.collapsed_height = 200
-
         super().__init__(parent)
-
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
 
 
