@@ -46,6 +46,7 @@ class EISWizardPairplot(EISPlot, FORM_CLASS):
         if layer is None or not isinstance(layer, QgsVectorLayer):
             return
 
+        self.fields.clear()
         self.fields.addItems(field.name() for field in layer.fields())
         self.color_field.setLayer(layer)
 

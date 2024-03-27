@@ -327,6 +327,21 @@
         </item>
         <item>
          <property name="text">
+          <string>flare</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rocket</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>mako</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>inferno</string>
          </property>
         </item>
@@ -338,6 +353,36 @@
         <item>
          <property name="text">
           <string>cividis</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>cubehelix</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Blues</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>vlag</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>icefire</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Spectral</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>coolwarm</string>
          </property>
         </item>
        </widget>
@@ -367,6 +412,11 @@
         <item>
          <property name="text">
           <string>bright</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>muted</string>
          </property>
         </item>
        </widget>

@@ -11,7 +11,6 @@ from qgis.gui import QgsColorButton, QgsFieldComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 from qgis.utils import iface
 
-# from sklearn.preprocessing import LabelEncoder
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
@@ -56,6 +55,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         if layer is None or not isinstance(layer, QgsVectorLayer):
             return
 
+        self.fields.clear()
         for field in layer.fields():
             if field.isNumeric():
                 self.fields.addItem(field.name())
@@ -74,14 +74,14 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
     def plot(self, ax, fig):
         # 1 Prepare and check data
         data, field_names, y_min, y_max = self.prepare_data()
-        color_data, color_field_type, cmap, norm, color_min, color_max = self.prepare_color_data()
+        color_data, color_labels, color_field_type, cmap, norm = self.prepare_color_data()
         if not self.perform_checks(field_names, color_data, color_field_type):
             return
 
         # 2 Prepare plot
         self.prepare_plot(ax, data, y_min, y_max, field_names)
         if color_data is not None:
-            self.prepare_legend(ax, fig, color_data, color_field_type, cmap, norm, color_min, color_max)
+            self.prepare_legend(ax, color_data, color_labels, color_field_type, cmap, norm)
 
         # 3 Draw
         self.draw(ax, data, color_data, cmap, norm)
@@ -93,10 +93,10 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
             iface.messageBar().pushCritical("Error: ", "Cannot select more than 6 fields.")
             ok = False
         n_categories = len(np.unique(color_data))
-        if n_categories > 8 and color_field_type == "categorical":
+        if n_categories > 10 and color_field_type == "categorical":
             iface.messageBar().pushCritical(
                 "Error: ",
-                f"Categorical color column can have at most 8 unique values, {n_categories} categories detected."
+                f"Categorical color column can have at most 10 unique values, {n_categories} categories detected."
             )
             ok = False
         return ok
@@ -108,7 +108,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         fields = [item.text() for item in self.fields.selectedItems()]
 
         # Get data as Numpy array
-        data = self.vector_layer_to_numpy(layer, *fields)
+        data = self.vector_layer_to_numpy(layer, *fields, dtype=np.float32)
         data, y_min, y_max = self._normalize_data(data)
 
         return data, fields, y_min, y_max
@@ -134,32 +134,39 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         color_column_name = self.color_field.currentField()
         if not color_column_name:
             color = self.color.color().getRgbF()
-            return None, None, color, None, None, None
+            return None, None, None, color, None
     
         color_field_type = self.color_field_type.currentText().lower()
 
-        color_data = np.array([feature[color_column_name] for feature in layer.getFeatures()], dtype=np.float32)
-
         if color_field_type == "continuous":
-            color_data_prepared = color_data
-            norm = plt.Normalize(np.min(color_data), np.max(color_data))
+            color_data = np.array(
+                [feature[color_column_name] for feature in layer.getFeatures()], dtype=np.float32
+            )
             palette_name = self.get_default_continuous_palette()
 
-        # elif color_field_type == "categorical":
-        #     encoder = LabelEncoder()
-        #     color_data_prepared = encoder.fit_transform(color_data)
-        #     norm = plt.Normalize(min(color_data_prepared), max(color_data_prepared))
-        #     palette_name = self.get_default_categorical_palette()
+        elif color_field_type == "categorical":
+            color_labels, color_data = self._encode_data(
+                [feature[color_column_name] for feature in layer.getFeatures()]
+            )
+            palette_name = self.get_default_categorical_palette()
 
         else:
             raise ValueError(f"Unknown color field type: {color_field_type}")
-        
+
+        norm = plt.Normalize(np.min(color_data), np.max(color_data))
         cmap = sns.color_palette(palette_name, as_cmap=True)
         if isinstance(cmap, list):
-            colors = cmap[:len(set(color_data_prepared))]  # Take the first N colors
+            colors = cmap[:len(set(color_data))]  # Take the first N colors
             cmap = mcolors.LinearSegmentedColormap.from_list("custom_colormap", colors)
 
-        return color_data_prepared, color_field_type, cmap, norm, np.min(color_data), np.max(color_data)
+        return color_data, color_labels, color_field_type, cmap, norm
+
+
+    def _encode_data(self, color_data: list) -> np.ndarray:
+        unique_values = list(dict.fromkeys(color_data))
+        encoding = {value: i for i, value in enumerate(unique_values)}
+        color_data_encoded = [encoding[value] for value in color_data]
+        return unique_values, color_data_encoded
 
 
     def prepare_plot(self, ax, data, y_min, y_max, data_labels):
@@ -181,13 +188,12 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         ax.xaxis.tick_top()
     
 
-    def prepare_legend(self, ax, fig, color_data, color_field_type, cmap, norm, color_min, color_max):
+    def prepare_legend(self, ax, color_data, color_labels, color_field_type, cmap, norm):
         color_column_name = self.color_field.currentField()
         if color_field_type == "categorical":
-            unique_categories = np.unique(color_data)
             # Create legend for categorical color data
             legend_handles = [
-                patches.Patch(color=cmap(norm(i)), label=category) for i, category in enumerate(unique_categories)
+                patches.Patch(color=cmap(norm(i)), label=category) for i, category in enumerate(color_labels)
             ]
             ax.legend(handles=legend_handles, title=color_column_name, bbox_to_anchor=(1.05, 1), loc='upper left')
         else:
