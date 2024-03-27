@@ -107,7 +107,7 @@ class EISPlot(QWidget):
         elif qgis_dtype == Qgis.UInt32:
             dtype = np.uint32
         else:
-            raise Exception(f"Datatype conversion to Numpy failed. Raster dtype: {qgis_dtype}")
+            raise Exception(f"Datatype conversion to Numpy failed. QGIS datatype: {qgis_dtype}")
 
         return dtype
     

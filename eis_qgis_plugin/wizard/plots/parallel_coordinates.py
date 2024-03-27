@@ -9,6 +9,7 @@ from matplotlib.path import Path
 from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
 from qgis.gui import QgsColorButton, QgsFieldComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
+from qgis.utils import iface
 from sklearn.preprocessing import LabelEncoder
 
 import eis_qgis_plugin.libs.seaborn as sns
@@ -71,25 +72,40 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
 
 
     def plot(self, ax, fig):
-        # 1 Prepare data
+        # 1 Prepare and check data
         data, field_names, y_min, y_max = self.prepare_data()
-        color_data, cmap, norm, color_min, color_max = self.prepare_color_data()
+        color_data, color_field_type, cmap, norm, color_min, color_max = self.prepare_color_data()
+        if not self.perform_checks(field_names, color_data, color_field_type):
+            return
 
         # 2 Prepare plot
         self.prepare_plot(ax, data, y_min, y_max, field_names)
         if color_data is not None:
-            self.prepare_legend(ax, fig, color_data, cmap, norm, color_min, color_max)
+            self.prepare_legend(ax, fig, color_data, color_field_type, cmap, norm, color_min, color_max)
 
         # 3 Draw
         self.draw(ax, data, color_data, cmap, norm)
+
+
+    def perform_checks(self, fields, color_data, color_field_type) -> bool:
+        ok = True
+        if len(fields) > 8:
+            iface.messageBar().pushCritical("Error: ", "Cannot select more than 6 fields.")
+            ok = False
+        n_categories = len(np.unique(color_data))
+        if n_categories > 8 and color_field_type == "categorical":
+            iface.messageBar().pushCritical(
+                "Error: ",
+                f"Categorical color column can have at most 8 unique values, {n_categories} categories detected."
+            )
+            ok = False
+        return ok
 
 
     def prepare_data(self):
         # Get input values
         layer = self.layer.currentLayer()
         fields = [item.text() for item in self.fields.selectedItems()]
-        if len(fields) > 6:
-            raise ValueError("Cannot select more than 6 fields.")
 
         # Get data as Numpy array
         data = self.vector_layer_to_numpy(layer, *fields)
@@ -118,7 +134,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         color_column_name = self.color_field.currentField()
         if not color_column_name:
             color = self.color.color().getRgbF()
-            return None, color, None, None, None
+            return None, None, color, None, None, None
     
         color_field_type = self.color_field_type.currentText().lower()
 
@@ -130,11 +146,6 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
             palette_name = self.get_default_continuous_palette()
 
         elif color_field_type == "categorical":
-            n_categories = len(np.unique(color_data))
-            if n_categories > 8:
-                raise ValueError(
-                    f"Categorical column can have at most 8 unique values, {n_categories} categories detected."
-                )
             encoder = LabelEncoder()
             color_data_prepared = encoder.fit_transform(color_data)
             norm = plt.Normalize(min(color_data_prepared), max(color_data_prepared))
@@ -148,7 +159,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
             colors = cmap[:len(set(color_data_prepared))]  # Take the first N colors
             cmap = mcolors.LinearSegmentedColormap.from_list("custom_colormap", colors)
 
-        return color_data_prepared, cmap, norm, np.min(color_data), np.max(color_data)
+        return color_data_prepared, color_field_type, cmap, norm, np.min(color_data), np.max(color_data)
 
 
     def prepare_plot(self, ax, data, y_min, y_max, data_labels):
@@ -170,9 +181,8 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         ax.xaxis.tick_top()
     
 
-    def prepare_legend(self, ax, fig, color_data, cmap, norm, color_min, color_max):
+    def prepare_legend(self, ax, fig, color_data, color_field_type, cmap, norm, color_min, color_max):
         color_column_name = self.color_field.currentField()
-        color_field_type = self.color_field_type.currentText().lower()
         if color_field_type == "categorical":
             unique_categories = np.unique(color_data)
             # Create legend for categorical color data

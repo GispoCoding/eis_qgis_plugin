@@ -116,6 +116,9 @@
         <property name="editable">
          <bool>true</bool>
         </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
         <property name="allowEmptyFieldName">
          <bool>true</bool>
         </property>
