@@ -2,7 +2,6 @@ from typing import Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from qgis import processing
@@ -20,6 +19,7 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
+import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     FuzzyMembership,
