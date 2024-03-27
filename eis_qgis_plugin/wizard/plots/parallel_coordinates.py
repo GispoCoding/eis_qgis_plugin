@@ -10,8 +10,8 @@ from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
 from qgis.gui import QgsColorButton, QgsFieldComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 from qgis.utils import iface
-from sklearn.preprocessing import LabelEncoder
 
+# from sklearn.preprocessing import LabelEncoder
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
@@ -145,11 +145,11 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
             norm = plt.Normalize(np.min(color_data), np.max(color_data))
             palette_name = self.get_default_continuous_palette()
 
-        elif color_field_type == "categorical":
-            encoder = LabelEncoder()
-            color_data_prepared = encoder.fit_transform(color_data)
-            norm = plt.Normalize(min(color_data_prepared), max(color_data_prepared))
-            palette_name = self.get_default_categorical_palette()
+        # elif color_field_type == "categorical":
+        #     encoder = LabelEncoder()
+        #     color_data_prepared = encoder.fit_transform(color_data)
+        #     norm = plt.Normalize(min(color_data_prepared), max(color_data_prepared))
+        #     palette_name = self.get_default_categorical_palette()
 
         else:
             raise ValueError(f"Unknown color field type: {color_field_type}")
