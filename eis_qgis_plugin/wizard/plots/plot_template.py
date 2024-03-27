@@ -112,11 +112,11 @@ class EISPlot(QWidget):
         return dtype
     
     @staticmethod
-    def vector_layer_to_numpy(layer: QgsVectorLayer, *fields):
+    def vector_layer_to_numpy(layer: QgsVectorLayer, *fields, dtype = None):
         data = np.array([
             [feature[field] for field in fields]
             for feature in layer.getFeatures()
-        ])
+        ], dtype=dtype)
         return data
 
     @staticmethod
