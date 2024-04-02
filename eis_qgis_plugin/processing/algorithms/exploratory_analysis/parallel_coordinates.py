@@ -20,10 +20,10 @@ class EISParallelCoordinates(EISProcessingAlgorithm):
         self._group_id = "exploratory_analysis"
         self._short_help_string = """
             Generate a parallel coordinates plot for vector data.
+            
             Automatically removes all rows containing null/nan values. \
             If more than 8 columns are present (after numeric filtering), keeps only the first 8 to plot.
         """
-        
 
     def initAlgorithm(self, config=None):
 

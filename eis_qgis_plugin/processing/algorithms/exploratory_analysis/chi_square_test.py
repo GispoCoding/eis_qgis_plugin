@@ -17,7 +17,7 @@ class EISChiSquareTest(EISProcessingAlgorithm):
         self._short_help_string = """
             Perform a Chi-square test of independence between a target variable and one or more other variables.
 
-            Input data should be categorical data. Continuous data or non-categorical data should be discretized or
+            Input data should be categorical data. Continuous data or non-categorical data should be discretized or \
             binned before using this function, as Chi-square tests are not applicable to continuous variables directly.
 
             The test assumes that the observed frequencies in each category are independent.

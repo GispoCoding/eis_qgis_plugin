@@ -11,29 +11,26 @@ class EISDescriptiveStatisticsVector(EISProcessingAlgorithm):
         self._display_name = "Descriptive statistics (vector)"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
-        self._short_help_string = "Generate descriptive statistics for a vector layer"
+        self._short_help_string = """
+            Calculate descriptive statistics for vector data.
+
+            Calculates min, max, mean, quantiles (25%, 50% and 75%), \
+            standard deviation, relative standard deviation and skewness.
+        """
 
     def initAlgorithm(self, config=None):
-        # self.alg_parameters = ["input_file", "column", "output_file"]
         self.alg_parameters = ["input_file", "column"]
 
-        self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input layer"
-            )
+        input_vector_param = QgsProcessingParameterFeatureSource(
+            name=self.alg_parameters[0], description="Input vector"
         )
+        input_vector_param.setHelp("Input vector to calculate descriptive statistics for.")
+        self.addParameter(input_vector_param)
 
-        self.addParameter(
-            QgsProcessingParameterField(
-                name=self.alg_parameters[1],
-                description="Column",
-                parentLayerParameterName=self.alg_parameters[0],
-            )
+        column_param = QgsProcessingParameterField(
+            name=self.alg_parameters[1],
+            description="Column",
+            parentLayerParameterName=self.alg_parameters[0],
         )
-
-        # self.addParameter(
-        #     QgsProcessingParameterFileDestination(
-        #         name=self.alg_parameters[2],
-        #         description="Output file",
-        #     )
-        # )
+        column_param.setHelp("Column selection.")
+        self.addParameter(column_param)
