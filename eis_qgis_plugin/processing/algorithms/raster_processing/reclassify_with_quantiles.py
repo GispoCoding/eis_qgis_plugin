@@ -16,9 +16,7 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
         self._display_name = "Reclassify with quantiles"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = (
-            "Reclassify raster data set with quantiles."
-        )
+        self._short_help_string = "Reclassify raster with quantiles."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
@@ -31,7 +29,7 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
         input_raster_param = QgsProcessingParameterRasterLayer(
             name=self.alg_parameters[0], description="Input raster"
         )
-        input_raster_param.setHelp("The input raster data set.")
+        input_raster_param.setHelp("The input raster to be reclassified.")
         self.addParameter(input_raster_param)
 
         quantiles_param = QgsProcessingParameterNumber(
@@ -39,7 +37,7 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
             description="Quantiles",
             minValue=2,
         )
-        quantiles_param.setHelp("The Quantiles for reclassification.")
+        quantiles_param.setHelp("The number of quantiles used in reclassification.")
         self.addParameter(quantiles_param)
 
         bands_param = QgsProcessingParameterBand(
@@ -53,5 +51,5 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[3], description="Output raster"
         )
-        output_raster_param.setHelp("The output raster data set.")
+        output_raster_param.setHelp("The output reclassified raster.")
         self.addParameter(output_raster_param)
