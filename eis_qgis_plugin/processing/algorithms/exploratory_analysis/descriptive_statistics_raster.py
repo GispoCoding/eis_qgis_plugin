@@ -11,21 +11,18 @@ class EISDescriptiveStatisticsRaster(EISProcessingAlgorithm):
         self._display_name = "Descriptive statistics (raster)"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
-        self._short_help_string = "Generate descriptive statistics for a raster layer"
+        self._short_help_string = """
+            Calculate descriptive statistics for raster data.
+
+            Calculates min, max, mean, quantiles (25%, 50% and 75%), \
+            standard deviation, relative standard deviation and skewness.
+        """
 
     def initAlgorithm(self, config=None):
-        # self.alg_parameters = ["input_file", "output_file"]
         self.alg_parameters = ["input_file"]
 
-        self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Input layer"
-            )
+        input_raster_param = QgsProcessingParameterRasterLayer(
+            name=self.alg_parameters[0], description="Input raster"
         )
-
-        # self.addParameter(
-        #     QgsProcessingParameterFileDestination(
-        #         name=self.alg_parameters[1],
-        #         description="Output file",
-        #     )
-        # )
+        input_raster_param.setHelp("Input raster to calculate descriptive statistics for.")
+        self.addParameter(input_raster_param)

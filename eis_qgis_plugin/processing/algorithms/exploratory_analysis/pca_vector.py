@@ -18,7 +18,7 @@ class EISPcaVector(EISProcessingAlgorithm):
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
         self._short_help_string = """
-            Compute PCA for vector data.
+            Compute PCA (principal component analysis) for vector data.
 
             Before computation, data is automatically standardized, and nodata values removed \
             or replaced with column mean.
