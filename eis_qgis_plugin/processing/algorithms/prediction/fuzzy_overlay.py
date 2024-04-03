@@ -17,7 +17,7 @@ from eis_qgis_plugin.processing.eis_toolkit_invoker import EISToolkitInvoker
 
 class EISFuzzyOverlay(EISProcessingAlgorithm):
 
-    # The map is used to get correct algorithm name for CLI (that has functions separately for each ovrelay)
+    # The map is used to get correct algorithm name for CLI (that has functions separately for each overlay)
     # from the overlay method parameter here
     OVERLAY_METHOD_MAP = {
         "and": "and_overlay",
@@ -34,7 +34,7 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
         self._display_name = "Fuzzy overlay"
         self._group = "Prediction"
         self._group_id = "prediction"
-        self._short_help_string = "Combine fuzzy membership data with an overlay method"
+        self._short_help_string = "Combine fuzzy membership data with an overlay method."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_rasters", "overlay_method", "gamma", "output_raster"]
@@ -63,10 +63,8 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
             defaultValue=0.5
         )
         gamma_param.setHelp(
-            '''
-            Used for gamma overlay. With gamma value of 0, the result will be the same as 'product' overlay.
-            When gamma is closer to 1, the weight of the 'sum' overlay is increased.
-            '''
+            "Used for gamma overlay. With gamma value of 0, the result will be the same as 'product' overlay. \
+            When gamma is closer to 1, the weight of the 'sum' overlay is increased."
         )
         self.addParameter(gamma_param)
     
