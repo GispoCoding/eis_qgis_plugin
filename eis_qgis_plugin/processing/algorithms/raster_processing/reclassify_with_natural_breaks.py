@@ -16,9 +16,7 @@ class EISReclassifyWithNaturalBreaks(EISProcessingAlgorithm):
         self._display_name = "Reclassify with natural breaks"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = (
-            "Reclassify raster data set with natural breaks."
-        )
+        self._short_help_string = "Reclassify raste with natural breaks."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
@@ -31,7 +29,7 @@ class EISReclassifyWithNaturalBreaks(EISProcessingAlgorithm):
         input_raster_param = QgsProcessingParameterRasterLayer(
             name=self.alg_parameters[0], description="Input raster"
         )
-        input_raster_param.setHelp("The input raster data set.")
+        input_raster_param.setHelp("The input raster to be reclassified.")
         self.addParameter(input_raster_param)
 
         breaks_param = QgsProcessingParameterNumber(
@@ -39,7 +37,7 @@ class EISReclassifyWithNaturalBreaks(EISProcessingAlgorithm):
             description="The number of classes",
             minValue=2,
         )
-        breaks_param.setHelp("The number of classes for Natural breaks.")
+        breaks_param.setHelp("The number of classes used in reclassification.")
         self.addParameter(breaks_param)
 
         bands_param = QgsProcessingParameterBand(
@@ -53,5 +51,5 @@ class EISReclassifyWithNaturalBreaks(EISProcessingAlgorithm):
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[3], description="Output raster"
         )
-        output_raster_param.setHelp("The output raster data set.")
+        output_raster_param.setHelp("The output reclassified raster.")
         self.addParameter(output_raster_param)

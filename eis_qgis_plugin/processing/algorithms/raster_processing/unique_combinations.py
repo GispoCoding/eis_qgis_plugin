@@ -16,9 +16,9 @@ class EISUniqueCombinations(EISProcessingAlgorithm):
         self._group = "Unique Combinations"
         self._group_id = "raster_processing"
         self._short_help_string = """
-        Generate combinations of values between rasters.
+            Generate combinations of values between rasters.
 
-        All bands from all rasters are used to generate the combinations.
+            All bands from all rasters are used to generate the combinations.
         """
 
     def initAlgorithm(self, config=None):
@@ -32,12 +32,12 @@ class EISUniqueCombinations(EISProcessingAlgorithm):
             description="Input rasters",
             layerType=QgsProcessing.TypeRaster,
         )
-        input_rasters_param.setHelp("Input rasters to generate combinations.")
+        input_rasters_param.setHelp("Input rasters used to generate the unique combinations.")
         self.addParameter(input_rasters_param)
 
         output_raster = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[1],
             description="Output raster"
         )
-        output_raster.setHelp("Output combination raster.")
+        output_raster.setHelp("The output combination raster.")
         self.addParameter(output_raster)

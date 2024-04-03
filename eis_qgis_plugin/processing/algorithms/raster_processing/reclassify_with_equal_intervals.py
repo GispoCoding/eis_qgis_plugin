@@ -16,9 +16,7 @@ class EISReclassifyWithEqualIntervals(EISProcessingAlgorithm):
         self._display_name = "Reclassify with equal intervals"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = (
-            "Reclassify raster data set with equal intervals."
-        )
+        self._short_help_string = "Reclassify raster with equal intervals."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
@@ -31,7 +29,7 @@ class EISReclassifyWithEqualIntervals(EISProcessingAlgorithm):
         input_raster_param = QgsProcessingParameterRasterLayer(
             name=self.alg_parameters[0], description="Input raster"
         )
-        input_raster_param.setHelp("The input raster data set.")
+        input_raster_param.setHelp("The input raster to be reclassified.")
         self.addParameter(input_raster_param)
 
         interval_size_param = QgsProcessingParameterNumber(
@@ -39,7 +37,7 @@ class EISReclassifyWithEqualIntervals(EISProcessingAlgorithm):
             description="Number of intervals",
             minValue=2,
         )
-        interval_size_param.setHelp("The number of intervals for Equal intervals.")
+        interval_size_param.setHelp("The number of intervals used in reclassification.")
         self.addParameter(interval_size_param)
 
         bands_param = QgsProcessingParameterBand(
@@ -53,5 +51,5 @@ class EISReclassifyWithEqualIntervals(EISProcessingAlgorithm):
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[3], description="Output raster"
         )
-        output_raster_param.setHelp("The output raster data set.")
+        output_raster_param.setHelp("The output reclassfied raster.")
         self.addParameter(output_raster_param)

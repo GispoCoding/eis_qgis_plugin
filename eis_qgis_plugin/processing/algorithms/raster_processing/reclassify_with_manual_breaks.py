@@ -23,9 +23,7 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
         self._display_name = "Reclassify with manual breaks"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = (
-            "Reclassify raster data set with manual breaks."
-        )
+        self._short_help_string = "Reclassify raster with manual breaks."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
@@ -38,7 +36,7 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
         input_raster_param = QgsProcessingParameterRasterLayer(
             name=self.alg_parameters[0], description="Input raster"
         )
-        input_raster_param.setHelp("The input raster data set.")
+        input_raster_param.setHelp("The input raster to be reclassified.")
         self.addParameter(input_raster_param)
 
         breaks_param = QgsProcessingParameterString(
@@ -46,7 +44,7 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
             description="Breaks"
         )
         breaks_param.setHelp(
-            '''The breaks for Manual breaks. Input the breaks as a comma-separated list. 
+            '''The breaks used in reclassification. Input the breaks as a comma-separated list. 
             For example: 0, 10, 20, 30, 40, 50.'''
         )
         self.addParameter(breaks_param)
@@ -62,7 +60,7 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[3], description="Output raster"
         )
-        output_raster_param.setHelp("The output raster data set.")
+        output_raster_param.setHelp("The output reclassified raster.")
         self.addParameter(output_raster_param)
 
 
