@@ -29,37 +29,41 @@ class EISEvaluateTrainedModel(EISProcessingAlgorithm):
             "output_raster"
         ]
 
-        self.addParameter(
-            QgsProcessingParameterMultipleLayers(
-                name=self.alg_parameters[0], description="Input data", layerType=QgsProcessing.TypeRaster
-            )
+        evidence_data_param = QgsProcessingParameterMultipleLayers(
+            name=self.alg_parameters[0], description="Evidence data", layerType=QgsProcessing.TypeRaster
         )
+        evidence_data_param.setHelp(
+            "Evidence data used for testing. Evidence layers should match the layers used in training."
+        )
+        self.addParameter(evidence_data_param)
 
-        self.addParameter(
-            QgsProcessingParameterMapLayer(
-                name=self.alg_parameters[1], description="Target labels"
-            )
+        target_labels_param = QgsProcessingParameterMapLayer(
+            name=self.alg_parameters[1], description="Target labels"
         )
+        target_labels_param.setHelp("Target labels used for evaluating performance.")
+        self.addParameter(target_labels_param)
 
-        self.addParameter(
-            QgsProcessingParameterFile(
-                name=self.alg_parameters[2], description="Model file", fileFilter='.joblib (*.joblib)'
-            )
+        model_file_param = QgsProcessingParameterFile(
+            name=self.alg_parameters[2], description="Model file", fileFilter='.joblib (*.joblib)'
         )
+        model_file_param.setHelp("The model file.")
+        self.addParameter(model_file_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[3],
-                description="Evaluation metric",
-                options=["accuracy", "precision", "recall", "f1", "auc", "mse", "rmse", "mae", "r2"],
-                defaultValue="accuracy",
-                allowMultiple=True
-            )
+        evaluation_metric_param = QgsProcessingParameterEnum(
+            name=self.alg_parameters[3],
+            description="Evaluation metric",
+            options=["accuracy", "precision", "recall", "f1", "auc", "mse", "rmse", "mae", "r2"],
+            defaultValue="accuracy",
+            allowMultiple=True
         )
+        evaluation_metric_param.setHelp(
+            "Metrics calculated. The selected metrics need to be applicable for model type (classifier or regressor)."
+        )
+        self.addParameter(evaluation_metric_param)
 
-        self.addParameter(
-            QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[4],
-                description="Output raster",
-            )
+        output_raster_param = QgsProcessingParameterRasterDestination(
+            name=self.alg_parameters[4],
+            description="Output raster",
         )
+        output_raster_param.setHelp("Output raster with predictions.")
+        self.addParameter(output_raster_param)
