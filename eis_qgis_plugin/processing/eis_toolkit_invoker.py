@@ -310,12 +310,9 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
 class VenvEnvironmentHandler(EnvironmentHandler):
 
-    BIN_DIRECTORY = "Scripts" if os.name == "nt" else "bin"
-    PYTHON_EXE = "python.exe" if os.name == "nt" else "python"
-
     def __init__(self, venv_directory: os.PathLike) -> None:
         self.venv_directory = venv_directory
-        self.python_path = os.path.join(venv_directory, self.BIN_DIRECTORY, self.PYTHON_EXE)
+        self.python_path = self.get_python_path(venv_directory)
 
 
     def assemble_cli_cmd(self, alg_name: str, typer_args: List[str], typer_options: List[str]):
@@ -327,6 +324,19 @@ class VenvEnvironmentHandler(EnvironmentHandler):
             *typer_options
         ]
 
+    @staticmethod
+    def get_python_path(venv_directory: os.PathLike) -> str:
+        # os_name = platform.system().lower()
+        is_windows = os.name == "nt"
+        exe_directory = "Scripts" if is_windows else "bin"
+        python_executable = "python.exe" if is_windows else "python"
+
+        # Heuristic to check if Conda env
+        if os.path.exists(os.path.join(venv_directory, 'conda-meta')) and is_windows:
+            return os.path.join(venv_directory, python_executable)
+        else:
+            return os.path.join(venv_directory, exe_directory, python_executable)
+            
 
     def get_invocation_cmd(self) -> List[str]:
         return [self.python_path, "-m"]
