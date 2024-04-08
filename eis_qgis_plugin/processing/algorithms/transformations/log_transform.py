@@ -15,29 +15,27 @@ class EISLogTransform(EISProcessingAlgorithm):
         self._display_name = "Logarithmic transform"
         self._group = "Transformations"
         self._group_id = "transformations"
-        self._short_help_string = (
-            "Perform a logarithmic transformation on the provided data."
-        )
+        self._short_help_string = "Perform a logarithmic transformation on the provided data."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_raster", "log_type", "output_raster"]
 
-        self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[0], description="Input raster"
-            )
+        input_raster_param =  QgsProcessingParameterRasterLayer(
+            name=self.alg_parameters[0], description="Input raster"
         )
+        input_raster_param.setHelp("Input raster to be transformed.")
+        self.addParameter(input_raster_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[1],
-                description="Lower",
-                options=["log2", "log10", "ln"],
-            )
+        log_type_param =  QgsProcessingParameterEnum(
+            name=self.alg_parameters[1],
+            description="Log type",
+            options=["log2", "log10", "ln"],
         )
+        log_type_param.setHelp("The base for logarithmic transformation.")
+        self.addParameter(log_type_param)
 
-        self.addParameter(
-            QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[2], description="Output raster"
-            )
+        output_raster_param = QgsProcessingParameterRasterDestination(
+            name=self.alg_parameters[2], description="Output raster"
         )
+        output_raster_param.setHelp("Output raster with transformed data.")
+        self.addParameter(output_raster_param)
