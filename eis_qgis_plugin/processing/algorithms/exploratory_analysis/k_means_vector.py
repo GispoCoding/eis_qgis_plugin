@@ -63,7 +63,7 @@ class EISKMeansVector(EISProcessingAlgorithm):
             optional=True
         )
         columns_param.setHelp(
-            "Columns/attributes in the input Geodataframe to be included in the clustering process."
+            "Columns/attributes in the input vector to be included in the clustering process."
         )
         self.addParameter(columns_param)
 
