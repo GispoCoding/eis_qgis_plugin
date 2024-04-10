@@ -19,15 +19,15 @@ class EISClrTransform(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_vector", "output_vector"]
 
-        self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input vector"
-            )
+        input_vector_param = QgsProcessingParameterFeatureSource(
+            name=self.alg_parameters[0], description="Input vector"
         )
+        input_vector_param.setHelp("Input vector with compositional data.")
+        self.addParameter(input_vector_param)
 
-        self.addParameter(
-            QgsProcessingParameterVectorDestination(
-                name=self.alg_parameters[1],
-                description="Output vector",
-            )
+        output_vector_param = QgsProcessingParameterVectorDestination(
+            name=self.alg_parameters[1],
+            description="Output vector",
         )
+        output_vector_param.setHelp("Output vector with the CLR transformed data.")
+        self.addParameter(output_vector_param)
