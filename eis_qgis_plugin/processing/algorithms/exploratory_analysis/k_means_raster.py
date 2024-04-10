@@ -1,35 +1,46 @@
 from qgis.core import (
-    QgsProcessingParameterFeatureSource,
+    QgsProcessing,
+    QgsProcessingParameterMultipleLayers,
     QgsProcessingParameterNumber,
-    QgsProcessingParameterVectorDestination,
+    QgsProcessingParameterRasterDestination,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISKMeans(EISProcessingAlgorithm):
+class EISKMeansRaster(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "k_means_clustering"
-        self._display_name = "K-means clustering"
+        self._name = "k_means_clustering_raster"
+        self._display_name = "K-means clustering (raster)"
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
-        self._short_help_string = "Perform K-means clustering on input vector data."
+        self._short_help_string = """
+        Perform k-means clustering on Numpy array data.
+
+        If the raster datasets/bands have different scales and represent different phenomena, \
+        consider normalizing or standardizing data before running k-means to avoid biased clusters.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "input_vector",
+            "input_rasters",
             "number_of_clusters",
             "random_state",
-            "output_vector",
+            "output_raster",
         ]
 
-        input_vector_param = QgsProcessingParameterFeatureSource(
-            name=self.alg_parameters[0], description="Input vector"
+        input_rasters_param = QgsProcessingParameterMultipleLayers(
+            name=self.alg_parameters[0],
+            description="Input rasters",
+            layerType=QgsProcessing.TypeRaster
         )
-        input_vector_param.setHelp("Input vector file with features to be clustered.")
-        self.addParameter(input_vector_param)
+        input_rasters_param.setHelp(
+            "Input rasters for clustering. All bands from all rasters are used. Rasters need to have \
+             same grid properties."
+        )
+        self.addParameter(input_rasters_param)
 
         nr_of_clusters_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
@@ -50,8 +61,8 @@ class EISKMeans(EISProcessingAlgorithm):
         )
         self.addParameter(random_state_param)
 
-        output_vector_param = QgsProcessingParameterVectorDestination(
-            name=self.alg_parameters[3], description="Output vector"
+        output_vector_param = QgsProcessingParameterRasterDestination(
+            name=self.alg_parameters[3], description="Output raster"
         )
-        output_vector_param.setHelp("Output vector file with new cluster label column.")
+        output_vector_param.setHelp("Output singleband raster with cluster numbers as pixel values.")
         self.addParameter(output_vector_param)
