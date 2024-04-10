@@ -17,7 +17,7 @@ class EISKMeansRaster(EISProcessingAlgorithm):
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
         self._short_help_string = """
-        Perform k-means clustering on Numpy array data.
+        Perform k-means clustering on raster data.
 
         If the raster datasets/bands have different scales and represent different phenomena, \
         consider normalizing or standardizing data before running k-means to avoid biased clusters.
@@ -61,8 +61,8 @@ class EISKMeansRaster(EISProcessingAlgorithm):
         )
         self.addParameter(random_state_param)
 
-        output_vector_param = QgsProcessingParameterRasterDestination(
+        output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[3], description="Output raster"
         )
-        output_vector_param.setHelp("Output singleband raster with cluster numbers as pixel values.")
-        self.addParameter(output_vector_param)
+        output_raster_param.setHelp("Output singleband raster with cluster numbers as pixel values.")
+        self.addParameter(output_raster_param)
