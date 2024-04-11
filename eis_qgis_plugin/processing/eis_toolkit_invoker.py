@@ -132,6 +132,7 @@ class EISToolkitInvoker:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
+                env=self.environment_handler.env
             )
 
             # Poll the subprocess to get messages and termination signal
@@ -312,7 +313,7 @@ class VenvEnvironmentHandler(EnvironmentHandler):
 
     def __init__(self, venv_directory: os.PathLike) -> None:
         self.venv_directory = venv_directory
-        self.python_path = self.get_python_path(venv_directory)
+        self.python_path, self.env = self.get_python_path(venv_directory)
 
 
     def assemble_cli_cmd(self, alg_name: str, typer_args: List[str], typer_options: List[str]):
@@ -325,7 +326,7 @@ class VenvEnvironmentHandler(EnvironmentHandler):
         ]
 
     @staticmethod
-    def get_python_path(venv_directory: os.PathLike) -> str:
+    def get_python_path(venv_directory: os.PathLike):
         # os_name = platform.system().lower()
         is_windows = os.name == "nt"
         exe_directory = "Scripts" if is_windows else "bin"
@@ -333,9 +334,11 @@ class VenvEnvironmentHandler(EnvironmentHandler):
 
         # Heuristic to check if Conda env
         if os.path.exists(os.path.join(venv_directory, 'conda-meta')) and is_windows:
-            return os.path.join(venv_directory, python_executable)
+            env = os.environ.copy()
+            env['PYTHONHOME'] = venv_directory
+            return os.path.join(venv_directory, python_executable), env
         else:
-            return os.path.join(venv_directory, exe_directory, python_executable)
+            return os.path.join(venv_directory, exe_directory, python_executable), None
             
 
     def get_invocation_cmd(self) -> List[str]:
