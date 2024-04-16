@@ -1,5 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterCrs,
+    QgsProcessingParameterExtent,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
 )
@@ -15,15 +16,19 @@ class EISCreateConstantRasterManually(EISProcessingAlgorithm):
         self._display_name = "Create constant raster manually"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Create a constant raster manually."
+        self._short_help_string = """
+        Create a constant raster manually by defining CRS, extent and pixel size.
+        
+        If the resulting raster height and width are not exact multiples of the pixel size, the \
+        output raster extent will differ slightly from the defined extent.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
             "constant_value",
             "target_epsg",
+            "extent",
             "target_pixel_size",
-            "raster_width",
-            "raster_height",
             "nodata_value",
             "output_raster",
         ]
@@ -33,48 +38,41 @@ class EISCreateConstantRasterManually(EISProcessingAlgorithm):
             description="Constant value",
             type=QgsProcessingParameterNumber.Double,
         )
-        constant_value_param.setHelp("The constant value to use in the raster.")
+        constant_value_param.setHelp("The constant value of the output raster.")
         self.addParameter(constant_value_param)
 
         target_epsg_param = QgsProcessingParameterCrs(
             name=self.alg_parameters[1],
-            description="Coordinate system",
+            description="Target CRS",
         )
-        target_epsg_param.setHelp("The EPSG code for the output raster.")
+        target_epsg_param.setHelp("The CRS of the output raster.")
         self.addParameter(target_epsg_param)
 
-        target_pixel_size_param = QgsProcessingParameterNumber(
+        extent_param = QgsProcessingParameterExtent(
             name=self.alg_parameters[2],
+            description="Extent",
+        )
+        extent_param.setHelp("The extent of the output raster.")
+        self.addParameter(extent_param)
+
+        target_pixel_size_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[3],
             description="Target pixel size",
         )
         target_pixel_size_param.setHelp("The pixel size of the output raster.")
         self.addParameter(target_pixel_size_param)
 
-        raster_width_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[3],
-            description="Raster width",
-        )
-        raster_width_param.setHelp("The width of the output raster.")
-        self.addParameter(raster_width_param)
-
-        raster_height_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[4],
-            description="Raster height",
-        )
-        raster_height_param.setHelp("The height of the output raster.")
-        self.addParameter(raster_height_param)
-
         nodata_value_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[5],
+            name=self.alg_parameters[4],
             description="Nodata value",
-            optional=True,
             type=QgsProcessingParameterNumber.Double,
+            defaultValue=-9999
         )
         nodata_value_param.setHelp("The nodata value of the output raster.")
         self.addParameter(nodata_value_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[6], description="Output raster"
+            name=self.alg_parameters[5], description="Output raster"
         )
-        output_raster_param.setHelp("The Output raster.")
+        output_raster_param.setHelp("The output constant raster.")
         self.addParameter(output_raster_param)
