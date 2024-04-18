@@ -133,18 +133,24 @@ EIS QGIS Plugin is a graphical user interface for EIS Toolkit, a comprehensive m
      <property name="title">
       <string>License</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>This QGIS plugin is licensed under GPS version 2.</string>
+         <string>This QGIS plugin is licensed under GPL version 2.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="gpl_logo_label">
+      <item>
+       <widget class="QLabel" name="gnu_logo_label">
         <property name="text">
          <string>GPL logo</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
