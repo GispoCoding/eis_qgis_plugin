@@ -1,8 +1,12 @@
 
+import os
+
 from qgis.gui import QgsDockWidget
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils import PLUGIN_PATH
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
 from eis_qgis_plugin.wizard.wizard_history import EISWizardHistory
@@ -56,30 +60,37 @@ class EISWizard(QWidget, FORM_CLASS):
         # Set menu icons
         # item = self.menu_widget.item(0)
         # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/project_settings.png")))
-        # # Icon: <a href="https://www.flaticon.com/free-icons/project-management"
-        # # title="project management icons">Project management icons created by the best icon - Flaticon</a>
+        # Icon: <a href="https://www.flaticon.com/free-icons/project-management"
+        # title="project management icons">Project management icons created by the best icon - Flaticon</a>
 
-        # item = self.menu_widget.item(0)
-        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/preprocessing.png")))
-        # # Icon: <a href="https://www.flaticon.com/free-icons/processing"
-        # # title="processing icons">Processing icons created by Vectorslab - Flaticon</a>
+        item = self.menu_widget.item(0)
+        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/rock1.png")))
+        # Icon: <a href="https://icons8.com/icon/9FSQ5judlnAN/rock">Rock</a>
+        # icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
-        # item = self.menu_widget.item(1)
-        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/eda.png")))
-        # # Icon: <a href="https://www.flaticon.com/free-icons/data-analysis"
-        # # title="data analysis icons">Data analysis icons created by HAJICON - Flaticon</a>
+        item = self.menu_widget.item(1)
+        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/eda.png")))
+        # Icon: <a href="https://www.flaticon.com/free-icons/data-analysis"
+        # title="data analysis icons">Data analysis icons created by HAJICON - Flaticon</a>
 
-        # item = self.menu_widget.item(2)
-        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png")))
-        # # Icon by Icons8
+        item = self.menu_widget.item(2)
+        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png")))
+        # Icon by Icons8
 
-        # item = self.menu_widget.item(4)
-        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg")))
-        # # Icon by Icons8
+        item = self.menu_widget.item(3)
+        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/history2.png")))
+        # Icon 2: <a href="https://www.flaticon.com/free-icons/history" title="history icons">
+        # History icons created by Irfansusanto20 - Flaticon</a>
+        # # Icon : <a href="https://www.flaticon.com/free-icons/history" title="history icons">
+        # # History icons created by Tempo_doloe - Flaticon</a>
+       
+        item = self.menu_widget.item(4)
+        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg")))
+        # Icon by Icons8
 
-        # item = self.menu_widget.item(5)
-        # item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/about.svg")))
-        # # Icon by Icons8
+        item = self.menu_widget.item(5)
+        item.setIcon(QIcon(os.path.join(PLUGIN_PATH, "resources/icons/about.svg")))
+        # Icon by Icons8
 
         self.model_manager = ModelManager()
 
