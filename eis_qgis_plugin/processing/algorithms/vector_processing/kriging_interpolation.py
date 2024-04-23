@@ -61,8 +61,8 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         self.addParameter(base_raster_param)
 
         pixel_size_param = QgsProcessingParameterNumber(
-                name=self.alg_parameters[3], description="Pixel size"
-            )
+            name=self.alg_parameters[3], description="Pixel size", optional=True
+        )
         pixel_size_param.setHelp("Pixel size of the output raster. Only used if base raster isn't defined.")
         self.addParameter(pixel_size_param)
 
