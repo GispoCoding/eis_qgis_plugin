@@ -81,7 +81,6 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         self.output_raster_settings_pages: QStackedWidget
         self.base_raster: QgsMapLayerComboBox
         self.pixel_size: QgsDoubleSpinBox
-        self.nodata: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
         self.back_btn: QPushButton
@@ -212,7 +211,6 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
         self.output_raster_settings_pages: QStackedWidget
         self.base_raster: QgsMapLayerComboBox
         self.pixel_size: QgsDoubleSpinBox
-        self.nodata: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
         self.back_btn: QPushButton
@@ -359,7 +357,6 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         self.output_raster_settings_pages: QStackedWidget
         self.base_raster: QgsMapLayerComboBox
         self.pixel_size: QgsDoubleSpinBox
-        self.nodata: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
         self.back_btn: QPushButton
@@ -437,7 +434,6 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.output_raster_settings_pages: QStackedWidget
         self.base_raster: QgsMapLayerComboBox
         self.pixel_size: QgsDoubleSpinBox
-        self.nodata: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
         self.back_btn: QPushButton
@@ -456,7 +452,6 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.anomaly_output_raster_settings_pages: QStackedWidget
         self.anomaly_base_raster: QgsMapLayerComboBox
         self.anomaly_pixel_size: QgsDoubleSpinBox
-        self.anomaly_nodata: QgsDoubleSpinBox
         self.anomaly_extent: QgsExtentGroupBox
 
         self.anomaly_back_btn: QPushButton
