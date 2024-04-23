@@ -12,6 +12,7 @@ from qgis.gui import (
     QgsRasterBandComboBox,
 )
 from qgis.PyQt.QtWidgets import QComboBox, QLabel, QPushButton, QStackedWidget, QWidget
+from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import set_file_widget_placeholder_text
@@ -104,25 +105,65 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         # Initialize
         self.selection.setLayer(self.vector_layer.currentLayer())
         self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
-    
+
 
     def on_output_raster_settings_changed(self, i):
         max_height = 50 if i == 0 else 230
         self.output_raster_settings_pages.setMaximumHeight(max_height)
         self.output_raster_settings_pages.setCurrentIndex(i)
 
-    
+
     def back(self):
         self.proxy_manager.return_from_proxy_processing()
 
 
+    def get_extent(self):
+        current_extent = self.extent.outputExtent()
+        if current_extent.isEmpty():
+            return None
+        return "{},{},{},{}".format(
+            current_extent.xMinimum(),
+            current_extent.xMaximum(),
+            current_extent.yMinimum(),
+            current_extent.yMaximum()
+        )
+
+
+    def get_output_raster_params(self):
+        if self.output_raster_settings.currentIndex() == 0:
+            base_raster = self.base_raster.currentLayer()
+            if base_raster is None:
+                iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
+                return None
+            params = {
+                "base_raster": base_raster,
+                "pixel_size": None,
+                "extent": None
+            }
+        else:
+            pixel_size = self.pixel_size.value()
+            extent = self.get_extent()
+            if pixel_size <= 0 or extent is None:
+                iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
+                return None
+            params = {
+                "base_raster": None,
+                "pixel_size": pixel_size,
+                "extent": extent
+            }
+        return params
+
+
     def run(self):
-        # TODO: Handle case where base raster is not used. Needs modifications to ALG/CLI
+        params = self.get_output_raster_params()
+        if params is None:
+            return
+
         result = processing.run(
             self.ALG_NAME,
             {
-                "input_raster": self.base_raster.currentLayer(),
-                "geometries": self.vector_layer.currentLayer(),  # SELECTION NOT INCLUDED!
+                "input_vector": self.vector_layer.currentLayer(),  # SELECTION NOT INCLUDED! (yet)
+                **params,
                 "output_raster": get_output_path(self.output_raster_path)
             }
         )
@@ -230,6 +271,8 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
 
     def get_extent(self):
         current_extent = self.extent.outputExtent()
+        if current_extent.isEmpty():
+            return None
         return "{},{},{},{}".format(
             current_extent.xMinimum(),
             current_extent.xMaximum(),
@@ -238,17 +281,44 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
         )
 
 
+    def get_output_raster_params(self):
+        if self.output_raster_settings.currentIndex() == 0:
+            base_raster = self.base_raster.currentLayer()
+            if base_raster is None:
+                iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
+                return None
+            params = {
+                "base_raster": base_raster,
+                "pixel_size": None,
+                "extent": None
+            }
+        else:
+            pixel_size = self.pixel_size.value()
+            extent = self.get_extent()
+            if pixel_size <= 0 or extent is None:
+                iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
+                return None
+            params = {
+                "base_raster": None,
+                "pixel_size": pixel_size,
+                "extent": extent
+            }
+        return params
+
+
     def run(self):
         interpolation_alg, interpolation_params = self.get_interpolation_alg_and_parameters()
+        output_raster_params = self.get_output_raster_params()
+        if not output_raster_params:
+            return
+
         result = processing.run(
             interpolation_alg,
             {
                 "input_vector": self.vector_layer.currentLayer(),
                 "target_column": self.attribute.currentField(),
                 **interpolation_params,
-                # TODO: Add base raster, ALG/CLI needs adjustments
-                "resolution": self.pixel_size.value(),
-                "extent": self.get_extent(),
+                **output_raster_params,
                 "output_raster": get_output_path(self.output_raster_path)
             }
         )
@@ -485,6 +555,8 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
     
     def get_extent(self):
         current_extent = self.extent.outputExtent()
+        if current_extent.isEmpty():
+            return None
         return "{},{},{},{}".format(
             current_extent.xMinimum(),
             current_extent.xMaximum(),
@@ -493,17 +565,44 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         )
 
 
+    def get_output_raster_params(self):
+        if self.output_raster_settings.currentIndex() == 0:
+            base_raster = self.base_raster.currentLayer()
+            if base_raster is None:
+                iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
+                return None
+            params = {
+                "base_raster": base_raster,
+                "pixel_size": None,
+                "extent": None
+            }
+        else:
+            pixel_size = self.pixel_size.value()
+            extent = self.get_extent()
+            if pixel_size <= 0 or extent is None:
+                iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
+                return None
+            params = {
+                "base_raster": None,
+                "pixel_size": pixel_size,
+                "extent": extent
+            }
+        return params
+
+
     def run_interpolate(self):
         interpolation_alg, interpolation_params = self.get_interpolation_alg_and_parameters()
+        output_raster_params = self.get_output_raster_params()
+        if output_raster_params is None:
+            return
+
         result = processing.run(
             interpolation_alg,
             {
                 "input_vector": self.vector_layer.currentLayer(),
                 "target_column": self.attribute.currentField(),
                 **interpolation_params,
-                # TODO: Add base raster, ALG/CLI needs adjustments
-                "resolution": self.pixel_size.value(),
-                "extent": self.get_extent(),
+                **output_raster_params,
                 "output_raster": get_output_path(self.output_raster_path)
             }
         )
