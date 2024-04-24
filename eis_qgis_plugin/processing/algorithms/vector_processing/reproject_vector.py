@@ -20,20 +20,20 @@ class EISReprojectVector(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_vector", "target_crs", "output_vector"]
 
-        self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input vector"
-            )
+        reproject_vector_param = QgsProcessingParameterFeatureSource(
+            name=self.alg_parameters[0], description="Input vector"
         )
+        reproject_vector_param.setHelp("Input vector to reproject.")
+        self.addParameter(reproject_vector_param)
 
-        self.addParameter(
-            QgsProcessingParameterCrs(
-                name=self.alg_parameters[1], description="Target crs"
-            )
+        target_crs_param = QgsProcessingParameterCrs(
+            name=self.alg_parameters[1], description="Target CRS"
         )
+        target_crs_param.setHelp("The CRS of the reprojected vector.")
+        self.addParameter(target_crs_param )
 
-        self.addParameter(
-            QgsProcessingParameterVectorDestination(
-                name=self.alg_parameters[2], description="Output vector"
-            )
+        output_vector_param = QgsProcessingParameterVectorDestination(
+            name=self.alg_parameters[2], description="Output vector"
         )
+        output_vector_param.setHelp("Output reprojected vector.")
+        self.addParameter(output_vector_param)

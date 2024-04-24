@@ -1,10 +1,12 @@
 from qgis.core import (
+    Qgis,
     QgsProcessingParameterEnum,
+    QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterField,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterString,
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -23,72 +25,94 @@ class EISRasterize(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
             "input_vector",
-            "resolution",
-            "column_name",
+            "value_column",
+            "base_raster",
+            "pixel_size",
+            "extent",
             "default_value",
             "fill_value",
-            "raster_profile",
             "buffer_value",
             "merge_strategy",
             "output_raster",
         ]
 
-        self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input vector"
-            )
+        input_vector_param = QgsProcessingParameterFeatureSource(
+            name=self.alg_parameters[0], description="Input vector"
         )
+        input_vector_param.setHelp("Input vector to rasterize.")
+        self.addParameter(input_vector_param)
 
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[1], description="Resolution", optional=True
-            )
+        value_column_param = QgsProcessingParameterField(
+            name=self.alg_parameters[1],
+            description="Value column",
+            optional=True,
+            parentLayerParameterName=self.alg_parameters[0],
         )
+        value_column_param.setDataType(Qgis.ProcessingFieldParameterDataType.Numeric)
+        value_column_param.setHelp(
+            "Column to be used when burning values. If not given, default value is used for all geometries.")
+        self.addParameter(value_column_param)
 
-        self.addParameter(
-            QgsProcessingParameterString(
-                name=self.alg_parameters[2], description="Column name", optional=True
-            )
+        base_raster_param =  QgsProcessingParameterRasterLayer(
+            name=self.alg_parameters[2],
+            description="Base raster",
+            optional=True,
         )
+        base_raster_param.setHelp("Base raster to define grid properties of output raster.")
+        self.addParameter(base_raster_param)
 
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[3],
-                description="Default value",
-                defaultValue=1.0,
-            )
+        pixel_size_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[3], description="Pixel size", optional=True
         )
+        pixel_size_param.setHelp("Pixel size of the output raster. Only used if base raster isn't defined.")
+        self.addParameter(pixel_size_param)
 
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[4], description="Fill value", defaultValue=0.0
-            )
+        extent_param = QgsProcessingParameterExtent(
+            name=self.alg_parameters[4], description="Extent", optional=True
         )
+        extent_param.setHelp(
+            "Extent of the output raster. Only used if base raster isn't defined."
+        )
+        self.addParameter(extent_param)
 
-        self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[5],
-                description="Base raster profile",
-                optional=True,
-            )
+        default_value_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[5],
+            description="Default value",
+            defaultValue=1.0,
         )
+        default_value_param.setHelp("Default value burned into raster cells based on geometries.")
+        self.addParameter(default_value_param)
 
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[6], description="Buffer value", optional=True
-            )
+        fill_value_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[6], description="Fill value", defaultValue=0.0
         )
+        fill_value_param.setHelp("Value used outside the burned/rasterized geometry cells.")
+        self.addParameter(fill_value_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[7],
-                options=["replace", "add"],
-                defaultValue="replace",
-            )
+        buffer_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[7], description="Buffer value", optional=True
         )
+        buffer_param.setHelp("Size of buffer added around geometries before computing density.")
+        self.addParameter(buffer_param)
 
-        self.addParameter(
-            QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[8], description="Output raster"
-            )
+        merge_strategy_param = QgsProcessingParameterEnum(
+            name=self.alg_parameters[8],
+            description="Merge strategy",
+            options=["replace", "add"],
+            defaultValue="replace",
         )
+        merge_strategy_param.setHelp(
+            "How to handle overlapping geometries. \
+            'add' causes overlapping geometries to add together the \
+            values while 'replace' does not. Adding them together is the \
+            basis for density computations where the density can be \
+            calculated by using a default value of 1.0 and the sum in \
+            each cell is the count of intersecting geometries."
+        )
+        self.addParameter(merge_strategy_param)
+
+        output_raster_param = QgsProcessingParameterRasterDestination(
+            name=self.alg_parameters[9], description="Output raster"
+        )
+        output_raster_param.setHelp("Output raster.")
+        self.addParameter(output_raster_param)
