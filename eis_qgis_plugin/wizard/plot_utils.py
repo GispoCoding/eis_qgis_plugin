@@ -4,8 +4,6 @@ from qgis.core import QgsColorRamp, QgsVectorLayer
 from qgis.gui import QgsColorButton
 from qgis.PyQt.QtGui import QColor
 
-from eis_qgis_plugin import pyqtgraph as pg
-
 # River nights in specific order, max 6 colors
 DEFAULT_COLORS_CATECORIGAL = [
     (179, 0, 0),
@@ -48,16 +46,16 @@ def update_color_selection(color_selection: QgsColorButton, plot_number: int) ->
     color_selection.setColor(color)
 
 
-def create_brush(color_selection: QgsColorButton, alpha: int):
-    q_color = color_selection.color()
-    red, green, blue = q_color.red(), q_color.green(), q_color.blue()
-    return pg.mkBrush(color=(red, green, blue, alpha), width=3)
+# def create_brush(color_selection: QgsColorButton, alpha: int):
+#     q_color = color_selection.color()
+#     red, green, blue = q_color.red(), q_color.green(), q_color.blue()
+#     return pg.mkBrush(color=(red, green, blue, alpha), width=3)
 
 
-def create_pen(color_selection: QgsColorButton, alpha: int):
-    q_color = color_selection.color()
-    red, green, blue = q_color.red(), q_color.green(), q_color.blue()
-    return pg.mkPen(color=(red, green, blue, alpha), width=3)
+# def create_pen(color_selection: QgsColorButton, alpha: int):
+#     q_color = color_selection.color()
+#     red, green, blue = q_color.red(), q_color.green(), q_color.blue()
+#     return pg.mkPen(color=(red, green, blue, alpha), width=3)
 
 
 # def qgis_color_ramp_to_pyqtgraph(color_ramp: QgsColorRamp, n_colors=256):
