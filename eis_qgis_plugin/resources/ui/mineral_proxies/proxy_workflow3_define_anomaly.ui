@@ -42,16 +42,6 @@
       <item row="0" column="1">
        <widget class="QgsMapLayerComboBox" name="raster_layer"/>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="band_label">
-        <property name="text">
-         <string>Band</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QgsRasterBandComboBox" name="band"/>
-      </item>
      </layout>
     </widget>
    </item>
@@ -61,15 +51,15 @@
       <string>Method settings</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="anomaly_threshold_label">
+      <item row="1" column="0">
+       <widget class="QLabel" name="anomaly_threshold_label_1">
         <property name="text">
-         <string>Anomaly threshold </string>
+         <string>Threshold value 1</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QgsDoubleSpinBox" name="anomaly_threshold">
+      <item row="1" column="1">
+       <widget class="QgsDoubleSpinBox" name="anomaly_threshold_1">
         <property name="decimals">
          <number>3</number>
         </property>
@@ -81,23 +71,43 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="1">
+       <widget class="QgsDoubleSpinBox" name="anomaly_threshold_2">
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="minimum">
+         <double>-99999.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>99999.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="anomaly_threshold_label_2">
+        <property name="text">
+         <string>Threshold value 2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
        <widget class="QLabel" name="threshold_criteria_label">
         <property name="text">
          <string>Threshold criteria</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="1">
        <widget class="QComboBox" name="threshold_criteria">
         <item>
          <property name="text">
-          <string>Lower</string>
+          <string>Higher</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Higher</string>
+          <string>Lower</string>
          </property>
         </item>
         <item>
@@ -137,16 +147,6 @@
             <string>Input raster</string>
            </property>
           </item>
-          <item>
-           <property name="text">
-            <string>From base raster</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Define manually</string>
-           </property>
-          </item>
          </widget>
         </item>
         <item row="0" column="0">
@@ -174,7 +174,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="input_raster_page"/>
         <widget class="QWidget" name="base_raster_page">
@@ -332,11 +332,6 @@
    <class>QgsMapLayerComboBox</class>
    <extends>QComboBox</extends>
    <header>qgsmaplayercombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QgsRasterBandComboBox</class>
-   <extends>QComboBox</extends>
-   <header>qgsrasterbandcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
