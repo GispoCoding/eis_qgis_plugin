@@ -1,5 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterEnum,
+    QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
@@ -22,8 +23,9 @@ class EISVectorDensity(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
             "input_vector",
-            "base_raster_profile_raster",
-            "resolution",
+            "base_raster",
+            "pixel_value",
+            "extent",
             "buffer_value",
             "statistic",
             "output_raster",
@@ -47,14 +49,22 @@ class EISVectorDensity(EISProcessingAlgorithm):
         pixel_size_param.setHelp("Pixel size of the output raster. Only used if base raster isn't defined.")
         self.addParameter(pixel_size_param)
 
+        extent_param = QgsProcessingParameterExtent(
+            name=self.alg_parameters[3], description="Extent", optional=True
+        )
+        extent_param.setHelp(
+            "Extent of the output raster. Only used if base raster isn't defined."
+        )
+        self.addParameter(extent_param)
+
         buffer_param =QgsProcessingParameterNumber(
-            name=self.alg_parameters[3], description="Buffer", optional=True
+            name=self.alg_parameters[4], description="Buffer", optional=True
         )
         buffer_param.setHelp("Size of buffer added around geometries before computing density.")
         self.addParameter(buffer_param)
 
         statistic_param = QgsProcessingParameterEnum(
-            name=self.alg_parameters[4],
+            name=self.alg_parameters[5],
             description="Statistic",
             options=["density", "count"],
             defaultValue="density",
@@ -63,7 +73,7 @@ class EISVectorDensity(EISProcessingAlgorithm):
         self.addParameter(statistic_param)            
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[5],
+            name=self.alg_parameters[6],
             description="Output raster",
         )
         output_raster_param.setHelp("Output density raster.")
