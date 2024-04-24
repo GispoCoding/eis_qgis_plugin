@@ -22,49 +22,49 @@ class EISVectorDensity(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
             "input_vector",
-            "resolution",
             "base_raster_profile_raster",
+            "resolution",
             "buffer_value",
             "statistic",
             "output_raster",
         ]
 
-        self.addParameter(
-            QgsProcessingParameterFeatureSource(
-                name=self.alg_parameters[0], description="Input vector"
-            )
+        input_vector_param = QgsProcessingParameterFeatureSource(
+            name=self.alg_parameters[0], description="Input vector"
         )
+        input_vector_param.setHelp("Input vector with geometries to compute density for.")
+        self.addParameter(input_vector_param)
 
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[1], description="Cell size", optional=True
-            )
+        base_raster_param = QgsProcessingParameterRasterLayer(
+            name=self.alg_parameters[1], description="Base raster", optional=True
         )
+        base_raster_param.setHelp("Base raster to define grid properties of output raster.")
+        self.addParameter(base_raster_param)
 
-        self.addParameter(
-            QgsProcessingParameterRasterLayer(
-                name=self.alg_parameters[2], description="Raster profile", optional=True
-            )
+        pixel_size_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[2], description="Pixel size", optional=True
         )
+        pixel_size_param.setHelp("Pixel size of the output raster. Only used if base raster isn't defined.")
+        self.addParameter(pixel_size_param)
 
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.alg_parameters[3], description="Buffer", optional=True
-            )
+        buffer_param =QgsProcessingParameterNumber(
+            name=self.alg_parameters[3], description="Buffer", optional=True
         )
+        buffer_param.setHelp("Size of buffer added around geometries before computing density.")
+        self.addParameter(buffer_param)
 
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                name=self.alg_parameters[4],
-                description="Statistic",
-                options=["density", "count"],
-                defaultValue="density",
-            )
+        statistic_param = QgsProcessingParameterEnum(
+            name=self.alg_parameters[4],
+            description="Statistic",
+            options=["density", "count"],
+            defaultValue="density",
         )
+        statistic_param.setHelp("Statistic to be used in density computation.")
+        self.addParameter(statistic_param)            
 
-        self.addParameter(
-            QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[5],
-                description="Output raster",
-            )
+        output_raster_param = QgsProcessingParameterRasterDestination(
+            name=self.alg_parameters[5],
+            description="Output raster",
         )
+        output_raster_param.setHelp("Output density raster.")
+        self.addParameter(output_raster_param)
