@@ -1,5 +1,5 @@
 from qgis.core import (
-    Qgis,
+    # Qgis,
     QgsProcessingParameterEnum,
     QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSource,
@@ -48,7 +48,7 @@ class EISRasterize(EISProcessingAlgorithm):
             optional=True,
             parentLayerParameterName=self.alg_parameters[0],
         )
-        value_column_param.setDataType(Qgis.ProcessingFieldParameterDataType.Numeric)
+        # value_column_param.setDataType(Qgis.ProcessingFieldParameterDataType.Numeric)
         value_column_param.setHelp(
             "Column to be used when burning values. If not given, default value is used for all geometries.")
         self.addParameter(value_column_param)
