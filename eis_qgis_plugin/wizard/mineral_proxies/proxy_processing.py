@@ -9,7 +9,6 @@ from qgis.gui import (
     QgsFieldExpressionWidget,
     QgsFileWidget,
     QgsMapLayerComboBox,
-    QgsRasterBandComboBox,
 )
 from qgis.PyQt.QtWidgets import QComboBox, QLabel, QPushButton, QStackedWidget, QWidget
 from qgis.utils import iface
@@ -329,6 +328,8 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
 
 class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
 
+    ALG_NAME =  "eis:distance_to_anomaly"
+
     def __init__(
         self,
         proxy_manager: QWidget,
@@ -347,10 +348,11 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
 
         # DELCARE TYPES
         self.raster_layer: QgsMapLayerComboBox
-        self.band: QgsRasterBandComboBox
+        # self.band: QgsRasterBandComboBox
 
-        self.anomaly_threshold: QgsDoubleSpinBox
         self.threshold_criteria: QComboBox
+        self.anomaly_threshold_1: QgsDoubleSpinBox
+        self.anomaly_threshold_2: QgsDoubleSpinBox
 
         self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
@@ -369,13 +371,13 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         set_file_widget_placeholder_text(self.output_raster_path)
 
         # Connect signals
-        self.raster_layer.layerChanged.connect(self.band.setLayer)
+        # self.raster_layer.layerChanged.connect(self.band.setLayer)
         self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
         self.back_btn.clicked.connect(self.back)
         self.run_btn.clicked.connect(self.run)
 
         # Initialize layer selection
-        self.band.setLayer(self.raster_layer.currentLayer())
+        # self.band.setLayer(self.raster_layer.currentLayer())
 
 
     def on_output_raster_settings_changed(self, i):
@@ -389,13 +391,33 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
 
 
     def run(self):
-        print("Not implemented yet!")
+        threshold_criteria = self.threshold_criteria.currentIndex()
+        anomaly_threshold_2 = self.anomaly_threshold_2.value()
+        if threshold_criteria == 0 or threshold_criteria == 1:
+            anomaly_threshold_2 = None
+
+        result = processing.run(
+            self.ALG_NAME,
+            {
+                "input_raster": self.raster_layer.currentLayer(),
+                "threshold_criteria": self.threshold_criteria.currentIndex(),
+                "first_threshold_criteria_value": self.anomaly_threshold_1.value(),
+                "second_threshold_criteria_value": anomaly_threshold_2,
+                "output_raster": get_output_path(self.output_raster_path)
+            }
+        )
+        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
+        if EISSettingsManager.get_layer_group_selection():
+            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+        else:
+            QgsProject.instance().addMapLayer(output_layer, True)
 
 
 class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
 
     IDW_ALG_NAME = "eis:idw_interpolation"
     KRIGING_ALG_NAME = "eis:kriging_interpolation"
+    ANOMALY_ALG_NAME = "eis:distance_to_anomaly"
 
     def __init__(self,
         proxy_manager: QWidget,
@@ -442,10 +464,11 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
 
         # ANOMALY PAGE
         self.raster_layer: QgsMapLayerComboBox
-        self.band: QgsRasterBandComboBox
+        # self.band: QgsRasterBandComboBox
 
-        self.anomaly_threshold: QgsDoubleSpinBox
         self.threshold_criteria: QComboBox
+        self.anomaly_threshold_1: QgsDoubleSpinBox
+        self.anomaly_threshold_2: QgsDoubleSpinBox
 
         self.anomaly_output_raster_path: QgsFileWidget
         self.anomaly_output_raster_settings: QComboBox
@@ -475,7 +498,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
                 "coordinates_type": self.coordinates_type.currentIndex()
             }
             return self.KRIGING_ALG_NAME, params
-
+        
 
     def initialize_interpolation_page(self):
         # Set filters
@@ -511,7 +534,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         set_file_widget_placeholder_text(self.anomaly_output_raster_path)
 
         # Connect signals
-        self.raster_layer.layerChanged.connect(self.band.setLayer)
+        # self.raster_layer.layerChanged.connect(self.band.setLayer)
         self.anomaly_output_raster_settings.currentIndexChanged.connect(
             self.on_define_anomaly_output_raster_settings_changed
         )
@@ -520,7 +543,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.finish_btn.clicked.connect(self.finish)
 
         # Initialize
-        self.band.setLayer(self.raster_layer.currentLayer())
+        # self.band.setLayer(self.raster_layer.currentLayer())
         self.proxy_name_label2.setText(self.proxy_name_label2.text() + self.proxy_name)
 
 
@@ -609,7 +632,26 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
 
 
     def run_define_anomaly(self):
-        print("Not implemented yet!")
+        threshold_criteria = self.threshold_criteria.currentIndex()
+        anomaly_threshold_2 = self.anomaly_threshold_2.value()
+        if threshold_criteria == 0 or threshold_criteria == 1:
+            anomaly_threshold_2 = None
+
+        result = processing.run(
+            self.ANOMALY_ALG_NAME,
+            {
+                "input_raster": self.raster_layer.currentLayer(),
+                "threshold_criteria": self.threshold_criteria.currentIndex(),
+                "first_threshold_criteria_value": self.anomaly_threshold_1.value(),
+                "second_threshold_criteria_value": anomaly_threshold_2,
+                "output_raster": get_output_path(self.anomaly_output_raster_path)
+            }
+        )
+        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
+        if EISSettingsManager.get_layer_group_selection():
+            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+        else:
+            QgsProject.instance().addMapLayer(output_layer, True)
 
 
     def finish(self):
