@@ -51,7 +51,7 @@
         <item>
          <widget class="QRadioButton" name="docker_selection">
           <property name="text">
-           <string>Docker image</string>
+           <string>Docker image (WIP, not recommended)</string>
           </property>
          </widget>
         </item>
