@@ -84,7 +84,7 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
 
         # Remove breaks from the list to not prepare them again in the next step
         self.alg_parameters.pop(breaks_param_i)
-        typer_args, typer_options = self.prepare_arguments(parameters, context)
+        typer_args, typer_options, output_path = self.prepare_arguments(parameters, context)
         typer_options += break_options  # Combine lists
 
         toolkit_invoker = EISToolkitInvoker()
@@ -92,5 +92,8 @@ class EISReclassifyWithManualBreaks(EISProcessingAlgorithm):
         results = toolkit_invoker.run_toolkit_command(feedback)
 
         self.get_results(results, parameters)
+        results["output_path"] = output_path
+
+        feedback.setProgress(100)
 
         return results
