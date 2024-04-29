@@ -72,6 +72,7 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         # DELCARE TYPES
         self.vector_layer: QgsMapLayerComboBox
         self.selection: QgsFieldExpressionWidget
+        self.max_distance: QgsDoubleSpinBox
 
         self.proxy_name_label: QLabel
     
@@ -162,6 +163,7 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
             {
                 "input_vector": self.vector_layer.currentLayer(),  # SELECTION NOT INCLUDED! (yet)
                 **params,
+                "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
                 "output_raster": get_output_path(self.output_raster_path)
             }
         )
@@ -353,6 +355,7 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         self.threshold_criteria: QComboBox
         self.anomaly_threshold_1: QgsDoubleSpinBox
         self.anomaly_threshold_2: QgsDoubleSpinBox
+        self.max_distance: QgsDoubleSpinBox
 
         self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
@@ -403,6 +406,7 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
                 "threshold_criteria": self.threshold_criteria.currentIndex(),
                 "first_threshold_criteria_value": self.anomaly_threshold_1.value(),
                 "second_threshold_criteria_value": anomaly_threshold_2,
+                "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
                 "output_raster": get_output_path(self.output_raster_path)
             }
         )
@@ -469,6 +473,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.threshold_criteria: QComboBox
         self.anomaly_threshold_1: QgsDoubleSpinBox
         self.anomaly_threshold_2: QgsDoubleSpinBox
+        self.max_distance: QgsDoubleSpinBox
 
         self.anomaly_output_raster_path: QgsFileWidget
         self.anomaly_output_raster_settings: QComboBox
@@ -644,6 +649,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
                 "threshold_criteria": self.threshold_criteria.currentIndex(),
                 "first_threshold_criteria_value": self.anomaly_threshold_1.value(),
                 "second_threshold_criteria_value": anomaly_threshold_2,
+                "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
                 "output_raster": get_output_path(self.anomaly_output_raster_path)
             }
         )

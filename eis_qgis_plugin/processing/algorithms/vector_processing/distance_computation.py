@@ -24,7 +24,7 @@ class EISDistanceComputation(EISProcessingAlgorithm):
         """
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_vector", "base_raster", "pixel_size", "extent", "output_raster"]
+        self.alg_parameters = ["input_vector", "base_raster", "pixel_size", "extent", "max_distance", "output_raster"]
 
         input_vector_param = QgsProcessingParameterFeatureSource(
             name=self.alg_parameters[0], description="Input vector"
@@ -51,9 +51,19 @@ class EISDistanceComputation(EISProcessingAlgorithm):
             "Extent of the output raster. Only used if base raster isn't defined."
         )
         self.addParameter(extent_param)
-        
+
+        max_distance_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[4],
+            description="Max distance",
+            optional=True,
+            type=QgsProcessingParameterNumber.Double,
+            minValue=0.0
+        )
+        max_distance_param.setHelp("Maximum distance in the output raster.")
+        self.addParameter(max_distance_param)
+
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[4], description="Output raster"
+            name=self.alg_parameters[5], description="Output raster"
         )
         output_raster_param.setHelp("Output distance raster.")
         self.addParameter(output_raster_param)

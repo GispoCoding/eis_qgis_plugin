@@ -31,6 +31,7 @@ class EISDistanceToAnomaly(EISProcessingAlgorithm):
             "threshold_criteria",
             "first_threshold_criteria_value",
             "second_threshold_criteria_value",
+            "max_distance",
             "output_raster",
         ]
 
@@ -80,8 +81,18 @@ class EISDistanceToAnomaly(EISProcessingAlgorithm):
         )
         self.addParameter(second_threshold_criteria_value_param)
 
+        max_distance_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[4],
+            description="Max distance",
+            optional=True,
+            type=QgsProcessingParameterNumber.Double,
+            minValue=0.0
+        )
+        max_distance_param.setHelp("Maximum distance in the output raster.")
+        self.addParameter(max_distance_param)
+
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[4], description="Output raster"
+            name=self.alg_parameters[5], description="Output raster"
         )
         output_raster_param.setHelp("Output raster with distances to closest anomalies.")
         self.addParameter(output_raster_param)
