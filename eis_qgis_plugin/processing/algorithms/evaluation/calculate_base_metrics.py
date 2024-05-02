@@ -14,8 +14,8 @@ class EISCalculateBaseMetrics(EISProcessingAlgorithm):
 
         self._name = "calculate_base_metrics"
         self._display_name = "Calculate base metrics"
-        self._group = "Validation"
-        self._group_id = "validation"
+        self._group = "Evaluation"
+        self._group_id = "evaluation"
         self._display_name = "Calculate base metrics"
 
     def initAlgorithm(self, config=None):
