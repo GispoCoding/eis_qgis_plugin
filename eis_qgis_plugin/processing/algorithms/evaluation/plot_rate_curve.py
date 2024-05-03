@@ -13,8 +13,8 @@ class EISPlotRateCurve(EISProcessingAlgorithm):
 
         self._name = "plot_rate_curve"
         self._display_name = "Plot rate curve"
-        self._group = "Validation"
-        self._group_id = "validation"
+        self._group = "Evaluation"
+        self._group_id = "evaluation"
         self._short_help_string = "Plot success rate, prediction rate or ROC curve"
 
     def initAlgorithm(self, config=None):

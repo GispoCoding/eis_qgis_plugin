@@ -348,20 +348,6 @@ p, li { white-space: pre-wrap; }
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="results_tab">
-          <attribute name="title">
-           <string>Training score</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_19">
-           <item>
-            <widget class="QTableWidget" name="results_table">
-             <property name="alternatingRowColors">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
         </widget>
        </item>
       </layout>

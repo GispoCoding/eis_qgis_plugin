@@ -6,7 +6,9 @@ from qgis.PyQt.QtWidgets import (
     QComboBox,
     QGroupBox,
     QLineEdit,
+    QProgressBar,
     QPushButton,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -15,6 +17,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_filter, set_placeholder_text
+from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 
 FORM_CLASS: QWidget = load_ui("modeling/application.ui")
 
@@ -43,6 +46,9 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
         self.application_reset_btn: QPushButton
         self.application_run_btn: QPushButton
 
+        self.application_log: QTextEdit
+        self.application_progress_bar: QProgressBar
+
         # Connect signals
         self.application_run_btn.clicked.connect(self.apply_model)
         self.application_model_selection.currentTextChanged.connect(self._on_selected_model_changed)
@@ -50,6 +56,7 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
         # Initialize
         self.application_evidence_data = ModelDataTable(self, self.ROW_HEIGHT)
         self.application_evidence_data_layout.addWidget(self.application_evidence_data)
+        self.application_feedback = EISProcessingFeedback(self.application_log, self.application_progress_bar)
 
         self.update_selectable_models(ModelManager.get_all_models())
         set_placeholder_text(self.application_output_raster)
@@ -78,5 +85,6 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
                 "input_rasters": self.application_evidence_data.get_layers(),
                 "model_file": self.model_file_application.text(),
                 "output_raster": get_output_path(self.application_output_raster)
-            }
+            },
+            feedback=self.application_feedback
         )

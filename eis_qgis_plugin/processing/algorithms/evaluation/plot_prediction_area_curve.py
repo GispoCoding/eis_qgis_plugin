@@ -12,8 +12,8 @@ class EISPlotPredictionAreaCurve(EISProcessingAlgorithm):
 
         self._name = "plot_prediction_area_curve"
         self._display_name = "Plot prediction area curve"
-        self._group = "Validation"
-        self._group_id = "validation"
+        self._group = "Evaluation"
+        self._group_id = "evaluation"
         self._short_help_string = "Plot prediction-area (P-A) curve"
 
     def initAlgorithm(self, config=None):

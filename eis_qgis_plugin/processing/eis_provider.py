@@ -27,7 +27,7 @@ class EISProvider(QgsProcessingProvider):
 
     def loadAlgorithms(self) -> None:
         # Load algorithms from each directory
-        validation = self.load_algorithms_from_directory("validation")
+        evaluation = self.load_algorithms_from_directory("evaluation")
         vector_processing = self.load_algorithms_from_directory("vector_processing")
         raster_processing = self.load_algorithms_from_directory("raster_processing")
         exploratory_analysis = self.load_algorithms_from_directory("exploratory_analysis")
@@ -38,7 +38,7 @@ class EISProvider(QgsProcessingProvider):
 
         # Add the algorithm instances to the provider
         for algorithm in (
-            validation + vector_processing + raster_processing +
+            evaluation + vector_processing + raster_processing +
             exploratory_analysis + prediction + transformations + utilities +
             filtering
         ):

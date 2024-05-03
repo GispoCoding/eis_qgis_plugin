@@ -15,6 +15,7 @@ from qgis.PyQt.QtWidgets import (
     QPushButton,
     QSizePolicy,
     QStackedWidget,
+    QTabWidget,
     QVBoxLayout,
     QWidget,
 )
@@ -30,6 +31,7 @@ from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     PowerMembership,
     SmallMembership,
 )
+from eis_qgis_plugin.wizard.modeling.machine_learning.data_preparation import EISMLModelDataPreparation
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_placeholder_text
 
@@ -50,6 +52,7 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         self.setupUi(self)
 
         # DECLARE TYPES
+        self.fuzzy_modeling_tabs: QTabWidget
 
         # Fuzzy membership tab
         self.input_raster_membership: QgsMapLayerComboBox
@@ -99,6 +102,10 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         self.output_raster_overlay: QgsFileWidget
 
         self.run_overlay_btn: QPushButton
+
+        self.data_preparation = EISMLModelDataPreparation(parent=self.fuzzy_modeling_tabs, model_main=self)
+        self.fuzzy_modeling_tabs.insertTab(0, self.data_preparation, "Data preparation")
+        self.fuzzy_modeling_tabs.setCurrentIndex(0)
 
         # INITIALIZE MEMBERSHIPS AND LINK WIDGETS
         self.initialize_memberships()

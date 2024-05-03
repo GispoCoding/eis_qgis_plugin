@@ -4,6 +4,7 @@ description=
 about=
 version=0.1.0
 qgisMinimumVersion=3.16
+qgisMaximumVersion=3.37
 author=Gispo
 email=
 changelog=
