@@ -7,8 +7,10 @@ from qgis.PyQt.QtWidgets import (
     QComboBox,
     QGroupBox,
     QLineEdit,
+    QProgressBar,
     QPushButton,
     QStackedWidget,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -17,6 +19,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_filter, set_placeholder_text
+from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 
 FORM_CLASS: QWidget = load_ui("modeling/testing.ui")
 
@@ -34,7 +37,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         self.model_main = model_main
         self.test_metrics = [  # IN ORDER
             self.accuracy_checkbox, self.precision_checkbox, self.recall_checkbox, self.f1_checkbox,
-            self.auc_checkbox, self.mse_checkbox, self.rmse_checkbox, self.mae_checkbox, self.r2_checkbox
+            self.mse_checkbox, self.rmse_checkbox, self.mae_checkbox, self.r2_checkbox
         ]
 
         # DECLARE TYPES
@@ -56,11 +59,13 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         self.precision_checkbox: QCheckBox
         self.recall_checkbox: QCheckBox
         self.f1_checkbox: QCheckBox
-        self.auc_checkbox: QCheckBox
         self.mse_checkbox: QCheckBox
         self.rmse_checkbox: QCheckBox
         self.mae_checkbox: QCheckBox
         self.r2_checkbox: QCheckBox
+
+        self.testing_log: QTextEdit
+        self.testing_progress_bar: QProgressBar
 
         # Connect signals
         self.test_run_btn.clicked.connect(self.test_model)
@@ -69,6 +74,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         # Initialize
         self.test_evidence_data = ModelDataTable(self, self.ROW_HEIGHT)
         self.test_evidence_data_layout.addWidget(self.test_evidence_data)
+        self.testing_feedback = EISProcessingFeedback(self.testing_log, self.testing_progress_bar)
        
         self.update_selectable_models(ModelManager.get_all_models())
         set_placeholder_text(self.test_output_raster)
@@ -107,5 +113,6 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
                 "model_file": self.model_file_testing.text(),
                 "validation_metrics": self.get_test_metrics(),
                 "output_raster": get_output_path(self.test_output_raster)
-            }
+            },
+            feedback=self.testing_feedback
         )
