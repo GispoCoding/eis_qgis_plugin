@@ -83,5 +83,5 @@ class EISMLModel(QWidget):
         return self.application
 
 
-    def get_parameter_values(self) -> Dict[str, Any]:
+    def get_parameter_values(self, as_str: bool) -> Dict[str, Any]:
         raise NotImplementedError("'get_parameter_values' needs to be defined in child class.")

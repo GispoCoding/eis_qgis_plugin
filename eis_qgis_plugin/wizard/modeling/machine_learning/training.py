@@ -145,12 +145,14 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         }
 
 
-    def get_validation_settings(self) -> Dict[str, Any]:
+    def get_validation_settings(self, as_str: bool = False) -> Dict[str, Any]:
         return {
-            "validation_method": self.validation_method.currentIndex(),
+            "validation_method": self.validation_method.currentText() if
+                as_str else self.validation_method.currentIndex(),
             "split_size": self.split_size.value() / 100,
             "cv": self.cv_folds.value(),
-            "validation_metrics": [self.validation_metrics.currentIndex()]
+            "validation_metrics": [self.validation_metrics.currentText()] if
+                as_str else [self.validation_metrics.currentIndex()]
         }
 
 
@@ -185,7 +187,12 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         )
 
         if result and self.training_feedback.no_errors:
-            self.save_info(model_parameters)
+            model_parameters_as_str = {
+                **self.model_main.get_parameter_values(as_str = True),
+                **self.get_common_parameter_values(),
+                **self.get_validation_settings(as_str = True)
+            }
+            self.save_info(model_parameters_as_str)
         else:
             self.training_feedback.report_failed_run()
 
@@ -197,8 +204,9 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             "model_type": self.model_main.get_model_type(),
             "model_file": self.get_output_file(),
             "tags": self.train_evidence_data.get_tags(),
-            "evidence_data": [layer.source() for layer in self.train_evidence_data.get_layers()],
-            "labels_data": self.get_training_label_layer().source(),
+            "evidence_data": [layer.name() for layer in self.train_evidence_data.get_layers()],
+            "evidence_data_filepaths": [layer.source() for layer in self.train_evidence_data.get_layers()],
+            "label_data": (self.get_training_label_layer().name(), self.get_training_label_layer().source()),
             "parameters": model_parameters,
             "training_execution_time": execution_time
         }

@@ -68,10 +68,10 @@ class EISWizardRandomForest(EISMLModel):
         self.criterion.addItems(["squared_error", "absolute_error", "friedman_mse", "poisson"])
 
 
-    def get_parameter_values(self) -> Dict[str, Any]:
+    def get_parameter_values(self, as_str: bool = False) -> Dict[str, Any]:
         return {
             'n_estimators': self.n_estimators.value(),
-            'criterion': self.criterion.currentIndex(),
+            'criterion': self.criterion.currentText() if as_str else self.criterion.currentIndex(),
             'max_depth': self.max_depth.value()
         }
     

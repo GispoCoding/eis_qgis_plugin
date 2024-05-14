@@ -84,10 +84,10 @@ class EISWizardGradientBoosting(EISMLModel):
         self.loss.addItems(["squared_error", "absolute_error", "huber", "quantile"])
 
 
-    def get_parameter_values(self) -> Dict[str, Any]:
+    def get_parameter_values(self, as_str: bool = False) -> Dict[str, Any]:
         return {
             'learning_rate': self.learning_rate.value(),
-            'loss': self.loss.currentIndex(),
+            'loss': self.loss.currentText() if as_str else self.loss.currentIndex(),
             'n_estimators': self.n_estimators.value(),
             'max_depth': self.max_depth.value()
         }

@@ -48,11 +48,11 @@ class EISWizardLogisticRegression(EISMLModel):
         self.training_tab.add_parameter_row(self.solver_label, self.solver)
 
 
-    def get_parameter_values(self) -> Dict[str, Any]:
+    def get_parameter_values(self, as_str: bool = False) -> Dict[str, Any]:
         return {
-            'penalty': self.penalty.currentIndex(),
+            'penalty': self.penalty.currentText() if as_str else self.penalty.currentIndex(),
             'max_iter': self.max_iter.value(),
-            'solver': self.solver.currentIndex()
+            'solver': self.solver.currentText() if as_str else self.solver.currentIndex()
         }
 
 
