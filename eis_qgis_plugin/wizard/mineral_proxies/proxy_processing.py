@@ -10,12 +10,13 @@ from qgis.gui import (
     QgsFileWidget,
     QgsMapLayerComboBox,
 )
-from qgis.PyQt.QtWidgets import QComboBox, QLabel, QPushButton, QStackedWidget, QWidget
+from qgis.PyQt.QtWidgets import QComboBox, QLabel, QProgressBar, QPushButton, QStackedWidget, QWidget
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import set_file_widget_placeholder_text
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
+from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS_1 = load_ui("mineral_proxies/proxy_workflow1_dist_to_features.ui")
@@ -83,6 +84,7 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         self.pixel_size: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
+        self.progress_bar: QProgressBar
         self.back_btn: QPushButton
         self.run_btn: QPushButton
 
@@ -104,6 +106,8 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         # Initialize
         self.selection.setLayer(self.vector_layer.currentLayer())
         self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
+
+        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
 
 
     def on_output_raster_settings_changed(self, i):
@@ -165,7 +169,8 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
                 **params,
                 "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
                 "output_raster": get_output_path(self.output_raster_path)
-            }
+            },
+            feedback=self.feedback
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():
@@ -214,6 +219,7 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
         self.pixel_size: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
+        self.progress_bar: QProgressBar
         self.back_btn: QPushButton
         self.run_btn: QPushButton
 
@@ -235,6 +241,8 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
 
         # Initialize layer selection
         self.attribute.setLayer(self.vector_layer.currentLayer())
+
+        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
 
 
     def on_output_raster_settings_changed(self, i):
@@ -319,7 +327,8 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
                 **interpolation_params,
                 **output_raster_params,
                 "output_raster": get_output_path(self.output_raster_path)
-            }
+            },
+            feedback=self.feedback
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():
@@ -364,6 +373,7 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         self.pixel_size: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
+        self.progress_bar: QProgressBar
         self.back_btn: QPushButton
         self.run_btn: QPushButton
 
@@ -378,6 +388,8 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
         self.back_btn.clicked.connect(self.back)
         self.run_btn.clicked.connect(self.run)
+
+        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
 
         # Initialize layer selection
         # self.band.setLayer(self.raster_layer.currentLayer())
@@ -408,7 +420,8 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
                 "second_threshold_criteria_value": anomaly_threshold_2,
                 "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
                 "output_raster": get_output_path(self.output_raster_path)
-            }
+            },
+            feedback=self.feedback
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():
@@ -462,6 +475,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.pixel_size: QgsDoubleSpinBox
         self.extent: QgsExtentGroupBox
 
+        self.progress_bar: QProgressBar
         self.back_btn: QPushButton
         self.run_btn: QPushButton
         self.next_btn: QPushButton
@@ -482,6 +496,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.anomaly_pixel_size: QgsDoubleSpinBox
         self.anomaly_extent: QgsExtentGroupBox
 
+        self.anomaly_progress_bar: QProgressBar
         self.anomaly_back_btn: QPushButton
         self.anomaly_run_btn: QPushButton
         self.finish_btn: QPushButton
@@ -527,6 +542,8 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.attribute.setLayer(self.vector_layer.currentLayer())
         self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
 
+        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
+
 
     def initialize_anomaly_page(self):
         # Set filters
@@ -550,6 +567,8 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         # Initialize
         # self.band.setLayer(self.raster_layer.currentLayer())
         self.proxy_name_label2.setText(self.proxy_name_label2.text() + self.proxy_name)
+
+        self.anomaly_feedback = EISProcessingFeedback(progress_bar=self.anomaly_progress_bar)
 
 
     def on_output_raster_settings_changed(self, i):
@@ -627,7 +646,8 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
                 **interpolation_params,
                 **output_raster_params,
                 "output_raster": get_output_path(self.output_raster_path)
-            }
+            },
+            feedback=self.feedback
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():
@@ -651,7 +671,8 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
                 "second_threshold_criteria_value": anomaly_threshold_2,
                 "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
                 "output_raster": get_output_path(self.anomaly_output_raster_path)
-            }
+            },
+            feedback=self.anomaly_feedback
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():

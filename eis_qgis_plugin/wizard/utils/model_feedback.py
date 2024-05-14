@@ -7,7 +7,7 @@ class EISProcessingFeedback(QgsProcessingFeedback):
     PROGRESS_PREFIX = "Progress:"  # Should be same as in EISToolkitInvoker
     ERROR_PREFIX = "ValueError:"
 
-    def __init__(self, text_edit: QTextEdit, progress_bar: QProgressBar = None):
+    def __init__(self, text_edit: QTextEdit = None, progress_bar: QProgressBar = None):
         super().__init__()
         self.no_errors = True
         self.text_edit = text_edit
@@ -18,27 +18,33 @@ class EISProcessingFeedback(QgsProcessingFeedback):
             self.progress_bar.setValue(progress)
 
     def pushInfo(self, info):
-        if self.PROGRESS_PREFIX in info:
-            progress = int(info.split(":")[1].strip()[:-1])
-            self.setProgress(progress)
-            self.text_edit.append(f"Progress: {progress}%")
-        elif self.ERROR_PREFIX in info:
-            self.reportError(info)
-        else:
-            self.text_edit.append(info)
+        if self.text_edit is not None:
+            if self.PROGRESS_PREFIX in info:
+                progress = int(info.split(":")[1].strip()[:-1])
+                self.setProgress(progress)
+                self.text_edit.append(f"Progress: {progress}%")
+            elif self.ERROR_PREFIX in info:
+                self.reportError(info)
+            else:
+                self.text_edit.append(info)
 
     def pushCommandInfo(self, info):
-        self.text_edit.append(f"Command: {info}")
+        if self.text_edit is not None:
+            self.text_edit.append(f"Command: {info}")
 
     def pushDebugInfo(self, info):
-        self.text_edit.append(f"Debug: {info}")
+        if self.text_edit is not None:
+            self.text_edit.append(f"Debug: {info}")
 
     def pushConsoleInfo(self, info):
-        self.text_edit.append(f"Console: {info}")
+        if self.text_edit is not None:
+            self.text_edit.append(f"Console: {info}")
 
     def reportError(self, error, fatalError=False):
-        self.no_errors = False
-        self.text_edit.append(f"Error: {error}")
+        if self.text_edit is not None:
+            self.no_errors = False
+            self.text_edit.append(f"Error: {error}")
 
     def report_failed_run(self):
-        self.text_edit.append("Model training failed, not saving to database")
+        if self.text_edit is not None:
+            self.text_edit.append("Model training failed, not saving to database")
