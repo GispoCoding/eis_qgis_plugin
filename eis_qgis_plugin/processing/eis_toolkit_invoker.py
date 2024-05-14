@@ -143,20 +143,12 @@ class EISToolkitInvoker:
             # Poll the subprocess to get messages and termination signal
             while process.poll() is None:
                 stdout = process.stdout.readline().strip()
-
-                if self.PROGRESS_PREFIX in stdout:
-                    self._update_progress(stdout, feedback)
-    
-                elif self.RESULTS_PREFIX in stdout:
-                    self._update_results(stdout, results)
-
-                elif self.OUT_RASTERS_PREFIX in stdout:
-                    self._update_out_rasters(stdout)
-            
-                else:
-                    feedback.pushInfo(stdout)
+                self._process_command_output(stdout, feedback, results)
 
                 time.sleep(0.01)
+
+            stdout = process.stdout.readline().strip()
+            self._process_command_output(stdout, feedback, results)
 
             stdout, stderr = process.communicate()
 
@@ -176,8 +168,21 @@ class EISToolkitInvoker:
             except UnboundLocalError:
                 pass
             return {}
-        
+
         return results
+
+    def _process_command_output(self, stdout, feedback, results):
+        if self.PROGRESS_PREFIX in stdout:
+            self._update_progress(stdout, feedback)
+
+        elif self.RESULTS_PREFIX in stdout:
+            self._update_results(stdout, results)
+
+        elif self.OUT_RASTERS_PREFIX in stdout:
+            self._update_out_rasters(stdout)
+
+        else:
+            feedback.pushInfo(stdout)
 
 
 class EnvironmentHandler:
