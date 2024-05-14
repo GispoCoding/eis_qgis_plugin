@@ -241,14 +241,35 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="btn_layout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="back_btn">
-       <property name="text">
-        <string>Back</string>
+      <widget class="QProgressBar" name="progress_bar">
+       <property name="value">
+        <number>0</number>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="cancel_btn">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="run_btn">
+       <property name="text">
+        <string>Run</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="btn_layout">
      <item>
       <spacer name="run_btn_spacer">
        <property name="orientation">
@@ -263,9 +284,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="run_btn">
+      <widget class="QPushButton" name="back_btn">
        <property name="text">
-        <string>Run</string>
+        <string>Back</string>
        </property>
       </widget>
      </item>
