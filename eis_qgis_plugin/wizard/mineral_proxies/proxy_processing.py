@@ -10,7 +10,15 @@ from qgis.gui import (
     QgsFileWidget,
     QgsMapLayerComboBox,
 )
-from qgis.PyQt.QtWidgets import QComboBox, QLabel, QProgressBar, QPushButton, QStackedWidget, QWidget
+from qgis.PyQt.QtWidgets import (
+    QComboBox,
+    QGroupBox,
+    QLabel,
+    QProgressBar,
+    QPushButton,
+    QStackedWidget,
+    QWidget,
+)
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -363,7 +371,9 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
 
         self.threshold_criteria: QComboBox
         self.anomaly_threshold_1: QgsDoubleSpinBox
+        self.anomaly_threshold_label_1: QLabel
         self.anomaly_threshold_2: QgsDoubleSpinBox
+        self.anomaly_threshold_label_2: QLabel
         self.max_distance: QgsDoubleSpinBox
 
         self.output_raster_path: QgsFileWidget
@@ -386,10 +396,12 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         # Connect signals
         # self.raster_layer.layerChanged.connect(self.band.setLayer)
         self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
+        self.threshold_criteria.currentTextChanged.connect(self.on_threshold_criteria_changed)
         self.back_btn.clicked.connect(self.back)
         self.run_btn.clicked.connect(self.run)
 
         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
+        self.on_threshold_criteria_changed("higher")
 
         # Initialize layer selection
         # self.band.setLayer(self.raster_layer.currentLayer())
@@ -400,6 +412,17 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         self.output_raster_settings_pages.setMaximumHeight(max_height)
         self.output_raster_settings_pages.setCurrentIndex(i)
 
+
+    def on_threshold_criteria_changed(self, text: str):
+        text = text.lower()
+        if text == "higher" or text == "lower":
+            self.anomaly_threshold_label_1.setText("Threshold value")
+            self.anomaly_threshold_label_2.hide()
+            self.anomaly_threshold_2.hide()
+        else:
+            self.anomaly_threshold_label_1.setText("Threshold value lower")           
+            self.anomaly_threshold_label_2.show()
+            self.anomaly_threshold_2.show()
 
     def back(self):
         self.proxy_manager.return_from_proxy_processing()
@@ -484,9 +507,12 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.raster_layer: QgsMapLayerComboBox
         # self.band: QgsRasterBandComboBox
 
+        self.anomaly_method_box: QGroupBox
         self.threshold_criteria: QComboBox
         self.anomaly_threshold_1: QgsDoubleSpinBox
+        self.anomaly_threshold_label_1: QLabel
         self.anomaly_threshold_2: QgsDoubleSpinBox
+        self.anomaly_threshold_label_2: QLabel
         self.max_distance: QgsDoubleSpinBox
 
         self.anomaly_output_raster_path: QgsFileWidget
@@ -534,6 +560,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.vector_layer.layerChanged.connect(self.attribute.setLayer)
         self.interpolation_method.currentIndexChanged.connect(self.on_interpolation_method_changed)
         self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
+        self.threshold_criteria.currentTextChanged.connect(self.on_threshold_criteria_changed)
         self.back_btn.clicked.connect(self.back_interpolate)
         self.run_btn.clicked.connect(self.run_interpolate)
         self.next_btn.clicked.connect(self.next)
@@ -567,11 +594,14 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         # Initialize
         # self.band.setLayer(self.raster_layer.currentLayer())
         self.proxy_name_label2.setText(self.proxy_name_label2.text() + self.proxy_name)
+        self.on_threshold_criteria_changed("higher")
 
         self.anomaly_feedback = EISProcessingFeedback(progress_bar=self.anomaly_progress_bar)
 
 
     def on_output_raster_settings_changed(self, i):
+        max_height = 50 if i == 0 else 230
+        self.output_raster_settings_pages.setMaximumHeight(max_height)
         self.output_raster_settings_pages.setCurrentIndex(i)
 
 
@@ -581,7 +611,17 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
 
     def on_interpolation_method_changed(self, i):
         self.interpolation_method_pages.setCurrentIndex(i)
-    
+
+    def on_threshold_criteria_changed(self, text: str):
+        text = text.lower()
+        if text == "higher" or text == "lower":
+            self.anomaly_threshold_label_1.setText("Threshold value")
+            self.anomaly_threshold_label_2.hide()
+            self.anomaly_threshold_2.hide()
+        else:
+            self.anomaly_threshold_label_1.setText("Threshold value lower")           
+            self.anomaly_threshold_label_2.show()
+            self.anomaly_threshold_2.show()
 
     def back_interpolate(self):
         self.proxy_manager.return_from_proxy_processing()
