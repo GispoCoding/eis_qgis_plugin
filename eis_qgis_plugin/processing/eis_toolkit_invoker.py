@@ -11,6 +11,7 @@ from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
 
+logger = logging.getLogger(__name__)
 
 class EISToolkitInvoker:
     """Class that handles communication between EIS QGIS plugin and EIS Toolkit."""
@@ -127,30 +128,27 @@ class EISToolkitInvoker:
         # Execute EIS Toolkit through subprocess
         try:
             # Open the process
+
+            # QGIS sets some PYTHON environment variables that might disturb the external python the process is using
+            python_free_environment = {key:value for key, value in os.environ.items() if not key.startswith("PYTHON")}
+            logger.debug(f'Running command "{" ".join(self.cmd)}" with environment: {python_free_environment=}')
             process = subprocess.Popen(
                 self.cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
+                env=python_free_environment
             )
 
             # Poll the subprocess to get messages and termination signal
             while process.poll() is None:
                 stdout = process.stdout.readline().strip()
-
-                if self.PROGRESS_PREFIX in stdout:
-                    self._update_progress(stdout, feedback)
-    
-                elif self.RESULTS_PREFIX in stdout:
-                    self._update_results(stdout, results)
-
-                elif self.OUT_RASTERS_PREFIX in stdout:
-                    self._update_out_rasters(stdout)
-            
-                else:
-                    feedback.pushInfo(stdout)
+                self._process_command_output(stdout, feedback, results)
 
                 time.sleep(0.01)
+
+            stdout = process.stdout.readline().strip()
+            self._process_command_output(stdout, feedback, results)
 
             stdout, stderr = process.communicate()
 
@@ -170,8 +168,21 @@ class EISToolkitInvoker:
             except UnboundLocalError:
                 pass
             return {}
-        
+
         return results
+
+    def _process_command_output(self, stdout, feedback, results):
+        if self.PROGRESS_PREFIX in stdout:
+            self._update_progress(stdout, feedback)
+
+        elif self.RESULTS_PREFIX in stdout:
+            self._update_results(stdout, results)
+
+        elif self.OUT_RASTERS_PREFIX in stdout:
+            self._update_out_rasters(stdout)
+
+        else:
+            feedback.pushInfo(stdout)
 
 
 class EnvironmentHandler:
