@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="workflow_pages">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="interpolation_page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -408,7 +408,7 @@
          <item>
           <widget class="QPushButton" name="cancel_btn">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string>Cancel</string>
@@ -798,7 +798,7 @@
          <item>
           <widget class="QPushButton" name="anomaly_cancel_btn">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string>Cancel</string>

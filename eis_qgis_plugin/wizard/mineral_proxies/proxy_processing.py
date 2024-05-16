@@ -10,6 +10,7 @@ from qgis.gui import (
     QgsFileWidget,
     QgsMapLayerComboBox,
 )
+from qgis.PyQt.QtCore import QThread
 from qgis.PyQt.QtWidgets import (
     QComboBox,
     QGroupBox,
@@ -24,6 +25,7 @@ from qgis.utils import iface
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import set_file_widget_placeholder_text
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
+from eis_qgis_plugin.wizard.utils.algorithm_worker import AlgorithmWorker
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
@@ -57,75 +59,58 @@ def add_output_layer_to_group(layer, mineral_system: str, category: str):
     category_subgroup.addLayer(layer)
 
 
+class EISWizardProxyProcess(QWidget):
 
-class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
-
-    ALG_NAME = "eis:distance_computation"
-
-    def __init__(
-        self,
-        proxy_manager: QWidget,
-        mineral_system: str,
-        category: str,
-        proxy_name: str,
-        parent: Optional[QWidget] = None
-    ) -> None:
+    def __init__(self, parent):
         super().__init__(parent)
-        self.setupUi(self)
-
-        self.mineral_system = mineral_system
-        self.category = category
-        self.proxy_name = proxy_name
-        self.proxy_manager = proxy_manager
-
-        # DELCARE TYPES
-        self.vector_layer: QgsMapLayerComboBox
-        self.selection: QgsFieldExpressionWidget
-        self.max_distance: QgsDoubleSpinBox
-
-        self.proxy_name_label: QLabel
-    
-        self.output_raster_path: QgsFileWidget
-        self.output_raster_settings: QComboBox
-        self.output_raster_settings_pages: QStackedWidget
-        self.base_raster: QgsMapLayerComboBox
-        self.pixel_size: QgsDoubleSpinBox
-        self.extent: QgsExtentGroupBox
 
         self.progress_bar: QProgressBar
-        self.back_btn: QPushButton
-        self.run_btn: QPushButton
 
-        # Set filters
-        self.vector_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
-        self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
-        default_base_raster = EISSettingsManager.get_default_base_raster()
-        if default_base_raster is not None:
-            self.base_raster.setLayer(default_base_raster)
-
-        set_file_widget_placeholder_text(self.output_raster_path)
-
-        # Connect signals
-        self.vector_layer.layerChanged.connect(self.selection.setLayer)
-        self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
-        self.back_btn.clicked.connect(self.back)
-        self.run_btn.clicked.connect(self.run)
-
-        # Initialize
-        self.selection.setLayer(self.vector_layer.currentLayer())
-        self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
-
-        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
+        self.worker = None
+        self.worker_thread = None
+        self.terminated = False
 
 
-    def on_output_raster_settings_changed(self, i):
-        max_height = 50 if i == 0 else 230
-        self.output_raster_settings_pages.setMaximumHeight(max_height)
-        self.output_raster_settings_pages.setCurrentIndex(i)
+    def cancel(self):
+        self.terminated = True
+        if self.feedback:
+            self.feedback.cancel()
+        if self.worker:
+            self.worker = None
+        if self.worker_thread and self.worker_thread.isRunning():
+            self.worker_thread.terminate()
 
 
-    def back(self):
-        self.proxy_manager.return_from_proxy_processing()
+    def on_finished(self, result):
+        if self.worker:
+            self.worker.deleteLater()
+        if self.worker_thread:
+            self.worker_thread.quit()
+            self.worker_thread.deleteLater()
+        if not self.terminated:
+            output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
+            if EISSettingsManager.get_layer_group_selection():
+                add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+            else:
+                QgsProject.instance().addMapLayer(output_layer, True)
+
+
+    def on_error(self, error_message):
+        self.worker_thread.quit()
+        self.worker.deleteLater()
+        self.worker_thread.deleteLater()
+        iface.messageBar().pushWarning("Error: ", error_message)
+
+
+    def run(self):
+        self.worker.finished.connect(self.on_finished)
+        self.worker.error.connect(self.on_error)
+
+        self.worker_thread = QThread()
+        self.worker.moveToThread(self.worker_thread)
+
+        self.worker_thread.started.connect(self.worker.run)
+        self.worker_thread.start()
 
 
     def get_extent(self):
@@ -165,12 +150,84 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         return params
 
 
+class EISWizardProxyDistanceToFeatures(EISWizardProxyProcess, FORM_CLASS_1):
+
+    ALG_NAME = "eis:distance_computation"
+
+    def __init__(
+        self,
+        proxy_manager: QWidget,
+        mineral_system: str,
+        category: str,
+        proxy_name: str,
+        parent: Optional[QWidget] = None
+    ) -> None:
+        super().__init__(parent)
+        self.setupUi(self)
+
+        self.mineral_system = mineral_system
+        self.category = category
+        self.proxy_name = proxy_name
+        self.proxy_manager = proxy_manager
+
+        # DELCARE TYPES
+        self.vector_layer: QgsMapLayerComboBox
+        self.selection: QgsFieldExpressionWidget
+        self.max_distance: QgsDoubleSpinBox
+
+        self.proxy_name_label: QLabel
+    
+        self.output_raster_path: QgsFileWidget
+        self.output_raster_settings: QComboBox
+        self.output_raster_settings_pages: QStackedWidget
+        self.base_raster: QgsMapLayerComboBox
+        self.pixel_size: QgsDoubleSpinBox
+        self.extent: QgsExtentGroupBox
+
+        self.progress_bar: QProgressBar
+        self.back_btn: QPushButton
+        self.run_btn: QPushButton
+        self.cancel_btn: QPushButton
+
+        # Set filters
+        self.vector_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        default_base_raster = EISSettingsManager.get_default_base_raster()
+        if default_base_raster is not None:
+            self.base_raster.setLayer(default_base_raster)
+
+        set_file_widget_placeholder_text(self.output_raster_path)
+
+        # Connect signals
+        self.vector_layer.layerChanged.connect(self.selection.setLayer)
+        self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
+        self.back_btn.clicked.connect(self.back)
+        self.run_btn.clicked.connect(self.run)
+        self.cancel_btn.clicked.connect(self.cancel)
+
+        # Initialize
+        self.selection.setLayer(self.vector_layer.currentLayer())
+        self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
+
+        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
+
+
+    def on_output_raster_settings_changed(self, i):
+        max_height = 50 if i == 0 else 230
+        self.output_raster_settings_pages.setMaximumHeight(max_height)
+        self.output_raster_settings_pages.setCurrentIndex(i)
+
+
+    def back(self):
+        self.proxy_manager.return_from_proxy_processing()
+
+
     def run(self):
         params = self.get_output_raster_params()
         if params is None:
             return
 
-        result = processing.run(
+        self.worker = AlgorithmWorker(
             self.ALG_NAME,
             {
                 "input_vector": self.vector_layer.currentLayer(),  # SELECTION NOT INCLUDED! (yet)
@@ -180,11 +237,7 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
             },
             feedback=self.feedback
         )
-        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-        if EISSettingsManager.get_layer_group_selection():
-            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
-        else:
-            QgsProject.instance().addMapLayer(output_layer, True)
+        super().run()
 
 
 
@@ -453,7 +506,7 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
             QgsProject.instance().addMapLayer(output_layer, True)
 
 
-class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
+class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLASS_4):
 
     IDW_ALG_NAME = "eis:idw_interpolation"
     KRIGING_ALG_NAME = "eis:kriging_interpolation"
@@ -502,6 +555,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.back_btn: QPushButton
         self.run_btn: QPushButton
         self.next_btn: QPushButton
+        self.cancel_btn: QPushButton
 
         # ANOMALY PAGE
         self.raster_layer: QgsMapLayerComboBox
@@ -526,6 +580,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.anomaly_back_btn: QPushButton
         self.anomaly_run_btn: QPushButton
         self.finish_btn: QPushButton
+        self.anomaly_cancel_btn: QPushButton
 
         self.initialize_interpolation_page()
         self.initialize_anomaly_page()
@@ -564,6 +619,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.back_btn.clicked.connect(self.back_interpolate)
         self.run_btn.clicked.connect(self.run_interpolate)
         self.next_btn.clicked.connect(self.next)
+        self.cancel_btn.clicked.connect(self.cancel)
 
         # Initialize
         self.attribute.setLayer(self.vector_layer.currentLayer())
@@ -590,6 +646,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.anomaly_back_btn.clicked.connect(self.back_define_anomaly)
         self.anomaly_run_btn.clicked.connect(self.run_define_anomaly)
         self.finish_btn.clicked.connect(self.finish)
+        self.anomaly_cancel_btn.clicked.connect(self.cancel_anomaly)
 
         # Initialize
         # self.band.setLayer(self.raster_layer.currentLayer())
@@ -634,42 +691,15 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
     def next(self):
         self.workflow_pages.setCurrentIndex(1)
 
-    
-    def get_extent(self):
-        current_extent = self.extent.outputExtent()
-        if current_extent.isEmpty():
-            return None
-        return "{},{},{},{}".format(
-            current_extent.xMinimum(),
-            current_extent.xMaximum(),
-            current_extent.yMinimum(),
-            current_extent.yMaximum()
-        )
 
-
-    def get_output_raster_params(self):
-        if self.output_raster_settings.currentIndex() == 0:
-            base_raster = self.base_raster.currentLayer()
-            if base_raster is None:
-                iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
-                return None
-            params = {
-                "base_raster": base_raster,
-                "pixel_size": None,
-                "extent": None
-            }
-        else:
-            pixel_size = self.pixel_size.value()
-            extent = self.get_extent()
-            if pixel_size <= 0 or extent is None:
-                iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
-                return None
-            params = {
-                "base_raster": None,
-                "pixel_size": pixel_size,
-                "extent": extent
-            }
-        return params
+    def cancel_anomaly(self):
+        self.terminated = True
+        if self.anomaly_feedback:
+            self.anomaly_feedback.cancel()
+        if self.worker:
+            self.worker = None
+        if self.worker_thread and self.worker_thread.isRunning():
+            self.worker_thread.terminate()
 
 
     def run_interpolate(self):
@@ -678,7 +708,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         if output_raster_params is None:
             return
 
-        result = processing.run(
+        self.worker = AlgorithmWorker(
             interpolation_alg,
             {
                 "input_vector": self.vector_layer.currentLayer(),
@@ -689,11 +719,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
             },
             feedback=self.feedback
         )
-        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-        if EISSettingsManager.get_layer_group_selection():
-            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
-        else:
-            QgsProject.instance().addMapLayer(output_layer, True)
+        super().run()
 
 
     def run_define_anomaly(self):
@@ -702,7 +728,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         if threshold_criteria == 0 or threshold_criteria == 1:
             anomaly_threshold_2 = None
 
-        result = processing.run(
+        self.worker = AlgorithmWorker(
             self.ANOMALY_ALG_NAME,
             {
                 "input_raster": self.raster_layer.currentLayer(),
@@ -714,11 +740,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
             },
             feedback=self.anomaly_feedback
         )
-        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-        if EISSettingsManager.get_layer_group_selection():
-            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
-        else:
-            QgsProject.instance().addMapLayer(output_layer, True)
+        super().run()
 
 
     def finish(self):

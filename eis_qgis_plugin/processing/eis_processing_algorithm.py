@@ -311,6 +311,10 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             elif output.type() == "outputBoolean":
                 results[output_name] = results["result"]
 
+    def cancel(self):
+        if self.process:
+            self.process.terminate()
+
 
     def processAlgorithm(
         self,
