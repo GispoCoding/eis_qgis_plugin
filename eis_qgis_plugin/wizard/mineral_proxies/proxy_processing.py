@@ -600,6 +600,8 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
 
 
     def on_output_raster_settings_changed(self, i):
+        max_height = 50 if i == 0 else 230
+        self.output_raster_settings_pages.setMaximumHeight(max_height)
         self.output_raster_settings_pages.setCurrentIndex(i)
 
 

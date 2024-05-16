@@ -309,7 +309,7 @@
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>16777215</height>
+              <height>50</height>
              </size>
             </property>
             <property name="currentIndex">
@@ -652,6 +652,12 @@
        </item>
        <item>
         <widget class="QGroupBox" name="anomaly_output_box">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>111</height>
+          </size>
+         </property>
          <property name="title">
           <string>Output</string>
          </property>
@@ -695,7 +701,7 @@
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>16777215</height>
+              <height>1</height>
              </size>
             </property>
             <property name="currentIndex">
