@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="workflow_pages">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="interpolation_page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -585,9 +585,9 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="anomaly_threshold_label_2">
             <property name="text">
-             <string>Threshold value 2</string>
+             <string>Threshold value higher</string>
             </property>
            </widget>
           </item>
@@ -608,9 +608,9 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="anomaly_threshold_label">
+           <widget class="QLabel" name="anomaly_threshold_label_1">
             <property name="text">
-             <string>Threshold value 1</string>
+             <string>Threshold value</string>
             </property>
            </widget>
           </item>

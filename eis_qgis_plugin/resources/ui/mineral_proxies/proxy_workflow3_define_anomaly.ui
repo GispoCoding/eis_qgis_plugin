@@ -54,7 +54,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="anomaly_threshold_label_1">
         <property name="text">
-         <string>Threshold value 1</string>
+         <string>Threshold value</string>
         </property>
        </widget>
       </item>
@@ -87,7 +87,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="anomaly_threshold_label_2">
         <property name="text">
-         <string>Threshold value 2</string>
+         <string>Threshold value higher</string>
         </property>
        </widget>
       </item>
