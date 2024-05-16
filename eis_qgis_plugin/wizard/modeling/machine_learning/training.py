@@ -1,3 +1,4 @@
+import time
 from os import PathLike
 from typing import Any, Dict, Optional, Union
 
@@ -18,6 +19,7 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
 from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, set_filter
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
@@ -35,7 +37,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.model_main = model_main
 
         # DECLARE TYPES
-        self.train_model_name: QLineEdit
+        self.train_model_instance_name: QLineEdit
         self.train_model_save_path: QgsFileWidget
         self.train_evidence_data_layout: QVBoxLayout
         self.train_label_data: QgsMapLayerComboBox
@@ -71,7 +73,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.start_training_btn.clicked.connect(self.train_model)
         self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
         self.generate_tags_btn.clicked.connect(self.train_evidence_data.generate_tags)
-       
+
 
     def initialize_classifier(self):
         """Initialize general settings of a classifier model."""
@@ -145,18 +147,20 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         }
 
 
-    def get_validation_settings(self) -> Dict[str, Any]:
+    def get_validation_settings(self, as_str: bool = False) -> Dict[str, Any]:
         return {
-            "validation_method": self.validation_method.currentIndex(),
+            "validation_method": self.validation_method.currentText() if
+                as_str else self.validation_method.currentIndex(),
             "split_size": self.split_size.value() / 100,
             "cv": self.cv_folds.value(),
-            "validation_metrics": [self.validation_metrics.currentIndex()]
+            "validation_metrics": [self.validation_metrics.currentText()] if
+                as_str else [self.validation_metrics.currentIndex()]
         }
 
 
     def check_ready_for_training(self):
         """Check if the inputs are ok to start training process."""
-        if not self.train_model_name.text():
+        if not self.train_model_instance_name.text():
             raise Exception("No name specified")
         for row in range(self.train_evidence_data.rowCount()):
             tag = self.train_evidence_data.cellWidget(row, 0).text()
@@ -173,6 +177,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             **self.get_common_parameter_values(),
             **self.get_validation_settings()
         }
+        start = time.perf_counter()
         result = processing.run(
             self.model_main.get_alg_name(),
             {
@@ -183,26 +188,34 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             },
             feedback=self.training_feedback
         )
+        end = time.perf_counter()
+        execution_time = end - start
 
         if result and self.training_feedback.no_errors:
-            self.save_info(model_parameters)
+            model_parameters_as_str = {
+                **self.model_main.get_parameter_values(as_str = True),
+                **self.get_common_parameter_values(),
+                **self.get_validation_settings(as_str = True)
+            }
+            self.save_info(model_parameters_as_str, execution_time)
+            self.training_feedback.pushInfo(f"\nTraining time: {execution_time}")
         else:
             self.training_feedback.report_failed_run()
 
 
     def save_info(self, model_parameters: dict, execution_time: Optional[float] = None):
         """Save model info with ModelManager."""
-        model_info = {
-            "model_name": self.model_main.get_model_name(),
-            "model_type": self.model_main.get_model_type(),
-            "model_file": self.get_output_file(),
-            "tags": self.train_evidence_data.get_tags(),
-            "evidence_data": [layer.source() for layer in self.train_evidence_data.get_layers()],
-            "labels_data": self.get_training_label_layer().source(),
-            "parameters": model_parameters,
-            "training_execution_time": execution_time
-        }
-        self.model_main.get_model_manager().save_model_info(self.train_model_name.text(), model_info)
+        model_info = MLModelInfo(
+            model_instance_name=self.train_model_instance_name.text(),
+            model_type=self.model_main.get_model_type(),
+            model_file=self.get_output_file(),
+            training_time=execution_time,
+            tags=self.train_evidence_data.get_tags(),
+            evidence_data=[(layer.name(), layer.source()) for layer in self.train_evidence_data.get_layers()],
+            label_data=(self.get_training_label_layer().name(), self.get_training_label_layer().source()),
+            parameters=model_parameters,
+        )
+        self.model_main.get_model_manager().save_model_info(model_info)
 
 
     def reset_parameters(self):

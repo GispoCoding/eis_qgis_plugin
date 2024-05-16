@@ -14,7 +14,7 @@ class EISMLModel(QWidget):
 
     ROW_HEIGHT = 26
     
-    def __init__(self, parent, model_name: str, model_type: str) -> None:
+    def __init__(self, parent, model_type: str) -> None:
         super().__init__(parent)
 
         self.modeling_tabs = QTabWidget()
@@ -24,7 +24,6 @@ class EISMLModel(QWidget):
 
         self.setLayout(layout)
 
-        self.model_name = model_name
         self.model_type = model_type
         self.model_manager: ModelManager = self.parent().model_manager
         self.model_manager.models_updated.connect(self.update_model_selections)
@@ -45,15 +44,11 @@ class EISMLModel(QWidget):
     def update_model_selections(self):
         models = []
         for model in self.model_manager.get_all_models():
-            if self.model_manager.get_model_info(model)["model_name"] == self.model_name:
+            if self.model_manager.get_model_info(model).model_type == self.model_type:
                 models.append(model)
         self.testing.update_selectable_models(models)
         self.application.update_selectable_models(models)
 
-
-    def get_model_name(self) -> str:
-        return self.model_name
-    
 
     def get_model_type(self) -> str:
         return self.model_type
@@ -83,5 +78,5 @@ class EISMLModel(QWidget):
         return self.application
 
 
-    def get_parameter_values(self) -> Dict[str, Any]:
+    def get_parameter_values(self, as_str: bool) -> Dict[str, Any]:
         raise NotImplementedError("'get_parameter_values' needs to be defined in child class.")

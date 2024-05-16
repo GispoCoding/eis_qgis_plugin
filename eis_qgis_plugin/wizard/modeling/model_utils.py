@@ -14,7 +14,7 @@ FILE_FILTERS = {
     "joblib": "Joblib files (*.joblib)"
 }
 
-class ModelType(str, Enum):
+class ModelKind(str, Enum):
     CLASSIFIER = "classifier"
     REGRESSOR = "regressor"
 

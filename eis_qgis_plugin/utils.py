@@ -1,7 +1,7 @@
 import os
 
 from qgis.gui import QgsFileWidget
-from qgis.PyQt.QtWidgets import QLineEdit
+from qgis.PyQt.QtWidgets import QLayout, QLineEdit
 
 PLUGIN_PATH = os.path.dirname(__file__)
 
@@ -17,3 +17,10 @@ def set_file_widget_placeholder_text(
         line_edit.setPlaceholderText(placeholder_text)
         return True
     return False
+
+
+def clear_layout(layout: QLayout):
+    for i in reversed(range(layout.count())):
+        widget = layout.itemAt(i).widget()
+        if widget is not None:
+            widget.deleteLater()

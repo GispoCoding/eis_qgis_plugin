@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from qgis.core import QgsApplication, QgsMapLayerProxyModel, QgsRasterLayer
 from qgis.gui import QgsMapLayerComboBox
@@ -60,7 +60,68 @@ class ModelDataTable(QTableWidget):
 
     def get_layers(self) -> List[QgsRasterLayer]:
         return [self.cellWidget(row, 1).currentLayer() for row in range(self.rowCount())]
+
+
+class ModelHistoryTable(QTableWidget):
+    """
+    Class for displaying model data in history page.
     
+    This table does not have "add" or "remove" buttons, but creates as many rows as the selected model
+    used in training phase.
+    """
+
+    HEADER_ROW_HEIGHT = 23
+
+
+    def __init__(self, parent, row_height: int = 26) -> None:
+        super().__init__(parent)
+
+        self.row_height = row_height
+
+        self.setColumnCount(3)
+        self.setHorizontalHeaderLabels(["Tag", "Layer name", "Layer filepath"])
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.setColumnWidth(0, 150)
+        # self.setColumnWidth(1, 200)
+        self.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+
+        self.setMinimumHeight(23)
+        self.setMaximumHeight(23)
+
+
+    def load_model(self, tags: List[str], evidence_data: List[Tuple[str, str]]):
+        """Load information about the selected model (number of rows/layers and corresponding tags)."""
+        if len(tags) != len(evidence_data):
+            print("Length of evidence data should match the number of given tags!")
+            return
+
+        # Remove all previous rows
+        self.setRowCount(0)
+
+        # Set table size according to number of evidence layers / rows
+        nr_of_rows = len(tags)
+        self.setMinimumHeight(self.HEADER_ROW_HEIGHT + nr_of_rows * self.row_height)
+        self.setMaximumHeight(self.HEADER_ROW_HEIGHT + nr_of_rows * self.row_height)
+
+        for i, tag in enumerate(tags):
+            self.insertRow(i)
+
+            # Tag
+            tag_label = QLabel()
+            tag_label.setText(tag)
+            self.setCellWidget(i, 0, tag_label)
+
+            # Name
+            name_label = QLabel()
+            name_label.setText(evidence_data[i][0])
+            self.setCellWidget(i, 1, name_label)
+
+            # Filepath
+            filepath_label = QLabel()
+            filepath_label.setText(evidence_data[i][1])
+            self.setCellWidget(i, 2, filepath_label)
+
+            self.setRowHeight(i, self.row_height)
 
 
 class ModelTrainingDataTable(QTableWidget):

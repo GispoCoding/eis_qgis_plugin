@@ -11,7 +11,7 @@ from eis_qgis_plugin.wizard.modeling.machine_learning.models.gradient_boosting i
 from eis_qgis_plugin.wizard.modeling.machine_learning.models.logistic_regression import EISWizardLogisticRegression
 from eis_qgis_plugin.wizard.modeling.machine_learning.models.random_forest import EISWizardRandomForest
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
-from eis_qgis_plugin.wizard.modeling.model_utils import ModelType
+from eis_qgis_plugin.wizard.modeling.model_utils import ModelKind
 
 FORM_CLASS: QDialog = load_ui("wizard_modeling.ui")
 
@@ -40,10 +40,10 @@ class EISWizardModeling(QWidget, FORM_CLASS):
         """Create pages for each model type in the stacked widget."""
         self.pages = [
             EISWizardLogisticRegression(self),
-            EISWizardRandomForest(self, ModelType.CLASSIFIER),
-            EISWizardRandomForest(self, ModelType.REGRESSOR),
-            EISWizardGradientBoosting(self, ModelType.CLASSIFIER),
-            EISWizardGradientBoosting(self, ModelType.REGRESSOR),
+            EISWizardRandomForest(self, ModelKind.CLASSIFIER),
+            EISWizardRandomForest(self, ModelKind.REGRESSOR),
+            EISWizardGradientBoosting(self, ModelKind.CLASSIFIER),
+            EISWizardGradientBoosting(self, ModelKind.REGRESSOR),
             EISWizardFuzzyModeling(self)
         ]
 
