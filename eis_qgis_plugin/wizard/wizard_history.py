@@ -1,3 +1,5 @@
+from typing import Dict, Optional
+
 from qgis.PyQt.QtWidgets import (
     QComboBox,
     QDialog,
@@ -11,6 +13,7 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils import clear_layout
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelHistoryTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 
@@ -29,8 +32,9 @@ class EISWizardHistory(QWidget, FORM_CLASS):
 
         # DECLARE TYPES
         self.model_selection: QComboBox
-        self.model_name: QLineEdit
+        self.model_type: QLineEdit
         self.model_file: QLineEdit
+        self.model_training_time: QLineEdit
 
         self.summary_data_box: QGroupBox
         self.evidence_data_box: QGroupBox
@@ -60,7 +64,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
         self.update_list_of_models(0)
 
 
-    def update_list_of_models(self, index: int = None):
+    def update_list_of_models(self, index: Optional[int] = None):
         models = ModelManager.get_all_models()
         self.model_selection.clear()
         self.model_selection.addItems(models)
@@ -71,7 +75,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
     def update_viewed_model(self, model_id: str):
         info = ModelManager.get_model_info(model_id)
         if info is None:
-            self.model_name.clear()
+            self.model_type.clear()
             self.model_file.clear()
         else:
             self.load_summary_data(info)
@@ -80,18 +84,20 @@ class EISWizardHistory(QWidget, FORM_CLASS):
             self.load_parameter_data(info)
 
 
-    def load_summary_data(self, info):
-        self.model_name.setText(info["model_name"])
+    def load_summary_data(self, info: Dict):
+        self.model_type.setText(info["model_type"])
         self.model_file.setText(info["model_file"])
+        self.model_training_time.setText(f"{str(round(info['training_execution_time'], 1))} s")
 
-    def load_evidence_data(self, info):
+    def load_evidence_data(self, info: Dict):
         self.evidence_data.load_model(info["tags"], info["evidence_data"], info["evidence_data_filepaths"])
 
-    def load_label_data(self, info):
+    def load_label_data(self, info: Dict):
         self.label_layer_name.setText(info["label_data"][0])
         self.label_filepath.setText(info["label_data"][1])
 
-    def load_parameter_data(self, info):
+    def load_parameter_data(self, info: Dict):
+        clear_layout(self.parameters_layout)
         for parameter_name, parameter_value in info["parameters"].items():
             name_label = QLabel()
             name_label.setText(parameter_name)
@@ -99,7 +105,6 @@ class EISWizardHistory(QWidget, FORM_CLASS):
             value_widget.setText(str(parameter_value))
             value_widget.setReadOnly(True)
             self.parameters_layout.addRow(name_label, value_widget)
-
 
     def _on_export_clicked(self):
         print("Model history exporting not implemented yet!")

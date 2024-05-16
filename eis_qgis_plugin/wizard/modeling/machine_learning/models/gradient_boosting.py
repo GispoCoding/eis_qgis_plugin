@@ -4,7 +4,7 @@ from qgis.gui import QgsDoubleSpinBox, QgsSpinBox
 from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
 from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model_main import EISMLModel
-from eis_qgis_plugin.wizard.modeling.model_utils import ModelType
+from eis_qgis_plugin.wizard.modeling.model_utils import ModelKind
 
 
 class EISWizardGradientBoosting(EISMLModel):
@@ -12,19 +12,19 @@ class EISWizardGradientBoosting(EISMLModel):
     Class for gradient boosting models.
     """
 
-    def __init__(self, parent, model_type) -> None:
-        self.model_type = model_type
-        self.name = "Gradient boosting " + ("classifier" if model_type == ModelType.CLASSIFIER else "regressor")
+    def __init__(self, parent, model_kind) -> None:
+        self.model_kind = model_kind
+        self.model_type = "Gradient boosting " + ("classifier" if model_kind == ModelKind.CLASSIFIER else "regressor")
 
-        super().__init__(parent, self.name, model_type)
+        super().__init__(parent, self.model_type)
 
         self.training_tab = super().get_training_tab()
         self.training_tab.add_common_parameters()
         self.add_model_parameters()
 
-        if model_type == ModelType.CLASSIFIER:
+        if model_kind == ModelKind.CLASSIFIER:
             self.initialize_classifier()
-        elif model_type == ModelType.REGRESSOR:
+        elif model_kind == ModelKind.REGRESSOR:
             self.initialize_regressor()
 
 

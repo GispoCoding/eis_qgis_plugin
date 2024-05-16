@@ -37,7 +37,7 @@
      <item>
       <widget class="QLabel" name="model_selection_label">
        <property name="text">
-        <string>Model</string>
+        <string>Model instance name</string>
        </property>
       </widget>
      </item>
@@ -66,14 +66,14 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="model_name_label">
+       <widget class="QLabel" name="model_type_label">
         <property name="text">
-         <string>Model name</string>
+         <string>Model type</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="model_name">
+       <widget class="QLineEdit" name="model_type">
         <property name="text">
          <string/>
         </property>
@@ -98,6 +98,16 @@
          <bool>true</bool>
         </property>
        </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="training_time_label">
+        <property name="text">
+         <string>Training time</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="model_training_time"/>
       </item>
      </layout>
     </widget>

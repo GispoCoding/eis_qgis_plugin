@@ -4,7 +4,7 @@ from qgis.gui import QgsSpinBox
 from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
 from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model_main import EISMLModel
-from eis_qgis_plugin.wizard.modeling.model_utils import ModelType
+from eis_qgis_plugin.wizard.modeling.model_utils import ModelKind
 
 
 class EISWizardLogisticRegression(EISMLModel):
@@ -13,10 +13,11 @@ class EISWizardLogisticRegression(EISMLModel):
     """
 
     def __init__(self, parent) -> None:
-        self.name = "Logistic regression"
+        self.model_kind = ModelKind.CLASSIFIER
+        self.model_type = "Logistic regression"
         self.alg_name = "eis:logistic_regression_train"
 
-        super().__init__(parent, self.name, ModelType.CLASSIFIER)
+        super().__init__(parent, self.model_type)
 
         self.training_tab = super().get_training_tab()
         self.training_tab.add_common_parameters()

@@ -1,3 +1,4 @@
+import time
 from os import PathLike
 from typing import Any, Dict, Optional, Union
 
@@ -35,7 +36,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.model_main = model_main
 
         # DECLARE TYPES
-        self.train_model_name: QLineEdit
+        self.train_model_instance_name: QLineEdit
         self.train_model_save_path: QgsFileWidget
         self.train_evidence_data_layout: QVBoxLayout
         self.train_label_data: QgsMapLayerComboBox
@@ -158,7 +159,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
     def check_ready_for_training(self):
         """Check if the inputs are ok to start training process."""
-        if not self.train_model_name.text():
+        if not self.train_model_instance_name.text():
             raise Exception("No name specified")
         for row in range(self.train_evidence_data.rowCount()):
             tag = self.train_evidence_data.cellWidget(row, 0).text()
@@ -175,6 +176,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             **self.get_common_parameter_values(),
             **self.get_validation_settings()
         }
+        start = time.perf_counter()
         result = processing.run(
             self.model_main.get_alg_name(),
             {
@@ -185,6 +187,8 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             },
             feedback=self.training_feedback
         )
+        end = time.perf_counter()
+        execution_time = end - start
 
         if result and self.training_feedback.no_errors:
             model_parameters_as_str = {
@@ -192,7 +196,8 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
                 **self.get_common_parameter_values(),
                 **self.get_validation_settings(as_str = True)
             }
-            self.save_info(model_parameters_as_str)
+            self.save_info(model_parameters_as_str, execution_time)
+            self.training_feedback.pushInfo(f"Training time: {execution_time}")
         else:
             self.training_feedback.report_failed_run()
 
@@ -200,7 +205,6 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
     def save_info(self, model_parameters: dict, execution_time: Optional[float] = None):
         """Save model info with ModelManager."""
         model_info = {
-            "model_name": self.model_main.get_model_name(),
             "model_type": self.model_main.get_model_type(),
             "model_file": self.get_output_file(),
             "tags": self.train_evidence_data.get_tags(),
@@ -210,7 +214,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             "parameters": model_parameters,
             "training_execution_time": execution_time
         }
-        self.model_main.get_model_manager().save_model_info(self.train_model_name.text(), model_info)
+        self.model_main.get_model_manager().save_model_info(self.train_model_instance_name.text(), model_info)
 
 
     def reset_parameters(self):
