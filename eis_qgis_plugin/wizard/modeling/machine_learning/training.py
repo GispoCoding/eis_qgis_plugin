@@ -19,7 +19,6 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model_main import EISMLModel
 from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
 from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, set_filter
@@ -35,7 +34,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         super().__init__(parent)
         self.setupUi(self)
 
-        self.model_main: EISMLModel = model_main
+        self.model_main = model_main
 
         # DECLARE TYPES
         self.train_model_instance_name: QLineEdit
@@ -199,7 +198,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
                 **self.get_validation_settings(as_str = True)
             }
             self.save_info(model_parameters_as_str, execution_time)
-            self.training_feedback.pushInfo(f"Training time: {execution_time}")
+            self.training_feedback.pushInfo(f"\nTraining time: {execution_time}")
         else:
             self.training_feedback.report_failed_run()
 
