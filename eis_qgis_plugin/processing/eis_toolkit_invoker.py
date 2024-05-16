@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import select
 import subprocess
 import time
 from typing import List, Tuple
@@ -12,6 +13,11 @@ from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 DEBUG = True
 
 logger = logging.getLogger(__name__)
+
+
+class TerminationException(Exception):
+    """Exception error class raised if process is terminated by user."""
+
 
 class EISToolkitInvoker:
     """Class that handles communication between EIS QGIS plugin and EIS Toolkit."""
@@ -44,6 +50,7 @@ class EISToolkitInvoker:
             raise ValueError(f"Unsupported environment type: {env_type}")
 
         self.cmd = []
+        self.process = None
 
 
     @staticmethod
@@ -132,7 +139,7 @@ class EISToolkitInvoker:
             # QGIS sets some PYTHON environment variables that might disturb the external python the process is using
             python_free_environment = {key:value for key, value in os.environ.items() if not key.startswith("PYTHON")}
             logger.debug(f'Running command "{" ".join(self.cmd)}" with environment: {python_free_environment=}')
-            process = subprocess.Popen(
+            self.process = subprocess.Popen(
                 self.cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -140,34 +147,66 @@ class EISToolkitInvoker:
                 env=python_free_environment
             )
 
-            # Poll the subprocess to get messages and termination signal
-            while process.poll() is None:
-                stdout = process.stdout.readline().strip()
-                self._process_command_output(stdout, feedback, results)
+            while self.process.poll() is None:
+                if feedback.isCanceled():
+                    self.process.terminate()
+                    self.process.wait()
+                    raise TerminationException("Execution cancelled.")
+
+                reads = [self.process.stdout.fileno(), self.process.stderr.fileno()]
+                file_descriptors = select.select(reads, [], [], 0.1)[0]
+
+                for descriptor in file_descriptors:
+                    if descriptor == self.process.stdout.fileno():
+                        stdout = self.process.stdout.readline().strip()
+                        self._process_command_output(stdout, feedback, results)
+                    elif descriptor == self.process.stderr.fileno():
+                        stderr = self.process.stderr.readline().strip()
+                        if stderr:
+                            feedback.reportError(stderr)
 
                 time.sleep(0.01)
 
-            stdout = process.stdout.readline().strip()
+            stdout = self.process.stdout.readline().strip()
             self._process_command_output(stdout, feedback, results)
 
-            stdout, stderr = process.communicate()
+            stdout, stderr = self.process.communicate()
+            if stdout:
+                self._process_command_output(stdout.strip(), feedback, results)
+            if stderr:
+                feedback.reportError(stderr.strip())
 
             # Inform user whether execution was succesfull or not
-            if process.returncode != 0:
+            if self.process.returncode != 0:
                 feedback.reportError(
                     f"EIS Toolkit algorithm execution failed with error: {stderr}"
                 )
             else:
                 feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
 
+        except TerminationException as e:
+            feedback.reportError(str(e))
+
         # Handle potential exceptions
         except Exception as e:
-            feedback.reportError(f"Failed to run the command. Error: {str(e)}")
+            feedback.reportError(f"Run failed. Error: {str(e)}")
             try:
-                process.terminate()
+                self.process.terminate()
             except UnboundLocalError:
                 pass
             return {}
+        
+        finally:
+        # Ensure the subprocess is properly cleaned up in all cases
+            if self.process and self.process.poll() is None:
+                self.process.terminate()
+                self.process.wait()  # Ensure the process is reaped
+
+            # Close the file descriptors
+            if self.process.stdout:
+                self.process.stdout.close()
+            if self.process.stderr:
+                self.process.stderr.close()
 
         return results
 
