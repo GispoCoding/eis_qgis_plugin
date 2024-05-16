@@ -1,8 +1,9 @@
-import json
-from typing import List
+from typing import Dict, List, Optional
 
 from qgis.core import QgsProject
 from qgis.PyQt.QtCore import QObject, pyqtSignal
+
+from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 
 
 class ModelManager(QObject):
@@ -19,12 +20,13 @@ class ModelManager(QObject):
         return f"{self.BASE_KEY}/{id}"
 
     @classmethod
-    def get_model_info(self, id):
+    def get_model_info(self, id) -> Optional[MLModelInfo]:
         key = self._get_key(id)
         info_json, conversion_ok = QgsProject.instance().readEntry(self.SCOPE, key, "")
+        print(info_json, conversion_ok)
         if conversion_ok:
-            info = json.loads(info_json)
-            return info
+            ml_model_info = MLModelInfo.deserialize(info_json)
+            return ml_model_info
         return None
 
     @classmethod
@@ -35,7 +37,7 @@ class ModelManager(QObject):
         return []
 
     @classmethod
-    def get_model_info_all(self) -> dict:
+    def get_model_info_all(self) -> Dict[str, MLModelInfo]:
         models = self.get_all_models()
         infos = {}
         for model in models:
@@ -43,9 +45,10 @@ class ModelManager(QObject):
             infos[model] = info
         return infos
 
-    def save_model_info(self, id: str, info: dict):
+    def save_model_info(self, info: MLModelInfo):
+        id = info.model_instance_name
         key = self._get_key(id)
-        model_info_json = json.dumps(info)
+        model_info_json = info.serialize()
         proj = QgsProject.instance()
         proj.writeEntry(self.SCOPE, key, model_info_json)
 

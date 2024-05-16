@@ -44,7 +44,7 @@ class EISMLModel(QWidget):
     def update_model_selections(self):
         models = []
         for model in self.model_manager.get_all_models():
-            if self.model_manager.get_model_info(model)["model_type"] == self.model_type:
+            if self.model_manager.get_model_info(model).model_type == self.model_type:
                 models.append(model)
         self.testing.update_selectable_models(models)
         self.application.update_selectable_models(models)

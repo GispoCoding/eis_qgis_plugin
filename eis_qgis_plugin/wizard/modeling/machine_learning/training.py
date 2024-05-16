@@ -19,6 +19,8 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model_main import EISMLModel
+from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
 from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, set_filter
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
@@ -33,7 +35,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         super().__init__(parent)
         self.setupUi(self)
 
-        self.model_main = model_main
+        self.model_main: EISMLModel = model_main
 
         # DECLARE TYPES
         self.train_model_instance_name: QLineEdit
@@ -72,7 +74,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.start_training_btn.clicked.connect(self.train_model)
         self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
         self.generate_tags_btn.clicked.connect(self.train_evidence_data.generate_tags)
-       
+
 
     def initialize_classifier(self):
         """Initialize general settings of a classifier model."""
@@ -204,17 +206,17 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
     def save_info(self, model_parameters: dict, execution_time: Optional[float] = None):
         """Save model info with ModelManager."""
-        model_info = {
-            "model_type": self.model_main.get_model_type(),
-            "model_file": self.get_output_file(),
-            "tags": self.train_evidence_data.get_tags(),
-            "evidence_data": [layer.name() for layer in self.train_evidence_data.get_layers()],
-            "evidence_data_filepaths": [layer.source() for layer in self.train_evidence_data.get_layers()],
-            "label_data": (self.get_training_label_layer().name(), self.get_training_label_layer().source()),
-            "parameters": model_parameters,
-            "training_execution_time": execution_time
-        }
-        self.model_main.get_model_manager().save_model_info(self.train_model_instance_name.text(), model_info)
+        model_info = MLModelInfo(
+            model_instance_name=self.train_model_instance_name.text(),
+            model_type=self.model_main.get_model_type(),
+            model_file=self.get_output_file(),
+            training_time=execution_time,
+            tags=self.train_evidence_data.get_tags(),
+            evidence_data=[(layer.name(), layer.source()) for layer in self.train_evidence_data.get_layers()],
+            label_data=(self.get_training_label_layer().name(), self.get_training_label_layer().source()),
+            parameters=model_parameters,
+        )
+        self.model_main.get_model_manager().save_model_info(model_info)
 
 
     def reset_parameters(self):

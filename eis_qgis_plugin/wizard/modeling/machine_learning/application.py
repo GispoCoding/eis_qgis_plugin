@@ -69,8 +69,8 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
             self.model_file_application.setText("")
             return
         info = ModelManager.get_model_info(model_key)
-        self.application_evidence_data.load_model(info["tags"])
-        self.model_file_application.setText(info["model_file"])
+        self.application_evidence_data.load_model(info.tags)
+        self.model_file_application.setText(info.model_file)
 
 
     def update_selectable_models(self, model_names: Iterable[str]):

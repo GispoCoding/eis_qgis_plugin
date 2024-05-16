@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Optional
 
 from qgis.PyQt.QtWidgets import (
     QComboBox,
@@ -14,6 +14,7 @@ from qgis.PyQt.QtWidgets import (
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import clear_layout
+from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelHistoryTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 
@@ -84,21 +85,21 @@ class EISWizardHistory(QWidget, FORM_CLASS):
             self.load_parameter_data(info)
 
 
-    def load_summary_data(self, info: Dict):
-        self.model_type.setText(info["model_type"])
-        self.model_file.setText(info["model_file"])
-        self.model_training_time.setText(f"{str(round(info['training_execution_time'], 1))} s")
+    def load_summary_data(self, info: MLModelInfo):
+        self.model_type.setText(info.model_type)
+        self.model_file.setText(info.model_file)
+        self.model_training_time.setText(f"{str(round(info.training_time, 1))} s")
 
-    def load_evidence_data(self, info: Dict):
-        self.evidence_data.load_model(info["tags"], info["evidence_data"], info["evidence_data_filepaths"])
+    def load_evidence_data(self, info: MLModelInfo):
+        self.evidence_data.load_model(info.tags, info.evidence_data)
 
-    def load_label_data(self, info: Dict):
-        self.label_layer_name.setText(info["label_data"][0])
-        self.label_filepath.setText(info["label_data"][1])
+    def load_label_data(self, info: MLModelInfo):
+        self.label_layer_name.setText(info.label_data[0])
+        self.label_filepath.setText(info.label_data[1])
 
-    def load_parameter_data(self, info: Dict):
+    def load_parameter_data(self, info: MLModelInfo):
         clear_layout(self.parameters_layout)
-        for parameter_name, parameter_value in info["parameters"].items():
+        for parameter_name, parameter_value in info.parameters.items():
             name_label = QLabel()
             name_label.setText(parameter_name)
             value_widget = QLineEdit()

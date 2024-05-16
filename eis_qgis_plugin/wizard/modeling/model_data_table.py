@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from qgis.core import QgsApplication, QgsMapLayerProxyModel, QgsRasterLayer
 from qgis.gui import QgsMapLayerComboBox
@@ -89,10 +89,10 @@ class ModelHistoryTable(QTableWidget):
         self.setMaximumHeight(23)
 
 
-    def load_model(self, tags: List[str], layer_names: List[str], layer_filepaths: List[str]):
+    def load_model(self, tags: List[str], evidence_data: List[Tuple[str, str]]):
         """Load information about the selected model (number of rows/layers and corresponding tags)."""
-        if len(tags) != len(layer_names) or len(tags) != len(layer_filepaths):
-            print("Number of layer names and filepaths should match the number of given tags!")
+        if len(tags) != len(evidence_data):
+            print("Length of evidence data should match the number of given tags!")
             return
 
         # Remove all previous rows
@@ -113,12 +113,12 @@ class ModelHistoryTable(QTableWidget):
 
             # Name
             name_label = QLabel()
-            name_label.setText(layer_names[i])
+            name_label.setText(evidence_data[i][0])
             self.setCellWidget(i, 1, name_label)
 
             # Filepath
             filepath_label = QLabel()
-            filepath_label.setText(layer_filepaths[i])
+            filepath_label.setText(evidence_data[i][1])
             self.setCellWidget(i, 2, filepath_label)
 
             self.setRowHeight(i, self.row_height)
