@@ -59,8 +59,98 @@ def add_output_layer_to_group(layer, mineral_system: str, category: str):
     category_subgroup.addLayer(layer)
 
 
+class EISWizardProxyProcess(QWidget):
 
-class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.progress_bar: QProgressBar
+
+        self.worker = None
+        self.worker_thread = None
+        self.terminated = False
+
+
+    def cancel(self):
+        self.terminated = True
+        if self.feedback:
+            self.feedback.cancel()
+        if self.worker:
+            self.worker = None
+        if self.worker_thread and self.worker_thread.isRunning():
+            self.worker_thread.terminate()
+
+
+    def on_finished(self, result):
+        if self.worker:
+            self.worker.deleteLater()
+        if self.worker_thread:
+            self.worker_thread.quit()
+            self.worker_thread.deleteLater()
+        if not self.terminated:
+            output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
+            if EISSettingsManager.get_layer_group_selection():
+                add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+            else:
+                QgsProject.instance().addMapLayer(output_layer, True)
+
+
+    def on_error(self, error_message):
+        self.worker_thread.quit()
+        self.worker.deleteLater()
+        self.worker_thread.deleteLater()
+        iface.messageBar().pushWarning("Error: ", error_message)
+
+
+    def run(self):
+        self.worker.finished.connect(self.on_finished)
+        self.worker.error.connect(self.on_error)
+
+        self.worker_thread = QThread()
+        self.worker.moveToThread(self.worker_thread)
+
+        self.worker_thread.started.connect(self.worker.run)
+        self.worker_thread.start()
+
+
+    def get_extent(self):
+        current_extent = self.extent.outputExtent()
+        if current_extent.isEmpty():
+            return None
+        return "{},{},{},{}".format(
+            current_extent.xMinimum(),
+            current_extent.xMaximum(),
+            current_extent.yMinimum(),
+            current_extent.yMaximum()
+        )
+
+
+    def get_output_raster_params(self):
+        if self.output_raster_settings.currentIndex() == 0:
+            base_raster = self.base_raster.currentLayer()
+            if base_raster is None:
+                iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
+                return None
+            params = {
+                "base_raster": base_raster,
+                "pixel_size": None,
+                "extent": None
+            }
+        else:
+            pixel_size = self.pixel_size.value()
+            extent = self.get_extent()
+            if pixel_size <= 0 or extent is None:
+                iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
+                return None
+            params = {
+                "base_raster": None,
+                "pixel_size": pixel_size,
+                "extent": extent
+            }
+        return params
+
+
+class EISWizardProxyDistanceToFeatures(EISWizardProxyProcess, FORM_CLASS_1):
 
     ALG_NAME = "eis:distance_computation"
 
@@ -120,9 +210,6 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
         self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
 
         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
-        self.worker = None
-        self.worker_thread = None
-        self.terminated = False
 
 
     def on_output_raster_settings_changed(self, i):
@@ -133,53 +220,6 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
 
     def back(self):
         self.proxy_manager.return_from_proxy_processing()
-
-
-    def cancel(self):
-        self.terminated = True
-        if self.feedback:
-            self.feedback.cancel()
-        if self.worker:
-            self.worker = None
-        if self.worker_thread and self.worker_thread.isRunning():
-            self.worker_thread.terminate()
-
-
-    def get_extent(self):
-        current_extent = self.extent.outputExtent()
-        if current_extent.isEmpty():
-            return None
-        return "{},{},{},{}".format(
-            current_extent.xMinimum(),
-            current_extent.xMaximum(),
-            current_extent.yMinimum(),
-            current_extent.yMaximum()
-        )
-
-
-    def get_output_raster_params(self):
-        if self.output_raster_settings.currentIndex() == 0:
-            base_raster = self.base_raster.currentLayer()
-            if base_raster is None:
-                iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
-                return None
-            params = {
-                "base_raster": base_raster,
-                "pixel_size": None,
-                "extent": None
-            }
-        else:
-            pixel_size = self.pixel_size.value()
-            extent = self.get_extent()
-            if pixel_size <= 0 or extent is None:
-                iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
-                return None
-            params = {
-                "base_raster": None,
-                "pixel_size": pixel_size,
-                "extent": extent
-            }
-        return params
 
 
     def run(self):
@@ -197,35 +237,8 @@ class EISWizardProxyDistanceToFeatures(QWidget, FORM_CLASS_1):
             },
             feedback=self.feedback
         )
-        self.worker.finished.connect(self.on_finished)
-        self.worker.error.connect(self.on_error)
+        super().run()
 
-        self.worker_thread = QThread()
-        self.worker.moveToThread(self.worker_thread)
-
-        self.worker_thread.started.connect(self.worker.run)
-        self.worker_thread.start()
-
-
-    def on_finished(self, result):
-        if self.worker:
-            self.worker.deleteLater()
-        if self.worker_thread:
-            self.worker_thread.quit()
-            self.worker_thread.deleteLater()
-        if not self.terminated:
-            output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-            if EISSettingsManager.get_layer_group_selection():
-                add_output_layer_to_group(output_layer, self.mineral_system, self.category)
-            else:
-                QgsProject.instance().addMapLayer(output_layer, True)
-
-
-    def on_error(self, error_message):
-        self.worker_thread.quit()
-        self.worker.deleteLater()
-        self.worker_thread.deleteLater()
-        iface.messageBar().pushWarning("Error: ", error_message)
 
 
 class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
@@ -493,7 +506,7 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
             QgsProject.instance().addMapLayer(output_layer, True)
 
 
-class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
+class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLASS_4):
 
     IDW_ALG_NAME = "eis:idw_interpolation"
     KRIGING_ALG_NAME = "eis:kriging_interpolation"
@@ -567,7 +580,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.anomaly_back_btn: QPushButton
         self.anomaly_run_btn: QPushButton
         self.finish_btn: QPushButton
-        self.cancel_anomaly_btn: QPushButton
+        self.anomaly_cancel_btn: QPushButton
 
         self.initialize_interpolation_page()
         self.initialize_anomaly_page()
@@ -633,7 +646,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         self.anomaly_back_btn.clicked.connect(self.back_define_anomaly)
         self.anomaly_run_btn.clicked.connect(self.run_define_anomaly)
         self.finish_btn.clicked.connect(self.finish)
-        self.cancel_anomaly_btn.clicked.connect(self.cancel_anomaly)
+        self.anomaly_cancel_btn.clicked.connect(self.cancel_anomaly)
 
         # Initialize
         # self.band.setLayer(self.raster_layer.currentLayer())
@@ -678,48 +691,15 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
     def next(self):
         self.workflow_pages.setCurrentIndex(1)
 
-    def cancel(self):
-        self.feedback.cancel()
 
     def cancel_anomaly(self):
-        self.anomaly_feedback.cancel()
-
-    
-    def get_extent(self):
-        current_extent = self.extent.outputExtent()
-        if current_extent.isEmpty():
-            return None
-        return "{},{},{},{}".format(
-            current_extent.xMinimum(),
-            current_extent.xMaximum(),
-            current_extent.yMinimum(),
-            current_extent.yMaximum()
-        )
-
-
-    def get_output_raster_params(self):
-        if self.output_raster_settings.currentIndex() == 0:
-            base_raster = self.base_raster.currentLayer()
-            if base_raster is None:
-                iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
-                return None
-            params = {
-                "base_raster": base_raster,
-                "pixel_size": None,
-                "extent": None
-            }
-        else:
-            pixel_size = self.pixel_size.value()
-            extent = self.get_extent()
-            if pixel_size <= 0 or extent is None:
-                iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
-                return None
-            params = {
-                "base_raster": None,
-                "pixel_size": pixel_size,
-                "extent": extent
-            }
-        return params
+        self.terminated = True
+        if self.anomaly_feedback:
+            self.anomaly_feedback.cancel()
+        if self.worker:
+            self.worker = None
+        if self.worker_thread and self.worker_thread.isRunning():
+            self.worker_thread.terminate()
 
 
     def run_interpolate(self):
@@ -728,7 +708,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         if output_raster_params is None:
             return
 
-        result = processing.run(
+        self.worker = AlgorithmWorker(
             interpolation_alg,
             {
                 "input_vector": self.vector_layer.currentLayer(),
@@ -739,11 +719,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
             },
             feedback=self.feedback
         )
-        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-        if EISSettingsManager.get_layer_group_selection():
-            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
-        else:
-            QgsProject.instance().addMapLayer(output_layer, True)
+        super().run()
 
 
     def run_define_anomaly(self):
@@ -752,7 +728,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
         if threshold_criteria == 0 or threshold_criteria == 1:
             anomaly_threshold_2 = None
 
-        result = processing.run(
+        self.worker = AlgorithmWorker(
             self.ANOMALY_ALG_NAME,
             {
                 "input_raster": self.raster_layer.currentLayer(),
@@ -764,11 +740,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(QWidget, FORM_CLASS_4):
             },
             feedback=self.anomaly_feedback
         )
-        output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
-        if EISSettingsManager.get_layer_group_selection():
-            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
-        else:
-            QgsProject.instance().addMapLayer(output_layer, True)
+        super().run()
 
 
     def finish(self):
