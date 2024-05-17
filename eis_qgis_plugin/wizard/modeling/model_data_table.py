@@ -89,6 +89,12 @@ class ModelHistoryTable(QTableWidget):
         self.setMaximumHeight(23)
 
 
+    def reset_table(self):
+        self.setRowCount(0)
+        self.setMinimumHeight(23)
+        self.setMaximumHeight(23)
+
+
     def load_model(self, tags: List[str], evidence_data: List[Tuple[str, str]]):
         """Load information about the selected model (number of rows/layers and corresponding tags)."""
         if len(tags) != len(evidence_data):
