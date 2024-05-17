@@ -1,10 +1,11 @@
 import json
 import logging
 import os
-import select
+import queue
 import subprocess
+import threading
 import time
-from typing import List, Tuple
+from typing import Dict, List, TextIO, Tuple
 
 from qgis.core import QgsProcessingFeedback, QgsProject, QgsRasterLayer
 
@@ -125,19 +126,26 @@ class EISToolkitInvoker:
         return self.environment_handler.verify_toolkit()
 
 
-    def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> dict:
+    
+    def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> Dict:
         """Runs the toolkit command and captures the output."""
         if not self.cmd:
             raise Exception("Assemble a CLI call before trying to run EIS Toolkit.")
 
         results = {}
+        q = queue.Queue()
+
+        def enqueue_output(pipe: TextIO, queue: queue.Queue, process_event: threading.Event) -> None:
+            for line in iter(pipe.readline, ''):
+                if process_event.is_set():
+                    break
+                queue.put(line)
+            pipe.close()
 
         # Execute EIS Toolkit through subprocess
         try:
-            # Open the process
-
             # QGIS sets some PYTHON environment variables that might disturb the external python the process is using
-            python_free_environment = {key:value for key, value in os.environ.items() if not key.startswith("PYTHON")}
+            python_free_environment = {key: value for key, value in os.environ.items() if not key.startswith("PYTHON")}
             logger.debug(f'Running command "{" ".join(self.cmd)}" with environment: {python_free_environment=}')
             self.process = subprocess.Popen(
                 self.cmd,
@@ -147,28 +155,36 @@ class EISToolkitInvoker:
                 env=python_free_environment
             )
 
+            process_event = threading.Event()
+
+            stdout_thread = threading.Thread(target=enqueue_output, args=(self.process.stdout, q, process_event))
+            stderr_thread = threading.Thread(target=enqueue_output, args=(self.process.stderr, q, process_event))
+
+            stdout_thread.start()
+            stderr_thread.start()
+
             while self.process.poll() is None:
                 if feedback.isCanceled():
                     self.process.terminate()
                     self.process.wait()
+                    process_event.set()
+                    stdout_thread.join()
+                    stderr_thread.join()
                     raise TerminationException("Execution cancelled.")
 
-                reads = [self.process.stdout.fileno(), self.process.stderr.fileno()]
-                file_descriptors = select.select(reads, [], [], 0.1)[0]
+                try:
+                    line = q.get_nowait()
+                except queue.Empty:
+                    continue
 
-                for descriptor in file_descriptors:
-                    if descriptor == self.process.stdout.fileno():
-                        stdout = self.process.stdout.readline().strip()
-                        self._process_command_output(stdout, feedback, results)
-                    elif descriptor == self.process.stderr.fileno():
-                        stderr = self.process.stderr.readline().strip()
-                        if stderr:
-                            feedback.reportError(stderr)
+                if line:
+                    self._process_command_output(line.strip(), feedback, results)
 
-                time.sleep(0.01)
+                time.sleep(0.1)
 
-            stdout = self.process.stdout.readline().strip()
-            self._process_command_output(stdout, feedback, results)
+            process_event.set()
+            stdout_thread.join()
+            stderr_thread.join()
 
             stdout, stderr = self.process.communicate()
             if stdout:
@@ -176,7 +192,7 @@ class EISToolkitInvoker:
             if stderr:
                 feedback.reportError(stderr.strip())
 
-            # Inform user whether execution was succesfull or not
+            # Inform user whether execution was successful or not
             if self.process.returncode != 0:
                 feedback.reportError(
                     f"EIS Toolkit algorithm execution failed with error: {stderr}"
@@ -197,12 +213,11 @@ class EISToolkitInvoker:
             return {}
         
         finally:
-        # Ensure the subprocess is properly cleaned up in all cases
+            # Ensure the subprocess is properly cleaned up in all cases
             if self.process and self.process.poll() is None:
                 self.process.terminate()
                 self.process.wait()  # Ensure the process is reaped
 
-            # Close the file descriptors
             if self.process.stdout:
                 self.process.stdout.close()
             if self.process.stderr:
@@ -210,18 +225,19 @@ class EISToolkitInvoker:
 
         return results
 
-    def _process_command_output(self, stdout, feedback, results):
-        if self.PROGRESS_PREFIX in stdout:
-            self._update_progress(stdout, feedback)
 
-        elif self.RESULTS_PREFIX in stdout:
-            self._update_results(stdout, results)
+    def _process_command_output(self, stdout_line: str, feedback: QgsProcessingFeedback, results: Dict) -> None:
+        if self.PROGRESS_PREFIX in stdout_line:
+            self._update_progress(stdout_line, feedback)
 
-        elif self.OUT_RASTERS_PREFIX in stdout:
-            self._update_out_rasters(stdout)
+        elif self.RESULTS_PREFIX in stdout_line:
+            self._update_results(stdout_line, results)
+
+        elif self.OUT_RASTERS_PREFIX in stdout_line:
+            self._update_out_rasters(stdout_line)
 
         else:
-            feedback.pushInfo(stdout)
+            feedback.pushInfo(stdout_line)
 
 
 class EnvironmentHandler:

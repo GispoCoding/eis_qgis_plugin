@@ -1,4 +1,5 @@
 import time
+from datetime import date
 from os import PathLike
 from typing import Any, Dict, Optional, Union
 
@@ -209,6 +210,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             model_instance_name=self.train_model_instance_name.text(),
             model_type=self.model_main.get_model_type(),
             model_file=self.get_output_file(),
+            training_date=date.today().strftime("%d.%m.%Y"),
             training_time=execution_time,
             tags=self.train_evidence_data.get_tags(),
             evidence_data=[(layer.name(), layer.source()) for layer in self.train_evidence_data.get_layers()],

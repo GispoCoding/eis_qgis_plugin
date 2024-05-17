@@ -9,6 +9,7 @@ class MLModelInfo:
     model_type: str
     model_file: str
     training_time: float
+    training_date: str
     tags: List[str]
     evidence_data: List[Tuple[str, str]]
     label_data: Tuple[str, str]

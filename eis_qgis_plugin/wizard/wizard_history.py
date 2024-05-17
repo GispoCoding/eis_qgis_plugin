@@ -35,6 +35,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
         self.model_selection: QComboBox
         self.model_type: QLineEdit
         self.model_file: QLineEdit
+        self.model_training_date: QLineEdit
         self.model_training_time: QLineEdit
 
         self.summary_data_box: QGroupBox
@@ -76,8 +77,10 @@ class EISWizardHistory(QWidget, FORM_CLASS):
     def update_viewed_model(self, model_id: str):
         info = ModelManager.get_model_info(model_id)
         if info is None:
-            self.model_type.clear()
-            self.model_file.clear()
+            self.clear_summary_data()
+            self.clear_evidence_data()
+            self.clear_label_data()
+            self.clear_parameter_data()
         else:
             self.load_summary_data(info)
             self.load_evidence_data(info)
@@ -88,6 +91,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
     def load_summary_data(self, info: MLModelInfo):
         self.model_type.setText(info.model_type)
         self.model_file.setText(info.model_file)
+        self.model_training_date.setText(info.training_date)
         self.model_training_time.setText(f"{str(round(info.training_time, 1))} s")
 
     def load_evidence_data(self, info: MLModelInfo):
@@ -98,7 +102,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
         self.label_filepath.setText(info.label_data[1])
 
     def load_parameter_data(self, info: MLModelInfo):
-        clear_layout(self.parameters_layout)
+        self.clear_parameter_data()
         for parameter_name, parameter_value in info.parameters.items():
             name_label = QLabel()
             name_label.setText(parameter_name)
@@ -106,6 +110,22 @@ class EISWizardHistory(QWidget, FORM_CLASS):
             value_widget.setText(str(parameter_value))
             value_widget.setReadOnly(True)
             self.parameters_layout.addRow(name_label, value_widget)
+
+    def clear_summary_data(self):
+        self.model_type.clear()
+        self.model_file.clear()
+        self.model_training_date.clear()
+        self.model_training_time.clear()
+
+    def clear_evidence_data(self):
+        self.evidence_data.reset_table()
+
+    def clear_label_data(self):
+        self.label_layer_name.clear()
+        self.label_filepath.clear()
+
+    def clear_parameter_data(self):
+        clear_layout(self.parameters_layout)
 
     def _on_export_clicked(self):
         print("Model history exporting not implemented yet!")
