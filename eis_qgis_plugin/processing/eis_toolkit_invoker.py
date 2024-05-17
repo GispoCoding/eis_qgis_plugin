@@ -63,9 +63,10 @@ class EISToolkitInvoker:
     @staticmethod
     def _update_progress(stdout: str, feedback: QgsProcessingFeedback):
         """Updates the QGIS processing algorithm's progress based on the stdout message."""
-        progress = stdout.split(":")[1].strip()[:-1]
-        if progress[-1] == "%":
-            progress = progress[:-1]
+        index = stdout.find("%")
+        if index == -1:
+            return
+        progress = stdout[index-3:index].strip()
         feedback.setProgress(int(progress))
         feedback.pushInfo(f"Progress: {progress}%")
 
