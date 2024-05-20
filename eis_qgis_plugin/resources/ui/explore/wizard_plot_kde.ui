@@ -176,6 +176,9 @@
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_117">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Multiple</string>
         </property>
@@ -183,6 +186,9 @@
       </item>
       <item row="5" column="1">
        <widget class="QComboBox" name="multiple">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <item>
          <property name="text">
           <string>Stack</string>
