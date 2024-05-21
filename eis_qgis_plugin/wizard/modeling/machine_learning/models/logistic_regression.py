@@ -17,7 +17,7 @@ class EISWizardLogisticRegression(EISMLModel):
         self.model_type = "Logistic regression"
         self.alg_name = "eis:logistic_regression_train"
 
-        super().__init__(parent, self.model_type)
+        super().__init__(parent, self.model_type, self.model_kind)
 
         self.training_tab = super().get_training_tab()
         self.training_tab.add_common_parameters()

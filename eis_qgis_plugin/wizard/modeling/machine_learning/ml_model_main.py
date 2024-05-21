@@ -7,6 +7,7 @@ from eis_qgis_plugin.wizard.modeling.machine_learning.data_preparation import EI
 from eis_qgis_plugin.wizard.modeling.machine_learning.testing import EISMLModelTesting
 from eis_qgis_plugin.wizard.modeling.machine_learning.training import EISMLModelTraining
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
+from eis_qgis_plugin.wizard.modeling.model_utils import ModelKind
 
 
 class EISMLModel(QWidget):
@@ -14,7 +15,7 @@ class EISMLModel(QWidget):
 
     ROW_HEIGHT = 26
     
-    def __init__(self, parent, model_type: str) -> None:
+    def __init__(self, parent, model_type: str, model_kind: ModelKind) -> None:
         super().__init__(parent)
 
         self.modeling_tabs = QTabWidget()
@@ -25,6 +26,7 @@ class EISMLModel(QWidget):
         self.setLayout(layout)
 
         self.model_type = model_type
+        self.model_kind = model_kind
         self.model_manager: ModelManager = self.parent().model_manager
         self.model_manager.models_updated.connect(self.update_model_selections)
 
@@ -53,6 +55,10 @@ class EISMLModel(QWidget):
     def get_model_type(self) -> str:
         return self.model_type
     
+
+    def get_model_kind(self) -> str:
+        return "classifier" if self.model_kind == ModelKind.CLASSIFIER else "regressor"
+
 
     def get_alg_name(self) -> str:
         return self.alg_name
