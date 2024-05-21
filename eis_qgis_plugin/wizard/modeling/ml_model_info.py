@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Optional, Tuple
 class MLModelInfo:
     model_instance_name: str
     model_type: str
+    model_kind: str
     model_file: str
     training_time: float
     training_date: str
