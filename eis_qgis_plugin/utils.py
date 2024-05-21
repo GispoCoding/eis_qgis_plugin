@@ -1,5 +1,6 @@
 import os
 
+from qgis.core import QgsProject
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLayout, QLineEdit
 
@@ -24,3 +25,17 @@ def clear_layout(layout: QLayout):
         widget = layout.itemAt(i).widget()
         if widget is not None:
             widget.deleteLater()
+
+
+def add_output_layer_to_group(layer, group_name: str, subgroup_name: str):
+    QgsProject.instance().addMapLayer(layer, False)
+    root = QgsProject.instance().layerTreeRoot()
+    group = root.findGroup(group_name)
+    if not group:
+        group = root.addGroup(group_name)
+    
+    category_subgroup = group.findGroup(subgroup_name)
+    if not category_subgroup:
+        category_subgroup = group.addGroup(subgroup_name)
+    
+    category_subgroup.addLayer(layer)

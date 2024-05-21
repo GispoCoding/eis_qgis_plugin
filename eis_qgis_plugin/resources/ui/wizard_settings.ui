@@ -432,8 +432,11 @@
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
        <widget class="QCheckBox" name="layer_group_selection">
+        <property name="toolTip">
+         <string>If output layers from proxy processing and modeling should be automatically placed under named layer groups in QGIS layer tree. Layer groups are created on the fly if not found.</string>
+        </property>
         <property name="text">
-         <string>Automatically create layer groups</string>
+         <string>Categorize outputs into layer groups</string>
         </property>
        </widget>
       </item>

@@ -206,7 +206,6 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
     def save_info(self, model_parameters: dict, execution_time: Optional[float] = None):
         """Save model info with ModelManager."""
-        print(f"Model kind: {self.model_main.get_model_kind()}")
         model_info = MLModelInfo(
             model_instance_name=self.train_model_instance_name.text(),
             model_type=self.model_main.get_model_type(),

@@ -33,16 +33,26 @@
         <layout class="QFormLayout" name="model_application_info_layout">
          <item row="0" column="0">
           <widget class="QLabel" name="application_model_selection_label">
+           <property name="toolTip">
+            <string>Name of the trained model instance.</string>
+           </property>
            <property name="text">
             <string>Model instance name</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QComboBox" name="application_model_selection"/>
+          <widget class="QComboBox" name="application_model_selection">
+           <property name="toolTip">
+            <string>Name of the trained model instance.</string>
+           </property>
+          </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_11">
+           <property name="toolTip">
+            <string>Joblib file containing the trained model.</string>
+           </property>
            <property name="text">
             <string>Model file</string>
            </property>
@@ -50,6 +60,9 @@
          </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="model_file_application">
+           <property name="toolTip">
+            <string>Joblib file containing the trained model.</string>
+           </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
@@ -57,6 +70,9 @@
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="application_run_name_label">
+           <property name="toolTip">
+            <string/>
+           </property>
            <property name="text">
             <string>Application run name</string>
            </property>
@@ -71,6 +87,9 @@
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="application_output_raster_label_1">
+           <property name="toolTip">
+            <string>Filepath of output raster.</string>
+           </property>
            <property name="text">
             <string>Output classified raster</string>
            </property>
@@ -78,6 +97,9 @@
          </item>
          <item row="3" column="1">
           <widget class="QgsFileWidget" name="application_output_raster_1">
+           <property name="toolTip">
+            <string>Filepath of output raster.</string>
+           </property>
            <property name="storageMode">
             <enum>QgsFileWidget::SaveFile</enum>
            </property>
@@ -85,13 +107,23 @@
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="application_output_raster_label_2">
+           <property name="toolTip">
+            <string>Filepath of output raster.</string>
+           </property>
            <property name="text">
             <string>Output probability raster</string>
            </property>
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QgsFileWidget" name="application_output_raster_2"/>
+          <widget class="QgsFileWidget" name="application_output_raster_2">
+           <property name="toolTip">
+            <string>Filepath of output raster.</string>
+           </property>
+           <property name="storageMode">
+            <enum>QgsFileWidget::SaveFile</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -119,6 +151,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>Evidence/feature layers for the model.</string>
+         </property>
          <property name="title">
           <string>Evidence data</string>
          </property>
@@ -137,6 +172,9 @@
          <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
            <widget class="QLabel" name="label">
+            <property name="toolTip">
+             <string>Threshold for classifying based on probabilities. Only used for binary classification.</string>
+            </property>
             <property name="text">
              <string>Classification threshold</string>
             </property>
@@ -144,6 +182,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QgsDoubleSpinBox" name="application_classification_threshold">
+            <property name="toolTip">
+             <string>Threshold for classifying based on probabilities. Only used for binary classification.</string>
+            </property>
             <property name="decimals">
              <number>3</number>
             </property>
@@ -175,6 +216,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QPushButton" name="application_reset_btn">
+           <property name="toolTip">
+            <string/>
+           </property>
            <property name="text">
             <string>Reset</string>
            </property>

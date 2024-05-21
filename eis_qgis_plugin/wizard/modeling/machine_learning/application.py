@@ -1,6 +1,7 @@
 from typing import Iterable
 
 from qgis import processing
+from qgis.core import QgsProject, QgsRasterLayer
 from qgis.gui import QgsDoubleSpinBox, QgsFileWidget
 from qgis.PyQt.QtWidgets import (
     QComboBox,
@@ -15,10 +16,12 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils import add_output_layer_to_group
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_filter, set_placeholder_text
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
+from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS: QWidget = load_ui("modeling/application.ui")
 
@@ -36,7 +39,7 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
         self.setupUi(self)
 
         self.model_main = model_main
-        self.active_alg = self.CLASSIFIER_ALG
+        self.model_info = None
 
         # DECLARE TYPES
         self.application_model_selection: QComboBox
@@ -78,20 +81,17 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
         if model_key == "":
             self.application_evidence_data.load_model([])
             self.model_file_application.setText("")
-            self.active_alg = self.CLASSIFIER_ALG
+            self.model_info = None
             return
-        info = ModelManager.get_model_info(model_key)
-        self.application_evidence_data.load_model(info.tags)
-        self.model_file_application.setText(info.model_file)
-        print(info.model_kind)
-        if info.model_kind == "classifier":
-            self.active_alg = self.CLASSIFIER_ALG
+        self.model_info = ModelManager.get_model_info(model_key)
+        self.application_evidence_data.load_model(self.model_info.tags)
+        self.model_file_application.setText(self.model_info.model_file)
+        if self.model_info.model_kind == "classifier":
             self.application_output_raster_label_2.show()
             self.application_output_raster_2.show()
             self.application_parameter_box.show()
             self.application_output_raster_label_1.setText("Output classified raster")
         else:
-            self.active_alg = self.REGRESSOR_ALG
             self.application_output_raster_label_2.hide()
             self.application_output_raster_2.hide()
             self.application_parameter_box.hide()
@@ -104,8 +104,11 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
 
 
     def apply_model(self):
-        if self.active_alg == self.CLASSIFIER_ALG:
-            processing.runAndLoadResults(
+        if self.model_info is None:
+            return
+
+        if self.model_info.model_kind == "classifier":
+            result = processing.run(
                 self.CLASSIFIER_ALG,
                 {
                     "input_rasters": self.application_evidence_data.get_layers(),
@@ -116,8 +119,12 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
                 },
                 feedback=self.application_feedback
             )
-        else:
-            processing.runAndLoadResults(
+            output_layers = [
+                ("Output probabilities", "output_raster_probability"),
+                ("Output classified", "output_raster_classified")
+            ]
+        elif self.model_info.model_kind == "regressor":
+            result = processing.run(
                 self.REGRESSOR_ALG,
                 {
                     "input_rasters": self.application_evidence_data.get_layers(),
@@ -126,3 +133,17 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
                 },
                 feedback=self.application_feedback
             )
+            output_layers = [("Output predictions", "output_raster")]
+        else:
+            print(f"Unknown model kind: {self.model_info.model_kind}")
+            return
+
+        for (layer_name, output_layer) in output_layers:
+            layer = QgsRasterLayer(result[output_layer], layer_name)
+            if EISSettingsManager.get_layer_group_selection():
+                add_output_layer_to_group(
+                    layer, f"Modeling — {self.model_info.model_type}", self.model_info.model_instance_name
+                )
+            else:
+                QgsProject.instance().addMapLayer(layer, True)
+        

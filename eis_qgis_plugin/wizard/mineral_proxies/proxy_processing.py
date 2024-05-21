@@ -23,7 +23,7 @@ from qgis.PyQt.QtWidgets import (
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import set_file_widget_placeholder_text
+from eis_qgis_plugin.utils import add_output_layer_to_group, set_file_widget_placeholder_text
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
 from eis_qgis_plugin.wizard.utils.algorithm_worker import AlgorithmWorker
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
@@ -42,21 +42,6 @@ MINERAL_SYSTEM_GROUP_NAMES = {
     "custom": "Mineral system proxies - Custom"
 }
 
-
-def add_output_layer_to_group(layer, mineral_system: str, category: str):
-    QgsProject.instance().addMapLayer(layer, False)
-    root = QgsProject.instance().layerTreeRoot()
-    mineral_system_group_name = MINERAL_SYSTEM_GROUP_NAMES[mineral_system]
-    mineral_system_group = root.findGroup(mineral_system_group_name)
-    if not mineral_system_group:
-        mineral_system_group = root.addGroup(mineral_system_group_name)
-    
-    category_name = category.capitalize()
-    category_subgroup = mineral_system_group.findGroup(category_name)
-    if not category_subgroup:
-        category_subgroup = mineral_system_group.addGroup(category_name)
-    
-    category_subgroup.addLayer(layer)
 
 
 class EISWizardProxyProcess(QWidget):
@@ -90,7 +75,9 @@ class EISWizardProxyProcess(QWidget):
         if not self.terminated:
             output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
             if EISSettingsManager.get_layer_group_selection():
-                add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+                add_output_layer_to_group(
+                    output_layer, MINERAL_SYSTEM_GROUP_NAMES[self.mineral_system], self.category.capitalize()
+                )
             else:
                 QgsProject.instance().addMapLayer(output_layer, True)
 
@@ -393,7 +380,9 @@ class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():
-            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+            add_output_layer_to_group(
+                output_layer, MINERAL_SYSTEM_GROUP_NAMES[self.mineral_system], self.category.capitalize()
+            )
         else:
             QgsProject.instance().addMapLayer(output_layer, True)
 
@@ -501,7 +490,9 @@ class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
         )
         output_layer = QgsRasterLayer(result["output_path"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():
-            add_output_layer_to_group(output_layer, self.mineral_system, self.category)
+            add_output_layer_to_group(
+                output_layer, MINERAL_SYSTEM_GROUP_NAMES[self.mineral_system], self.category.capitalize()
+            )
         else:
             QgsProject.instance().addMapLayer(output_layer, True)
 

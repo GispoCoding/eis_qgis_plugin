@@ -5,6 +5,7 @@ from qgis.PyQt.QtCore import QObject, pyqtSignal
 
 from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 
+DEBUG = True
 
 class ModelManager(QObject):
 
@@ -23,7 +24,6 @@ class ModelManager(QObject):
     def get_model_info(self, id) -> Optional[MLModelInfo]:
         key = self._get_key(id)
         info_json, conversion_ok = QgsProject.instance().readEntry(self.SCOPE, key, "")
-        print(info_json, conversion_ok)
         if conversion_ok:
             ml_model_info = MLModelInfo.deserialize(info_json)
             return ml_model_info
@@ -56,7 +56,8 @@ class ModelManager(QObject):
         models.append(id)
         proj.writeEntry(self.SCOPE, self.ALL_MODELS_KEY, models)
 
-        print(f"Saved model info with key {id}. Info: {info}")
+        if DEBUG:
+            print(f"Saved model info with key {id}. Info: {info}")
 
         self.models_updated.emit()
 
@@ -69,7 +70,8 @@ class ModelManager(QObject):
         models.remove(id)
         proj.writeEntry(self.SCOPE, self.ALL_MODELS_KEY, models)
 
-        print(f"Removed model {id}")
+        if DEBUG:
+            print(f"Removed model {id}")
 
         if emit:
             self.models_updated.emit()

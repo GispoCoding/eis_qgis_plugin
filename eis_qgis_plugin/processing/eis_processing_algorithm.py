@@ -124,7 +124,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
         typer_args = []  # These parameters are delivered without the parameter name tag (as Typer arguments)
         typer_options = []  # These parameters are delivered with their name ()
-        output_path = None  # If TEMPORARY OUTPUT is used, it's useful for EIS Wizard if we return the actual path
+        output_paths = {}  # If TEMPORARY OUTPUT is used, it's useful for EIS Wizard if we return the actual path
 
         # By default, all parameters are passed as Typer options (parameter name needs to be delivered
         # prefixed with --)
@@ -261,7 +261,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 param_value = os.path.normpath(
                     self.parameterAsOutputLayer(parameters, name, context)
                 )
-                output_path = param_value
+                output_paths[param.name()] = param_value
 
             # TODO
             elif isinstance(param, QgsProcessingParameterFeatureSink):
@@ -300,12 +300,13 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             typer_options.append(param_name)
             typer_options.append(param_value)
 
-        return typer_args, typer_options, output_path
+        return typer_args, typer_options, output_paths
 
 
     def get_results(self, results: dict, parameters: Dict[str, QgsProcessingParameterDefinition]):
         for output in self.outputDefinitions():
             output_name = output.name()
+            print(output_name)
             if output_name in parameters:
                 results[output_name] = parameters[output_name]
             elif output.type() == "outputBoolean":
@@ -334,14 +335,15 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         if feedback is None:
             feedback = QgsProcessingFeedback()
 
-        typer_args, typer_options, output_path = self.prepare_arguments(parameters, context)
+        typer_args, typer_options, output_paths = self.prepare_arguments(parameters, context)
         
         toolkit_invoker = EISToolkitInvoker()
         toolkit_invoker.assemble_cli_command(self.name(), typer_args, typer_options)
         results = toolkit_invoker.run_toolkit_command(feedback)
 
         self.get_results(results, parameters)
-        results["output_path"] = output_path
+        for param_name, output_path in output_paths.items():
+            results[param_name] = output_path
 
         feedback.setProgress(100)
 

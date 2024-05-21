@@ -47,16 +47,26 @@
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="test_model_selection_label">
+           <property name="toolTip">
+            <string>Name of the trained model instance.</string>
+           </property>
            <property name="text">
             <string>Model instance name</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QComboBox" name="test_model_selection"/>
+          <widget class="QComboBox" name="test_model_selection">
+           <property name="toolTip">
+            <string>Name of the trained model instance.</string>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="test_output_raster_label_1">
+           <property name="toolTip">
+            <string>Filepath of output raster.</string>
+           </property>
            <property name="text">
             <string>Output classified raster</string>
            </property>
@@ -64,6 +74,9 @@
          </item>
          <item row="3" column="1">
           <widget class="QgsFileWidget" name="test_output_raster_1">
+           <property name="toolTip">
+            <string>Filepath of output raster.</string>
+           </property>
            <property name="storageMode">
             <enum>QgsFileWidget::SaveFile</enum>
            </property>
@@ -71,6 +84,9 @@
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_10">
+           <property name="toolTip">
+            <string>Joblib file containing the trained model.</string>
+           </property>
            <property name="text">
             <string>Model file</string>
            </property>
@@ -78,16 +94,29 @@
          </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="model_file_testing">
+           <property name="toolTip">
+            <string>Joblib file containing the trained model.</string>
+           </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QgsFileWidget" name="test_output_raster_2"/>
+          <widget class="QgsFileWidget" name="test_output_raster_2">
+           <property name="toolTip">
+            <string>Filepath of output raster.</string>
+           </property>
+           <property name="storageMode">
+            <enum>QgsFileWidget::SaveFile</enum>
+           </property>
+          </widget>
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="test_output_raster_label_2">
+           <property name="toolTip">
+            <string>Filepath of output raster.</string>
+           </property>
            <property name="text">
             <string>Output probability raster</string>
            </property>
@@ -119,6 +148,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>Evidence/feature layers for the model.</string>
+         </property>
          <property name="title">
           <string>Evidence data</string>
          </property>
@@ -137,6 +169,9 @@
          <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
            <widget class="QLabel" name="label">
+            <property name="toolTip">
+             <string>Threshold for classifying based on probabilities. Only used for binary classification.</string>
+            </property>
             <property name="text">
              <string>Classification threshold</string>
             </property>
@@ -144,6 +179,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QgsDoubleSpinBox" name="test_classification_threshold">
+            <property name="toolTip">
+             <string>Threshold for classifying based on probabilities. Only used for binary classification.</string>
+            </property>
             <property name="decimals">
              <number>3</number>
             </property>
@@ -165,6 +203,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Target labels to test the predictions against.</string>
          </property>
          <property name="title">
           <string>Labels</string>
@@ -195,6 +236,9 @@
            <width>16777215</width>
            <height>500</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Metrics to score the test with.</string>
          </property>
          <property name="title">
           <string>Metrics</string>
