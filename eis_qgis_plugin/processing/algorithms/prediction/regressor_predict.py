@@ -8,15 +8,15 @@ from qgis.core import (
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISPredictWithTrainedModel(EISProcessingAlgorithm):
+class EISRegressorPredict(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "predict_with_trained_model"
-        self._display_name = "Predict with trained model"
+        self._name = "regressor_predict"
+        self._display_name = "Regressor predict"
         self._group = "Prediction"
         self._group_id = "prediction"
-        self._short_help_string = "Predict mineral prospectivity with a trained machine learning model."
+        self._short_help_string = "Predict mineral prospectivity with a trained machine learning regressor model."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
@@ -38,7 +38,7 @@ class EISPredictWithTrainedModel(EISProcessingAlgorithm):
         )
         model_file_param.setHelp("The model file.")
         self.addParameter(model_file_param)
-        
+
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[2],
             description="Output raster",

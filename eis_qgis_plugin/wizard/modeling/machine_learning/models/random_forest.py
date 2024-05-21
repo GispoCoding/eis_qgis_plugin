@@ -63,7 +63,7 @@ class EISWizardRandomForest(EISMLModel):
     def initialize_regressor(self):
         """Initialize random forest regressor settings."""
         self.name = "Random forest regressor"
-        self.alg_name = "eis:random_forest_classifier_train"
+        self.alg_name = "eis:random_forest_regressor_train"
         self.training_tab.initialize_regressor()
         self.criterion.addItems(["squared_error", "absolute_error", "friedman_mse", "poisson"])
 
