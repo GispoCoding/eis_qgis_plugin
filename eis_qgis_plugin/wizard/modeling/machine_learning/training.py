@@ -3,7 +3,6 @@ from datetime import date
 from os import PathLike
 from typing import Any, Dict, Optional, Union
 
-from qgis import processing
 from qgis.core import QgsMapLayer
 from qgis.gui import QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
 from qgis.PyQt.QtWidgets import (
@@ -23,6 +22,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
 from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, set_filter
+from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 
 FORM_CLASS: QWidget = load_ui("modeling/training.ui")
@@ -54,6 +54,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.validation_metrics: QComboBox
 
         self.start_training_btn: QPushButton
+        self.cancel_training_btn: QPushButton
         self.reset_training_parameters_btn: QPushButton
         self.generate_tags_btn: QPushButton
 
@@ -65,13 +66,21 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         # Initialize
         self.train_evidence_data = ModelTrainingDataTable(self)
         self.train_evidence_data_layout.addWidget(self.train_evidence_data)
-        self.training_feedback = EISProcessingFeedback(self.training_log, self.training_progress_bar)
+        self.training_feedback = EISProcessingFeedback(
+            text_edit=self.training_log, progress_bar=self.training_progress_bar
+        )
 
         set_filter(self.train_model_save_path, "joblib")
+
+        self.executor = AlgorithmExecutor()
+        self.executor.finished.connect(self.on_algorithm_executor_finished)
+        self.executor.terminated.connect(self.on_algorithm_executor_terminated)
+        self.executor.error.connect(self.on_algorithm_executor_error)
 
         # Connect signals
         self.validation_method.currentTextChanged.connect(self.update_validation_settings)
         self.start_training_btn.clicked.connect(self.train_model)
+        self.cancel_training_btn.clicked.connect(self.cancel)
         self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
         self.generate_tags_btn.clicked.connect(self.train_evidence_data.generate_tags)
 
@@ -86,6 +95,26 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         """Initialize general settings of a regressor model."""
         self.validation_metrics.clear()
         self.validation_metrics.addItems(REGRESSOR_METRICS)
+
+
+    def on_algorithm_executor_finished(self, result, execution_time):
+        model_parameters_as_str = {
+            **self.model_main.get_parameter_values(as_str = True),
+            **self.get_common_parameter_values(),
+            **self.get_validation_settings(as_str = True)
+        }
+        self.save_info(model_parameters_as_str, execution_time)
+        self.training_feedback.pushInfo(f"\nTraining time: {execution_time}")
+    
+
+    def on_algorithm_executor_error(self, error_message: str):
+        self.training_feedback.report_failed_run()
+
+
+    def on_algorithm_executor_terminated(self):
+        self.training_feedback = EISProcessingFeedback(
+            text_edit=self.training_log, progress_bar=self.training_progress_bar
+        )
 
 
     def add_parameter_row(self, label, widget):
@@ -173,35 +202,29 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         """Trains the ML model. Runs the corresponding processing algorithm."""
         self.check_ready_for_training()
 
+        if self.executor.is_running:
+            return
+
         model_parameters = {
             **self.model_main.get_parameter_values(),
             **self.get_common_parameter_values(),
             **self.get_validation_settings()
         }
-        start = time.perf_counter()
-        result = processing.run(
-            self.model_main.get_alg_name(),
-            {
-                "input_rasters": self.train_evidence_data.get_layers(),
-                "target_labels": self.get_training_label_layer(),
-                "output_file": self.get_output_file(),
-                **model_parameters
-            },
-            feedback=self.training_feedback
-        )
-        end = time.perf_counter()
-        execution_time = end - start
 
-        if result and self.training_feedback.no_errors:
-            model_parameters_as_str = {
-                **self.model_main.get_parameter_values(as_str = True),
-                **self.get_common_parameter_values(),
-                **self.get_validation_settings(as_str = True)
-            }
-            self.save_info(model_parameters_as_str, execution_time)
-            self.training_feedback.pushInfo(f"\nTraining time: {execution_time}")
-        else:
-            self.training_feedback.report_failed_run()
+        params = {
+            "input_rasters": self.train_evidence_data.get_layers(),
+            "target_labels": self.get_training_label_layer(),
+            "output_file": self.get_output_file(),
+            **model_parameters
+        }
+        self.start_time = time.perf_counter()
+        self.executor.configure(self.model_main.get_alg_name(), self.training_feedback)
+        self.executor.run(params)
+
+
+    def cancel(self):
+        if self.executor is not None:
+            self.executor.cancel()
 
 
     def save_info(self, model_parameters: dict, execution_time: Optional[float] = None):

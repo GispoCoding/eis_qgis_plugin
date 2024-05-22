@@ -238,6 +238,13 @@
           </spacer>
          </item>
          <item>
+          <widget class="QPushButton" name="cancel_application_btn">
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="application_run_btn">
            <property name="text">
             <string>Run</string>

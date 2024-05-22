@@ -1,3 +1,4 @@
+import time
 from typing import Any, Dict
 
 import processing
@@ -5,12 +6,15 @@ from qgis.core import QgsProcessingFeedback
 from qgis.PyQt.QtCore import QObject, QThread, pyqtSignal
 from qgis.utils import iface
 
+from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
+
 
 class AlgorithmExecutor(QObject):
-    finished = pyqtSignal(dict)
+    finished = pyqtSignal(dict, float)
     terminated = pyqtSignal()
+    error = pyqtSignal(str)
 
-    def __init__(self, alg_name: str, feedback: QgsProcessingFeedback) -> None:
+    def __init__(self) -> None:
         super().__init__()
 
         self.worker = None
@@ -18,8 +22,8 @@ class AlgorithmExecutor(QObject):
         self.is_running = False
         self.is_terminated = False
 
-        self.alg_name = alg_name
-        self.feedback = feedback
+        self.alg_name = None
+        self.feedback = None
 
 
     def _cleanup(self):
@@ -47,16 +51,36 @@ class AlgorithmExecutor(QObject):
 
 
     def on_finished(self, result):
+        end = time.perf_counter()
+        execution_time = end - self.start_time
         if self.is_terminated:
             self.terminated.emit()
         else:
-            self.finished.emit(result)
+            self.finished.emit(result, execution_time)
         self._cleanup()
 
 
     def on_error(self, error_message):
         iface.messageBar().pushWarning("Error: ", error_message)
+        self.error.emit(error_message)
         self._cleanup()
+
+    
+    def update_feedback_progress(self, progress: int):
+        self.feedback.progress_bar.setValue(progress)
+
+
+    def update_feedback_text(self, text: str):
+        self.feedback.text_edit.append(text)
+
+
+    def configure(self, alg_name: str, feedback: EISProcessingFeedback):
+        self.alg_name = alg_name
+        if feedback is not self.feedback:
+            self.feedback = feedback
+            self.feedback.progress_signal.connect(self.update_feedback_progress)
+            if self.feedback.text_edit is not None:
+                self.feedback.text_signal.connect(self.update_feedback_text)
 
 
     def run(self, alg_parameters: Dict[str, Any]):
@@ -65,6 +89,7 @@ class AlgorithmExecutor(QObject):
         
         self._cleanup()
         self.is_running = True
+        self.start_time = time.perf_counter()
 
         self.worker = AlgorithmWorker(self.alg_name, alg_parameters, self.feedback)
         self.worker.finished.connect(self.on_finished)

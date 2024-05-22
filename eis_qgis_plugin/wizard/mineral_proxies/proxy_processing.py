@@ -51,7 +51,7 @@ class EISWizardProxyProcess(QWidget):
         self.executor: AlgorithmExecutor
 
 
-    def on_algorithm_executor_finished(self, result):
+    def on_algorithm_executor_finished(self, result, _):
         output_layer = QgsRasterLayer(result["output_raster"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():
             add_output_layer_to_group(
@@ -63,7 +63,10 @@ class EISWizardProxyProcess(QWidget):
 
     def on_algorithm_executor_terminated(self):
         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
-        self.executor.feedback = self.feedback
+
+    
+    def on_algorithm_executor_error(self, error_message: str):
+        pass
 
 
     def get_extent(self):
@@ -164,9 +167,10 @@ class EISWizardProxyDistanceToFeatures(EISWizardProxyProcess, FORM_CLASS_1):
 
         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
 
-        self.executor = AlgorithmExecutor(self.ALG_NAME, feedback=self.feedback)
+        self.executor = AlgorithmExecutor()
         self.executor.finished.connect(self.on_algorithm_executor_finished)
         self.executor.terminated.connect(self.on_algorithm_executor_terminated)
+        self.executor.error.connect(self.on_algorithm_executor_error)
 
 
     def on_output_raster_settings_changed(self, i):
@@ -199,6 +203,7 @@ class EISWizardProxyDistanceToFeatures(EISWizardProxyProcess, FORM_CLASS_1):
             "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
             "output_raster": get_output_path(self.output_raster_path)
         }
+        self.executor.configure(self.ALG_NAME, self.feedback)
         self.executor.run(params)
 
 
@@ -593,9 +598,10 @@ class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLAS
 
         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
 
-        self.executor = AlgorithmExecutor(self.IDW_ALG_NAME, feedback=self.feedback)
+        self.executor = AlgorithmExecutor()
         self.executor.finished.connect(self.on_algorithm_executor_finished)
         self.executor.terminated.connect(self.on_algorithm_executor_terminated)
+        self.executor.error.connect(self.on_algorithm_executor_error)
 
 
     def initialize_anomaly_page(self):
@@ -687,9 +693,6 @@ class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLAS
         if output_raster_params is None or self.executor.is_running:
             return
 
-        self.executor.alg_name = interpolation_alg
-        self.executor.feedback = self.feedback
-
         params = {
             "input_vector": self.vector_layer.currentLayer(),
             "target_column": self.attribute.currentField(),
@@ -697,7 +700,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLAS
             **output_raster_params,
             "output_raster": get_output_path(self.output_raster_path)
         }
-        print(params)
+        self.executor.configure(interpolation_alg, self.feedback)
         self.executor.run(params)
 
 
@@ -707,9 +710,6 @@ class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLAS
         if threshold_criteria == 0 or threshold_criteria == 1:
             anomaly_threshold_2 = None
 
-        self.executor.alg_name = self.ANOMALY_ALG_NAME
-        self.executor.feedback = self.anomaly_feedback
-
         params = {
             "input_raster": self.raster_layer.currentLayer(),
             "threshold_criteria": self.threshold_criteria.currentIndex(),
@@ -718,6 +718,7 @@ class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLAS
             "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
             "output_raster": get_output_path(self.anomaly_output_raster_path)
         }
+        self.executor.configure(self.ANOMALY_ALG_NAME, self.anomaly_feedback)
         self.executor.run(params)
 
 
