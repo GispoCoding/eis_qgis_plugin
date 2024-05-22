@@ -98,14 +98,17 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
 
     def on_algorithm_executor_finished(self, result, execution_time):
-        model_parameters_as_str = {
-            **self.model_main.get_parameter_values(as_str = True),
-            **self.get_common_parameter_values(),
-            **self.get_validation_settings(as_str = True)
-        }
-        self.save_info(model_parameters_as_str, execution_time)
-        self.training_feedback.pushInfo(f"\nTraining time: {execution_time}")
-    
+        if self.training_feedback.no_errors:
+            model_parameters_as_str = {
+                **self.model_main.get_parameter_values(as_str = True),
+                **self.get_common_parameter_values(),
+                **self.get_validation_settings(as_str = True)
+            }
+            self.save_info(model_parameters_as_str, execution_time)
+            self.training_feedback.pushInfo(f"\nTraining time: {execution_time}")
+        else:
+            self.training_feedback.report_failed_run()
+
 
     def on_algorithm_executor_error(self, error_message: str):
         self.training_feedback.report_failed_run()
