@@ -1,17 +1,26 @@
 [general]
-name=EIS QGIS plugin
-description=
-about=
-version=0.1.0
+name=EIS QGIS Plugin
+description=Comprehensive mineral prospectivity mapping and analysis framework
+about=EIS (Exploration Information System) QGIS Plugin is a tool for prospectivity
+    mapping of critical raw materials. EIS QGIS Plugin consists of two main components:
+    EIS Wizard, a plugin application with guided processes and workflows and EIS
+    Processing Algorithms, the individual tools and algorithms available in QGIS
+    Processing Toolbox. To run EIS QGIS Plugin, you need to install EIS Toolkit in a
+    Python environment and configure the environment in the plugin. More detailed
+    instructions can be found in EIS QGIS Plugin GitHub repository
+    (https://github.com/GispoCoding/eis_qgis_plugin) and EIS Toolkit GitHub repository
+    (https://github.com/GispoCoding/eis_toolkit). 
+version=0.5.0
 qgisMinimumVersion=3.16
 qgisMaximumVersion=3.37
 author=Gispo
 email=
-changelog=
-tags=
+changelog=  
+tags=mineral exploration, geology, geochemistry, geophysics, processing, modelling, data analysis, raster, vector
 repository=https://github.com/GispoCoding/eis_qgis_plugin
 tracker=https://github.com/GispoCoding/eis_qgis_plugin/issues
 homepage=https://github.com/GispoCoding/eis_qgis_plugin
+icon=resources/icons/icon4.png
 category=Plugins
 experimental=True
 deprecated=False
