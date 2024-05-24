@@ -44,17 +44,30 @@ class ModelManager(QObject):
             info = self.get_model_info(model)
             infos[model] = info
         return infos
+    
+    @classmethod
+    def model_info_exists(self, id) -> bool:
+        models = self.get_all_models()
+        if id in models:
+            return True
+        else:
+            return False
 
-    def save_model_info(self, info: MLModelInfo):
+    def save_model_info(self, info: MLModelInfo, overwrite: bool = True):
         id = info.model_instance_name
+        models = self.get_all_models()
+        if id in models and not overwrite:
+            print("ID found and overwrite is False.")
+            return
+
         key = self._get_key(id)
         model_info_json = info.serialize()
         proj = QgsProject.instance()
         proj.writeEntry(self.SCOPE, key, model_info_json)
 
-        models = self.get_all_models()
-        models.append(id)
-        proj.writeEntry(self.SCOPE, self.ALL_MODELS_KEY, models)
+        if id not in models:
+            models.append(id)
+            proj.writeEntry(self.SCOPE, self.ALL_MODELS_KEY, models)
 
         if DEBUG:
             print(f"Saved model info with key {id}. Info: {info}")

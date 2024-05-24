@@ -58,6 +58,8 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.reset_training_parameters_btn: QPushButton
         self.generate_tags_btn: QPushButton
 
+        self.instance_name_warning_label: QLabel
+
         self.training_log: QTextEdit
         self.training_progress_bar: QProgressBar
 
@@ -69,6 +71,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.training_feedback = EISProcessingFeedback(
             text_edit=self.training_log, progress_bar=self.training_progress_bar
         )
+        self.check_model_instance_name()
 
         set_filter(self.train_model_save_path, "joblib")
 
@@ -83,6 +86,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.cancel_training_btn.clicked.connect(self.cancel)
         self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
         self.generate_tags_btn.clicked.connect(self.train_evidence_data.generate_tags)
+        self.train_model_instance_name.editingFinished.connect(self.check_model_instance_name)
 
 
     def initialize_classifier(self):
@@ -118,6 +122,13 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.training_feedback = EISProcessingFeedback(
             text_edit=self.training_log, progress_bar=self.training_progress_bar
         )
+
+
+    def check_model_instance_name(self):
+        if self.model_main.get_model_manager().model_info_exists(self.train_model_instance_name.text()):
+            self.instance_name_warning_label.show()
+        else:
+            self.instance_name_warning_label.hide()
 
 
     def add_parameter_row(self, label, widget):

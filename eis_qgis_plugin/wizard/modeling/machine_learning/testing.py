@@ -179,10 +179,24 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
     def cancel(self):
         if self.executor is not None:
             self.executor.cancel()
+            
+
+    def check_model_info(self) -> bool:
+        if self.model_info is None:
+            warning = "Error: ", "Model instance not defined!"
+            iface.messageBar().pushWarning("Error: ", warning)
+            self.testing_feedback.text_edit.append("Error: " + warning)
+            return False
+        if not self.model_info.check_model_file():
+            warning = "Model file not found! Check model filepath in History."
+            iface.messageBar().pushWarning("Error: ", warning)
+            self.testing_feedback.text_edit.append("Error: " + warning)
+            return False
+        return True
 
 
     def test_model(self):
-        if self.model_info is None:
+        if not self.check_model_info():
             return
 
         if self.model_info.model_kind == "classifier":
