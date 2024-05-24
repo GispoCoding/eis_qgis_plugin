@@ -162,7 +162,7 @@
                   <item row="0" column="1">
                    <widget class="QgsDoubleSpinBox" name="gaussian_function_midpoint">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="maximum">
                      <double>9999.000000000000000</double>
@@ -182,7 +182,7 @@
                   <item row="1" column="1">
                    <widget class="QgsDoubleSpinBox" name="gaussian_function_spread">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="maximum">
                      <double>9999.000000000000000</double>
@@ -206,7 +206,7 @@
                   <item row="0" column="1">
                    <widget class="QgsDoubleSpinBox" name="large_function_midpoint">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="minimum">
                      <double>-9999.000000000000000</double>
@@ -229,7 +229,7 @@
                   <item row="1" column="1">
                    <widget class="QgsDoubleSpinBox" name="large_function_spread">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="maximum">
                      <double>9999.000000000000000</double>
@@ -253,7 +253,7 @@
                   <item row="0" column="1">
                    <widget class="QgsDoubleSpinBox" name="linear_low_bound">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="minimum">
                      <double>-9999.000000000000000</double>
@@ -273,7 +273,7 @@
                   <item row="1" column="1">
                    <widget class="QgsDoubleSpinBox" name="linear_high_bound">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="minimum">
                      <double>-9999.000000000000000</double>
@@ -300,7 +300,7 @@
                   <item row="0" column="1">
                    <widget class="QgsDoubleSpinBox" name="near_function_midpoint">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="minimum">
                      <double>-9999.000000000000000</double>
@@ -323,7 +323,7 @@
                   <item row="1" column="1">
                    <widget class="QgsDoubleSpinBox" name="near_function_spread">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="maximum">
                      <double>9999.000000000000000</double>
@@ -347,7 +347,7 @@
                   <item row="0" column="1">
                    <widget class="QgsDoubleSpinBox" name="power_low_bound">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="minimum">
                      <double>-9999.000000000000000</double>
@@ -367,7 +367,7 @@
                   <item row="1" column="1">
                    <widget class="QgsDoubleSpinBox" name="power_high_bound">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="minimum">
                      <double>-9999.000000000000000</double>
@@ -390,7 +390,7 @@
                   <item row="2" column="1">
                    <widget class="QgsDoubleSpinBox" name="power_function_exponent">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="maximum">
                      <double>9999.000000000000000</double>
@@ -414,7 +414,7 @@
                   <item row="0" column="1">
                    <widget class="QgsDoubleSpinBox" name="small_function_midpoint">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="minimum">
                      <double>-9999.000000000000000</double>
@@ -437,7 +437,7 @@
                   <item row="1" column="1">
                    <widget class="QgsDoubleSpinBox" name="small_function_spread">
                     <property name="decimals">
-                     <number>3</number>
+                     <number>5</number>
                     </property>
                     <property name="maximum">
                      <double>9999.000000000000000</double>
@@ -542,8 +542,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>648</width>
-            <height>740</height>
+            <width>223</width>
+            <height>393</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">

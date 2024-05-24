@@ -47,7 +47,7 @@ class EISPlotPrecisionRecallCurve(EISProcessingAlgorithm):
         )
 
         show_plot_param = QgsProcessingParameterBoolean(
-            name=self.alg_parameters[2], description="Show plot immediately"
+            name=self.alg_parameters[2], description="Show plot immediately", defaultValue=True
         )
         show_plot_param.setHelp(
             "If the produced plot should be displayed immediately. Note that the algorithm " +
