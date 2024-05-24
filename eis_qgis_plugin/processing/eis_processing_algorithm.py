@@ -308,8 +308,8 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
             output_name = output.name()
             if output_name in parameters:
                 results[output_name] = parameters[output_name]
-            elif output.type() == "outputBoolean":
-                results[output_name] = results["result"]
+            # elif output.type() == "outputBoolean":        # NOTE: EIS Toolkit will send boolean results as a print
+            #     results[output_name] = results["result"]  #       that is captured and printed in ToolkitInvoker
 
     def cancel(self):
         if self.process:
