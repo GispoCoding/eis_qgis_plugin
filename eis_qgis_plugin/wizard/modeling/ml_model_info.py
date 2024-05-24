@@ -1,4 +1,5 @@
 import json
+import os
 from dataclasses import asdict, dataclass, fields
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -33,3 +34,9 @@ class MLModelInfo:
         for key, value in kwargs.items():
             if key in self.__dataclass_fields__:
                 setattr(self, key, value)
+
+    def check_model_file(self):
+        if not os.path.exists(self.model_file):
+            return False
+        else:
+            return True

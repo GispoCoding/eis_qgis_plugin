@@ -13,6 +13,7 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import add_output_layer_to_group
@@ -138,8 +139,22 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
             self.executor.cancel()
 
 
-    def apply_model(self):
+    def check_model_info(self) -> bool:
         if self.model_info is None:
+            warning = "Error: ", "Model instance not defined!"
+            iface.messageBar().pushWarning("Error: ", warning)
+            self.testing_feedback.text_edit.append("Error: " + warning)
+            return False
+        if not self.model_info.check_model_file():
+            warning = "Model file not found! Check model filepath in History."
+            iface.messageBar().pushWarning("Error: ", warning)
+            self.testing_feedback.text_edit.append("Error: " + warning)
+            return False
+        return True
+
+
+    def apply_model(self):
+        if not self.check_model_info():
             return
 
         if self.model_info.model_kind == "classifier":
