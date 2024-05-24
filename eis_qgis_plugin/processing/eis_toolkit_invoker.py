@@ -183,7 +183,7 @@ class EISToolkitInvoker:
                 if line:
                     self._process_command_output(line.strip(), feedback, results)
 
-                time.sleep(0.1)
+                time.sleep(0.05)
 
             process_event.set()
             stdout_thread.join()

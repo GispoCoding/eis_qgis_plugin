@@ -306,7 +306,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
     def get_results(self, results: dict, parameters: Dict[str, QgsProcessingParameterDefinition]):
         for output in self.outputDefinitions():
             output_name = output.name()
-            print(output_name)
             if output_name in parameters:
                 results[output_name] = parameters[output_name]
             elif output.type() == "outputBoolean":
