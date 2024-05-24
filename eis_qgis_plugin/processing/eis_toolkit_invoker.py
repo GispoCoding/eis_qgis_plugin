@@ -159,7 +159,7 @@ class EISToolkitInvoker:
                 creationflags = subprocess.CREATE_NO_WINDOW
 
             self.process = subprocess.Popen(
-                self.cmd,
+                self.cmd,   
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
@@ -197,6 +197,11 @@ class EISToolkitInvoker:
             process_event.set()
             stdout_thread.join()
             stderr_thread.join()
+
+            while not q.empty():
+                line = q.get_nowait()
+                if line:
+                    self._process_command_output(line.strip(), feedback, results)
 
             stdout, stderr = self.process.communicate()
             if stdout:
