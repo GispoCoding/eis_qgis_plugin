@@ -188,7 +188,8 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
             self.testing_feedback.text_edit.append("Error: " + warning)
             return False
         if not self.model_info.check_model_file():
-            warning = "Model file not found! Check model filepath in History."
+            warning = f"Model file not found for model instance {self.model_info.model_instance_name}! \
+                Check model filepath in History."
             iface.messageBar().pushWarning("Error: ", warning)
             self.testing_feedback.text_edit.append("Error: " + warning)
             return False
