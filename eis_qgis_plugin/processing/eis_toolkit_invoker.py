@@ -71,7 +71,7 @@ class EISToolkitInvoker:
         feedback.pushInfo(f"Progress: {progress}%")
 
 
-    def _update_results(self, stdout: str, results: dict):
+    def _update_results(self, stdout: str, results: dict, feedback: QgsProcessingFeedback):
         """Updates the results dictionary with information parsed from the stdout message."""
         # Extract the JSON part
         json_str = stdout.split(self.RESULTS_PREFIX)[-1].strip()
@@ -79,8 +79,11 @@ class EISToolkitInvoker:
         # Deserialize the JSON-formatted string to a Python dict
         output_dict = json.loads(json_str)
 
+        feedback.pushInfo("\n*** Results ***")
+        feedback.pushInfo("-----------------------")
         for key, value in output_dict.items():
-            results[key] = value
+            feedback.pushInfo(f"* {key}: {value}")
+        feedback.pushInfo("-----------------------\n ")
 
 
     def _update_out_rasters(self, stdout: str):
@@ -240,7 +243,7 @@ class EISToolkitInvoker:
             self._update_progress(stdout_line, feedback)
 
         elif self.RESULTS_PREFIX in stdout_line:
-            self._update_results(stdout_line, results)
+            self._update_results(stdout_line, results, feedback)
 
         elif self.OUT_RASTERS_PREFIX in stdout_line:
             self._update_out_rasters(stdout_line)
