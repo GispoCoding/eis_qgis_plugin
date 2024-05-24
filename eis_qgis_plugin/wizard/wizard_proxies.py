@@ -5,11 +5,12 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.wizard.mineral_proxies.proxy_processing import (
-    EISWizardProxyDefineAnomaly,
+    # EISWizardProxyDefineAnomaly,
     EISWizardProxyDistanceToFeatures,
     EISWizardProxyInterpolateAndDefineAnomaly,
-    EISWizardProxyInterpolation,
 )
+
+# EISWizardProxyInterpolation,
 from eis_qgis_plugin.wizard.mineral_proxies.proxy_view import EISWizardProxyView
 
 
@@ -23,8 +24,8 @@ class EISWizardProxies(QWidget):
     # }
     WORKFLOW_MAP = {
         1: EISWizardProxyDistanceToFeatures,
-        2: EISWizardProxyInterpolation,
-        3: EISWizardProxyDefineAnomaly,
+        # 2: EISWizardProxyInterpolation,
+        # 3: EISWizardProxyDefineAnomaly,
         4: EISWizardProxyInterpolateAndDefineAnomaly
     }
 

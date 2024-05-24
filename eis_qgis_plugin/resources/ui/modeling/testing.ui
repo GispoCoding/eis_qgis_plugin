@@ -343,6 +343,13 @@
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="cancel_testing_btn">
+             <property name="text">
+              <string>Cancel</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="test_run_btn">
              <property name="text">
               <string>Run</string>

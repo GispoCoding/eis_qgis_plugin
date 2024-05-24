@@ -1,6 +1,5 @@
 from typing import Iterable, List
 
-from qgis import processing
 from qgis.core import QgsProject, QgsRasterLayer
 from qgis.gui import QgsDoubleSpinBox, QgsFileWidget, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import (
@@ -16,12 +15,14 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import add_output_layer_to_group
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_filter, set_placeholder_text
+from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
@@ -42,6 +43,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         self.model_main = model_main
         self.active_alg = self.CLASSIFIER_ALG
         self.model_info = None
+        self.output_layers = None
 
         # METRICS IN ORDER MATCHIN PROCESSING ALGS
         self.classifier_metrics = [
@@ -66,6 +68,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         self.test_metrics_stack: QStackedWidget
         self.test_reset_btn: QPushButton
         self.test_run_btn: QPushButton
+        self.cancel_testing_btn: QPushButton
 
         self.test_parameter_box: QGroupBox
         self.test_classification_threshold: QgsDoubleSpinBox
@@ -84,18 +87,46 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
 
         # Connect signals
         self.test_run_btn.clicked.connect(self.test_model)
+        self.cancel_testing_btn.clicked.connect(self.cancel)
         self.test_model_selection.currentTextChanged.connect(self._on_selected_model_changed)
 
         # Initialize
         self.test_evidence_data = ModelDataTable(self, self.ROW_HEIGHT)
         self.test_evidence_data_layout.addWidget(self.test_evidence_data)
         self.testing_feedback = EISProcessingFeedback(self.testing_log, self.testing_progress_bar)
+
+        self.executor = AlgorithmExecutor()
+        self.executor.finished.connect(self.on_algorithm_executor_finished)
+        self.executor.terminated.connect(self.on_algorithm_executor_terminated)
+        self.executor.error.connect(self.on_algorithm_executor_error)
        
         self.update_selectable_models(ModelManager.get_all_models())
         set_placeholder_text(self.test_output_raster_1)
         set_placeholder_text(self.test_output_raster_2)
         set_filter(self.test_output_raster_1, "raster")
         set_filter(self.test_output_raster_2, "raster")
+
+    
+    def on_algorithm_executor_finished(self, result, _):
+        if self.testing_feedback.no_errors:
+            for (layer_name, output_layer) in self.output_layers:
+                layer = QgsRasterLayer(result[output_layer], layer_name)
+                if EISSettingsManager.get_layer_group_selection():
+                    add_output_layer_to_group(
+                        layer, f"Modeling — {self.model_info.model_type}", self.model_info.model_instance_name
+                    )
+                else:
+                    QgsProject.instance().addMapLayer(layer, True)
+
+
+    def on_algorithm_executor_error(self, error_message: str):
+        self.testing_feedback.report_failed_run()
+
+
+    def on_algorithm_executor_terminated(self):
+        self.testing_feedback = EISProcessingFeedback(
+            text_edit=self.testing_log, progress_bar=self.testing_progress_bar
+        )
 
 
     def _on_selected_model_changed(self, model_id: str):
@@ -143,6 +174,11 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
             if checkbox.isChecked():
                 metric_indices.append(i)
         return metric_indices
+    
+
+    def cancel(self):
+        if self.executor is not None:
+            self.executor.cancel()
 
 
     def test_model(self):
@@ -150,45 +186,44 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
             return
 
         if self.model_info.model_kind == "classifier":
-            result = processing.run(
-                self.CLASSIFIER_ALG,
-                {
-                    "input_rasters": self.test_evidence_data.get_layers(),
-                    "target_labels": self.test_label_data.currentLayer(),
-                    "model_file": self.model_file_testing.text(),
-                    "classification_threshold": self.test_classification_threshold.value(),
-                    "test_metrics": self.get_classifier_metrics(),
-                    "output_raster_probability": get_output_path(self.test_output_raster_2),
-                    "output_raster_classified": get_output_path(self.test_output_raster_1)
-                },
-                feedback=self.testing_feedback
-            )
-            output_layers = [
+            metrics = self.get_classifier_metrics()
+            if len(metrics) == 0:
+                iface.messageBar().pushWarning("Error: ", "No metrics were selected!")
+                return
+
+            params = {
+                "input_rasters": self.test_evidence_data.get_layers(),
+                "target_labels": self.test_label_data.currentLayer(),
+                "model_file": self.model_file_testing.text(),
+                "classification_threshold": self.test_classification_threshold.value(),
+                "test_metrics": metrics,
+                "output_raster_probability": get_output_path(self.test_output_raster_2),
+                "output_raster_classified": get_output_path(self.test_output_raster_1)
+            }
+            self.output_layers = [
                 ("Output probabilities", "output_raster_probability"),
                 ("Output classified", "output_raster_classified")
             ]
+            self.executor.configure(self.CLASSIFIER_ALG, self.testing_feedback)
+            self.executor.run(params)
+
         elif self.model_info.model_kind == "regressor":
-            result = processing.run(
-                self.REGRESSOR_ALG,
-                {
-                    "input_rasters": self.test_evidence_data.get_layers(),
-                    "target_labels": self.test_label_data.currentLayer(),
-                    "model_file": self.model_file_testing.text(),
-                    "validation_metrics": self.get_regressor_metrics(),
-                    "output_raster": get_output_path(self.test_output_raster_1)
-                },
-                feedback=self.testing_feedback
-            )
-            output_layers = [("Output predictions", "output_raster")]
+            metrics = self.get_classifier_metrics()
+            if len(metrics) == 0:
+                iface.messageBar().pushWarning("Error: ", "No metrics were selected!")
+                return
+
+            params = {
+                "input_rasters": self.test_evidence_data.get_layers(),
+                "target_labels": self.test_label_data.currentLayer(),
+                "model_file": self.model_file_testing.text(),
+                "test_metrics": metrics,
+                "output_raster": get_output_path(self.test_output_raster_1)
+            }
+            self.output_layers = [("Output predictions", "output_raster")]
+            self.executor.configure(self.REGRESSOR_ALG, self.testing_feedback)
+            self.executor.run(params)
+
         else:
             print(f"Unknown model kind: {self.model_info.model_kind}")
             return
-
-        for (layer_name, output_layer) in output_layers:
-            layer = QgsRasterLayer(result[output_layer], layer_name)
-            if EISSettingsManager.get_layer_group_selection():
-                add_output_layer_to_group(
-                    layer, f"Modeling — {self.model_info.model_type}", self.model_info.model_instance_name
-                )
-            else:
-                QgsProject.instance().addMapLayer(layer, True)
