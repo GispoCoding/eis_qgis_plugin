@@ -150,12 +150,18 @@ class EISToolkitInvoker:
             # QGIS sets some PYTHON environment variables that might disturb the external python the process is using
             python_free_environment = {key: value for key, value in os.environ.items() if not key.startswith("PYTHON")}
             logger.debug(f'Running command "{" ".join(self.cmd)}" with environment: {python_free_environment=}')
+
+            creationflags = 0
+            if os.name == 'nt':  # If Windows, prevent process window creation
+                creationflags = subprocess.CREATE_NO_WINDOW
+
             self.process = subprocess.Popen(
                 self.cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
-                env=python_free_environment
+                env=python_free_environment,
+                creationflags=creationflags
             )
 
             process_event = threading.Event()
@@ -423,11 +429,15 @@ class VenvEnvironmentHandler(EnvironmentHandler):
     def verify_toolkit(self) -> Tuple[bool, str]:
         try:
             cmd = [self.python_path, "-c", "import eis_toolkit"]
+            creationflags = 0
+            if os.name == 'nt':  # If Windows, prevent process window creation
+                creationflags = subprocess.CREATE_NO_WINDOW
             subprocess.run(
                 cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                universal_newlines=True
+                universal_newlines=True,
+                creationflags=creationflags
             )
             return True, "EIS Toolkit is installed in the specified venv."
         except subprocess.CalledProcessError as e:
