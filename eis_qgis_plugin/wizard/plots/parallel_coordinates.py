@@ -143,6 +143,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
                 [feature[color_column_name] for feature in layer.getFeatures()], dtype=np.float32
             )
             palette_name = self.get_default_continuous_palette()
+            color_labels = None
 
         elif color_field_type == "categorical":
             color_labels, color_data = self._encode_data(
