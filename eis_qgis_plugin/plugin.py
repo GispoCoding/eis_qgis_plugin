@@ -14,14 +14,13 @@ from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 from .processing.eis_provider import EISProvider
 from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logger
 from .qgis_plugin_tools.tools.i18n import setup_translation
-from .qgis_plugin_tools.tools.resources import plugin_name
 from .wizard.wizard_main import EISWizardDialog, EISWizardDocked
 
 
 class Plugin:
     """QGIS Plugin Implementation."""
 
-    name = plugin_name()
+    name = "EIS QGIS Plugin"
 
     def __init__(self) -> None:
         setup_logger(Plugin.name)
