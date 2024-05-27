@@ -70,7 +70,7 @@ After you have EIS Toolkit installed in a Python virtual environment, you need t
 
 In EIS Wizard, choose **Settings** page in the the menu. You can specify either a Python virtual environment with EIS Toolkit installation or a Docker image with EIS Toolkit. After you have set the required fields, you can click **Verify** to check if your configuration is OK.
 
-![image](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/e3c70178-fa2e-48a0-ab0b-84e1dbac2d0e)
+![Screenshot from 2024-05-27 17-02-55](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/dc02add4-5b9c-434a-881a-4ca07cb09723)
 
 > [!WARNING]  
 > Docker setup is still actively being developed and tested!
@@ -96,7 +96,7 @@ EIS Wizard is divided into different parts each with their own functionality.
 ### EIS Processing
 EIS Processing Algorithms allow using all EIS tools separately and freely. They can be used in combination with EIS Wizard to increase flexibility, or exclusively for those that don't want the guidance of EIS Wizard. If you don't have Processing Toolbox open in QGIS, it can opened by clicking **Processing** and selecting **Toolbox** (or with `CTRL+ALT+T` shortcut). To find EIS Processing Algorithms in Processing Toolbox, you can look for the **EIS** entry in the list or use the search bar.
 
-![image](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/0e1e8b63-594e-4061-b0b5-b89ccb9bb6b5)
+![Screenshot from 2024-05-27 17-04-01](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/d0699be6-7338-46df-87b6-f98a65044342)
 
 EIS Processing Algorithms can be launched by double-clicking an algorithm. In the opened window, parameters can be set and description of the algorithm read. QGIS Processing algorithms are fairly intuitive to use, but in case you are new to them, you can refer to various online guides.
 
@@ -106,9 +106,9 @@ EIS Processing Algorithms can be launched by double-clicking an algorithm. In th
 > EIS Processing Algorithms, like all algorithms in QGIS Processing Toolbox, can be used to create and save custom workflows in QGIS Model Designer. 
 
 ## Roadmap
-- Milestone 1: Beta release 1 (April 2024). At this stage, the plugin should have the basic funtionalities required for a full MPM workflow implemented. Official testing phase begins. The plugin will be still under active development.
-- Milestone 2: Beta release 2 (October 2024). All features should be incorporated at this time and the plugin useful for actual MPM work. Testing will continue and potential bugs will be fixed and the user experience refined.
-- Milestone 3: Final release (April 2025). The plugin is considered complete and fully functional, and the EIS project ends. After this, the plugin will be maintained and bugs fixed, but majority of further work will lie on the shoulders of the open source community.
+- **Milestone 1**: Beta release 1 (May 2024). At this stage, the plugin should have the basic funtionalities required for a full MPM workflow implemented. Official testing phase begins. The plugin will be still under active development.
+- **Milestone 2**: Beta release 2 (October 2024). All features should be incorporated at this time and the plugin useful for actual MPM work. Testing will continue and potential bugs will be fixed and the user experience refined.
+- **Milestone 3**: Final release (April 2025). The plugin is considered complete and fully functional, and the EIS project ends. After this, the plugin will be maintained and bugs fixed, but majority of further work will lie on the shoulders of the open source community.
 
 
 ## Contributing
