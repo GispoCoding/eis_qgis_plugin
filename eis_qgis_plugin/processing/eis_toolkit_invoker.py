@@ -72,11 +72,12 @@ class EISToolkitInvoker:
 
 
     def _update_results(self, stdout: str, results: dict, feedback: QgsProcessingFeedback):
-        """Updates the results dictionary with information parsed from the stdout message."""
-        # Extract the JSON part
+        """Prints the result information parsed from the stdout message."""
         json_str = stdout.split(self.RESULTS_PREFIX)[-1].strip()
-
-        # Deserialize the JSON-formatted string to a Python dict
+        # Convert all found quotation marks to ensure succesfull deserialization.
+        # NOTE that intended single quotation marks will get replaced too (but currently these
+        # result messages should not have need for those)
+        json_str = json_str.replace("\'", "\"")
         output_dict = json.loads(json_str)
 
         feedback.pushInfo("\n*** Results ***")
