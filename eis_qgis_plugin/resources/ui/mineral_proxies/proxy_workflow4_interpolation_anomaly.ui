@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="workflow_pages">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="interpolation_page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
