@@ -56,7 +56,6 @@ class EISWizardRandomForest(EISMLModel):
         """Initialize random forest classifier settings."""
         self.name = "Random forest classifier"
         self.alg_name = "eis:random_forest_classifier_train"
-        self.training_tab.initialize_classifier()
         self.criterion.addItems(["gini", "entropy", "log_loss"])
 
 
@@ -64,7 +63,6 @@ class EISWizardRandomForest(EISMLModel):
         """Initialize random forest regressor settings."""
         self.name = "Random forest regressor"
         self.alg_name = "eis:random_forest_regressor_train"
-        self.training_tab.initialize_regressor()
         self.criterion.addItems(["squared_error", "absolute_error", "friedman_mse", "poisson"])
 
 

@@ -4,7 +4,7 @@ from os import PathLike
 from typing import Any, Dict, Optional, Union
 
 from qgis.core import QgsMapLayer
-from qgis.gui import QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
+from qgis.gui import QgsCheckableComboBox, QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
 from qgis.PyQt.QtWidgets import (
     QComboBox,
     QGroupBox,
@@ -21,7 +21,7 @@ from qgis.PyQt.QtWidgets import (
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
-from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, set_filter
+from eis_qgis_plugin.wizard.modeling.model_utils import set_filter
 from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 
@@ -51,7 +51,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.validation_method: QComboBox
         self.split_size: QgsSpinBox
         self.cv_folds: QgsSpinBox
-        self.validation_metrics: QComboBox
+        self.validation_metrics: QgsCheckableComboBox
 
         self.start_training_btn: QPushButton
         self.cancel_training_btn: QPushButton
@@ -71,6 +71,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.training_feedback = EISProcessingFeedback(
             text_edit=self.training_log, progress_bar=self.training_progress_bar
         )
+        self.add_validation_metrics()
         self.check_model_instance_name()
 
         set_filter(self.train_model_save_path, "joblib")
@@ -89,16 +90,24 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.train_model_instance_name.editingFinished.connect(self.check_model_instance_name)
 
 
-    def initialize_classifier(self):
-        """Initialize general settings of a classifier model."""
+    def add_validation_metrics(self):
         self.validation_metrics.clear()
-        self.validation_metrics.addItems(CLASSIFIER_METRICS)
+        metrics = self.model_main.get_valid_metrics()
+        self.validation_metrics.addItems(metrics)
+        self.validation_metrics.setCheckedItems([metrics[0]])
+
+    # def initialize_classifier(self):
+    #     """Initialize general settings of a classifier model."""
+    #     self.validation_metrics.clear()
+    #     self.validation_metrics.addItems(CLASSIFIER_METRICS)
+    #     self.validation_metrics.setCheckedItems([CLASSIFIER_METRICS[0]])
 
 
-    def initialize_regressor(self):
-        """Initialize general settings of a regressor model."""
-        self.validation_metrics.clear()
-        self.validation_metrics.addItems(REGRESSOR_METRICS)
+    # def initialize_regressor(self):
+    #     """Initialize general settings of a regressor model."""
+    #     self.validation_metrics.clear()
+    #     self.validation_metrics.addItems(REGRESSOR_METRICS)
+    #     self.validation_metrics.setCheckedItems([REGRESSOR_METRICS[0]])
 
 
     def on_algorithm_executor_finished(self, result, execution_time):
@@ -197,8 +206,8 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
                 as_str else self.validation_method.currentIndex(),
             "split_size": self.split_size.value() / 100,
             "cv": self.cv_folds.value(),
-            "validation_metrics": [self.validation_metrics.currentText()] if
-                as_str else [self.validation_metrics.currentIndex()]
+            "validation_metrics": self.validation_metrics.checkedItems() if as_str else
+                [self.model_main.get_valid_metrics().index(elem) for elem in self.validation_metrics.checkedItems()]
         }
 
 
@@ -266,7 +275,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.validation_method.setCurrentIndex(0)
         self.split_size.setValue(20)
         self.cv_folds.setValue(5)
-        self.validation_method.setCurrentIndex(0)
+        self.add_validation_metrics()
 
 
     def set_tooltips(self):
@@ -308,6 +317,6 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.cv_folds.setToolTip(cv_folds_tip)
         self.cv_folds_label.setToolTip(cv_folds_tip)
 
-        validation_metric_tip = "Metric to use for scoring the model."
+        validation_metric_tip = "Metrics to use for scoring in validation."
         self.validation_metrics.setToolTip(validation_metric_tip)
         self.validation_metrics_label.setToolTip(validation_metric_tip)

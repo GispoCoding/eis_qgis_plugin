@@ -23,8 +23,6 @@ class EISWizardLogisticRegression(EISMLModel):
         self.training_tab.add_common_parameters()
         self.add_model_parameters()
 
-        self.training_tab.initialize_classifier()
-
     
     def add_model_parameters(self):
         """Add parameter widgets for Logistic Regression model."""

@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from qgis.PyQt.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
@@ -7,7 +7,7 @@ from eis_qgis_plugin.wizard.modeling.machine_learning.data_preparation import EI
 from eis_qgis_plugin.wizard.modeling.machine_learning.testing import EISMLModelTesting
 from eis_qgis_plugin.wizard.modeling.machine_learning.training import EISMLModelTraining
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
-from eis_qgis_plugin.wizard.modeling.model_utils import ModelKind
+from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, ModelKind
 
 
 class EISMLModel(QWidget):
@@ -58,6 +58,10 @@ class EISMLModel(QWidget):
 
     def get_model_kind(self) -> str:
         return "classifier" if self.model_kind == ModelKind.CLASSIFIER else "regressor"
+
+
+    def get_valid_metrics(self) -> List[str]:
+        return CLASSIFIER_METRICS if self.model_kind == ModelKind.CLASSIFIER else REGRESSOR_METRICS
 
 
     def get_alg_name(self) -> str:

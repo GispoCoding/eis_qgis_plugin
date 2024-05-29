@@ -73,14 +73,12 @@ class EISWizardGradientBoosting(EISMLModel):
     def initialize_classifier(self):
         """Initialize gradient boosting classifier settings."""
         self.alg_name = "eis:gradient_boosting_classifier_train"
-        self.training_tab.initialize_classifier()
         self.loss.addItems(["log_loss", "exponential"])
 
 
     def initialize_regressor(self):
         """Initialize gradient boosting regressor settings."""
         self.alg_name = "eis:gradient_boosting_regressor_train"
-        self.training_tab.initialize_regressor()
         self.loss.addItems(["squared_error", "absolute_error", "huber", "quantile"])
 
 
