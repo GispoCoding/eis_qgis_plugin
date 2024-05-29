@@ -5,8 +5,8 @@ from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLineEdit
 
 TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
-CLASSIFIER_METRICS = ["Accuracy", "Precision", "Recall", "F1", "AUC"]
-REGRESSOR_METRICS = ["MSE", "RMSE", "MAE"]
+CLASSIFIER_METRICS = ["Accuracy", "Precision", "Recall", "F1"]
+REGRESSOR_METRICS = ["MSE", "RMSE", "MAE", "R2"]
 
 FILE_FILTERS = {
     "raster": "GeoTiff files (*.tif *.tiff)",
