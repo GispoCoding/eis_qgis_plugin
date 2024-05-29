@@ -50,6 +50,7 @@ class EISToolkitInvoker:
         else:
             raise ValueError(f"Unsupported environment type: {env_type}")
 
+        self.python_free_environment = {key: value for key, value in os.environ.items() if not key.startswith("PYTHON")}
         self.cmd = []
         self.process = None
 
@@ -130,8 +131,7 @@ class EISToolkitInvoker:
 
     def verify_toolkit(self) -> Tuple[bool, str]:
         """Checks if EIS Toolkit can be found in the selected environment."""
-        return self.environment_handler.verify_toolkit()
-
+        return self.environment_handler.verify_toolkit(self.python_free_environment)
 
     
     def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> Dict:
@@ -152,8 +152,7 @@ class EISToolkitInvoker:
         # Execute EIS Toolkit through subprocess
         try:
             # QGIS sets some PYTHON environment variables that might disturb the external python the process is using
-            python_free_environment = {key: value for key, value in os.environ.items() if not key.startswith("PYTHON")}
-            logger.debug(f'Running command "{" ".join(self.cmd)}" with environment: {python_free_environment=}')
+            logger.debug(f'Running command "{" ".join(self.cmd)}" with environment: {self.python_free_environment=}')
 
             creationflags = 0
             if os.name == 'nt':  # If Windows, prevent process window creation
@@ -164,7 +163,7 @@ class EISToolkitInvoker:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
-                env=python_free_environment,
+                env=self.python_free_environment,
                 creationflags=creationflags
             )
 
@@ -271,7 +270,7 @@ class EnvironmentHandler:
     def verify_environment() -> Tuple[bool, str]:
         raise NotImplementedError
     
-    def verify_toolkit() -> Tuple[bool, str]:
+    def verify_toolkit(env) -> Tuple[bool, str]:
         raise NotImplementedError
 
 
@@ -376,7 +375,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
             return False, f"Docker image '{self.image_name}' not found."
 
 
-    def verify_toolkit(self) -> Tuple[bool, str]:
+    def verify_toolkit(self, env) -> Tuple[bool, str]:
         try:
             cmd = [
                 self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-c", "import eis_toolkit"
@@ -385,7 +384,8 @@ class DockerEnvironmentHandler(EnvironmentHandler):
                 cmd,
                 check=True,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
+                stderr=subprocess.PIPE,
+                env=env
             )
             return True, f"EIS Toolkit is installed in the Docker image '{self.image_name}'."
         except subprocess.CalledProcessError as e:
@@ -435,7 +435,7 @@ class VenvEnvironmentHandler(EnvironmentHandler):
             return False, "Venv directory is invalid."
 
 
-    def verify_toolkit(self) -> Tuple[bool, str]:
+    def verify_toolkit(self, env) -> Tuple[bool, str]:
         try:
             cmd = [self.python_path, "-c", "import eis_toolkit"]
             creationflags = 0
@@ -446,7 +446,8 @@ class VenvEnvironmentHandler(EnvironmentHandler):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
-                creationflags=creationflags
+                creationflags=creationflags,
+                env=env
             )
             return True, "EIS Toolkit is installed in the specified venv."
         except subprocess.CalledProcessError as e:
