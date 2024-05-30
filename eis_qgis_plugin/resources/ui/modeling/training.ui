@@ -220,9 +220,6 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QComboBox" name="validation_metrics"/>
-          </item>
           <item row="1" column="1">
            <widget class="QgsSpinBox" name="split_size">
             <property name="suffix">
@@ -238,6 +235,9 @@
              <number>20</number>
             </property>
            </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QgsCheckableComboBox" name="validation_metrics"/>
           </item>
          </layout>
         </widget>
@@ -394,6 +394,11 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QgsCheckableComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgscheckablecombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>QgsFileWidget</class>
    <extends>QWidget</extends>
