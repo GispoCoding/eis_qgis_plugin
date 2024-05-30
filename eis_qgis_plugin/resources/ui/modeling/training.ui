@@ -193,22 +193,6 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QgsSpinBox" name="split_size">
-            <property name="suffix">
-             <string>%</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>99</number>
-            </property>
-            <property name="value">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="cv_folds_label">
             <property name="text">
@@ -233,6 +217,22 @@
            <widget class="QLabel" name="validation_metrics_label">
             <property name="text">
              <string>Metric</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QgsSpinBox" name="split_size">
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>99</number>
+            </property>
+            <property name="value">
+             <number>20</number>
             </property>
            </widget>
           </item>
