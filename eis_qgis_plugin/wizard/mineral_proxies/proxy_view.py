@@ -27,7 +27,7 @@ FORM_CLASS = load_ui("mineral_proxies/proxy_view.ui")
 class EISWizardProxyView(QWidget, FORM_CLASS):
 
     PROXY_DATA_PATH = os.path.join(PLUGIN_PATH, "resources/proxies.json")
-    PROXY_CATEGORIES = ["source", "pathway", "depositional", "mineralisation"]
+    MINERAL_SYSTEM_COMPONENTS = ["source", "pathway", "depositional", "mineralisation"]
     CATEGORY_COLORS = {
         "geology": "sandybrown",
         "geophysics": "blue",
@@ -96,7 +96,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.bold_font.setBold(True)
 
         self.grid_layouts = {}
-        for tab, category in zip(self.tabs, self.PROXY_CATEGORIES):
+        for tab, component in zip(self.tabs, self.MINERAL_SYSTEM_COMPONENTS):
             tab_layout = QVBoxLayout()
 
             # Create and add search layout and widget
@@ -110,7 +110,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
             # Create and add proxy table layout and widget
             grid_layout = QGridLayout()
-            self.grid_layouts[category] = (grid_layout, search_bar)
+            self.grid_layouts[component] = (grid_layout, search_bar)
 
             scroll_widget = QWidget()
             scroll_layout = QVBoxLayout()
@@ -169,7 +169,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         return self.mineral_system_selection.currentText().lower(), self.scale_selection.currentText().lower()
     
 
-    def get_proxies_for_category(self, category, mineral_system, scale):
+    def get_proxies_for_category(self, category: str, mineral_system: str, scale: str):
         if mineral_system == "custom":
             sorted_proxies = self.get_proxies_custom(category)
         else:
@@ -178,9 +178,9 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         return sorted_proxies
 
 
-    def create_table_for_category(self, proxies, mineral_system, scale, grid_layout):
+    def create_table_for_category(self, proxies, mineral_system, mineral_system_component, scale, grid_layout):
         # Create label row
-        self.create_table_row(grid_layout, 0, "Proxy", "Importance", "Category", "", "", label=True)
+        self.create_table_row(grid_layout, 0, "Proxy", "Importance", "Category", "", "", "", label=True)
 
         # Create proxy rows
         for i, (proxy_name, proxy_details) in enumerate(proxies.items()):
@@ -191,7 +191,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
                 importance=proxy_details["importance"][scale] if mineral_system != "custom" else "",
                 category=proxy_details["category"],
                 workflow=proxy_details["workflow"],
-                mineral_system=mineral_system
+                mineral_system=mineral_system,
+                mineral_system_component=mineral_system_component
             )
 
 
@@ -207,12 +208,12 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             return
 
         # Populate tab at a time
-        for category in self.PROXY_CATEGORIES:
-            grid_layout, _ = self.grid_layouts[category]
+        for component in self.MINERAL_SYSTEM_COMPONENTS:
+            grid_layout, _ = self.grid_layouts[component]
 
-            proxies = self.get_proxies_for_category(category, mineral_system, scale)
+            proxies = self.get_proxies_for_category(component, mineral_system, scale)
 
-            self.create_table_for_category(proxies, mineral_system, scale, grid_layout)
+            self.create_table_for_category(proxies, mineral_system, component, scale, grid_layout)
 
 
     def create_table_row(
@@ -224,6 +225,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         category: str,
         workflow: str,
         mineral_system: str,
+        mineral_system_component: str,
         label=False,
     ):
         """Create a new row in the proxy table."""
@@ -272,7 +274,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             process_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
             process_button.clicked.connect(
                 lambda: self.proxy_manager.enter_proxy_processing(
-                    mineral_system, category, name, int(workflow)
+                    mineral_system, category, name, int(workflow), mineral_system_component
                 )
             )
             grid_layout.addWidget(process_button, row, 3)

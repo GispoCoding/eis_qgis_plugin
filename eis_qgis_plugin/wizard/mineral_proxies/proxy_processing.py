@@ -55,7 +55,9 @@ class EISWizardProxyProcess(QWidget):
         output_layer = QgsRasterLayer(result["output_raster"], self.proxy_name)
         if EISSettingsManager.get_layer_group_selection():
             add_output_layer_to_group(
-                output_layer, MINERAL_SYSTEM_GROUP_NAMES[self.mineral_system], self.category.capitalize()
+                output_layer,
+                MINERAL_SYSTEM_GROUP_NAMES[self.mineral_system],
+                self.mineral_system_component.capitalize()
             )
         else:
             QgsProject.instance().addMapLayer(output_layer, True)
@@ -116,12 +118,14 @@ class EISWizardProxyDistanceToFeatures(EISWizardProxyProcess, FORM_CLASS_1):
         mineral_system: str,
         category: str,
         proxy_name: str,
+        mineral_system_component: str,
         parent: Optional[QWidget] = None
     ) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
         self.mineral_system = mineral_system
+        self.mineral_system_component = mineral_system_component
         self.category = category
         self.proxy_name = proxy_name
         self.proxy_manager = proxy_manager
@@ -488,12 +492,14 @@ class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLAS
         mineral_system: str,
         category: str,
         proxy_name: str,
+        mineral_system_component: str,
         parent: Optional[QWidget] = None
     ) -> None:
         super().__init__(parent)
         self.setupUi(self)
         
         self.mineral_system = mineral_system
+        self.mineral_system_component = mineral_system_component
         self.category = category
         self.proxy_name = proxy_name
         self.proxy_manager = proxy_manager
