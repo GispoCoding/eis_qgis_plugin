@@ -12,6 +12,15 @@ class EISWizardLogisticRegression(EISMLModel):
     Class for logistic regression.
     """
 
+    SOLVER_PENALTY_COMBINATIONS = {
+        "lbfgs": ['l2', None],
+        "liblinear": ['l1', 'l2'],
+        "newton-cg": ['l2', None],
+        "newton-cholesky": ['l2', None],
+        "sag": ['l2', None],
+        "saga": ['elasticnet', 'l1', 'l2', None]
+    }
+
     def __init__(self, parent) -> None:
         self.model_kind = ModelKind.CLASSIFIER
         self.model_type = "Logistic regression"
@@ -25,7 +34,7 @@ class EISWizardLogisticRegression(EISMLModel):
 
         self.training_tab.initialize_classifier()
 
-    
+
     def add_model_parameters(self):
         """Add parameter widgets for Logistic Regression model."""
         self.penalty_label = QLabel()
@@ -55,6 +64,12 @@ class EISWizardLogisticRegression(EISMLModel):
             'max_iter': self.max_iter.value(),
             'solver': self.solver.currentText() if as_str else self.solver.currentIndex()
         }
+
+
+    def check_solver_penalties(self):
+        valid_penalties = self.SOLVER_PENALTY_COMBINATIONS[self.solver.currentText()]
+        if self.penalty.currentText() not in valid_penalties:
+            raise Exception("Chosen penalty is not supported for the chosen solver!")
 
 
     def reset_parameters(self):

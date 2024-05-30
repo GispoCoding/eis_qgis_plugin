@@ -204,6 +204,8 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
 
     def check_ready_for_training(self):
         """Check if the inputs are ok to start training process."""
+        if self.model_main.model_type == "Logistic regression":
+            self.model_main.check_solver_penalties()
         if not self.train_model_instance_name.text():
             raise Exception("No name specified")
         for row in range(self.train_evidence_data.rowCount()):

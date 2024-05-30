@@ -25,7 +25,7 @@
         <x>0</x>
         <y>0</y>
         <width>639</width>
-        <height>853</height>
+        <height>876</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -240,6 +240,19 @@
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="paramateres_ok_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>NOTE:</string>
+         </property>
         </widget>
        </item>
        <item>
