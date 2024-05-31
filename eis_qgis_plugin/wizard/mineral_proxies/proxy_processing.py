@@ -1,37 +1,14 @@
-from typing import Optional
+from typing import Any, Dict, Literal
 
 from qgis.core import QgsMapLayerProxyModel, QgsProject, QgsRasterLayer
-from qgis.gui import (
-    QgsDoubleSpinBox,
-    QgsExtentGroupBox,
-    QgsFieldComboBox,
-    QgsFieldExpressionWidget,
-    QgsFileWidget,
-    QgsMapLayerComboBox,
-)
-from qgis.PyQt.QtWidgets import (
-    QComboBox,
-    QGroupBox,
-    QLabel,
-    QProgressBar,
-    QPushButton,
-    QStackedWidget,
-    QWidget,
-)
+from qgis.gui import QgsDoubleSpinBox, QgsExtentGroupBox, QgsFileWidget, QgsMapLayerComboBox
+from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLayout, QProgressBar, QPushButton, QStackedWidget, QWidget
 from qgis.utils import iface
 
-from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import add_output_layer_to_group, set_file_widget_placeholder_text
-from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
 from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
-
-FORM_CLASS_1 = load_ui("mineral_proxies/proxy_workflow1_dist_to_features.ui")
-FORM_CLASS_2 = load_ui("mineral_proxies/proxy_workflow2_interpolation.ui")
-FORM_CLASS_3 = load_ui("mineral_proxies/proxy_workflow3_define_anomaly.ui")
-FORM_CLASS_4 = load_ui("mineral_proxies/proxy_workflow4_interpolation_anomaly.ui")
-
 
 MINERAL_SYSTEM_GROUP_NAMES = {
     "iocg": "Mineral system proxies - IOCG",
@@ -41,14 +18,91 @@ MINERAL_SYSTEM_GROUP_NAMES = {
 }
 
 
-
 class EISWizardProxyProcess(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        self.proxy_name_label: QLabel
+        self.process_step_label: QLabel
+
         self.progress_bar: QProgressBar
         self.executor: AlgorithmExecutor
+        self.mineral_system_component: str
+        self.mineral_system: str
+
+        self.output_raster_path: QgsFileWidget
+        self.output_raster_settings: QComboBox
+        self.output_raster_settings_pages: QStackedWidget
+        self.base_raster: QgsMapLayerComboBox
+        self.pixel_size: QgsDoubleSpinBox
+        self.extent: QgsExtentGroupBox
+
+        self.navigation_btn_layout: QLayout
+        self.run_btn: QPushButton
+        self.back_btn: QPushButton
+        self.finish_btn: QPushButton
+        self.cancel_btn: QPushButton
+        self.next_btn: QPushButton
+
+
+    def initialize(self, process_type: Literal["single_step", "multi_step", "multi_step_final"]):
+        # Set placeholder text for output raster
+        set_file_widget_placeholder_text(self.output_raster_path)
+
+        # Connect output raster settings signal
+        self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
+
+        # Set name label
+        self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
+
+        # Set base raster
+        self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        default_base_raster = EISSettingsManager.get_default_base_raster()
+        if default_base_raster is not None:
+            self.base_raster.setLayer(default_base_raster)
+
+        # Create feedback
+        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
+
+        # Create executor and connect signals
+        self.executor = AlgorithmExecutor()
+        self.executor.finished.connect(self.on_algorithm_executor_finished)
+        self.executor.terminated.connect(self.on_algorithm_executor_terminated)
+        self.executor.error.connect(self.on_algorithm_executor_error)
+
+        # Connect execution buttons
+        self.run_btn.clicked.connect(self.run)
+        self.cancel_btn.clicked.connect(lambda: self.executor.cancel() if self.executor is not None else None)
+        self.back_btn.clicked.connect(
+            lambda: self.proxy_manager.proxy_pages.setCurrentIndex(self.proxy_manager.proxy_pages.currentIndex() - 1)
+                if not self.check_if_executor_running()
+                else None
+            )
+        self.next_btn.clicked.connect(
+            lambda: self.proxy_manager.proxy_pages.setCurrentIndex(self.proxy_manager.proxy_pages.currentIndex() + 1)
+            if not self.check_if_executor_running()
+            else None
+        )
+        self.finish_btn.clicked.connect(
+            lambda: self.proxy_manager.proxy_pages.setCurrentIndex(0)
+            if not self.check_if_executor_running()
+            else None
+        )
+
+        # Configure page navigation buttons and name label based on process type
+        if process_type == "single_step":
+            self.finish_btn.hide()
+            self.next_btn.hide()
+            self.process_step_label.hide()
+        elif process_type == "multi_step":
+            self.finish_btn.hide()
+            self.process_step_label.setText(self.process_step_label.text() + "1/2")  # NOTE: 2 steps assumed for now
+        elif process_type == "multi_step_final":
+            self.next_btn.hide()
+            self.process_step_label.setText(self.process_step_label.text() + "2/2")
+        else:
+            raise TypeError(f"Unrecognized proxy workflow process type: {process_type}")
 
 
     def on_algorithm_executor_finished(self, result, _):
@@ -66,9 +120,13 @@ class EISWizardProxyProcess(QWidget):
     def on_algorithm_executor_terminated(self):
         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
 
-    
+
     def on_algorithm_executor_error(self, error_message: str):
         pass
+
+
+    def on_output_raster_settings_changed(self):
+        raise NotImplementedError("'on_output_raster_settings_changed' needs to be implemented in child class!")
 
 
     def get_extent(self):
@@ -83,7 +141,7 @@ class EISWizardProxyProcess(QWidget):
         )
 
 
-    def get_output_raster_params(self):
+    def get_output_raster_params(self) -> Dict[str, Any]:
         if self.output_raster_settings.currentIndex() == 0:
             base_raster = self.base_raster.currentLayer()
             if base_raster is None:
@@ -108,634 +166,8 @@ class EISWizardProxyProcess(QWidget):
         return params
 
 
-class EISWizardProxyDistanceToFeatures(EISWizardProxyProcess, FORM_CLASS_1):
-
-    ALG_NAME = "eis:distance_computation"
-
-    def __init__(
-        self,
-        proxy_manager: QWidget,
-        mineral_system: str,
-        category: str,
-        proxy_name: str,
-        mineral_system_component: str,
-        parent: Optional[QWidget] = None
-    ) -> None:
-        super().__init__(parent)
-        self.setupUi(self)
-
-        self.mineral_system = mineral_system
-        self.mineral_system_component = mineral_system_component
-        self.category = category
-        self.proxy_name = proxy_name
-        self.proxy_manager = proxy_manager
-
-        # DELCARE TYPES
-        self.vector_layer: QgsMapLayerComboBox
-        self.selection: QgsFieldExpressionWidget
-        self.max_distance: QgsDoubleSpinBox
-
-        self.proxy_name_label: QLabel
-    
-        self.output_raster_path: QgsFileWidget
-        self.output_raster_settings: QComboBox
-        self.output_raster_settings_pages: QStackedWidget
-        self.base_raster: QgsMapLayerComboBox
-        self.pixel_size: QgsDoubleSpinBox
-        self.extent: QgsExtentGroupBox
-
-        self.progress_bar: QProgressBar
-        self.back_btn: QPushButton
-        self.run_btn: QPushButton
-        self.cancel_btn: QPushButton
-
-        # Set filters
-        self.vector_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
-        self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
-        default_base_raster = EISSettingsManager.get_default_base_raster()
-        if default_base_raster is not None:
-            self.base_raster.setLayer(default_base_raster)
-
-        set_file_widget_placeholder_text(self.output_raster_path)
-
-        # Connect signals
-        self.vector_layer.layerChanged.connect(self.selection.setLayer)
-        self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
-        self.back_btn.clicked.connect(self.back)
-        self.run_btn.clicked.connect(self.run)
-        self.cancel_btn.clicked.connect(self.cancel)
-
-        # Initialize
-        self.selection.setLayer(self.vector_layer.currentLayer())
-        self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
-
-        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
-
-        self.executor = AlgorithmExecutor()
-        self.executor.finished.connect(self.on_algorithm_executor_finished)
-        self.executor.terminated.connect(self.on_algorithm_executor_terminated)
-        self.executor.error.connect(self.on_algorithm_executor_error)
-
-
-    def on_output_raster_settings_changed(self, i):
-        max_height = 50 if i == 0 else 230
-        self.output_raster_settings_pages.setMaximumHeight(max_height)
-        self.output_raster_settings_pages.setCurrentIndex(i)
-
-
-    def back(self):
+    def check_if_executor_running(self) -> bool:
         if self.executor.is_running:
             iface.messageBar().pushWarning("Error: ", "Cannot leave page when computation is running.")
-            return
-
-        self.proxy_manager.return_from_proxy_processing()
-
-
-    def cancel(self):
-        if self.executor is not None:
-            self.executor.cancel()
-
-
-    def run(self):
-        output_raster_params = self.get_output_raster_params()
-        if output_raster_params is None or self.executor.is_running:
-            return
-
-        params = {
-            "input_vector": self.vector_layer.currentLayer(),  # SELECTION NOT INCLUDED! (yet)
-            **output_raster_params,
-            "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
-            "output_raster": get_output_path(self.output_raster_path)
-        }
-        self.executor.configure(self.ALG_NAME, self.feedback)
-        self.executor.run(params)
-
-
-
-# class EISWizardProxyInterpolation(QWidget, FORM_CLASS_2):
-
-#     IDW_ALG_NAME = "eis:idw_interpolation"
-#     KRIGING_ALG_NAME = "eis:kriging_interpolation"
-
-#     def __init__(
-#         self,
-#         proxy_manager: QWidget,
-#         mineral_system: str,
-#         category: str,
-#         proxy_name: str,
-#         parent: Optional[QWidget] = None
-#     ) -> None:
-#         super().__init__(parent)
-#         self.setupUi(self)
-
-#         self.mineral_system = mineral_system
-#         self.category = category
-#         self.proxy_name = proxy_name
-#         self.proxy_manager = proxy_manager
-
-#         # DELCARE TYPES
-#         self.vector_layer: QgsMapLayerComboBox
-#         self.attribute: QgsFieldComboBox
-
-#         self.interpolation_method: QComboBox
-#         self.interpolation_method_pages: QComboBox
-#         self.power: QgsDoubleSpinBox
-#         self.kriging_method: QComboBox
-#         self.variogram_model: QComboBox
-#         self.coordinates_type: QComboBox
-
-#         self.output_raster_path: QgsFileWidget
-#         self.output_raster_settings: QComboBox
-#         self.output_raster_settings_pages: QStackedWidget
-#         self.base_raster: QgsMapLayerComboBox
-#         self.pixel_size: QgsDoubleSpinBox
-#         self.extent: QgsExtentGroupBox
-
-#         self.progress_bar: QProgressBar
-#         self.back_btn: QPushButton
-#         self.run_btn: QPushButton
-
-#         # Set filters
-#         self.vector_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
-#         self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
-#         default_base_raster = EISSettingsManager.get_default_base_raster()
-#         if default_base_raster is not None:
-#             self.base_raster.setLayer(default_base_raster)
-
-#         set_file_widget_placeholder_text(self.output_raster_path)
-
-#         # Connect signals
-#         self.vector_layer.layerChanged.connect(self.attribute.setLayer)
-#         self.interpolation_method.currentIndexChanged.connect(self.on_interpolation_method_changed)
-#         self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
-#         self.back_btn.clicked.connect(self.back)
-#         self.run_btn.clicked.connect(self.run)
-
-#         # Initialize layer selection
-#         self.attribute.setLayer(self.vector_layer.currentLayer())
-
-#         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
-
-
-#     def on_output_raster_settings_changed(self, i):
-#         max_height = 50 if i == 0 else 230
-#         self.output_raster_settings_pages.setMaximumHeight(max_height)
-#         self.output_raster_settings_pages.setCurrentIndex(i)
-
-    
-#     def on_interpolation_method_changed(self, i):
-#         max_height = 50 if i == 0 else 110
-#         self.interpolation_method_pages.setMaximumHeight(max_height)
-#         self.interpolation_method_pages.setCurrentIndex(i)
-
-
-#     def back(self):
-#         self.proxy_manager.return_from_proxy_processing()
-
-
-#     def get_interpolation_alg_and_parameters(self):
-#         if self.interpolation_method.currentIndex() == 0:  # IDW
-#             params = {
-#                 "power": self.power.value()
-#             }
-#             return self.IDW_ALG_NAME, params
-#         else:  # Kriging
-#             params = {
-#                 "method": self.kriging_method.currentIndex(),
-#                 "variogram_model": self.variogram_model.currentIndex(),
-#                 "coordinates_type": self.coordinates_type.currentIndex()
-#             }
-#             return self.KRIGING_ALG_NAME, params
-
-
-#     def get_extent(self):
-#         current_extent = self.extent.outputExtent()
-#         if current_extent.isEmpty():
-#             return None
-#         return "{},{},{},{}".format(
-#             current_extent.xMinimum(),
-#             current_extent.xMaximum(),
-#             current_extent.yMinimum(),
-#             current_extent.yMaximum()
-#         )
-
-
-#     def get_output_raster_params(self):
-#         if self.output_raster_settings.currentIndex() == 0:
-#             base_raster = self.base_raster.currentLayer()
-#             if base_raster is None:
-#                 iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
-#                 return None
-#             params = {
-#                 "base_raster": base_raster,
-#                 "pixel_size": None,
-#                 "extent": None
-#             }
-#         else:
-#             pixel_size = self.pixel_size.value()
-#             extent = self.get_extent()
-#             if pixel_size <= 0 or extent is None:
-#                 iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
-#                 return None
-#             params = {
-#                 "base_raster": None,
-#                 "pixel_size": pixel_size,
-#                 "extent": extent
-#             }
-#         return params
-
-
-#     def run(self):
-#         interpolation_alg, interpolation_params = self.get_interpolation_alg_and_parameters()
-#         output_raster_params = self.get_output_raster_params()
-#         if not output_raster_params:
-#             return
-
-#         result = processing.run(
-#             interpolation_alg,
-#             {
-#                 "input_vector": self.vector_layer.currentLayer(),
-#                 "target_column": self.attribute.currentField(),
-#                 **interpolation_params,
-#                 **output_raster_params,
-#                 "output_raster": get_output_path(self.output_raster_path)
-#             },
-#             feedback=self.feedback
-#         )
-#         output_layer = QgsRasterLayer(result["output_raster"], self.proxy_name)
-#         if EISSettingsManager.get_layer_group_selection():
-#             add_output_layer_to_group(
-#                 output_layer, MINERAL_SYSTEM_GROUP_NAMES[self.mineral_system], self.category.capitalize()
-#             )
-#         else:
-#             QgsProject.instance().addMapLayer(output_layer, True)
-
-
-# class EISWizardProxyDefineAnomaly(QWidget, FORM_CLASS_3):
-
-#     ALG_NAME =  "eis:distance_to_anomaly"
-
-#     def __init__(
-#         self,
-#         proxy_manager: QWidget,
-#         mineral_system: str,
-#         category: str,
-#         proxy_name: str,
-#         parent: Optional[QWidget] = None
-#     ) -> None:
-#         super().__init__(parent)
-#         self.setupUi(self)
-        
-#         self.mineral_system = mineral_system
-#         self.category = category
-#         self.proxy_name = proxy_name
-#         self.proxy_manager = proxy_manager
-
-#         # DELCARE TYPES
-#         self.raster_layer: QgsMapLayerComboBox
-#         # self.band: QgsRasterBandComboBox
-
-#         self.threshold_criteria: QComboBox
-#         self.anomaly_threshold_1: QgsDoubleSpinBox
-#         self.anomaly_threshold_label_1: QLabel
-#         self.anomaly_threshold_2: QgsDoubleSpinBox
-#         self.anomaly_threshold_label_2: QLabel
-#         self.max_distance: QgsDoubleSpinBox
-
-#         self.output_raster_path: QgsFileWidget
-#         self.output_raster_settings: QComboBox
-#         self.output_raster_settings_pages: QStackedWidget
-#         self.base_raster: QgsMapLayerComboBox
-#         self.pixel_size: QgsDoubleSpinBox
-#         self.extent: QgsExtentGroupBox
-
-#         self.progress_bar: QProgressBar
-#         self.back_btn: QPushButton
-#         self.run_btn: QPushButton
-
-#         # Set filters
-#         self.raster_layer.setFilters(QgsMapLayerProxyModel.RasterLayer)
-#         self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
-
-#         set_file_widget_placeholder_text(self.output_raster_path)
-
-#         # Connect signals
-#         # self.raster_layer.layerChanged.connect(self.band.setLayer)
-#         self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
-#         self.threshold_criteria.currentTextChanged.connect(self.on_threshold_criteria_changed)
-#         self.back_btn.clicked.connect(self.back)
-#         self.run_btn.clicked.connect(self.run)
-
-#         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
-#         self.on_threshold_criteria_changed("higher")
-
-#         # Initialize layer selection
-#         # self.band.setLayer(self.raster_layer.currentLayer())
-
-
-#     def on_output_raster_settings_changed(self, i):
-#         max_height = 230 if i == 2 else 50
-#         self.output_raster_settings_pages.setMaximumHeight(max_height)
-#         self.output_raster_settings_pages.setCurrentIndex(i)
-
-
-#     def on_threshold_criteria_changed(self, text: str):
-#         text = text.lower()
-#         if text == "higher" or text == "lower":
-#             self.anomaly_threshold_label_1.setText("Threshold value")
-#             self.anomaly_threshold_label_2.hide()
-#             self.anomaly_threshold_2.hide()
-#         else:
-#             self.anomaly_threshold_label_1.setText("Threshold value lower")           
-#             self.anomaly_threshold_label_2.show()
-#             self.anomaly_threshold_2.show()
-
-#     def back(self):
-#         self.proxy_manager.return_from_proxy_processing()
-
-
-#     def run(self):
-#         threshold_criteria = self.threshold_criteria.currentIndex()
-#         anomaly_threshold_2 = self.anomaly_threshold_2.value()
-#         if threshold_criteria == 0 or threshold_criteria == 1:
-#             anomaly_threshold_2 = None
-
-#         result = processing.run(
-#             self.ALG_NAME,
-#             {
-#                 "input_raster": self.raster_layer.currentLayer(),
-#                 "threshold_criteria": self.threshold_criteria.currentIndex(),
-#                 "first_threshold_criteria_value": self.anomaly_threshold_1.value(),
-#                 "second_threshold_criteria_value": anomaly_threshold_2,
-#                 "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
-#                 "output_raster": get_output_path(self.output_raster_path)
-#             },
-#             feedback=self.feedback
-#         )
-#         output_layer = QgsRasterLayer(result["output_raster"], self.proxy_name)
-#         if EISSettingsManager.get_layer_group_selection():
-#             add_output_layer_to_group(
-#                 output_layer, MINERAL_SYSTEM_GROUP_NAMES[self.mineral_system], self.category.capitalize()
-#             )
-#         else:
-#             QgsProject.instance().addMapLayer(output_layer, True)
-
-
-class EISWizardProxyInterpolateAndDefineAnomaly(EISWizardProxyProcess, FORM_CLASS_4):
-
-    IDW_ALG_NAME = "eis:idw_interpolation"
-    KRIGING_ALG_NAME = "eis:kriging_interpolation"
-    ANOMALY_ALG_NAME = "eis:distance_to_anomaly"
-
-    def __init__(self,
-        proxy_manager: QWidget,
-        mineral_system: str,
-        category: str,
-        proxy_name: str,
-        mineral_system_component: str,
-        parent: Optional[QWidget] = None
-    ) -> None:
-        super().__init__(parent)
-        self.setupUi(self)
-        
-        self.mineral_system = mineral_system
-        self.mineral_system_component = mineral_system_component
-        self.category = category
-        self.proxy_name = proxy_name
-        self.proxy_manager = proxy_manager
-
-        # DELCARE TYPES
-        self.workflow_pages: QStackedWidget
-
-        self.proxy_name_label: QLabel
-        self.proxy_name_label2: QLabel
-
-        # INTERPOLATION PAGE
-        self.vector_layer: QgsMapLayerComboBox
-        self.attribute: QgsFieldComboBox
-
-        self.interpolation_method: QComboBox
-        self.interpolation_method_pages: QComboBox
-        self.power: QgsDoubleSpinBox
-        self.kriging_method: QComboBox
-        self.variogram_model: QComboBox
-        self.coordinates_type: QComboBox
-
-        self.output_raster_path: QgsFileWidget
-        self.output_raster_settings: QComboBox
-        self.output_raster_settings_pages: QStackedWidget
-        self.base_raster: QgsMapLayerComboBox
-        self.pixel_size: QgsDoubleSpinBox
-        self.extent: QgsExtentGroupBox
-
-        self.progress_bar: QProgressBar
-        self.back_btn: QPushButton
-        self.run_btn: QPushButton
-        self.next_btn: QPushButton
-        self.cancel_btn: QPushButton
-
-        # ANOMALY PAGE
-        self.raster_layer: QgsMapLayerComboBox
-        # self.band: QgsRasterBandComboBox
-
-        self.anomaly_method_box: QGroupBox
-        self.threshold_criteria: QComboBox
-        self.anomaly_threshold_1: QgsDoubleSpinBox
-        self.anomaly_threshold_label_1: QLabel
-        self.anomaly_threshold_2: QgsDoubleSpinBox
-        self.anomaly_threshold_label_2: QLabel
-        self.max_distance: QgsDoubleSpinBox
-
-        self.anomaly_output_raster_path: QgsFileWidget
-        self.anomaly_output_raster_settings: QComboBox
-        self.anomaly_output_raster_settings_pages: QStackedWidget
-        self.anomaly_base_raster: QgsMapLayerComboBox
-        self.anomaly_pixel_size: QgsDoubleSpinBox
-        self.anomaly_extent: QgsExtentGroupBox
-
-        self.anomaly_progress_bar: QProgressBar
-        self.anomaly_back_btn: QPushButton
-        self.anomaly_run_btn: QPushButton
-        self.finish_btn: QPushButton
-        self.anomaly_cancel_btn: QPushButton
-
-        self.initialize_interpolation_page()
-        self.initialize_anomaly_page()
-
-
-    def get_interpolation_alg_and_parameters(self):
-        if self.interpolation_method.currentIndex() == 0:  # IDW
-            params = {
-                "power": self.power.value()
-            }
-            return self.IDW_ALG_NAME, params
-        else:  # Kriging
-            params = {
-                "method": self.kriging_method.currentIndex(),
-                "variogram_model": self.variogram_model.currentIndex(),
-                "coordinates_type": self.coordinates_type.currentIndex()
-            }
-            return self.KRIGING_ALG_NAME, params
-        
-
-    def initialize_interpolation_page(self):
-        # Set filters
-        self.vector_layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
-        self.base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
-        default_base_raster = EISSettingsManager.get_default_base_raster()
-        if default_base_raster is not None:
-            self.base_raster.setLayer(default_base_raster)
-
-        set_file_widget_placeholder_text(self.output_raster_path)
-
-        # Connect signals
-        self.vector_layer.layerChanged.connect(self.attribute.setLayer)
-        self.interpolation_method.currentIndexChanged.connect(self.on_interpolation_method_changed)
-        self.output_raster_settings.currentIndexChanged.connect(self.on_output_raster_settings_changed)
-        self.threshold_criteria.currentTextChanged.connect(self.on_threshold_criteria_changed)
-        self.back_btn.clicked.connect(self.back_interpolate)
-        self.run_btn.clicked.connect(self.run_interpolate)
-        self.next_btn.clicked.connect(self.next)
-        self.cancel_btn.clicked.connect(self.cancel)
-
-        # Initialize
-        self.attribute.setLayer(self.vector_layer.currentLayer())
-        self.proxy_name_label.setText(self.proxy_name_label.text() + self.proxy_name)
-
-        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
-
-        self.executor = AlgorithmExecutor()
-        self.executor.finished.connect(self.on_algorithm_executor_finished)
-        self.executor.terminated.connect(self.on_algorithm_executor_terminated)
-        self.executor.error.connect(self.on_algorithm_executor_error)
-
-
-    def initialize_anomaly_page(self):
-        # Set filters
-        self.raster_layer.setFilters(QgsMapLayerProxyModel.RasterLayer)
-        self.anomaly_base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
-        default_base_raster = EISSettingsManager.get_default_base_raster()
-        if default_base_raster is not None:
-            self.anomaly_base_raster.setLayer(default_base_raster)
-
-        set_file_widget_placeholder_text(self.anomaly_output_raster_path)
-
-        # Connect signals
-        # self.raster_layer.layerChanged.connect(self.band.setLayer)
-        self.anomaly_output_raster_settings.currentIndexChanged.connect(
-            self.on_define_anomaly_output_raster_settings_changed
-        )
-        self.anomaly_back_btn.clicked.connect(self.back_define_anomaly)
-        self.anomaly_run_btn.clicked.connect(self.run_define_anomaly)
-        self.finish_btn.clicked.connect(self.finish)
-        self.anomaly_cancel_btn.clicked.connect(self.cancel)
-
-        # Initialize
-        # self.band.setLayer(self.raster_layer.currentLayer())
-        self.proxy_name_label2.setText(self.proxy_name_label2.text() + self.proxy_name)
-        self.on_threshold_criteria_changed("higher")
-
-        self.anomaly_feedback = EISProcessingFeedback(progress_bar=self.anomaly_progress_bar)
-
-
-    def on_output_raster_settings_changed(self, i):
-        max_height = 50 if i == 0 else 230
-        self.output_raster_settings_pages.setMaximumHeight(max_height)
-        self.output_raster_settings_pages.setCurrentIndex(i)
-
-
-    def on_define_anomaly_output_raster_settings_changed(self, i):
-        self.anomaly_output_raster_settings_pages.setCurrentIndex(i)
-
-
-    def on_interpolation_method_changed(self, i):
-        self.interpolation_method_pages.setCurrentIndex(i)
-
-
-    def on_threshold_criteria_changed(self, text: str):
-        text = text.lower()
-        if text == "higher" or text == "lower":
-            self.anomaly_threshold_label_1.setText("Threshold value")
-            self.anomaly_threshold_label_2.hide()
-            self.anomaly_threshold_2.hide()
-        else:
-            self.anomaly_threshold_label_1.setText("Threshold value lower")           
-            self.anomaly_threshold_label_2.show()
-            self.anomaly_threshold_2.show()
-
-
-    def back_interpolate(self):
-        if self.executor.is_running:
-            iface.messageBar().pushWarning("Error: ", "Cannot leave page when computation is running.")
-            return
-
-        self.proxy_manager.return_from_proxy_processing()
-
-
-    def back_define_anomaly(self):
-        if self.executor.is_running:
-            iface.messageBar().pushWarning("Error: ", "Cannot leave page when computation is running.")
-            return
-
-        self.workflow_pages.setCurrentIndex(0)
-
-
-    def next(self):
-        if self.executor.is_running:
-            iface.messageBar().pushWarning("Error: ", "Cannot leave page when computation is running.")
-            return
-
-        self.workflow_pages.setCurrentIndex(1)
-
-
-    def cancel(self):
-        if self.executor is not None:
-            self.executor.cancel()
-
-
-    def run_interpolate(self):
-        interpolation_alg, interpolation_params = self.get_interpolation_alg_and_parameters()
-        output_raster_params = self.get_output_raster_params()
-        if output_raster_params is None or self.executor.is_running:
-            return
-
-        params = {
-            "input_vector": self.vector_layer.currentLayer(),
-            "target_column": self.attribute.currentField(),
-            **interpolation_params,
-            **output_raster_params,
-            "output_raster": get_output_path(self.output_raster_path)
-        }
-        self.executor.configure(interpolation_alg, self.feedback)
-        self.executor.run(params)
-
-
-    def run_define_anomaly(self):
-        threshold_criteria = self.threshold_criteria.currentIndex()
-        anomaly_threshold_2 = self.anomaly_threshold_2.value()
-        if threshold_criteria == 0 or threshold_criteria == 1:
-            anomaly_threshold_2 = None
-
-        params = {
-            "input_raster": self.raster_layer.currentLayer(),
-            "threshold_criteria": self.threshold_criteria.currentIndex(),
-            "first_threshold_criteria_value": self.anomaly_threshold_1.value(),
-            "second_threshold_criteria_value": anomaly_threshold_2,
-            "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
-            "output_raster": get_output_path(self.anomaly_output_raster_path)
-        }
-        self.executor.configure(self.ANOMALY_ALG_NAME, self.anomaly_feedback)
-        self.executor.run(params)
-
-
-    def finish(self):
-        if self.executor.is_running:
-            iface.messageBar().pushWarning("Error: ", "Cannot leave page when computation is running.")
-            return
-
-        self.proxy_manager.return_from_proxy_processing()
-
-
-    def on_algorithm_executor_terminated(self):
-        self.anomaly_feedback = EISProcessingFeedback(progress_bar=self.anomaly_progress_bar)
-        super().on_algorithm_executor_terminated()
+            return True
+        return False

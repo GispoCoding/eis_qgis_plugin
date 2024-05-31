@@ -425,7 +425,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="btn_layout_3">
+        <layout class="QHBoxLayout" name="navigation_btn_layout">
          <item>
           <spacer name="run_btn_spacer_3">
            <property name="orientation">

@@ -1,32 +1,24 @@
+from typing import Optional
+
 from qgis.PyQt.QtWidgets import (
     QStackedWidget,
     QVBoxLayout,
     QWidget,
 )
 
-from eis_qgis_plugin.wizard.mineral_proxies.proxy_processing import (
-    # EISWizardProxyDefineAnomaly,
-    EISWizardProxyDistanceToFeatures,
-    EISWizardProxyInterpolateAndDefineAnomaly,
-)
-
-# EISWizardProxyInterpolation,
 from eis_qgis_plugin.wizard.mineral_proxies.proxy_view import EISWizardProxyView
+from eis_qgis_plugin.wizard.mineral_proxies.workflows.distance_to_anomaly import EISWizardProxyDistanceToAnomaly
+from eis_qgis_plugin.wizard.mineral_proxies.workflows.distance_to_features import EISWizardProxyDistanceToFeatures
+from eis_qgis_plugin.wizard.mineral_proxies.workflows.interpolate import EISWizardProxyInterpolate
 
 
 class EISWizardProxies(QWidget):
 
-    # CATEGORY_PROCESS_MAP = {
-    #     "geochemistry": EISWizardProxyInterpolation,
-    #     "geology": EISWizardProxyDistanceToFeatures,
-    #     "geophysics": EISWizardProxyDefineAnomaly,
-    #     "test": EISWizardProxyInterpolateAndDefineAnomaly
-    # }
     WORKFLOW_MAP = {
         1: EISWizardProxyDistanceToFeatures,
-        # 2: EISWizardProxyInterpolation,
-        # 3: EISWizardProxyDefineAnomaly,
-        4: EISWizardProxyInterpolateAndDefineAnomaly
+        2: EISWizardProxyInterpolate,
+        3: EISWizardProxyDistanceToAnomaly,
+        4: [EISWizardProxyInterpolate, EISWizardProxyDistanceToAnomaly]
     }
 
     def __init__(self, parent=None) -> None:
@@ -40,6 +32,8 @@ class EISWizardProxies(QWidget):
         layout.addWidget(self.proxy_pages)
         self.setLayout(layout)
 
+        self.active_proxy_name: Optional[str] = None
+
 
     def enter_proxy_processing(
         self,mineral_system: str,
@@ -47,24 +41,40 @@ class EISWizardProxies(QWidget):
         proxy_name: str,
         workflow: int,
         mineral_system_component: str
-    ):
-        processing_page = self.WORKFLOW_MAP[workflow](
-            self,
-            mineral_system,
-            category,
-            proxy_name,
-            mineral_system_component
-        )
-        self.proxy_pages.addWidget(processing_page)
-        self.proxy_pages.setCurrentIndex(1)
+    ):  
+        # Cleanup if changing proxy
+        if self.active_proxy_name and self.active_proxy_name != proxy_name:
+            self.delete_proxy_processing_pages()
+
+        workflow_classes = self.WORKFLOW_MAP[workflow]
+        if isinstance(workflow_classes, list):
+            last_i = len(workflow_classes) - 1
+            for i, cls in enumerate(workflow_classes):
+                processing_page = cls(
+                    proxy_manager=self,
+                    mineral_system=mineral_system,
+                    category=category,
+                    proxy_name=proxy_name,
+                    mineral_system_component=mineral_system_component,
+                    process_type="multi_step" if i != last_i else "multi_step_final"
+                )
+                self.proxy_pages.addWidget(processing_page)
+        else:
+            processing_page = self.WORKFLOW_MAP[workflow](
+                proxy_manager=self,
+                mineral_system=mineral_system,
+                category=category,
+                proxy_name=proxy_name,
+                mineral_system_component=mineral_system_component,
+                process_type="single_step"
+            )
+            self.proxy_pages.addWidget(processing_page)
+
+        self.active_proxy_name = proxy_name
+        self.proxy_pages.setCurrentIndex(1)     
 
 
-    def return_from_proxy_processing(self):
-        self.proxy_pages.setCurrentIndex(0)
-        self.delete_proxy_processing_page()
-
-
-    def delete_proxy_processing_page(self):
+    def delete_proxy_processing_pages(self):
         for i in reversed(range(self.proxy_pages.count())):
             if i == 0:
                 return
