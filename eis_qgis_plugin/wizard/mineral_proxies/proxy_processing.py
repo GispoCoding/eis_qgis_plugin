@@ -7,7 +7,7 @@ from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLayout, QProgressBar, QPushB
 from qgis.utils import iface
 
 from eis_qgis_plugin.utils import add_output_layer_to_group, set_file_widget_placeholder_text
-from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
+from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_filter
 from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
@@ -49,7 +49,8 @@ class EISWizardProxyProcess(QWidget):
 
 
     def initialize(self, process_type: Literal["single_step", "multi_step", "multi_step_final"]):
-        # Set placeholder text for output raster
+        # Set file filter and placeholder text for output raster
+        set_filter(self.output_raster_path, "raster")
         set_file_widget_placeholder_text(self.output_raster_path)
 
         # Connect output raster settings signal
