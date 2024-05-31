@@ -30,7 +30,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="heading">
+    <widget class="QLabel" name="workflow_label">
      <property name="font">
       <font>
        <pointsize>15</pointsize>

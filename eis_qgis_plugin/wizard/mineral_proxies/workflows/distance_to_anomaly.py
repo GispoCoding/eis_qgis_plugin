@@ -25,6 +25,7 @@ FORM_CLASS = load_ui("mineral_proxies/proxy_workflow3_define_anomaly.ui")
 class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
 
     ALG_NAME = "eis:distance_to_anomaly"
+    WORKFLOW_NAME = "Distance to anomaly"
 
     def __init__(self,
         proxy_manager: QWidget,
