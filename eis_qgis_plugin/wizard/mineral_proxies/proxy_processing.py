@@ -1,3 +1,4 @@
+import os
 from typing import Any, Dict, Literal
 
 from qgis.core import QgsMapLayerProxyModel, QgsProject, QgsRasterLayer
@@ -6,6 +7,7 @@ from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLayout, QProgressBar, QPushB
 from qgis.utils import iface
 
 from eis_qgis_plugin.utils import add_output_layer_to_group, set_file_widget_placeholder_text
+from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
 from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
@@ -95,18 +97,21 @@ class EISWizardProxyProcess(QWidget):
             self.finish_btn.hide()
             self.next_btn.hide()
             self.process_step_label.hide()
+            self.default_output_name = self.proxy_name
         elif process_type == "multi_step":
             self.finish_btn.hide()
             self.process_step_label.setText(self.process_step_label.text() + "1/2")  # NOTE: 2 steps assumed for now
+            self.default_output_name = self.WORKFLOW_NAME + " result ― " + self.proxy_name
         elif process_type == "multi_step_final":
             self.next_btn.hide()
             self.process_step_label.setText(self.process_step_label.text() + "2/2")
+            self.default_output_name = self.proxy_name
         else:
             raise TypeError(f"Unrecognized proxy workflow process type: {process_type}")
 
 
     def on_algorithm_executor_finished(self, result, _):
-        output_layer = QgsRasterLayer(result["output_raster"], self.proxy_name)
+        output_layer = QgsRasterLayer(result["output_raster"], self.get_output_layer_name())
         if EISSettingsManager.get_layer_group_selection():
             add_output_layer_to_group(
                 output_layer,
@@ -164,6 +169,13 @@ class EISWizardProxyProcess(QWidget):
                 "extent": extent
             }
         return params
+    
+
+    def get_output_layer_name(self) -> str:
+        if get_output_path(self.output_raster_path) == 'TEMPORARY_OUTPUT':
+            return self.default_output_name
+        else:
+            return os.path.splitext(os.path.basename(self.output_raster_path.filePath()))[0]
 
 
     def check_if_executor_running(self) -> bool:

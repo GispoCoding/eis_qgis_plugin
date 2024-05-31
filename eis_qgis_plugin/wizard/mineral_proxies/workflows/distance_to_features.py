@@ -22,6 +22,7 @@ FORM_CLASS = load_ui("mineral_proxies/proxy_workflow1_dist_to_features.ui")
 class EISWizardProxyDistanceToFeatures(EISWizardProxyProcess, FORM_CLASS):
 
     ALG_NAME = "eis:distance_computation"
+    WORKFLOW_NAME = "Distance to features"
 
     def __init__(
         self,

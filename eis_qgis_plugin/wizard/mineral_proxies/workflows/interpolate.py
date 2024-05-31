@@ -24,6 +24,7 @@ class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
 
     IDW_ALG_NAME = "eis:idw_interpolation"
     KRIGING_ALG_NAME = "eis:kriging_interpolation"
+    WORKFLOW_NAME = "Interpolation"
 
     def __init__(self,
         proxy_manager: QWidget,
