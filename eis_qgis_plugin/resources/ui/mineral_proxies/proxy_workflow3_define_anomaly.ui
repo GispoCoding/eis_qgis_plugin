@@ -15,6 +15,18 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QLabel" name="proxy_name_label">
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Proxy: </string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="heading_label">
      <property name="font">
       <font>
@@ -22,7 +34,19 @@
       </font>
      </property>
      <property name="text">
-      <string>Define anomaly</string>
+      <string>Workflow: Distance to anomaly</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="process_step_label">
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Step: </string>
      </property>
     </widget>
    </item>
@@ -52,14 +76,14 @@
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="1" column="0">
-       <widget class="QLabel" name="anomaly_threshold_label_1">
+       <widget class="QLabel" name="threshold_label_1">
         <property name="text">
          <string>Threshold value</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QgsDoubleSpinBox" name="anomaly_threshold_1">
+       <widget class="QgsDoubleSpinBox" name="threshold_1">
         <property name="decimals">
          <number>3</number>
         </property>
@@ -72,7 +96,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QgsDoubleSpinBox" name="anomaly_threshold_2">
+       <widget class="QgsDoubleSpinBox" name="threshold_2">
         <property name="decimals">
          <number>3</number>
         </property>
@@ -85,7 +109,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="anomaly_threshold_label_2">
+       <widget class="QLabel" name="threshold_label_2">
         <property name="text">
          <string>Threshold value higher</string>
         </property>
@@ -290,7 +314,7 @@
      <item>
       <widget class="QPushButton" name="cancel_btn">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>Cancel</string>
@@ -307,7 +331,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="btn_layout">
+    <layout class="QHBoxLayout" name="navigation_btn_layout">
      <item>
       <spacer name="run_btn_spacer">
        <property name="orientation">
@@ -325,6 +349,20 @@
       <widget class="QPushButton" name="back_btn">
        <property name="text">
         <string>Back</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="next_btn">
+       <property name="text">
+        <string>Next</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="finish_btn">
+       <property name="text">
+        <string>Finish</string>
        </property>
       </widget>
      </item>

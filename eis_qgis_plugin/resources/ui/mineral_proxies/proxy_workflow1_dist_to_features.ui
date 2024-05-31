@@ -42,6 +42,18 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="process_step_label">
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Step: </string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="input_box">
      <property name="title">
       <string>Input</string>
@@ -269,7 +281,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="btn_layout">
+    <layout class="QHBoxLayout" name="navigation_btn_layout">
      <item>
       <spacer name="run_btn_spacer">
        <property name="orientation">
@@ -287,6 +299,20 @@
       <widget class="QPushButton" name="back_btn">
        <property name="text">
         <string>Back</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="next_btn">
+       <property name="text">
+        <string>Next</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="finish_btn">
+       <property name="text">
+        <string>Finish</string>
        </property>
       </widget>
      </item>
