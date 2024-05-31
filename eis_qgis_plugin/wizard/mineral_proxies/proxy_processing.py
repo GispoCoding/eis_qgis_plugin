@@ -174,7 +174,13 @@ class EISWizardProxyProcess(QWidget):
 
     def get_output_layer_name(self) -> str:
         if get_output_path(self.output_raster_path) == 'TEMPORARY_OUTPUT':
-            return self.default_output_name
+            layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+            unique_name = self.default_output_name
+            suffix = 1
+            while unique_name in layer_names:
+                unique_name = f"{self.default_output_name}_{suffix}"
+                suffix += 1
+            return unique_name
         else:
             return os.path.splitext(os.path.basename(self.output_raster_path.filePath()))[0]
 
