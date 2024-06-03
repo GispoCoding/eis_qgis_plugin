@@ -76,8 +76,8 @@ class EISWizardHistogram(EISPlot, FORM_CLASS):
 
             df = self.vector_layer_to_df(layer, *fields)
 
-            if color_field_name:
-                self.check_unique_values(df, color_field_name, 10)
+            # if color_field_name:
+            #     self.check_unique_values(df, color_field_name, 20)
 
             layer_specific_kwargs = {
                 "data": df,

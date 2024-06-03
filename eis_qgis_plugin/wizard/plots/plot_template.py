@@ -3,6 +3,7 @@ import pandas as pd
 from qgis.core import Qgis, QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QSizePolicy, QWidget
+from qgis.utils import iface
 
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
@@ -84,7 +85,10 @@ class EISPlot(QWidget):
         values = df[field_name]
         nr_of_values = np.unique(values).size
         if nr_of_values > threshold:
-            raise Exception(f"Too many unique values in selected {field_name}. ({values} > {threshold})")
+            iface.messageBar().pushCritical(
+                "Error: ",
+                f"Too many unique values in selected field '{field_name}'. ({nr_of_values} > {threshold})"
+            )
 
     @staticmethod
     def str_to_bool(str: str) -> bool:
@@ -107,7 +111,7 @@ class EISPlot(QWidget):
         elif qgis_dtype == Qgis.UInt32:
             dtype = np.uint32
         else:
-            raise Exception(f"Datatype conversion to Numpy failed. QGIS datatype: {qgis_dtype}")
+            raise ValueError(f"Datatype conversion to Numpy failed. QGIS datatype: {qgis_dtype}")
 
         return dtype
     
@@ -122,16 +126,12 @@ class EISPlot(QWidget):
     @staticmethod
     def vector_layer_to_df(layer: QgsVectorLayer, *fields) -> pd.DataFrame:
         """Create a DataFrame from given vector layer and its fields."""
-        nr_of_features = layer.featureCount()
-
-        df_data = {}
-        for field in fields:
-            df_data[field] = np.empty(nr_of_features)
+        df_data = {field: [] for field in fields}
 
         # Iterate over features and collect to arrays
-        for i, feature in enumerate(layer.getFeatures()):
+        for feature in layer.getFeatures():
             for field in fields:
-                df_data[field][i] = feature[field]
+                df_data[field].append(feature[field])
 
         # Create a DataFrame
         df = pd.DataFrame(df_data)
