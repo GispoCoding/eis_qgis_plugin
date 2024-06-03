@@ -93,10 +93,10 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
             iface.messageBar().pushCritical("Error: ", "Cannot select more than 15 fields.")
             ok = False
         n_categories = len(np.unique(color_data))
-        if n_categories > 10 and color_field_type == "categorical":
+        if n_categories > 15 and color_field_type == "categorical":
             iface.messageBar().pushCritical(
                 "Error: ",
-                f"Categorical color column can have at most 10 unique values, {n_categories} categories detected."
+                f"Categorical color column can have at most 15 unique values, {n_categories} categories detected."
             )
             ok = False
         return ok
