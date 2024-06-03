@@ -122,6 +122,10 @@ class EISWizardProxyProcess(QWidget):
         else:
             QgsProject.instance().addMapLayer(output_layer, True)
 
+        if self.process_type == "multi_step":
+            i = self.proxy_manager.proxy_pages.currentIndex() + 1
+            self.proxy_manager.proxy_pages.widget(i).raster_layer.setLayer(output_layer)
+
 
     def on_algorithm_executor_terminated(self):
         self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
