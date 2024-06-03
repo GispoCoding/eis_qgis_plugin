@@ -89,8 +89,8 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
 
     def perform_checks(self, fields, color_data, color_field_type) -> bool:
         ok = True
-        if len(fields) > 8:
-            iface.messageBar().pushCritical("Error: ", "Cannot select more than 6 fields.")
+        if len(fields) > 15:
+            iface.messageBar().pushCritical("Error: ", "Cannot select more than 15 fields.")
             ok = False
         n_categories = len(np.unique(color_data))
         if n_categories > 10 and color_field_type == "categorical":
