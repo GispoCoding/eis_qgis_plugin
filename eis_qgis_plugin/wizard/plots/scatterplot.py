@@ -40,6 +40,8 @@ class EISWizardScatterplot(EISPlot, FORM_CLASS):
         self.X.setFilters(QgsFieldProxyModel.Filter.Numeric)
         self.Y.setFilters(QgsFieldProxyModel.Filter.Numeric)
 
+        self.update_layer(self.layer.currentLayer())
+
 
     def update_layer(self, layer):
         """Update (set) widgets based on selected layer."""
