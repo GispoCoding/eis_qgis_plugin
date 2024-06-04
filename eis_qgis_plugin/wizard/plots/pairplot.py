@@ -40,6 +40,8 @@ class EISWizardPairplot(EISPlot, FORM_CLASS):
         self.select_all_btn.clicked.connect(self.fields.selectAll)
         self.deselect_all_btn.clicked.connect(self.fields.clearSelection)
 
+        self.update_layer(self.layer.currentLayer())
+
 
     def update_layer(self, layer):
         """Update (set/add items) widgets based on selected layer."""

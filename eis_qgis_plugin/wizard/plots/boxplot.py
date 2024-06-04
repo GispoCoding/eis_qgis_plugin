@@ -32,6 +32,8 @@ class EISWizardBoxplot(EISPlot, FORM_CLASS):
         super().__init__(parent)
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
 
+        self.update_layer(self.layer.currentLayer())
+
 
     def update_layer(self, layer):
         """Update (set) widgets based on selected layer."""
