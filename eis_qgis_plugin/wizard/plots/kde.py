@@ -1,4 +1,4 @@
-from qgis.core import QgsMapLayer
+from qgis.core import QgsFieldProxyModel, QgsMapLayer
 from qgis.gui import (
     QgsColorButton,
     QgsFieldComboBox,
@@ -39,6 +39,7 @@ class EISWizardKde(EISPlot, FORM_CLASS):
         # Initialize
         self.collapsed_height = 170
         super().__init__(parent)
+        self.vector_X.setFilters(QgsFieldProxyModel.Filter.Numeric)
 
 
     def update_layer(self, layer):

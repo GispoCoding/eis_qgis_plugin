@@ -1,4 +1,4 @@
-from qgis.core import QgsMapLayerProxyModel
+from qgis.core import QgsFieldProxyModel, QgsMapLayerProxyModel
 from qgis.gui import (
     QgsColorButton,
     QgsFieldComboBox,
@@ -37,6 +37,8 @@ class EISWizardScatterplot(EISPlot, FORM_CLASS):
         self.collapsed_height = 200
         super().__init__(parent)
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.X.setFilters(QgsFieldProxyModel.Filter.Numeric)
+        self.Y.setFilters(QgsFieldProxyModel.Filter.Numeric)
 
 
     def update_layer(self, layer):

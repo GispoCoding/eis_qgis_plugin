@@ -47,7 +47,10 @@ class EISWizardPairplot(EISPlot, FORM_CLASS):
             return
 
         self.fields.clear()
-        self.fields.addItems(field.name() for field in layer.fields())
+        for field in layer.fields():
+            if field.isNumeric():
+                self.fields.addItem(field.name())
+
         self.color_field.setLayer(layer)
 
 
