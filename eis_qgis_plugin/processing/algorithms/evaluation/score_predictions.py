@@ -39,7 +39,7 @@ class EISScorePredictions(EISProcessingAlgorithm):
         metrics_param = QgsProcessingParameterEnum(
             name=self.alg_parameters[2],
             description="Metrics",
-            options=["accuracy", "precision", "recall", "f1", "auc", "mse", "rmse", "mae", "r2"],
+            options=["accuracy", "precision", "recall", "f1", "mse", "rmse", "mae", "r2"],
             allowMultiple=True
         )
         metrics_param.setHelp(
