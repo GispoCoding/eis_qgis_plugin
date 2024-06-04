@@ -1,6 +1,6 @@
 from typing import Optional
 
-from qgis.core import QgsRasterLayer, QgsSettings
+from qgis.core import QgsProject, QgsRasterLayer, QgsSettings
 from qgis.PyQt.QtGui import QColor
 
 
@@ -101,7 +101,12 @@ class EISSettingsManager:
     @classmethod
     def get_default_base_raster(self) -> Optional[QgsRasterLayer]:
         key = self.DEFAULT_BASE_RASTER
-        return QgsSettings().value(key, self.DEFAULTS[key])
+        raster_id = QgsSettings().value(key, self.DEFAULTS[key])
+        if raster_id:
+            layer = QgsProject.instance().mapLayer(raster_id)
+            if isinstance(layer, QgsRasterLayer) and layer.isValid():
+                return layer
+        return None
 
 
     # SETTERS
@@ -151,7 +156,10 @@ class EISSettingsManager:
 
     @classmethod
     def set_default_base_raster(self, base_raster: Optional[QgsRasterLayer]):
-        QgsSettings().setValue(self.DEFAULT_BASE_RASTER, base_raster)
+        if base_raster:
+            QgsSettings().setValue(self.DEFAULT_BASE_RASTER, base_raster.id())
+        else:
+            QgsSettings().setValue(self.DEFAULT_BASE_RASTER, self.DEFAULTS[self.DEFAULT_BASE_RASTER])
 
 
     # RESETS
@@ -219,6 +227,4 @@ class EISSettingsManager:
         self.reset_layer_group_selection()
         self.reset_default_base_raster()
 
-        print(self.get_dock_wizard_selection())
-        print(type(self.get_dock_wizard_selection()))
         print("All EIS settings reset.")
