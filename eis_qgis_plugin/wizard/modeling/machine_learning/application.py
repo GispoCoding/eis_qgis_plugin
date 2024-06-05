@@ -16,7 +16,7 @@ from qgis.PyQt.QtWidgets import (
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import add_output_layer_to_group
+from eis_qgis_plugin.utils import add_output_layer_to_group, get_output_layer_name
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_filter, set_placeholder_text
@@ -109,8 +109,8 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
 
     def on_algorithm_executor_finished(self, result, _):
         if self.application_feedback.no_errors:
-            for (layer_name, output_layer) in self.output_layers:
-                layer = QgsRasterLayer(result[output_layer], layer_name)
+            for (layer_name, output_layer, output_path) in self.output_layers:
+                layer = QgsRasterLayer(result[output_layer], get_output_layer_name(output_path, layer_name))
                 if EISSettingsManager.get_layer_group_selection():
                     add_output_layer_to_group(
                         layer, f"Modeling — {self.model_info.model_type}", self.model_info.model_instance_name
@@ -167,8 +167,8 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
                 "output_raster_classified": get_output_path(self.application_output_raster_1)
             }
             self.output_layers = [
-                ("Output probabilities", "output_raster_probability"),
-                ("Output classified", "output_raster_classified")
+                ("Output probabilities", "output_raster_probability", self.application_output_raster_2),
+                ("Output classified", "output_raster_classified", self.application_output_raster_1)
             ]
             self.executor.configure(self.CLASSIFIER_ALG, self.application_feedback)
             self.executor.run(params)
@@ -178,7 +178,7 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
                 "model_file": self.model_file_application.text(),
                 "output_raster": get_output_path(self.application_output_raster_1)
             }
-            self.output_layers = [("Output predictions", "output_raster")]
+            self.output_layers = [("Output predictions", "output_raster", self.application_output_raster_1)]
             self.executor.configure(self.REGRESSOR_ALG, self.application_feedback)
             self.executor.run(params)
         else:
