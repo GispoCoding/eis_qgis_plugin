@@ -14,8 +14,6 @@ class EISMLModelDataPreparation(QWidget, FORM_CLASS):
 
         self.model_main = model_main
 
-        self.open_resample_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:resample_raster'))
-        self.open_reproject_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:reproject_raster'))
         self.open_unify_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:unify_rasters'))
         self.open_binarize_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:binarize'))
         self.open_min_max_scale_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:min_max_scaling'))

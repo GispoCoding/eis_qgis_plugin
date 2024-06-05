@@ -216,7 +216,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="validation_metrics_label">
             <property name="text">
-             <string>Metric</string>
+             <string>Metrics</string>
             </property>
            </widget>
           </item>
