@@ -13,10 +13,10 @@ from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
 MINERAL_SYSTEM_GROUP_NAMES = {
-    "iocg": "Mineral system proxies - IOCG",
-    "li-pegmatite": "Mineral system proxies - Li-Pegmatites",
-    "co-vms": "Mineral system proxies - Co-VMS",
-    "custom": "Mineral system proxies - Custom"
+    "iocg": "Mineral system proxies — IOCG",
+    "li-pegmatite": "Mineral system proxies — Li-Pegmatites",
+    "co-vms": "Mineral system proxies — Co-VMS",
+    "custom": "Mineral system proxies — Custom"
 }
 
 
