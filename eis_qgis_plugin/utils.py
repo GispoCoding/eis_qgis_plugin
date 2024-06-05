@@ -4,6 +4,8 @@ from qgis.core import QgsProject
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLayout, QLineEdit
 
+from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
+
 PLUGIN_PATH = os.path.dirname(__file__)
 
 TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
@@ -25,6 +27,19 @@ def clear_layout(layout: QLayout):
         widget = layout.itemAt(i).widget()
         if widget is not None:
             widget.deleteLater()
+
+
+def get_output_layer_name(output_raster_path: QgsFileWidget, default_output_name: str) -> str:
+    if get_output_path(output_raster_path) == 'TEMPORARY_OUTPUT':
+        layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+        unique_name = default_output_name
+        suffix = 1
+        while unique_name in layer_names:
+            unique_name = f"{default_output_name}_{suffix}"
+            suffix += 1
+        return unique_name
+    else:
+        return os.path.splitext(os.path.basename(output_raster_path.filePath()))[0]
 
 
 def add_output_layer_to_group(layer, group_name: str, subgroup_name: str):

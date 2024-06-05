@@ -1,4 +1,3 @@
-import os
 from typing import Any, Dict, Literal
 
 from qgis.core import QgsMapLayerProxyModel, QgsProject, QgsRasterLayer
@@ -6,8 +5,8 @@ from qgis.gui import QgsDoubleSpinBox, QgsExtentGroupBox, QgsFileWidget, QgsMapL
 from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLayout, QProgressBar, QPushButton, QStackedWidget, QWidget
 from qgis.utils import iface
 
-from eis_qgis_plugin.utils import add_output_layer_to_group, set_file_widget_placeholder_text
-from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_filter
+from eis_qgis_plugin.utils import add_output_layer_to_group, get_output_layer_name, set_file_widget_placeholder_text
+from eis_qgis_plugin.wizard.modeling.model_utils import set_filter
 from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
@@ -112,7 +111,9 @@ class EISWizardProxyProcess(QWidget):
 
 
     def on_algorithm_executor_finished(self, result, _):
-        output_layer = QgsRasterLayer(result["output_raster"], self.get_output_layer_name())
+        output_layer = QgsRasterLayer(
+            result["output_raster"], get_output_layer_name(self.output_raster_path, self.default_output_name)
+        )
         if EISSettingsManager.get_layer_group_selection():
             add_output_layer_to_group(
                 output_layer,
@@ -174,19 +175,6 @@ class EISWizardProxyProcess(QWidget):
                 "extent": extent
             }
         return params
-    
-
-    def get_output_layer_name(self) -> str:
-        if get_output_path(self.output_raster_path) == 'TEMPORARY_OUTPUT':
-            layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
-            unique_name = self.default_output_name
-            suffix = 1
-            while unique_name in layer_names:
-                unique_name = f"{self.default_output_name}_{suffix}"
-                suffix += 1
-            return unique_name
-        else:
-            return os.path.splitext(os.path.basename(self.output_raster_path.filePath()))[0]
 
 
     def check_if_executor_running(self) -> bool:
