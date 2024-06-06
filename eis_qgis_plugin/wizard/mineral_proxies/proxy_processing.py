@@ -5,7 +5,12 @@ from qgis.gui import QgsDoubleSpinBox, QgsExtentGroupBox, QgsFileWidget, QgsMapL
 from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLayout, QProgressBar, QPushButton, QStackedWidget, QWidget
 from qgis.utils import iface
 
-from eis_qgis_plugin.utils import add_output_layer_to_group, get_output_layer_name, set_file_widget_placeholder_text
+from eis_qgis_plugin.utils import (
+    add_output_layer_to_group,
+    apply_color_ramp_to_raster_layer,
+    get_output_layer_name,
+    set_file_widget_placeholder_text,
+)
 from eis_qgis_plugin.wizard.modeling.model_utils import set_filter
 from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
@@ -126,6 +131,8 @@ class EISWizardProxyProcess(QWidget):
         if self.process_type == "multi_step":
             i = self.proxy_manager.proxy_pages.currentIndex() + 1
             self.proxy_manager.proxy_pages.widget(i).raster_layer.setLayer(output_layer)
+
+        apply_color_ramp_to_raster_layer(output_layer, EISSettingsManager.get_raster_color_ramp())
 
 
     def on_algorithm_executor_terminated(self):

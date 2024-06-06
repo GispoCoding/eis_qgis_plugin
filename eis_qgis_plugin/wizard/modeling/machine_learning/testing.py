@@ -18,7 +18,7 @@ from qgis.PyQt.QtWidgets import (
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import add_output_layer_to_group, get_output_layer_name
+from eis_qgis_plugin.utils import add_output_layer_to_group, apply_color_ramp_to_raster_layer, get_output_layer_name
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_filter, set_placeholder_text
@@ -117,6 +117,8 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
                     )
                 else:
                     QgsProject.instance().addMapLayer(layer, True)
+
+                apply_color_ramp_to_raster_layer(layer, EISSettingsManager.get_raster_color_ramp())
 
 
     def on_algorithm_executor_error(self, error_message: str):

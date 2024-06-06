@@ -1,6 +1,13 @@
 import os
 
-from qgis.core import QgsProject
+from qgis.core import (
+    QgsColorRamp,
+    QgsColorRampShader,
+    QgsProject,
+    QgsRasterLayer,
+    QgsRasterShader,
+    QgsSingleBandPseudoColorRenderer,
+)
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLayout, QLineEdit
 
@@ -54,3 +61,24 @@ def add_output_layer_to_group(layer, group_name: str, subgroup_name: str):
         category_subgroup = group.addGroup(subgroup_name)
     
     category_subgroup.addLayer(layer)
+
+
+def apply_color_ramp_to_raster_layer(raster_layer: QgsRasterLayer, color_ramp: QgsColorRamp):
+    # Don't apply color ramps for multiband raster
+    if raster_layer.bandCount() > 1 or color_ramp is None:
+        return
+
+    stats = raster_layer.dataProvider().bandStatistics(1)
+    shader = QgsColorRampShader(
+        minimumValue=stats.minimumValue,
+        maximumValue=stats.maximumValue,
+        colorRamp=color_ramp
+    )
+    shader.classifyColorRamp()
+
+    raster_shader = QgsRasterShader()
+    raster_shader.setRasterShaderFunction(shader)
+    
+    renderer = QgsSingleBandPseudoColorRenderer(raster_layer.dataProvider(), 1, raster_shader)
+    raster_layer.setRenderer(renderer)
+    raster_layer.triggerRepaint()

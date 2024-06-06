@@ -1,7 +1,55 @@
+import json
 from typing import Optional
 
-from qgis.core import QgsProject, QgsRasterLayer, QgsSettings
+from qgis.core import (
+    QgsColorRamp,
+    QgsGradientColorRamp,
+    QgsGradientStop,
+    QgsProject,
+    QgsRasterLayer,
+    QgsSettings,
+    QgsStyle,
+)
 from qgis.PyQt.QtGui import QColor
+from qgis.utils import iface
+
+
+class ColorRampEncoder(json.JSONEncoder):
+    def default(self, obj: QgsGradientColorRamp):
+        if isinstance(obj, QColor):
+            return obj.name()  # QColor to hex string
+        elif isinstance(obj, QgsGradientStop):
+            return {
+                'offset': obj.offset,
+                'color': obj.color.name()  # QColor to hex string
+            }
+        return json.JSONEncoder.default(self, obj)
+
+    def decode(dct: dict):
+        for key, value in dct.items():
+            print(key, value)
+            if isinstance(value, str) and value.startswith('#') and len(value) == 7:
+                try:
+                    dct[key] = QColor(value)  # Convert hex string back to QColor
+                except ValueError:
+                    pass
+            elif key == "stops":
+                try:
+                    decoded_stops = []
+                    for stop in value: 
+                        offset = stop['offset']
+                        color = QColor(stop['color'])  # Convert hex string back to QColor
+                        decoded_stops.append(QgsGradientStop(offset, color))
+                    dct[key] = decoded_stops
+                except ValueError:
+                    pass
+        return dct
+
+
+def default_ramp():
+    ramp = QgsStyle().defaultStyle().colorRamp("Spectral")
+    items = {"color1": ramp.color1(), "color2": ramp.color2(), "discrete": ramp.isDiscrete(), "stops": ramp.stops()}
+    return json.dumps(items, cls=ColorRampEncoder)
 
 
 class EISSettingsManager:
@@ -24,6 +72,7 @@ class EISSettingsManager:
     LAYER_GROUP_SETTING = "eis_qgis_plugin/layer_group_setting"
     CATEGORICAL_PALETTE_SETTING = "eis_qgis_plugin/categorical_palette_setting"
     CONTINUOUS_PALETTE_SETTING = "eis_qgis_plugin/continuous_palette_setting"
+    RASTER_COLOR_RAMP_SETTING = "eis_qgis_plugin/raster_color_ramp_setting"
     COLOR_SETTING = "eis_qgis_plugin/default_color_setting"
     DEFAULT_BASE_RASTER = "eis_qgis_plugin/default_base_raster"
 
@@ -38,9 +87,11 @@ class EISSettingsManager:
         LAYER_GROUP_SETTING: "false",
         CATEGORICAL_PALETTE_SETTING: "bright",
         CONTINUOUS_PALETTE_SETTING: "viridis",
+        RASTER_COLOR_RAMP_SETTING: default_ramp(),
         COLOR_SETTING: QColor(72, 172, 50),
         DEFAULT_BASE_RASTER: None
     }
+
 
     # GETTERS
     @classmethod
@@ -77,6 +128,27 @@ class EISSettingsManager:
     def get_dock_wizard_selection(self) -> bool:
         key = self.DOCK_SETTING
         return QgsSettings().value(key, self.DEFAULTS[key]).lower() == "true"
+    
+    @classmethod
+    def get_raster_color_ramp(self) -> QgsColorRamp:
+        key = self.RASTER_COLOR_RAMP_SETTING
+
+        # Deserialize color ramp
+        try:
+            serialized_items = QgsSettings().value(key, self.DEFAULTS[key])
+            ramp = QgsGradientColorRamp(**json.loads(serialized_items, object_hook=ColorRampEncoder.decode))
+        
+        # If error, reset
+        except (TypeError, json.JSONDecodeError) as e:
+            self.reset_color_ramp_selection()
+            iface.messageBar().pushWarning(
+                "Error: ", f"Failed to load default raster color ramp info. Color ramp setting reset. {e}"
+            )
+
+            serialized_items = QgsSettings().value(key, self.DEFAULTS[key])
+            ramp = QgsGradientColorRamp(**json.loads(serialized_items, object_hook=ColorRampEncoder.decode))
+
+        return ramp
 
     @classmethod
     def get_default_color(self) -> QColor:
@@ -137,7 +209,14 @@ class EISSettingsManager:
     @classmethod
     def set_dock_wizard_selection(self, selection: bool):
         QgsSettings().setValue(self.DOCK_SETTING, "true" if selection else "false")
-    
+
+    @classmethod
+    def set_raster_color_ramp(self, ramp: QgsGradientColorRamp):
+        # Serialize color ramp
+        items = {"color1": ramp.color1(), "color2": ramp.color2(), "discrete": ramp.isDiscrete(), "stops": ramp.stops()}
+        encoded_ramp = json.dumps(items, cls=ColorRampEncoder)
+        QgsSettings().setValue(self.RASTER_COLOR_RAMP_SETTING, encoded_ramp)
+
     @classmethod
     def set_color_selection(self, color: QColor):
         QgsSettings().setValue(self.COLOR_SETTING, color)
@@ -190,7 +269,11 @@ class EISSettingsManager:
     @classmethod
     def reset_dock_wizard_selection(self):
         QgsSettings().setValue(self.DOCK_SETTING, self.DEFAULTS[self.DOCK_SETTING] == "true")
-    
+
+    @classmethod
+    def reset_color_ramp_selection(self):
+        self.set_raster_color_ramp(self.DEFAULTS[self.RASTER_COLOR_RAMP_SETTING])
+
     @classmethod
     def reset_color_selection(self):
         QgsSettings().setValue(self.COLOR_SETTING, self.DEFAULTS[self.COLOR_SETTING])
@@ -221,6 +304,7 @@ class EISSettingsManager:
         self.reset_docker_host_folder()
         self.reset_docker_temp_folder()
         self.reset_dock_wizard_selection()
+        self.reset_color_ramp_selection()
         self.reset_color_selection()
         self.reset_categorical_palette_selection()
         self.reset_continuous_palette_selection()
