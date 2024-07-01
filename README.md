@@ -52,10 +52,10 @@ To use all features of EIS QGIS Plugin, you need to install both EIS QGIS Plugin
 - QGIS 3.X
 
 ### Installation
-1. Download the latest release ZIP from GitHub in the [Releases](https://github.com/GispoCoding/eis_qgis_plugin/releases) page.
-2. In QGIS, open the **Plugins** menu and select **Manage and Install Plugins**.
-3. Choose **Install from ZIP** in the window that opens and find the ZIP file you just downloaded. Press **Install Plugin**.
-![image](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/cd83dfed-a0f5-4eab-b4f1-ace8d1d88713)
+1. In QGIS, open the **Plugins** menu and select **Manage and Install Plugins**.
+2. In **Settings** tab, tick **Show also Experimental Plugins** active
+3. Select **All** tab and type "EIS QGIS" in the search bar to find EIS QGIS Plugin and press **Install Experimental Plugin**.
+![image](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/2c1fd828-e00a-49d8-9d92-ee766e0e08a3)
 
 If you get a success message from the installer, you have now succesfully installed EIS QGIS Plugin!
 ![Screenshot from 2024-02-19 10-40-36](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/42f20d3e-a8ab-48d5-a9e3-4ddb4bdb2da3)
