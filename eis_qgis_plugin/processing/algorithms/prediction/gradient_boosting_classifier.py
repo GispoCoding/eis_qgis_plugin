@@ -53,11 +53,7 @@ class EISGradientBoostingClassifier(EISProcessingAlgorithm):
             name=self.alg_parameters[0], description="Evidence data", layerType=QgsProcessing.TypeRaster
         )
         evidence_data_param.setHelp("Evidence rasters used for training.")
-        self.addParameter(
-            QgsProcessingParameterMultipleLayers(
-                name=self.alg_parameters[0], description="Evidence data", layerType=QgsProcessing.TypeRaster
-            )
-        )
+        self.addParameter(evidence_data_param)
 
         target_labels_param = QgsProcessingParameterMapLayer(
             name=self.alg_parameters[1], description="Target labels"
@@ -69,7 +65,7 @@ class EISGradientBoostingClassifier(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Validation method",
             options=["split", "kfold_cv", "skfold_cv", "loo_cv", "none"],
-            defaultValue="split"
+            defaultValue=0
         )
         validation_method_param.setHelp(
             "Validation method to use. 'split' divides data into two parts, 'kfold_cv' \
@@ -83,7 +79,7 @@ class EISGradientBoostingClassifier(EISProcessingAlgorithm):
             name=self.alg_parameters[3],
             description="Validation metrics",
             options=["accuracy", "precision", "recall", "f1", "auc"],
-            defaultValue="accuracy",
+            defaultValue=0,
             allowMultiple=True
         )
         validation_metrics_param.setHelp("Metrics to use for scoring the model if a validation method is selected.")
@@ -119,7 +115,7 @@ class EISGradientBoostingClassifier(EISProcessingAlgorithm):
             name=self.alg_parameters[6],
             description="Loss",
             options=["log_loss", "exponential"],
-            defaultValue="log_loss"
+            defaultValue=0
         )
         loss_param.setHelp("The loss function to be optimized.")
         self.addParameter(loss_param)

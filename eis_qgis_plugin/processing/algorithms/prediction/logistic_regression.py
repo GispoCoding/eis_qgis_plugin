@@ -59,11 +59,7 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             name=self.alg_parameters[0], description="Evidence data", layerType=QgsProcessing.TypeRaster
         )
         evidence_data_param.setHelp("Evidence rasters used for training.")
-        self.addParameter(
-            QgsProcessingParameterMultipleLayers(
-                name=self.alg_parameters[0], description="Evidence data", layerType=QgsProcessing.TypeRaster
-            )
-        )
+        self.addParameter(evidence_data_param)
 
         target_labels_param = QgsProcessingParameterMapLayer(
             name=self.alg_parameters[1], description="Target labels"
@@ -75,7 +71,7 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Validation method",
             options=["split", "kfold_cv", "skfold_cv", "loo_cv", "none"],
-            defaultValue="split"
+            defaultValue=0
         )
         validation_method_param.setHelp(
             "Validation method to use. 'split' divides data into two parts, 'kfold_cv' \
@@ -89,7 +85,7 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             name=self.alg_parameters[3],
             description="Validation metrics",
             options=["accuracy", "precision", "recall", "f1", "auc"],
-            defaultValue="accuracy",
+            defaultValue=0,
             allowMultiple=True
         )
         validation_metrics_param.setHelp("Metrics to use for scoring the model if a validation method is selected.")
@@ -125,7 +121,7 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             name=self.alg_parameters[6],
             description="Penalty",
             options=["l2", "l1", "elasicnet"],
-            defaultValue="l2",
+            defaultValue=0,
             optional=True
         )
         penalty_param.setHelp("Specifies the norm of the penalty.")
@@ -144,7 +140,7 @@ class EISLogisticRegression(EISProcessingAlgorithm):
             name=self.alg_parameters[8],
             description="Solver",
             options=["lbfgs", "liblinear", "newton-cg", "newton-cholesky", "sag", "saga"],
-            defaultValue="lbfgs"
+            defaultValue=0
         )
         solver_param.setHelp("Algorithm to use in the optimization problem.")
         self.addParameter(solver_param)

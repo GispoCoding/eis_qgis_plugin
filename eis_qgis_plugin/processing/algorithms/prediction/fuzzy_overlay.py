@@ -49,7 +49,7 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Overlay method",
             options=["And", "Or", "Sum", "Product", "Gamma"],
-            defaultValue="And",
+            defaultValue=0,
         )
         overlay_param.setHelp("Overlay method. If 'gamma', the gamma parameter will be used.")
         self.addParameter(overlay_param)
