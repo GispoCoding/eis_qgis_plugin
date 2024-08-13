@@ -76,7 +76,7 @@ class EISClassifierTest(EISProcessingAlgorithm):
             name=self.alg_parameters[4],
             description="Test metric",
             options=["accuracy", "precision", "recall", "f1"],
-            defaultValue="accuracy",
+            defaultValue=0,
             allowMultiple=True
         )
         test_metrics_param.setHelp("Metrics calculated for the predictions.")

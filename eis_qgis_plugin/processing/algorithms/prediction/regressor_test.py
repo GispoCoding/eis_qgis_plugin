@@ -53,7 +53,7 @@ class EISRegressorTest(EISProcessingAlgorithm):
             name=self.alg_parameters[3],
             description="Test metric",
             options=["mse", "rmse", "mae", "r2"],
-            defaultValue="mse",
+            defaultValue=0,
             allowMultiple=True
         )
         test_metrics_param.setHelp("Metrics calculated for the predictions.")

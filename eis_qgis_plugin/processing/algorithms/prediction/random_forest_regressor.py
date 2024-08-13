@@ -51,11 +51,7 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
             name=self.alg_parameters[0], description="Evidence data", layerType=QgsProcessing.TypeRaster
         )
         evidence_data_param.setHelp("Evidence rasters used for training.")
-        self.addParameter(
-            QgsProcessingParameterMultipleLayers(
-                name=self.alg_parameters[0], description="Evidence data", layerType=QgsProcessing.TypeRaster
-            )
-        )
+        self.addParameter(evidence_data_param)
 
         target_labels_param = QgsProcessingParameterMapLayer(
             name=self.alg_parameters[1], description="Target labels"
@@ -67,7 +63,7 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Validation method",
             options=["split", "kfold_cv", "skfold_cv", "loo_cv", "none"],
-            defaultValue="split"
+            defaultValue=0
         )
         validation_method_param.setHelp(
             "Validation method to use. 'split' divides data into two parts, 'kfold_cv' \
@@ -81,7 +77,7 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
             name=self.alg_parameters[3],
             description="Validation metrics",
             options=["mse", "rmse", "mae", "r2"],
-            defaultValue="mse",
+            defaultValue=0,
             allowMultiple=True
         )
         validation_metrics_param.setHelp("Metrics to use for scoring the model if a validation method is selected.")
@@ -126,7 +122,7 @@ class EISRandomForestRegressor(EISProcessingAlgorithm):
             name=self.alg_parameters[7],
             description="Criterion",
             options=["squared_error", "absolute_error", "friedman_mse", "poisson"],
-            defaultValue="squared_error"
+            defaultValue=0
         )
         criterion_param.setHelp("The function to measure the quality of a split.")
         self.addParameter(criterion_param)
