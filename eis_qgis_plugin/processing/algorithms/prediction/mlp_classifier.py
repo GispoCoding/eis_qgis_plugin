@@ -1,4 +1,3 @@
-import re
 from typing import Any, Dict, Optional
 
 from qgis.core import (
@@ -16,7 +15,7 @@ from qgis.core import (
 )
 
 from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
-from eis_qgis_plugin.processing.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.utils import parse_string_list_parameter_and_run_command
 
 
 class EISMlpClassifier(EISProcessingAlgorithm):
@@ -236,28 +235,13 @@ class EISMlpClassifier(EISProcessingAlgorithm):
     ) -> Dict[str, Any]:
         if feedback is None:
             feedback = QgsProcessingFeedback()
-        
-        neurons_param_i = 3
-        # Handle the manual breaks
-        neurons_raw = self.parameterAsString(parameters, self.alg_parameters[neurons_param_i], context).lower()
-        values = re.split(';|,', neurons_raw)
-        neurons_options = []
-        for value in values:
-            neurons_options.append("--" + self.alg_parameters[neurons_param_i].replace("_", "-"))
-            neurons_options.append(value) 
 
-        # Remove breaks from the list to not prepare them again in the next step
-        self.alg_parameters.pop(neurons_param_i)
-        typer_args, typer_options, output_path = self.prepare_arguments(parameters, context)
-        typer_options += neurons_options  # Combine lists
-
-        toolkit_invoker = EISToolkitInvoker()
-        toolkit_invoker.assemble_cli_command(self.name(), typer_args, typer_options)
-        results = toolkit_invoker.run_toolkit_command(feedback)
-
-        self.get_results(results, parameters)
-        results["output_path"] = output_path
-
-        feedback.setProgress(100)
+        results = parse_string_list_parameter_and_run_command(
+            self,
+            3,
+            parameters,
+            context,
+            feedback
+        )
 
         return results
