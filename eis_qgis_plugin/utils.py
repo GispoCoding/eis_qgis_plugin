@@ -1,8 +1,13 @@
 import os
+import re
+from typing import Any, Dict, Optional
 
 from qgis.core import (
     QgsColorRamp,
     QgsColorRampShader,
+    QgsProcessingContext,
+    QgsProcessingFeedback,
+    QgsProcessingParameterDefinition,
     QgsProject,
     QgsRasterLayer,
     QgsRasterShader,
@@ -11,6 +16,8 @@ from qgis.core import (
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLayout, QLineEdit
 
+from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
+from eis_qgis_plugin.processing.eis_toolkit_invoker import EISToolkitInvoker
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
 
 PLUGIN_PATH = os.path.dirname(__file__)
@@ -82,3 +89,36 @@ def apply_color_ramp_to_raster_layer(raster_layer: QgsRasterLayer, color_ramp: Q
     renderer = QgsSingleBandPseudoColorRenderer(raster_layer.dataProvider(), 1, raster_shader)
     raster_layer.setRenderer(renderer)
     raster_layer.triggerRepaint()
+
+
+def parse_string_list_parameter_and_run_command(
+    algorithm: EISProcessingAlgorithm,
+    parameter_index: int,
+    parameters: Dict[str, QgsProcessingParameterDefinition],
+    context: QgsProcessingContext,
+    feedback: Optional[QgsProcessingFeedback]
+) -> Dict[str, Any]:
+    raw = algorithm.parameterAsString(
+        parameters, algorithm.alg_parameters[parameter_index], context
+    ).lower()
+    values = re.split(';|,', raw)
+    parameter_values = []
+    for value in values:
+        parameter_values.append("--" + algorithm.alg_parameters[parameter_index].replace("_", "-"))
+        parameter_values.append(value) 
+
+    # Remove parameter from the list to not prepare them again in the next step
+    algorithm.alg_parameters.pop(parameter_index)
+    typer_args, typer_options, output_path = algorithm.prepare_arguments(parameters, context)
+    typer_options += parameter_values  # Combine lists
+
+    toolkit_invoker = EISToolkitInvoker()
+    toolkit_invoker.assemble_cli_command(algorithm.name(), typer_args, typer_options)
+    results = toolkit_invoker.run_toolkit_command(feedback)
+
+    algorithm.get_results(results, parameters)
+    results["output_path"] = output_path
+
+    feedback.setProgress(100)
+
+    return results
