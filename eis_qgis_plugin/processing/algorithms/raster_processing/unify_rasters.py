@@ -1,6 +1,5 @@
 from qgis.core import (
     QgsProcessing,
-    QgsProcessingParameterBoolean,
     QgsProcessingParameterEnum,
     QgsProcessingParameterFolderDestination,
     QgsProcessingParameterMultipleLayers,
@@ -19,7 +18,14 @@ class EISUnifyRasters(EISProcessingAlgorithm):
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
         self._short_help_string = """
-            Unify (reproject, resample, align/snap and optionally clip) given rasters with a base raster.
+            Unifies given rasters with the base raster.
+
+            Performs the following operations:
+            - Reprojecting
+            - Resampling
+            - Aligning / snapping
+            - Clipping / expanding extents (optional, determined by masking parameter)
+            - Copying nodata cells from base raster (optional, determined by masking parameter)
         """
 
     def initAlgorithm(self, config=None):
@@ -27,7 +33,7 @@ class EISUnifyRasters(EISProcessingAlgorithm):
             "rasters_to_unify",
             "base_raster",
             "resampling_method",
-            "same_extent",
+            "masking",
             "output_directory"
         ]
 
@@ -62,14 +68,23 @@ class EISUnifyRasters(EISProcessingAlgorithm):
         )
         self.addParameter(resampling_method_param)
 
-        same_extent_param = QgsProcessingParameterBoolean(
-            name=self.alg_parameters[3], description="Same extent"
+        masking = QgsProcessingParameterEnum(
+            name=self.alg_parameters[3],
+            description="Masking",
+            options=[
+                "None",
+                "Extents",
+                "Full",
+            ],
+            defaultValue=1,
         )
-        same_extent_param.setHelp(
-            "If the unified rasters will be forced to have the same extent/bounds \
-            as the base raster. Expands smaller rasters with nodata cells."
+        masking.setHelp(
+            "Controls if and how masking should be handled. If `extents`, the bounds of rasters to-be-unified \
+            are matched with the base raster. Larger rasters are clipped and smaller rasters expanded (with nodata). \
+            If `extents_and_nodata`, copies nodata pixel locations from the base raster additionally. If None, \
+            extents are not matched and nodata not copied."
         )
-        self.addParameter(same_extent_param)
+        self.addParameter(masking)
 
         output_directory_param = QgsProcessingParameterFolderDestination(
             name=self.alg_parameters[4], description="Output directory"
