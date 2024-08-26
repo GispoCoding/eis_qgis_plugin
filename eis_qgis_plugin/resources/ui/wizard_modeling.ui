@@ -64,6 +64,16 @@
        </item>
        <item>
         <property name="text">
+         <string>MLP - classifier</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>MLP - regressor</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Fuzzy overlay</string>
         </property>
        </item>

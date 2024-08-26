@@ -6,6 +6,7 @@ from eis_qgis_plugin.wizard.modeling.machine_learning.application import EISMLMo
 from eis_qgis_plugin.wizard.modeling.machine_learning.data_preparation import EISMLModelDataPreparation
 from eis_qgis_plugin.wizard.modeling.machine_learning.testing import EISMLModelTesting
 from eis_qgis_plugin.wizard.modeling.machine_learning.training import EISMLModelTraining
+from eis_qgis_plugin.wizard.modeling.machine_learning.training_mlp import EISMLModelTrainingMLP
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, ModelKind
 
@@ -33,7 +34,10 @@ class EISMLModel(QWidget):
         self.data_preparation = EISMLModelDataPreparation(parent=self.modeling_tabs, model_main=self)
         self.modeling_tabs.addTab(self.data_preparation, "Data preparation")
 
-        self.training = EISMLModelTraining(parent=self.modeling_tabs, model_main=self)
+        if self.model_type[:3] == "MLP":
+            self.training = EISMLModelTrainingMLP(parent=self.modeling_tabs, model_main=self)
+        else:
+            self.training = EISMLModelTraining(parent=self.modeling_tabs, model_main=self)
         self.modeling_tabs.addTab(self.training, "Training")
 
         self.testing = EISMLModelTesting(parent=self.modeling_tabs, model_main=self)
