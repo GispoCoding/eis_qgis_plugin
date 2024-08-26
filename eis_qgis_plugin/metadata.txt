@@ -12,7 +12,7 @@ about=EIS (Exploration Information System) QGIS Plugin is a tool for prospectivi
     (https://github.com/GispoCoding/eis_toolkit). 
 version=0.5.1
 qgisMinimumVersion=3.16
-qgisMaximumVersion=3.37
+qgisMaximumVersion=3.40
 author=Gispo
 email=niko@gispo.fi
 changelog=  
