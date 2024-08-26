@@ -88,7 +88,6 @@ class EISMlpRegressor(EISProcessingAlgorithm):
         # validation_data_param.setHelp("")
         # self.addParameter(validation_data_param)
 
-        # TODO: PARSE
         neurons_param = QgsProcessingParameterString(
             name=self.alg_parameters[3], description="Neurons",
         )
