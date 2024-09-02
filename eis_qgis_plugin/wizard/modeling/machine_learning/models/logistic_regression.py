@@ -72,8 +72,6 @@ class EISWizardLogisticRegression(EISMLModel):
 
     def reset_parameters(self):
         """Reset logistic regression parameters to defaults."""
-        self.training_tab.reset_parameters()
-
         self.penalty.setCurrentIndex(0)
         self.max_iter.setValue(100)
         self.solver.setCurrentIndex(0)

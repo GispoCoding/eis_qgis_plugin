@@ -93,8 +93,6 @@ class EISWizardGradientBoosting(EISMLModel):
 
     def reset_parameters(self):
         """Reset gradient boosting parameters to defaults."""
-        self.training_tab.reset_parameters()
-
         self.loss.setCurrentIndex(0)
         self.learning_rate.setValue(0.1)
         self.n_estimators.setValue(100)

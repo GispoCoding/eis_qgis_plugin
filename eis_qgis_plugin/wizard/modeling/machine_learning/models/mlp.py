@@ -76,9 +76,9 @@ class EISWizardMLP(EISMLModel):
         self.learning_rate_label = QLabel()
         self.learning_rate_label.setText("Learning rate")
         self.learning_rate = QgsDoubleSpinBox()
+        self.learning_rate.setDecimals(5)
         self.learning_rate.setMinimum(0.0001)
         self.learning_rate.setValue(0.001)
-        self.learning_rate.setDecimals(5)
         self.training_tab.add_parameter_row(self.learning_rate_label, self.learning_rate)
 
         self.loss_function_label = QLabel()
@@ -148,9 +148,7 @@ class EISWizardMLP(EISMLModel):
 
 
     def reset_parameters(self):
-        """Reset MLP parameters to defaults."""
-        self.training_tab.reset_parameters()
-        
+        """Reset MLP parameters to defaults."""        
         self.neurons.clear()
         self.output_neurons.setValue(1)
         self.activation.setCurrentIndex(0)
