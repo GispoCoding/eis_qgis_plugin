@@ -76,11 +76,9 @@ class EISWizardRandomForest(EISMLModel):
 
     def reset_parameters(self):
         """Reset random forest parameters to defaults."""
-        self.training_tab.reset_parameters()
-
         self.n_estimators.setValue(100)
         self.criterion.setCurrentIndex(0)
-        self.max_depth.setValue(-1)
+        self.max_depth.setValue(3)
 
 
     def set_tooltips(self):

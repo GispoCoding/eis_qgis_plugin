@@ -88,6 +88,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         # Connect signals
         self.test_run_btn.clicked.connect(self.test_model)
         self.cancel_testing_btn.clicked.connect(self.cancel)
+        self.test_reset_btn.clicked.connect(self.reset_parameters)
         self.test_model_selection.currentTextChanged.connect(self._on_selected_model_changed)
 
         # Initialize
@@ -244,3 +245,15 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         else:
             print(f"Unknown model kind: {self.model_info.model_kind}")
             return
+
+
+    def reset_parameters(self):
+        self.test_classification_threshold.setValue(0.5)
+        self.accuracy_checkbox.setChecked(False)
+        self.precision_checkbox.setChecked(False)
+        self.recall_checkbox.setChecked(False)
+        self.f1_checkbox.setChecked(False)
+        self.mse_checkbox.setChecked(False)
+        self.rmse_checkbox.setChecked(False)
+        self.mae_checkbox.setChecked(False)
+        self.r2_checkbox.setChecked(False)

@@ -279,6 +279,8 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.cv_folds.setValue(5)
         self.add_validation_metrics()
 
+        self.model_main.reset_parameters()
+
 
     def set_tooltips(self):
         """Set tooltips for the common and validation parameters."""
