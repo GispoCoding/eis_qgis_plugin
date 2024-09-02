@@ -54,7 +54,6 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
 
         self.application_evidence_data_layout: QVBoxLayout
         self.application_evidence_data_box: QGroupBox
-        self.application_reset_btn: QPushButton
         self.application_run_btn: QPushButton
         self.cancel_application_btn: QPushButton
 
