@@ -1,21 +1,24 @@
-from qgis.core import QgsFieldProxyModel, QgsMapLayerProxyModel
+from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import (
     QgsColorButton,
     QgsFieldComboBox,
     QgsOpacityWidget,
 )
-from qgis.PyQt.QtWidgets import QWidget
+from qgis.PyQt.QtWidgets import (
+    QComboBox,
+    QWidget,
+)
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
+from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
 
-FORM_CLASS: QWidget = load_ui("explore/wizard_plot_scatterplot.ui")
+FORM_CLASS: QWidget = load_ui("eda/wizard_plot_barplot.ui")
 
 
-class EISWizardScatterplot(EISPlot, FORM_CLASS):
+class EISWizardBarplot(EISPlot, FORM_CLASS):
     """
-    Class for EIS-Seaborn scatterplots.
+    Class for EIS-Seaborn barplots.
 
     Initialized from a UI file. Responsible for updating widgets and
     producing the plot.
@@ -30,15 +33,14 @@ class EISWizardScatterplot(EISPlot, FORM_CLASS):
         self.color_field: QgsFieldComboBox
         self.color: QgsColorButton
         self.opacity: QgsOpacityWidget
-        self.size: QgsFieldComboBox
-        self.style: QgsFieldComboBox
+        self.log_scale: QComboBox
+        self.estimator: QComboBox
+        self.errorbars: QComboBox
 
         # Initialize
         self.collapsed_height = 200
         super().__init__(parent)
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
-        self.X.setFilters(QgsFieldProxyModel.Filter.Numeric)
-        self.Y.setFilters(QgsFieldProxyModel.Filter.Numeric)
 
         self.update_layer(self.layer.currentLayer())
 
@@ -51,8 +53,6 @@ class EISWizardScatterplot(EISPlot, FORM_CLASS):
         self.X.setLayer(layer)
         self.Y.setLayer(layer)
         self.color_field.setLayer(layer)
-        self.size.setLayer(layer)
-        self.style.setLayer(layer)
 
 
     def plot(self, ax):
@@ -62,36 +62,24 @@ class EISWizardScatterplot(EISPlot, FORM_CLASS):
         X_field_name = self.X.currentField()
         Y_field_name = self.Y.currentField()
         color_field_name = self.color_field.currentField()
-        size_field_name = self.size.currentField()
-        style_field_name = self.style.currentField()
         fields = [X_field_name, Y_field_name]
         if color_field_name:
             fields.append(color_field_name)
-        if size_field_name:
-            fields.append(size_field_name)
-        if style_field_name:
-            fields.append(style_field_name)
 
         df = self.vector_layer_to_df(layer, *fields)
 
         # if color_field_name:
         #     self.check_unique_values(df, color_field_name, 20)
 
-        if size_field_name:
-            self.check_unique_values(df, size_field_name, 10)
-
-        if style_field_name:
-            self.check_unique_values(df, style_field_name, 10)
-
-        sns.scatterplot(
+        sns.barplot(
             data=df,
             x=X_field_name,
             y=Y_field_name,
             hue=color_field_name if color_field_name else None,
             color=self.color.color().getRgbF(),
             alpha=self.opacity.opacity(),
-            size=size_field_name if size_field_name else None,
-            style=style_field_name if style_field_name else None,
+            estimator=self.estimator.currentText().lower(),
+            errorbar=('ci', 95) if self.str_to_bool(self.errorbars) else None,
             ax=ax
         )
 
@@ -100,10 +88,10 @@ class EISWizardScatterplot(EISPlot, FORM_CLASS):
         """Produce example plot using SNS data."""
         penguins = sns.load_dataset("penguins")
 
-        sns.scatterplot(
+        sns.barplot(
             data=penguins,
             x="flipper_length_mm",
-            y="bill_length_mm",
+            y="species",
             hue="species",
             palette="dark",
             ax=ax
@@ -116,5 +104,6 @@ class EISWizardScatterplot(EISPlot, FORM_CLASS):
 
         self.color_field.setField("")
         self.opacity.setOpacity(100)
-        self.size.setField("")
-        self.style.setField("")
+        self.log_scale.setCurrentIndex(0)
+        self.estimator.setCurrentIndex(0)
+        self.errorbars.setCurrentIndex(0)

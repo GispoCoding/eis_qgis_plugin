@@ -1,4 +1,3 @@
-
 import os
 
 from qgis.gui import QgsDockWidget
@@ -9,9 +8,9 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils import PLUGIN_PATH
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
+from eis_qgis_plugin.wizard.wizard_eda import EISWizardEDA
 from eis_qgis_plugin.wizard.wizard_history import EISWizardHistory
 from eis_qgis_plugin.wizard.wizard_modeling import EISWizardModeling
-from eis_qgis_plugin.wizard.wizard_plot import EISWizardPlotting
 from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
 from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
 
@@ -103,8 +102,8 @@ class EISWizard(QWidget, FORM_CLASS):
         self.proxies_page = EISWizardProxies(self)
         self.pages_widget.insertWidget(0, self.proxies_page)
 
-        self.explore_page = EISWizardPlotting(self)
-        self.pages_widget.insertWidget(1, self.explore_page)
+        self.eda_page = EISWizardEDA(self)
+        self.pages_widget.insertWidget(1, self.eda_page)
 
         self.model_page = EISWizardModeling(self, self.model_manager)
         self.pages_widget.insertWidget(2, self.model_page)
