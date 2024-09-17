@@ -3,8 +3,8 @@ from typing import Any, Dict
 from qgis.gui import QgsSpinBox
 from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
+from eis_qgis_plugin.utils.misc_utils import ModelKind
 from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model_main import EISMLModel
-from eis_qgis_plugin.wizard.utils.misc_utils import ModelKind
 
 
 class EISWizardLogisticRegression(EISMLModel):

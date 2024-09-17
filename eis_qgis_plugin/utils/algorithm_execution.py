@@ -6,7 +6,7 @@ from qgis.core import QgsProcessingFeedback
 from qgis.PyQt.QtCore import QObject, QThread, pyqtSignal
 from qgis.utils import iface
 
-from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
+from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
 
 
 class AlgorithmExecutor(QObject):

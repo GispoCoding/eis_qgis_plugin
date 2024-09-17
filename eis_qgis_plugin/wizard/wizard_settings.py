@@ -15,7 +15,7 @@ from qgis.utils import iface
 
 from eis_qgis_plugin.processing.eis_toolkit_invoker import EISToolkitInvoker
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
+from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS: QDialog = load_ui("wizard_settings.ui")
 

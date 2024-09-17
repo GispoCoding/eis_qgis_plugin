@@ -22,6 +22,7 @@ from qgis.PyQt.QtWidgets import (
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.misc_utils import get_output_path, set_placeholder_text
 from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
     FuzzyMembership,
     GaussianMembership,
@@ -33,7 +34,6 @@ from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
 )
 from eis_qgis_plugin.wizard.modeling.machine_learning.data_preparation import EISMLModelDataPreparation
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
-from eis_qgis_plugin.wizard.utils.misc_utils import get_output_path, set_placeholder_text
 
 # from eis_qgis_plugin.processing.algorithms.prediction.fuzzy_overlay import (
 

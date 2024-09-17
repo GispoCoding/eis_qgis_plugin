@@ -18,13 +18,19 @@ from qgis.PyQt.QtWidgets import (
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import add_output_layer_to_group, apply_color_ramp_to_raster_layer, get_output_layer_name
+from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
+from eis_qgis_plugin.utils.misc_utils import (
+    add_output_layer_to_group,
+    apply_color_ramp_to_raster_layer,
+    get_output_layer_name,
+    get_output_path,
+    set_filter,
+    set_placeholder_text,
+)
+from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
+from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelDataTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
-from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
-from eis_qgis_plugin.wizard.utils.misc_utils import get_output_path, set_filter, set_placeholder_text
-from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
-from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS: QWidget = load_ui("modeling/testing.ui")
 

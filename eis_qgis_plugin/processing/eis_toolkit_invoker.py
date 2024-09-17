@@ -9,7 +9,7 @@ from typing import Dict, List, TextIO, Tuple
 
 from qgis.core import QgsProcessingFeedback, QgsProject, QgsRasterLayer
 
-from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
+from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
 

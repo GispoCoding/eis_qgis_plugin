@@ -8,8 +8,8 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu, QToolButton, QWidget
 from qgis.utils import iface
 
-from eis_qgis_plugin.utils import PLUGIN_PATH
-from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
+from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
+from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 from .processing.eis_provider import EISProvider
 from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logger

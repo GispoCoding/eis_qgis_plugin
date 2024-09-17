@@ -19,11 +19,11 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
+from eis_qgis_plugin.utils.misc_utils import set_filter
+from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
-from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
-from eis_qgis_plugin.wizard.utils.misc_utils import set_filter
-from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 
 FORM_CLASS: QWidget = load_ui("modeling/training.ui")
 

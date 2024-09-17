@@ -2,13 +2,13 @@ from typing import Any, Dict, List
 
 from qgis.PyQt.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
+from eis_qgis_plugin.utils.misc_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, ModelKind
 from eis_qgis_plugin.wizard.modeling.machine_learning.application import EISMLModelApplication
 from eis_qgis_plugin.wizard.modeling.machine_learning.data_preparation import EISMLModelDataPreparation
 from eis_qgis_plugin.wizard.modeling.machine_learning.testing import EISMLModelTesting
 from eis_qgis_plugin.wizard.modeling.machine_learning.training import EISMLModelTraining
 from eis_qgis_plugin.wizard.modeling.machine_learning.training_mlp import EISMLModelTrainingMLP
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
-from eis_qgis_plugin.wizard.utils.misc_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, ModelKind
 
 
 class EISMLModel(QWidget):

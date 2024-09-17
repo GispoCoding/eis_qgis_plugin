@@ -14,8 +14,8 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.misc_utils import get_output_path
 from eis_qgis_plugin.wizard.mineral_proxies.proxy_processing import EISWizardProxyProcess
-from eis_qgis_plugin.wizard.utils.misc_utils import get_output_path
 
 FORM_CLASS = load_ui("mineral_proxies/proxy_workflow1_dist_to_features.ui")
 
