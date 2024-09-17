@@ -33,7 +33,7 @@ from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy_memberships import (
 )
 from eis_qgis_plugin.wizard.modeling.machine_learning.data_preparation import EISMLModelDataPreparation
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelTrainingDataTable
-from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path, set_placeholder_text
+from eis_qgis_plugin.wizard.utils.misc_utils import get_output_path, set_placeholder_text
 
 # from eis_qgis_plugin.processing.algorithms.prediction.fuzzy_overlay import (
 

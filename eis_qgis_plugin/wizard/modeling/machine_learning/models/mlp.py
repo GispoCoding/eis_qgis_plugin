@@ -4,7 +4,7 @@ from qgis.gui import QgsDoubleSpinBox, QgsSpinBox
 from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QLabel, QLineEdit
 
 from eis_qgis_plugin.wizard.modeling.machine_learning.ml_model_main import EISMLModel
-from eis_qgis_plugin.wizard.modeling.model_utils import ModelKind
+from eis_qgis_plugin.wizard.utils.misc_utils import ModelKind
 
 
 class EISWizardMLP(EISMLModel):

@@ -12,7 +12,7 @@ from eis_qgis_plugin.wizard.modeling.machine_learning.models.logistic_regression
 from eis_qgis_plugin.wizard.modeling.machine_learning.models.mlp import EISWizardMLP
 from eis_qgis_plugin.wizard.modeling.machine_learning.models.random_forest import EISWizardRandomForest
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
-from eis_qgis_plugin.wizard.modeling.model_utils import ModelKind
+from eis_qgis_plugin.wizard.utils.misc_utils import ModelKind
 
 FORM_CLASS: QDialog = load_ui("wizard_modeling.ui")
 

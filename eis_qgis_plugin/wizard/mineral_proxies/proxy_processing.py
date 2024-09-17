@@ -11,8 +11,8 @@ from eis_qgis_plugin.utils import (
     get_output_layer_name,
     set_file_widget_placeholder_text,
 )
-from eis_qgis_plugin.wizard.modeling.model_utils import set_filter
 from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
+from eis_qgis_plugin.wizard.utils.misc_utils import set_filter
 from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
 

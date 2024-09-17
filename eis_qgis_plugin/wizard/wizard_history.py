@@ -18,7 +18,7 @@ from eis_qgis_plugin.utils import clear_layout
 from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.wizard.modeling.model_data_table import ModelHistoryTable
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
-from eis_qgis_plugin.wizard.modeling.model_utils import set_filter
+from eis_qgis_plugin.wizard.utils.misc_utils import set_filter
 
 FORM_CLASS: QDialog = load_ui("results/wizard_model_history.ui")
 

@@ -8,7 +8,7 @@ from eis_qgis_plugin.wizard.modeling.machine_learning.testing import EISMLModelT
 from eis_qgis_plugin.wizard.modeling.machine_learning.training import EISMLModelTraining
 from eis_qgis_plugin.wizard.modeling.machine_learning.training_mlp import EISMLModelTrainingMLP
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
-from eis_qgis_plugin.wizard.modeling.model_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, ModelKind
+from eis_qgis_plugin.wizard.utils.misc_utils import CLASSIFIER_METRICS, REGRESSOR_METRICS, ModelKind
 
 
 class EISMLModel(QWidget):
