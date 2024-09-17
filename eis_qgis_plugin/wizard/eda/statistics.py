@@ -148,8 +148,8 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
             descriptive_statistics_results = processing.run(
                 "eis:descriptive_statistics_raster",
                 {
-                    "input_file": self.layer.currentLayer(),
-                    #TODO band
+                    "input_raster": self.layer.currentLayer(),
+                    "band": self.band.currentBand()
                 },
             )
 
