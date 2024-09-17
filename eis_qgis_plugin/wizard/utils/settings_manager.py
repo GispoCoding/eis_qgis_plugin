@@ -48,8 +48,7 @@ class ColorRampEncoder(json.JSONEncoder):
 
 def default_ramp():
     ramp = QgsStyle().defaultStyle().colorRamp("Spectral")
-    items = {"color1": ramp.color1(), "color2": ramp.color2(), "discrete": ramp.isDiscrete(), "stops": ramp.stops()}
-    return json.dumps(items, cls=ColorRampEncoder)
+    return ramp
 
 
 class EISSettingsManager:
