@@ -250,10 +250,6 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         y_values = membership.membership_function(x_values, *params)
         if isinstance(y_values, pd.DataFrame) or isinstance(y_values, pd.Series):
             y_values = y_values.to_numpy()
-        print("X-values type: ", type(x_values))
-        print("Y-values type: ", type(y_values))
-        print("X-values: ", x_values)
-        print("Y-values: ", y_values)
 
         sns.lineplot(
             x=x_values,

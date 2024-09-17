@@ -12,6 +12,7 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.misc_utils import clear_layout, set_filter
@@ -154,7 +155,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
 
 
     def _on_export_clicked(self):
-        print("Model history exporting not implemented yet!")
+        iface.messageBar().pushWarning("Warning: ", "Model history exporting not implemented yet!")
 
 
     def _on_delete_clicked(self):
@@ -162,10 +163,10 @@ class EISWizardHistory(QWidget, FORM_CLASS):
         new_index = min(self.model_selection.currentIndex(), self.model_selection.count() - 2)
         self.model_manager.remove_model_info(model)
         self.update_list_of_models(index=new_index)
-        print(f"Model {model} deleted")
+        iface.messageBar().pushSuccess("Success: ", f"Model {model} deleted.")
 
 
     def _on_delete_all_clicked(self):
         self.model_manager.remove_model_info_all()
         self.update_list_of_models()
-        print("All models deleted")
+        iface.messageBar().pushSuccess("Success: ", "All models deleted.")

@@ -249,7 +249,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
             self.executor.run(params)
 
         else:
-            print(f"Unknown model kind: {self.model_info.model_kind}")
+            iface.messageBar().pushCritical("Error: ", f"Unknown model kind: {self.model_info.model_kind}")
             return
 
 

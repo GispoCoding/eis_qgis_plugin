@@ -27,7 +27,6 @@ class ColorRampEncoder(json.JSONEncoder):
 
     def decode(dct: dict):
         for key, value in dct.items():
-            print(key, value)
             if isinstance(value, str) and value.startswith('#') and len(value) == 7:
                 try:
                     dct[key] = QColor(value)  # Convert hex string back to QColor
@@ -309,5 +308,3 @@ class EISSettingsManager:
         self.reset_continuous_palette_selection()
         self.reset_layer_group_selection()
         self.reset_default_base_raster()
-
-        print("All EIS settings reset.")
