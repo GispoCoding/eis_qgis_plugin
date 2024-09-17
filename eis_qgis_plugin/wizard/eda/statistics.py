@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from qgis import processing
 from qgis.core import NULL, Qgis, QgsFieldProxyModel, QgsMapLayer
 from qgis.gui import QgsFieldComboBox, QgsRasterBandComboBox, QgsSpinBox
@@ -52,14 +54,14 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
         }
 
         # Connect layer change updates and populate initial layer
-        self.layer.layerChanged.connect(self.update_layer)
-        self.update_layer(self.layer.currentLayer())
+        self.layer.layerChanged.connect(self._update_layer)
+        self._update_layer(self.layer.currentLayer())
         self.field.setFilters(QgsFieldProxyModel.Filter.Numeric)
 
         self.compute_btn.clicked.connect(self.compute_statistics)
 
 
-    def update_layer(self, layer: QgsMapLayer):
+    def _update_layer(self, layer: QgsMapLayer):
         """Update (set/show/hide) widgets based on selected layer."""
         if layer is None:
             return
@@ -79,12 +81,12 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
 
     def compute_statistics(self):
         layer = self.layer.currentLayer()
-        self.check_valid_layer_type(layer)
+        self._check_valid_layer_type(layer)
         self.compute_general_statistics(layer)
         self.compute_descriptive_statistics_and_quantiles(layer)
 
 
-    def check_valid_layer_type(self, layer: QgsMapLayer) -> bool:
+    def _check_valid_layer_type(self, layer: QgsMapLayer) -> bool:
         if layer.type() not in [QgsMapLayer.VectorLayer, QgsMapLayer.RasterLayer]:
             iface.messageBar().pushMessage("Error", f"Unsupported layer type: {layer.type()}", level=Qgis.Critical)
             return False
@@ -93,35 +95,43 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
 
     def compute_general_statistics(self, layer: QgsMapLayer):
         if layer.type() == QgsMapLayer.VectorLayer:
-            field = self.field.currentField()
-            all_values = [feature.attribute(field) for feature in layer.getFeatures()]
-            n_total = len(all_values)
-            n_null = len([value for value in all_values if value == NULL])
-            # nr_of_valids = nr_of_all_values - nr_of_nulls
-
-        else:  # Raster
-            data_provider = layer.dataProvider()
-            width = layer.width()
-            height = layer.height()
-            band = int(self.band.currentIndex())
-
-            data_block = data_provider.block(band, layer.extent(), width, height)
-            n_null = 0
-            # nr_of_valids = 0
-            n_total = width * height
-
-            # Loop over all pixels
-            for row in range(height):
-                for col in range(width):
-                    pixel_value = data_block.value(row, col)
-                    if pixel_value == NULL:
-                        n_null += 1
-                    else:
-                        # nr_of_valids += 1
-                        pass
-
+            n_total, n_null = self._compute_general_statistics_vector(layer)
+        else:
+            n_total, n_null = self._compute_general_statistics_raster(layer)
         self.n_total.setText(str(n_total))
         self.n_null.setText(str(n_null))
+
+
+    def _compute_general_statistics_vector(self, layer: QgsMapLayer) -> Tuple[int, int]:
+        field = self.field.currentField()
+        all_values = [feature.attribute(field) for feature in layer.getFeatures()]
+        n_total = len(all_values)
+        n_null = len([value for value in all_values if value == NULL]) 
+        # nr_of_valids = nr_of_all_values - nr_of_nulls
+        return n_total, n_null  
+
+
+    def _compute_general_statistics_raster(self, layer: QgsMapLayer) -> Tuple[int, int]:
+        data_provider = layer.dataProvider()
+        width = layer.width()
+        height = layer.height()
+        band = int(self.band.currentIndex())
+
+        data_block = data_provider.block(band, layer.extent(), width, height)
+        n_null = 0
+        # nr_of_valids = 0
+        n_total = width * height
+
+        # Loop over all pixels
+        for row in range(height):
+            for col in range(width):
+                pixel_value = data_block.value(row, col)
+                if pixel_value == NULL:
+                    n_null += 1
+                else:
+                    # nr_of_valids += 1
+                    pass
+        return n_total, n_null
 
 
     def compute_descriptive_statistics_and_quantiles(self, layer: QgsMapLayer):
