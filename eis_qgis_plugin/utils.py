@@ -16,8 +16,8 @@ from qgis.core import (
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLayout, QLineEdit
 
-from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
-from eis_qgis_plugin.processing.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
+from eis_qgis_plugin.eis_processing.eis_toolkit_invoker import EISToolkitInvoker
 from eis_qgis_plugin.wizard.modeling.model_utils import get_output_path
 
 PLUGIN_PATH = os.path.dirname(__file__)
