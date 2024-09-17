@@ -69,7 +69,7 @@ running on Windows, make sure the value *QGIS_INSTALLATION_DIR* points to right 
 If you create or edit source files make sure that they contain absolute imports:
 
 ```python
-from eis_qgis_plugin.processing.eis_provider import EISProvider # Good
+from eis_qgis_plugin.eis_processing.eis_provider import EISProvider # Good
 
 from ..processing.eis_provider import EISProvider # Bad
 ```
