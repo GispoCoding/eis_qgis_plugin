@@ -17,8 +17,10 @@ from qgis.core import (
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLayout, QLineEdit
 
-from eis_qgis_plugin.processing.eis_processing_algorithm import EISProcessingAlgorithm
-from eis_qgis_plugin.processing.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
+from eis_qgis_plugin.eis_processing.eis_toolkit_invoker import EISToolkitInvoker
+
+PLUGIN_PATH = os.path.dirname(__file__)
 
 TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
 CLASSIFIER_METRICS = ["Accuracy", "Precision", "Recall", "F1"]

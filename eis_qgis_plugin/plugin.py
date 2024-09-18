@@ -8,11 +8,11 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu, QToolButton, QWidget
 from qgis.utils import iface
 
+from eis_qgis_plugin.eis_processing.eis_provider import EISProvider
+from eis_qgis_plugin.qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logger
 from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
-from .processing.eis_provider import EISProvider
-from .qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logger
 from .qgis_plugin_tools.tools.i18n import setup_translation
 from .wizard.wizard_main import EISWizardDialog, EISWizardDocked
 
