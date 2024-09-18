@@ -5,16 +5,16 @@ from qgis.gui import QgsDoubleSpinBox, QgsExtentGroupBox, QgsFileWidget, QgsMapL
 from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLayout, QProgressBar, QPushButton, QStackedWidget, QWidget
 from qgis.utils import iface
 
-from eis_qgis_plugin.utils import (
+from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
+from eis_qgis_plugin.utils.misc_utils import (
     add_output_layer_to_group,
     apply_color_ramp_to_raster_layer,
     get_output_layer_name,
     set_file_widget_placeholder_text,
+    set_filter,
 )
-from eis_qgis_plugin.wizard.modeling.model_utils import set_filter
-from eis_qgis_plugin.wizard.utils.algorithm_execution import AlgorithmExecutor
-from eis_qgis_plugin.wizard.utils.model_feedback import EISProcessingFeedback
-from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
+from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
+from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 MINERAL_SYSTEM_GROUP_NAMES = {
     "iocg": "Mineral system proxies — IOCG",

@@ -5,7 +5,7 @@ from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QSizePolicy, QWidget
 from qgis.utils import iface
 
-from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
+from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 
 class EISPlot(QWidget):

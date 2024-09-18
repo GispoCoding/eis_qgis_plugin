@@ -2,6 +2,7 @@ from typing import Dict, List, Optional
 
 from qgis.core import QgsProject
 from qgis.PyQt.QtCore import QObject, pyqtSignal
+from qgis.utils import iface
 
 from eis_qgis_plugin.wizard.modeling.ml_model_info import MLModelInfo
 
@@ -57,7 +58,7 @@ class ModelManager(QObject):
         id = info.model_instance_name
         models = self.get_all_models()
         if id in models and not overwrite:
-            print("ID found and overwrite is False.")
+            iface.messageBar().pushCritical("Error: ", "Model with given ID was found and overwrite setting is False.")
             return
 
         key = self._get_key(id)

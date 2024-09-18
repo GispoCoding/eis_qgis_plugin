@@ -15,7 +15,7 @@ from qgis.utils import iface
 
 from eis_qgis_plugin.eis_processing.eis_toolkit_invoker import EISToolkitInvoker
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.utils.settings_manager import EISSettingsManager
+from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS: QDialog = load_ui("wizard_settings.ui")
 
@@ -192,7 +192,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         EISSettingsManager.set_layer_group_selection(self.layer_group_selection.isChecked())
         EISSettingsManager.set_default_base_raster(self.default_base_raster.currentLayer())
 
-        iface.messageBar().pushSuccess("Success:", "Saved EIS QGIS plugin settings.")
+        iface.messageBar().pushSuccess("Success: ", "Saved EIS QGIS plugin settings.")
 
 
     def reset_settings_to_default(self):
@@ -214,4 +214,4 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.layer_group_selection.setChecked(defaults[EISSettingsManager.LAYER_GROUP_SETTING] == "true")
         self.default_base_raster.setLayer(defaults[EISSettingsManager.DEFAULT_BASE_RASTER])
 
-        iface.messageBar().pushInfo("Info:", "EIS QGIS plugin settings reset.")
+        iface.messageBar().pushInfo("Info: ", "EIS QGIS plugin settings reset.")

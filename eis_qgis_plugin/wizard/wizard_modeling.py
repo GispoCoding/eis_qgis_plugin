@@ -6,13 +6,13 @@ from qgis.PyQt.QtWidgets import (
 )
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.misc_utils import ModelKind
 from eis_qgis_plugin.wizard.modeling.fuzzy_modeling.fuzzy import EISWizardFuzzyModeling
 from eis_qgis_plugin.wizard.modeling.machine_learning.models.gradient_boosting import EISWizardGradientBoosting
 from eis_qgis_plugin.wizard.modeling.machine_learning.models.logistic_regression import EISWizardLogisticRegression
 from eis_qgis_plugin.wizard.modeling.machine_learning.models.mlp import EISWizardMLP
 from eis_qgis_plugin.wizard.modeling.machine_learning.models.random_forest import EISWizardRandomForest
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
-from eis_qgis_plugin.wizard.modeling.model_utils import ModelKind
 
 FORM_CLASS: QDialog = load_ui("wizard_modeling.ui")
 

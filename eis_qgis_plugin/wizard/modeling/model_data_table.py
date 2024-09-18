@@ -4,6 +4,7 @@ from qgis.core import QgsApplication, QgsMapLayerProxyModel, QgsRasterLayer
 from qgis.gui import QgsMapLayerComboBox
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QHeaderView, QLabel, QLineEdit, QPushButton, QSizePolicy, QTableWidget
+from qgis.utils import iface
 
 
 class ModelDataTable(QTableWidget):
@@ -98,7 +99,7 @@ class ModelHistoryTable(QTableWidget):
     def load_model(self, tags: List[str], evidence_data: List[Tuple[str, str]]):
         """Load information about the selected model (number of rows/layers and corresponding tags)."""
         if len(tags) != len(evidence_data):
-            print("Length of evidence data should match the number of given tags!")
+            iface.messageBar().pushCritical("Error: ", "Length of evidence data should match the number of given tags!")
             return
 
         # Remove all previous rows

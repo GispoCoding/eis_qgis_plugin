@@ -19,7 +19,7 @@ from qgis.PyQt.QtWidgets import (
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import PLUGIN_PATH
+from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
 
 FORM_CLASS = load_ui("mineral_proxies/proxy_view.ui")
 

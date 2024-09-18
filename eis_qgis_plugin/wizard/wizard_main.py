@@ -5,7 +5,7 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils import PLUGIN_PATH
+from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
 from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
 from eis_qgis_plugin.wizard.wizard_eda import EISWizardEDA

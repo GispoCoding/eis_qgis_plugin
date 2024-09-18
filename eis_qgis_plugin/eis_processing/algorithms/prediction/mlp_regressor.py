@@ -15,7 +15,7 @@ from qgis.core import (
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
-from eis_qgis_plugin.utils import parse_string_list_parameter_and_run_command
+from eis_qgis_plugin.utils.misc_utils import parse_string_list_parameter_and_run_command
 
 
 class EISMlpRegressor(EISProcessingAlgorithm):
