@@ -1,4 +1,4 @@
-from qgis.core import QgsProcessingParameterRasterLayer
+from qgis.core import QgsProcessingParameterBand, QgsProcessingParameterRasterLayer
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
 
@@ -12,17 +12,33 @@ class EISDescriptiveStatisticsRaster(EISProcessingAlgorithm):
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
         self._short_help_string = """
-            Calculate descriptive statistics for raster data.
+            Compute descriptive statistics for raster data.
 
-            Calculates min, max, mean, quantiles (25%, 50% and 75%), \
-            standard deviation, relative standard deviation and skewness.
+            Computes the following statistics:
+            - min
+            - max
+            - mean
+            - quantiles 25%
+            - quantile 50% (median)
+            - quantile 75%
+            - standard deviation
+            - relative standard deviation
+            - skewness
+
+            Nodata values are removed from the data before the statistics are computed.
         """
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_file"]
+        self.alg_parameters = ["input_raster", "band"]
 
         input_raster_param = QgsProcessingParameterRasterLayer(
             name=self.alg_parameters[0], description="Input raster"
         )
-        input_raster_param.setHelp("Input raster to calculate descriptive statistics for.")
+        input_raster_param.setHelp("Input raster.")
         self.addParameter(input_raster_param)
+
+        band_param =QgsProcessingParameterBand(
+            name=self.alg_parameters[1], description="Band", parentLayerParameterName=self.alg_parameters[0]
+        )
+        band_param.setHelp("Raster band to compute descriptive statistics from.")
+        self.addParameter(band_param)

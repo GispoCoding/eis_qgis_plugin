@@ -1,41 +1,31 @@
 from qgis.core import QgsMapLayerProxyModel
-from qgis.gui import (
-    QgsColorButton,
-    QgsFieldComboBox,
-    QgsOpacityWidget,
-)
-from qgis.PyQt.QtWidgets import (
-    QComboBox,
-    QWidget,
-)
+from qgis.gui import QgsColorButton, QgsFieldComboBox
+from qgis.PyQt.QtWidgets import QComboBox, QWidget
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.plots.plot_template import EISPlot
+from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
 
-FORM_CLASS: QWidget = load_ui("explore/wizard_plot_barplot.ui")
+FORM_CLASS: QWidget = load_ui("eda/wizard_plot_boxplot.ui")
 
 
-class EISWizardBarplot(EISPlot, FORM_CLASS):
+class EISWizardBoxplot(EISPlot, FORM_CLASS):
     """
-    Class for EIS-Seaborn barplots.
+    Class for EIS-Seaborn boxplots.
 
     Initialized from a UI file. Responsible for updating widgets and
     producing the plot.
     """
 
     def __init__(self, parent=None) -> None:
-
+        
         # DECLARE TYPES
         self.X: QgsFieldComboBox
         self.Y: QgsFieldComboBox
 
         self.color_field: QgsFieldComboBox
         self.color: QgsColorButton
-        self.opacity: QgsOpacityWidget
         self.log_scale: QComboBox
-        self.estimator: QComboBox
-        self.errorbars: QComboBox
 
         # Initialize
         self.collapsed_height = 200
@@ -71,15 +61,12 @@ class EISWizardBarplot(EISPlot, FORM_CLASS):
         # if color_field_name:
         #     self.check_unique_values(df, color_field_name, 20)
 
-        sns.barplot(
+        sns.boxplot(
             data=df,
             x=X_field_name,
             y=Y_field_name,
             hue=color_field_name if color_field_name else None,
             color=self.color.color().getRgbF(),
-            alpha=self.opacity.opacity(),
-            estimator=self.estimator.currentText().lower(),
-            errorbar=('ci', 95) if self.str_to_bool(self.errorbars) else None,
             ax=ax
         )
 
@@ -88,7 +75,7 @@ class EISWizardBarplot(EISPlot, FORM_CLASS):
         """Produce example plot using SNS data."""
         penguins = sns.load_dataset("penguins")
 
-        sns.barplot(
+        sns.boxplot(
             data=penguins,
             x="flipper_length_mm",
             y="species",
@@ -103,7 +90,4 @@ class EISWizardBarplot(EISPlot, FORM_CLASS):
         super().reset()
 
         self.color_field.setField("")
-        self.opacity.setOpacity(100)
         self.log_scale.setCurrentIndex(0)
-        self.estimator.setCurrentIndex(0)
-        self.errorbars.setCurrentIndex(0)

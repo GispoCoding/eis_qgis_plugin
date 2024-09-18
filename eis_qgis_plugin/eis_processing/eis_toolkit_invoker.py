@@ -87,6 +87,8 @@ class EISToolkitInvoker:
             feedback.pushInfo(f"* {key}: {value}")
         feedback.pushInfo("-----------------------\n ")
 
+        results.update(output_dict)
+
 
     def _update_out_rasters(self, stdout: str):
         """
