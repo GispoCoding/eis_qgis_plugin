@@ -67,6 +67,7 @@ class EISSettingsManager:
     DOCKER_HOST_FOLDER = "eis_qgis_plugin/docker_host_folder"
     DOCKER_TEMP_FOLDER = "eis_qgis_plugin/docker_temp_folder"
     DOCK_SETTING = "eis_qgis_plugin/dock_setting"
+    MINIMAL_MENU_SETTING = "eis_qgis_plugin/minimal_menu_setting"
     LAYER_GROUP_SETTING = "eis_qgis_plugin/layer_group_setting"
     CATEGORICAL_PALETTE_SETTING = "eis_qgis_plugin/categorical_palette_setting"
     CONTINUOUS_PALETTE_SETTING = "eis_qgis_plugin/continuous_palette_setting"
@@ -82,6 +83,7 @@ class EISSettingsManager:
         DOCKER_HOST_FOLDER: "",
         DOCKER_TEMP_FOLDER: "",
         DOCK_SETTING: "false",
+        MINIMAL_MENU_SETTING: "false",
         LAYER_GROUP_SETTING: "false",
         CATEGORICAL_PALETTE_SETTING: "bright",
         CONTINUOUS_PALETTE_SETTING: "viridis",
@@ -126,7 +128,12 @@ class EISSettingsManager:
     def get_dock_wizard_selection(self) -> bool:
         key = self.DOCK_SETTING
         return QgsSettings().value(key, self.DEFAULTS[key]).lower() == "true"
-    
+
+    @classmethod
+    def get_minimal_menu_selection(self) -> bool:
+        key = self.MINIMAL_MENU_SETTING
+        return QgsSettings().value(key, self.DEFAULTS[key]).lower() == "true"
+
     @classmethod
     def get_raster_color_ramp(self) -> QgsColorRamp:
         key = self.RASTER_COLOR_RAMP_SETTING
@@ -209,6 +216,10 @@ class EISSettingsManager:
         QgsSettings().setValue(self.DOCK_SETTING, "true" if selection else "false")
 
     @classmethod
+    def set_minimal_menu_selection(self, selection: bool):
+        QgsSettings().setValue(self.MINIMAL_MENU_SETTING, "true" if selection else "false")
+
+    @classmethod
     def set_raster_color_ramp(self, ramp: QgsGradientColorRamp):
         # Serialize color ramp
         items = {"color1": ramp.color1(), "color2": ramp.color2(), "discrete": ramp.isDiscrete(), "stops": ramp.stops()}
@@ -269,6 +280,10 @@ class EISSettingsManager:
         QgsSettings().setValue(self.DOCK_SETTING, self.DEFAULTS[self.DOCK_SETTING] == "true")
 
     @classmethod
+    def reset_minimal_menu_selection(self):
+        QgsSettings().setValue(self.MINIMAL_MENU_SETTING, self.DEFAULTS[self.MINIMAL_MENU_SETTING] == "true")
+
+    @classmethod
     def reset_color_ramp_selection(self):
         self.set_raster_color_ramp(self.DEFAULTS[self.RASTER_COLOR_RAMP_SETTING])
 
@@ -302,6 +317,7 @@ class EISSettingsManager:
         self.reset_docker_host_folder()
         self.reset_docker_temp_folder()
         self.reset_dock_wizard_selection()
+        self.reset_minimal_menu_selection()
         self.reset_color_ramp_selection()
         self.reset_color_selection()
         self.reset_categorical_palette_selection()
