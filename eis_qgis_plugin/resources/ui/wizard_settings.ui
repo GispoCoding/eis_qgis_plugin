@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>737</width>
-        <height>775</height>
+        <width>723</width>
+        <height>801</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -253,6 +253,13 @@
            <widget class="QCheckBox" name="dock_wizard_selection">
             <property name="text">
              <string>Use dockable EIS Wizard</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="minimal_menu_selection">
+            <property name="text">
+             <string>Minimize EIS Wizard menu (show only icons)</string>
             </property>
            </widget>
           </item>

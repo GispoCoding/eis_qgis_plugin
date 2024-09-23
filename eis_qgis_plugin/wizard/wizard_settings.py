@@ -1,5 +1,6 @@
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsColorButton, QgsColorRampButton, QgsFileWidget, QgsMapLayerComboBox
+from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -21,6 +22,8 @@ FORM_CLASS: QDialog = load_ui("wizard_settings.ui")
 
 
 class EISWizardSettings(QWidget, FORM_CLASS):
+
+    minimal_menu_setting_changed = pyqtSignal(bool)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -48,6 +51,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
         self.default_base_raster: QgsMapLayerComboBox
         self.dock_wizard_selection: QCheckBox
+        self.minimal_menu_selection: QCheckBox
         self.layer_group_selection: QCheckBox
 
         self.color_ramp_layout: QVBoxLayout
@@ -168,6 +172,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.docker_host_folder.setFilePath(EISSettingsManager.get_docker_host_folder())
         self.docker_temp_folder.setFilePath(EISSettingsManager.get_docker_temp_folder())
         self.dock_wizard_selection.setChecked(EISSettingsManager.get_dock_wizard_selection())
+        self.minimal_menu_selection.setChecked(EISSettingsManager.get_minimal_menu_selection())
         self.raster_color_ramp_selection.setColorRamp(EISSettingsManager.get_raster_color_ramp())
         self.default_color_selection.setColor(EISSettingsManager.get_default_color())
         self.categorical_palette_selection.setCurrentText(EISSettingsManager.get_default_categorical_palette())
@@ -185,13 +190,15 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         EISSettingsManager.set_docker_host_folder(self.docker_host_folder.filePath())
         EISSettingsManager.set_docker_temp_folder(self.docker_temp_folder.filePath())
         EISSettingsManager.set_dock_wizard_selection(self.dock_wizard_selection.isChecked())
+        EISSettingsManager.set_minimal_menu_selection(self.minimal_menu_selection.isChecked())
         EISSettingsManager.set_raster_color_ramp(self.raster_color_ramp_selection.colorRamp())
         EISSettingsManager.set_color_selection(self.default_color_selection.color())
         EISSettingsManager.set_categorical_palette_selection(self.categorical_palette_selection.currentText())
         EISSettingsManager.set_continuous_palette_selection(self.continuous_palette_selection.currentText())
         EISSettingsManager.set_layer_group_selection(self.layer_group_selection.isChecked())
         EISSettingsManager.set_default_base_raster(self.default_base_raster.currentLayer())
-
+        
+        self.minimal_menu_setting_changed.emit(self.minimal_menu_selection.isChecked())
         iface.messageBar().pushSuccess("Success: ", "Saved EIS QGIS plugin settings.")
 
 
@@ -207,6 +214,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.docker_host_folder.setFilePath(defaults[EISSettingsManager.DOCKER_HOST_FOLDER])
         self.docker_temp_folder.setFilePath(defaults[EISSettingsManager.DOCKER_TEMP_FOLDER])
         self.dock_wizard_selection.setChecked(defaults[EISSettingsManager.DOCK_SETTING] == "true")
+        self.minimal_menu_selection.setChecked(defaults[EISSettingsManager.MINIMAL_MENU_SETTING] == "true")
         self.raster_color_ramp_selection.setColorRamp(defaults[EISSettingsManager.RASTER_COLOR_RAMP_SETTING])
         self.default_color_selection.setColor(defaults[EISSettingsManager.COLOR_SETTING])
         self.categorical_palette_selection.setCurrentText(defaults[EISSettingsManager.CATEGORICAL_PALETTE_SETTING])
