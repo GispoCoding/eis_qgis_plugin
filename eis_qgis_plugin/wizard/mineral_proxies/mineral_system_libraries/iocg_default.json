@@ -348,33 +348,5 @@
                 "workflow": 4
             }
         }
-    },
-    "li-pegmatites": {
-        "source": {
-
-        },
-        "pathway": {
-
-        },
-        "depositional": {
-
-        },
-        "mineralisation": {
-
-        }
-    },
-    "co-vms": {
-        "source": {
-
-        },
-        "pathway": {
-
-        },
-        "depositional": {
-
-        },
-        "mineralisation": {
-
-        }
     }
 }
