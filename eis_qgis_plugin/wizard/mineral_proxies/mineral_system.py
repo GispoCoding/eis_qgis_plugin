@@ -1,12 +1,5 @@
 from dataclasses import dataclass
-from enum import Enum
 from typing import Optional, Sequence
-
-
-class ProxyWorkflows(Enum):
-     RED = 1
-     BLUE = 2
-     GREEN = 3
 
 
 @dataclass
@@ -39,7 +32,7 @@ class MineralProxy:
     custom: bool
     mineral_system_component: str
     category: str
-    workflow: int
+    workflow: Sequence[str]
     regional_scale_importance: ProxyImportance
     camp_scale_importance: ProxyImportance
     deposit_scale_importance: ProxyImportance

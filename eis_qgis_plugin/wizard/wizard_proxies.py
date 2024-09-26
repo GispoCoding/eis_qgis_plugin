@@ -17,11 +17,10 @@ from eis_qgis_plugin.wizard.mineral_proxies.workflows.interpolate import EISWiza
 
 class EISWizardProxies(QWidget):
 
-    WORKFLOW_MAP = {
-        1: EISWizardProxyDistanceToFeatures,
-        2: EISWizardProxyInterpolate,
-        3: EISWizardProxyDistanceToAnomaly,
-        4: [EISWizardProxyInterpolate, EISWizardProxyDistanceToAnomaly]
+    WORKFLOW_WIDGETS = {
+        "distance_to_features": EISWizardProxyDistanceToFeatures,
+        "interpolate": EISWizardProxyInterpolate,
+        "distance_to_anomaly": EISWizardProxyDistanceToAnomaly,
     }
 
     MINERAL_SYSTEMS_DIR = os.path.join(os.path.dirname(__file__), "mineral_proxies/mineral_system_libraries")
@@ -69,12 +68,13 @@ class EISWizardProxies(QWidget):
         # Cleanup if changing proxy
         if self.active_proxy_name and self.active_proxy_name != proxy.name:
             self.delete_proxy_processing_pages()
-
-        workflow_classes = self.WORKFLOW_MAP[proxy.workflow]
-        if isinstance(workflow_classes, list):
-            last_i = len(workflow_classes) - 1
-            for i, cls in enumerate(workflow_classes):
-                processing_page = cls(
+        
+        steps = len(proxy.workflow)
+        if steps > 1:
+            last_i = steps - 1
+            for i, workflow_step_name in enumerate(proxy.workflow):
+                widget_cls = self.WORKFLOW_WIDGETS[workflow_step_name]
+                processing_page = widget_cls(
                     proxy_manager=self,
                     mineral_system=mineral_system_name,
                     category=proxy.category,
@@ -84,7 +84,7 @@ class EISWizardProxies(QWidget):
                 )
                 self.proxy_pages.addWidget(processing_page)
         else:
-            processing_page = self.WORKFLOW_MAP[proxy.workflow](
+            processing_page = self.WORKFLOW_WIDGETS[proxy.workflow[0]](
                 proxy_manager=self,
                 mineral_system=mineral_system_name,
                 category=proxy.category,
