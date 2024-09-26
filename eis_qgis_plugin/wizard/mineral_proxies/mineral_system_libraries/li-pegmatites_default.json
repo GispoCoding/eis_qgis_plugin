@@ -1,16 +1,10 @@
 {
-    "li-pegmatites": {
-        "source": {
-
-        },
-        "pathway": {
-
-        },
-        "depositional": {
-
-        },
-        "mineralisation": {
-
-        }
+    "name": "Li-Pegmatites",
+    "custom": "false",
+    "mineral_system_components": {
+        "source": [],
+        "pathway": [],
+        "depositional": [],
+        "mineralisation": []
     }
 }
