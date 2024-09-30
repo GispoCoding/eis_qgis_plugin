@@ -11,6 +11,7 @@ from eis_qgis_plugin.wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.wizard.wizard_about import EISWizardAbout
 from eis_qgis_plugin.wizard.wizard_eda import EISWizardEDA
 from eis_qgis_plugin.wizard.wizard_history import EISWizardHistory
+from eis_qgis_plugin.wizard.wizard_model_evaluation import EISWizardEvaluation
 from eis_qgis_plugin.wizard.wizard_modeling import EISWizardModeling
 from eis_qgis_plugin.wizard.wizard_proxies import EISWizardProxies
 from eis_qgis_plugin.wizard.wizard_settings import EISWizardSettings
@@ -69,6 +70,10 @@ class EISWizard(QWidget, FORM_CLASS):
         # History icons created by Irfansusanto20 - Flaticon</a>
         ("History", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/history2.png"))),
 
+        # <a href="https://www.flaticon.com/free-icons/business-evaluation" title="business evaluation icons">
+        # Business evaluation icons created by VectorPortal - Flaticon</a>
+        ("Model evaluation", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/evaluation.png"))),
+
         # Icon by Icons8
         ("Settings", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg"))),
 
@@ -88,7 +93,7 @@ class EISWizard(QWidget, FORM_CLASS):
 
         # Create Settings page first
         self.settings_page = EISWizardSettings(self)
-        self.pages_widget.insertWidget(4, self.settings_page)
+        self.pages_widget.insertWidget(5, self.settings_page)
 
         self.proxies_page = EISWizardProxies(self)
         self.pages_widget.insertWidget(0, self.proxies_page)
@@ -104,7 +109,10 @@ class EISWizard(QWidget, FORM_CLASS):
         self.pages_widget.insertWidget(3, self.history_page)
 
         self.about_page = EISWizardAbout(self)
-        self.pages_widget.insertWidget(5, self.about_page)
+        self.pages_widget.insertWidget(6, self.about_page)
+
+        self.evaluation_page = EISWizardEvaluation(self)
+        self.pages_widget.insertWidget(4, self.evaluation_page)
 
         # Set menu
         # self.menu_widget.setMinimumWidth(
