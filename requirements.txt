@@ -1,0 +1,8 @@
+debugpy
+fastcluster
+ipywidgets
+ptvsd
+pydevd
+Sphinx
+statsmodels
+typing_extensions
