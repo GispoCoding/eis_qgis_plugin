@@ -1,21 +1,14 @@
 from typing import List, Optional
 
-from qgis.PyQt import QtGui
-from qgis.PyQt.QtWidgets import (
-    QComboBox,
-    QGridLayout,
-    QLabel,
-    QLineEdit,
-    QPushButton,
-    QSizePolicy,
-    QWidget,
-)
+from qgis.core import QgsApplication
+from qgis.PyQt.QtGui import QFont
+from qgis.PyQt.QtWidgets import QComboBox, QGridLayout, QLabel, QLineEdit, QMenu, QPushButton, QSizePolicy, QWidget
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem, ProxyImportance
 
-FORM_CLASS = load_ui("mineral_proxies/proxy_view.ui")
+FORM_CLASS = load_ui("mineral_proxies/proxy_view3.ui")
 
 # SETTINGS
 COLOR_CODE_CATEGORIES = True
@@ -40,7 +33,11 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         # DELCARE TYPES
         self.scale_selection: QComboBox
         self.mineral_system_selection: QComboBox
+        self.mineral_system_conf_btn: QPushButton
 
+        self.add_proxy_btn: QPushButton
+        self.edit_proxy_btn: QPushButton
+        self.delete_proxy_btn: QPushButton
         self.search_bar: QLineEdit
 
         self.source_grid_layout: QGridLayout
@@ -68,15 +65,78 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.widgets_per_proxy = {}
 
         # Initialize UI
-        self.bold_font = QtGui.QFont()
+        # Bold font
+        self.bold_font = QFont()
         self.bold_font.setBold(True)
 
+        # Mineral system configuration menu
+        conf_mineral_systems_menu = QMenu()
+        self.new_action = conf_mineral_systems_menu.addAction(
+            QgsApplication.getThemeIcon('symbologyAdd.svg'), "New"
+        )
+        self.delete_action = conf_mineral_systems_menu.addAction(
+            QgsApplication.getThemeIcon('mActionDeleteSelected.svg'), "Delete"
+        )
+        self.import_action = conf_mineral_systems_menu.addAction(
+            QgsApplication.getThemeIcon('mActionFileOpen.svg'), "Import"
+        )
+        self.export_action = conf_mineral_systems_menu.addAction(
+            QgsApplication.getThemeIcon('mActionFileSaveAs.svg'), "Export"
+        )
+        self.mineral_system_conf_btn.setMenu(conf_mineral_systems_menu)
+        self.mineral_system_conf_btn.setIcon(QgsApplication.getThemeIcon('mIconProperties.svg'))
+
+        # Proxies menu
+        add_proxy_menu = QMenu()
+        self.define_proxy_action = add_proxy_menu.addAction("Define new proxy")
+        self.import_proxy_action = add_proxy_menu.addAction("Add proxy from another mineral system")
+        self.add_proxy_btn.setMenu(add_proxy_menu)
+        self.add_proxy_btn.setIcon(QgsApplication.getThemeIcon("symbologyAdd.svg"))
+        self.edit_proxy_btn.setIcon(QgsApplication.getThemeIcon("mActionToggleEditing.svg"))
+        self.delete_proxy_btn.setIcon(QgsApplication.getThemeIcon("symbologyRemove.svg"))
+
+        # Proxy view itself
         self.create_view()
 
         # Connect signals
         self.search_bar.textChanged.connect(self.filter_proxies)
         self.scale_selection.currentTextChanged.connect(self._on_settings_changed)
         self.mineral_system_selection.currentTextChanged.connect(self._on_settings_changed)
+
+        self.new_action.triggered.connect(self._on_new_mineral_system_clicked)
+        self.delete_action.triggered.connect(self._on_delete_mineral_system_clicked)
+        self.import_action.triggered.connect(self._on_import_mineral_system_clicked)
+        self.export_action.triggered.connect(self._on_export_mineral_system_clicked)
+
+        self.define_proxy_action.triggered.connect(self._on_define_proxy_clicked)
+        self.import_proxy_action.triggered.connect(self._on_import_proxy_clicked)
+        self.edit_proxy_btn.clicked.connect(self._on_edit_proxy_clicked)
+        self.delete_proxy_btn.clicked.connect(self._on_delete_proxy_clicked)
+
+
+    def _on_new_mineral_system_clicked(self):
+        print("NEW TEST")
+
+    def _on_delete_mineral_system_clicked(self):
+        print("DEL TEST")
+
+    def _on_import_mineral_system_clicked(self):
+        print("IMPORT TEST")
+
+    def _on_export_mineral_system_clicked(self):
+        print("EXPORT TEST")
+
+    def _on_define_proxy_clicked(self):
+        print("DEFINE TEST")
+
+    def _on_import_proxy_clicked(self):
+        print("IMPORT PROXY TEST")
+
+    def _on_edit_proxy_clicked(self):
+        print("EDIT TEST")
+
+    def _on_delete_proxy_clicked(self):
+        print("DEL PROXY TEST")
 
 
     def _on_settings_changed(self):
@@ -122,8 +182,6 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             category_label = QLabel("Category")
             category_label.setFont(self.bold_font)
             layout.addWidget(category_label, 0, 2)
-
-            # self.create_proxy_row(grid_layout, 0, "Proxy", "Importance", "Category", "", "", "", header_row=True)
 
         # Create proxy entries
         proxies = self.sort_proxies(self.selected_mineral_system.proxies)
@@ -181,7 +239,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.widgets_per_proxy[proxy.name] = (proxy, widgets + [name_label, category_label, process_button])
 
 
-    def create_importance_widget(self, importance: ProxyImportance):
+    def create_importance_widget(self, importance: ProxyImportance) -> QLabel:
         importance_label = QLabel("*")
         importance_label.setStyleSheet(f"color: {importance.color_coding};")
         importance_label.setToolTip(importance.tooltip_text)
