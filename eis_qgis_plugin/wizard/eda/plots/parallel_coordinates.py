@@ -80,12 +80,13 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
 
         elif layer.type() == QgsMapLayer.RasterLayer:
             self.rasters_box.show()
+            self.color_field_rasters.show()
             self.fields.hide()
             self.color_field.hide()
             self.select_all_btn.hide()
             self.deselect_all_btn.hide()
             self.fields_label.hide()
-            
+
 
     def reset(self):
         """Reset parameters to defaults."""
@@ -158,7 +159,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
                 raise ValueError("All rasters must have the same dimensions.")
             
         # Get data as Numpy array
-        raster_data = np.empty((height * width, 0)).dtype(np.float32)
+        raster_data = np.empty((height * width, 0), dtype=np.float32)
         for raster in rasters:
             data = self.raster_layer_to_array(raster)
             raster_data = np.hstack((raster_data, data.reshape(-1, 1)))
