@@ -54,14 +54,14 @@
       <item row="0" column="1">
        <widget class="QgsMapLayerComboBox" name="layer"/>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
+      <item row="3" column="0">
+       <widget class="QLabel" name="fields_label">
         <property name="text">
          <string>Fields</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="3" column="1">
        <widget class="QListWidget" name="fields">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -77,7 +77,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="4" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QPushButton" name="select_all_btn">
@@ -94,6 +94,18 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QGroupBox" name="rasters_box">
+        <property name="title">
+         <string>Rasters</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <layout class="QVBoxLayout" name="rasters_layout"/>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -124,14 +136,14 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label_116">
         <property name="text">
          <string>Line type</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="3" column="1">
        <widget class="QComboBox" name="line_type">
         <item>
          <property name="text">
@@ -145,14 +157,14 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Color field type</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="1">
        <widget class="QComboBox" name="color_field_type">
         <item>
          <property name="text">
@@ -166,14 +178,14 @@
         </item>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Color</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="QgsColorButton" name="color">
         <property name="minimumSize">
          <size>
@@ -189,6 +201,9 @@
          </color>
         </property>
        </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="color_field_rasters"/>
       </item>
      </layout>
     </widget>
@@ -206,6 +221,7 @@
    <class>QgsColorButton</class>
    <extends>QToolButton</extends>
    <header>qgscolorbutton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QgsFieldComboBox</class>

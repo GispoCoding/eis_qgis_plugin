@@ -6,13 +6,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.cm import ScalarMappable
 from matplotlib.path import Path
-from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
+from qgis.core import QgsMapLayer, QgsMapLayerProxyModel
 from qgis.gui import QgsColorButton, QgsFieldComboBox
-from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
+from qgis.PyQt.QtWidgets import QComboBox, QGroupBox, QLabel, QListWidget, QPushButton, QVBoxLayout, QWidget
 from qgis.utils import iface
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.eda.plot_utils import RasterTable
 from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_parallel_coordinates.ui")
@@ -30,12 +31,16 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         
         # DECLARE TYPES
         self.fields: QListWidget
+        self.rasters_box: QGroupBox
+        self.rasters_layout: QVBoxLayout
 
         self.color_field: QgsFieldComboBox
+        self.color_field_rasters: QComboBox
         self.color_field_type: QComboBox
         self.line_type: QComboBox
         self.color: QgsColorButton
 
+        self.fields_label: QLabel
         self.select_all_btn: QPushButton
         self.deselect_all_btn: QPushButton
 
@@ -43,7 +48,10 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         self.collapsed_height = 270
         super().__init__(parent)
 
-        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.raster_table = RasterTable(self)
+        self.rasters_layout.addWidget(self.raster_table)
+
+        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer | QgsMapLayerProxyModel.RasterLayer)
         self.select_all_btn.clicked.connect(self.fields.selectAll)
         self.deselect_all_btn.clicked.connect(self.fields.clearSelection)
 
@@ -52,16 +60,32 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
 
     def update_layer(self, layer):
         """Update (set/add items) widgets based on selected layer."""
-        if layer is None or not isinstance(layer, QgsVectorLayer):
+        if layer is None:
             return
+        
+        if layer.type() == QgsMapLayer.VectorLayer:
+            self.rasters_box.hide()
+            self.color_field_rasters.hide()
+            self.fields.clear()
+            self.fields.show()
+            self.color_field.show()
+            self.select_all_btn.show()
+            self.deselect_all_btn.show()
+            self.fields_label.show()
+            for field in layer.fields():
+                if field.isNumeric():
+                    self.fields.addItem(field.name())
+            
+            self.color_field.setLayer(layer)  
 
-        self.fields.clear()
-        for field in layer.fields():
-            if field.isNumeric():
-                self.fields.addItem(field.name())
-
-        self.color_field.setLayer(layer)
-
+        elif layer.type() == QgsMapLayer.RasterLayer:
+            self.rasters_box.show()
+            self.fields.hide()
+            self.color_field.hide()
+            self.select_all_btn.hide()
+            self.deselect_all_btn.hide()
+            self.fields_label.hide()
+            
 
     def reset(self):
         """Reset parameters to defaults."""
@@ -73,7 +97,11 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
 
     def plot(self, ax, fig):
         # 1 Prepare and check data
-        data, field_names, y_min, y_max = self.prepare_data()
+        layer = self.layer.currentLayer()
+        if layer.type() == QgsMapLayer.VectorLayer:
+            data, field_names, y_min, y_max = self.prepare_vector_data()
+        elif layer.type() == QgsMapLayer.RasterLayer:
+            data, field_names, y_min, y_max = self.prepare_raster_data()
         color_data, color_labels, color_field_type, cmap, norm = self.prepare_color_data()
         if not self.perform_checks(field_names, color_data, color_field_type):
             return
@@ -102,7 +130,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         return ok
 
 
-    def prepare_data(self):
+    def prepare_vector_data(self):
         # Get input values
         layer = self.layer.currentLayer()
         fields = [item.text() for item in self.fields.selectedItems()]
@@ -112,6 +140,31 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         data, y_min, y_max = self._normalize_data(data)
 
         return data, fields, y_min, y_max
+    
+
+    def prepare_raster_data(self):
+        # Get input values
+        rasters = self.raster_table.get_layers()
+        raster_names = [raster.name() for raster in rasters]
+
+        height = rasters[0].height()
+        width = rasters[0].width()
+
+        # Check that all raster dimensions match
+        for raster in rasters[1:]:
+            height_n = raster.height()
+            width_n = raster.width()
+            if height_n != height or width_n != width:
+                raise ValueError("All rasters must have the same dimensions.")
+            
+        # Get data as Numpy array
+        raster_data = np.empty((height * width, 0)).dtype(np.float32)
+        for raster in rasters:
+            data = self.raster_layer_to_array(raster)
+            raster_data = np.hstack((raster_data, data.reshape(-1, 1)))
+        data, y_min, y_max = self._normalize_data(raster_data)
+
+        return data, raster_names, y_min, y_max
 
 
     def _normalize_data(self, data: np.ndarray) -> Tuple[np.ndarray, float, float]:
