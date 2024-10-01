@@ -66,13 +66,13 @@ class EISWizard(QWidget, FORM_CLASS):
         # Icon by Icons8
         ("Modeling", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png"))),
 
+        # <a href="https://www.flaticon.com/free-icons/business-evaluation" title="business evaluation icons">
+        # Business evaluation icons created by Dewi Sari - Flaticon</a>
+        ("Model evaluation", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/evaluation.png"))),
+
         # Icon 2: <a href="https://www.flaticon.com/free-icons/history" title="history icons">
         # History icons created by Irfansusanto20 - Flaticon</a>
         ("History", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/history2.png"))),
-
-        # <a href="https://www.flaticon.com/free-icons/business-evaluation" title="business evaluation icons">
-        # Business evaluation icons created by VectorPortal - Flaticon</a>
-        ("Model evaluation", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/evaluation.png"))),
 
         # Icon by Icons8
         ("Settings", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg"))),
@@ -103,16 +103,15 @@ class EISWizard(QWidget, FORM_CLASS):
 
         self.model_page = EISWizardModeling(self, self.model_manager)
         self.pages_widget.insertWidget(2, self.model_page)
-        # self.pages_widget.insertWidget(2, QWidget())
+
+        self.evaluation_page = EISWizardEvaluation(self)
+        self.pages_widget.insertWidget(3, self.evaluation_page)
 
         self.history_page = EISWizardHistory(self, self.model_manager)
-        self.pages_widget.insertWidget(3, self.history_page)
+        self.pages_widget.insertWidget(4, self.history_page)
 
         self.about_page = EISWizardAbout(self)
         self.pages_widget.insertWidget(6, self.about_page)
-
-        self.evaluation_page = EISWizardEvaluation(self)
-        self.pages_widget.insertWidget(4, self.evaluation_page)
 
         # Set menu
         # self.menu_widget.setMinimumWidth(

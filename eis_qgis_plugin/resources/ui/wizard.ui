@@ -96,12 +96,12 @@ QListWidget::item::selected {
      </item>
      <item>
       <property name="text">
-       <string>History</string>
+       <string>Model evaluation</string>
       </property>
      </item>
-      <item>
+     <item>
       <property name="text">
-       <string>Model evaluation</string>
+       <string>History</string>
       </property>
      </item>
      <item>

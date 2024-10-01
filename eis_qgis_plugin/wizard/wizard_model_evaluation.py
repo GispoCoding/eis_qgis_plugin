@@ -1,7 +1,7 @@
 from qgis.PyQt.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
-from eis_qgis_plugin.wizard.eda.plotting import EISWizardPlotting
-from eis_qgis_plugin.wizard.eda.statistics import EISWizardStatistics
+from eis_qgis_plugin.wizard.model_evaluation.plotting import EISWizardPlotting
+from eis_qgis_plugin.wizard.model_evaluation.statistics import EISWizardStatistics
 
 
 class EISWizardEvaluation(QWidget):
