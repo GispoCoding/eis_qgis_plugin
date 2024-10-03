@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from qgis.core import Qgis, QgsMapLayer, QgsRasterLayer, QgsVectorLayer
-from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton, QgsMapLayerComboBox
+from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton
 from qgis.PyQt.QtWidgets import QSizePolicy, QWidget
 from qgis.utils import iface
 
@@ -14,7 +14,7 @@ class EISPlot(QWidget):
     def __init__(self, parent) -> None:
 
         # DELCARE TYPES
-        self.layer: QgsMapLayerComboBox
+        # self.layer: QgsMapLayerComboBox
         self.parameter_box: QgsCollapsibleGroupBox
         self.color: QgsColorButton
         self.collapsed_height: int
@@ -26,8 +26,8 @@ class EISPlot(QWidget):
         self.original_height = self.height()
 
         # Connect layer change updates and populate initial layer
-        self.layer.layerChanged.connect(self.update_layer)
-        self.update_layer(self.layer.currentLayer())
+        # self.layer.layerChanged.connect(self.update_layer)
+        # self.update_layer(self.layer.currentLayer())
 
         # Save original widget size and connect groupbox collapse signal to resizing
         self.parameter_box.collapsedStateChanged.connect(self.resize_parameter_box)
