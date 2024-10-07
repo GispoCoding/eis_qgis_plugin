@@ -94,7 +94,12 @@
            </item>
            <item>
             <property name="text">
-             <string>Parallel coordinates</string>
+             <string>Parallel coordinates (Vector)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Parallel coordinates (Raster)</string>
             </property>
            </item>
           </widget>
