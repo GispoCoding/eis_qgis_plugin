@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Tuple
 
 import matplotlib.colors as mcolors
 import matplotlib.patches as patches
@@ -6,26 +6,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.cm import ScalarMappable
 from matplotlib.path import Path
-from qgis.core import QgsFieldProxyModel, QgsMapLayer
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
 from qgis.gui import QgsColorButton, QgsFieldComboBox
-from qgis.PyQt.QtWidgets import (
-    QComboBox,
-    QGroupBox,
-    QStackedWidget,
-    QVBoxLayout,
-    QWidget,
-)
+from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
 from qgis.utils import iface
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
-from eis_qgis_plugin.wizard.wizard_layer_data_table import LayerDataTable
 
-FORM_CLASS: QWidget = load_ui("eda/wizard_plot_parallel_coordinates.ui")
+FORM_CLASS: QWidget = load_ui("eda/wizard_plot_parallel_coordinates_vector.ui")
 
 
-class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
+class EISWizardParallelCoordinatesVectorPlot(EISPlot, FORM_CLASS):
     """
     Class for EIS parallel coordinate plots.
 
@@ -35,76 +28,51 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
 
     def __init__(self, parent=None) -> None:
         
-        # DECLARE TYPES
-        self.data_box: QGroupBox
-        self.data_layout: QVBoxLayout
+        self.fields: QListWidget
 
-        self.color_field_stacked_widget: QStackedWidget
+        self.color_field: QgsFieldComboBox
         self.color_field_type: QComboBox
         self.line_type: QComboBox
         self.color: QgsColorButton
+
+        self.select_all_btn: QPushButton
+        self.deselect_all_btn: QPushButton
 
         # Initialize
         self.collapsed_height = 270
         super().__init__(parent)
 
-        self.data_layer_table = LayerDataTable(self, field_selection=True)
-        self.data_layout.addWidget(self.data_layer_table)
+        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.select_all_btn.clicked.connect(self.fields.selectAll)
+        self.deselect_all_btn.clicked.connect(self.fields.clearSelection)
 
-        for _ in range(self.data_layer_table.initial_rows):
-            self.data_layer_table.add_row()
-
-        for row_idx, map_layer in self.data_layer_table.map_layers:
-            map_layer.layerChanged.connect(self.update_layer(row_idx, map_layer))
+        self.update_layer(self.layer.currentLayer())
 
 
-    def update_layer(self, row_idx: int, map_layer: QgsMapLayer):
+    def update_layer(self, layer):
         """Update (set/add items) widgets based on selected layer."""
-        
-        # nrows = self.data_layer_table.rowCount()
-        # for row in range(0, nrows):
-            # layer = self.get_layer(row)
-        if map_layer.type() == QgsMapLayer.VectorLayer:
-            field_selection = QgsFieldComboBox()
-            field_selection.setFilters(QgsFieldProxyModel.Filter.Numeric)
-            field_selection.setLayer(map_layer)
-            self.data_layer_table.setCellWidget(row_idx, 1, field_selection)
+        if layer is None or not isinstance(layer, QgsVectorLayer):
+            return
 
-            # self.color_field_stacked_widget.setCurrentIndex(1)
-            # self.color_field_vector.setLayer(layer)
+        self.fields.clear()
+        for field in layer.fields():
+            if field.isNumeric():
+                self.fields.addItem(field.name())
 
-        elif map_layer.type() == QgsMapLayer.RasterLayer:
-            band_selection = QComboBox()
-            band_count = map_layer.bandCount()
-            for band in range(1, band_count + 1):
-                band_selection.addItem(f"Band {band}")
-            self.data_layer_table.setCellWidget(row_idx, 1, band_selection)
-            # self.color_field_stacked_widget.setCurrentIndex(2)
+        self.color_field.setLayer(layer)
 
 
     def reset(self):
         """Reset parameters to defaults."""
         super().reset()
 
-        # self.color_field.setField("")
+        self.color_field.setField("")
         self.line_type.setCurrentIndex(0)
-
-    
-    def get_layers(self) -> List[QgsMapLayer]:
-        layer_col = 0
-        return [
-            self.data_layer_table.cellWidget(row, layer_col).currentLayer()
-            for row in range(self.data_layer_table.rowCount())
-        ]
 
 
     def plot(self, ax, fig):
         # 1 Prepare and check data
-        layer = self.layer.currentLayer()
-        if layer.type() == QgsMapLayer.VectorLayer:
-            data, field_names, y_min, y_max = self.prepare_vector_data()
-        elif layer.type() == QgsMapLayer.RasterLayer:
-            data, field_names, y_min, y_max = self.prepare_raster_data()
+        data, field_names, y_min, y_max = self.prepare_data()
         color_data, color_labels, color_field_type, cmap, norm = self.prepare_color_data()
         if not self.perform_checks(field_names, color_data, color_field_type):
             return
@@ -133,7 +101,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         return ok
 
 
-    def prepare_vector_data(self):
+    def prepare_data(self):
         # Get input values
         layer = self.layer.currentLayer()
         fields = [item.text() for item in self.fields.selectedItems()]
@@ -143,31 +111,6 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         data, y_min, y_max = self._normalize_data(data)
 
         return data, fields, y_min, y_max
-    
-
-    def prepare_raster_data(self):
-        # Get input values
-        rasters = self.get_layers()
-        raster_names = [raster.name() for raster in rasters]
-
-        height = rasters[0].height()
-        width = rasters[0].width()
-
-        # Check that all raster dimensions match
-        for raster in rasters[1:]:
-            height_n = raster.height()
-            width_n = raster.width()
-            if height_n != height or width_n != width:
-                raise ValueError("All rasters must have the same dimensions.")
-            
-        # Get data as Numpy array
-        raster_data = np.empty((height * width, 0), dtype=np.float32)
-        for raster in rasters:
-            data = self.raster_layer_to_array(raster)
-            raster_data = np.hstack((raster_data, data.reshape(-1, 1)))
-        data, y_min, y_max = self._normalize_data(raster_data)
-
-        return data, raster_names, y_min, y_max
 
 
     def _normalize_data(self, data: np.ndarray) -> Tuple[np.ndarray, float, float]:
@@ -187,10 +130,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
 
     def prepare_color_data(self):
         layer = self.layer.currentLayer()
-        if layer.type() == QgsMapLayer.VectorLayer:
-            color_column_name = self.color_field_vector.currentField()
-        elif layer.type() == QgsMapLayer.RasterLayer:
-            color_column_name = self.color_field_raster.currentLayer().name()
+        color_column_name = self.color_field.currentField()
         if not color_column_name:
             color = self.color.color().getRgbF()
             return None, None, None, color, None
@@ -198,10 +138,9 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
         color_field_type = self.color_field_type.currentText().lower()
 
         if color_field_type == "continuous":
-            if layer.type() == QgsMapLayer.VectorLayer:
-                color_data = np.array(
-                    [feature[color_column_name] for feature in layer.getFeatures()], dtype=np.float32
-                )
+            color_data = np.array(
+                [feature[color_column_name] for feature in layer.getFeatures()], dtype=np.float32
+            )
             palette_name = self.get_default_continuous_palette()
             color_labels = None
 
@@ -250,7 +189,7 @@ class EISWizardParallelCoordinatesPlot(EISPlot, FORM_CLASS):
     
 
     def prepare_legend(self, ax, color_data, color_labels, color_field_type, cmap, norm):
-        color_column_name = self.color_field_vector.currentField()
+        color_column_name = self.color_field.currentField()
         if color_field_type == "categorical":
             # Create legend for categorical color data
             legend_handles = [

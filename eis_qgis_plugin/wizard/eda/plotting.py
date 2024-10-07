@@ -11,7 +11,8 @@ from eis_qgis_plugin.wizard.eda.plots.histogram import EISWizardHistogram
 from eis_qgis_plugin.wizard.eda.plots.kde import EISWizardKde
 from eis_qgis_plugin.wizard.eda.plots.lineplot import EISWizardLineplot
 from eis_qgis_plugin.wizard.eda.plots.pairplot import EISWizardPairplot
-from eis_qgis_plugin.wizard.eda.plots.parallel_coordinates import EISWizardParallelCoordinatesPlot
+from eis_qgis_plugin.wizard.eda.plots.parallel_coordinates_raster import EISWizardParallelCoordinatesRasterPlot
+from eis_qgis_plugin.wizard.eda.plots.parallel_coordinates_vector import EISWizardParallelCoordinatesVectorPlot
 from eis_qgis_plugin.wizard.eda.plots.scatterplot import EISWizardScatterplot
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot.ui")
@@ -56,7 +57,8 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
             EISWizardBarplot(self),
             EISWizardBoxplot(self),
             EISWizardPairplot(self),
-            EISWizardParallelCoordinatesPlot(self)
+            EISWizardParallelCoordinatesVectorPlot(self),
+            EISWizardParallelCoordinatesRasterPlot(self),
         ]
 
         for i, page in enumerate(self.pages):
@@ -83,7 +85,7 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
         fig, ax = plt.subplots()
         if isinstance(page, EISWizardPairplot):
             fig = page.plot(ax)
-        elif isinstance(page, EISWizardParallelCoordinatesPlot):
+        elif isinstance(page, (EISWizardParallelCoordinatesVectorPlot, EISWizardParallelCoordinatesRasterPlot)):
             page.plot(ax, fig)
         else:
             page.plot(ax)

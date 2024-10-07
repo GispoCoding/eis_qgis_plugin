@@ -1,5 +1,14 @@
-from qgis.core import QgsApplication
-from qgis.gui import QgsMapLayerComboBox
+from typing import Optional
+
+from qgis.core import (
+    QgsApplication,
+    QgsFieldProxyModel,
+    QgsMapLayer,
+    QgsMapLayerProxyModel,
+    QgsRasterLayer,
+    QgsVectorLayer,
+)
+from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox, QgsRasterBandComboBox
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QComboBox, QHeaderView, QPushButton, QTableWidget
 
@@ -17,27 +26,26 @@ class LayerDataTable(QTableWidget):
         initial_rows: int = 1,
         row_height: int = 26,
         min_rows: int = 1,
+        dtype: Optional[QgsMapLayer] = None,
         field_selection: bool = False,
     ):
         super().__init__(parent)
 
-        self.map_layers = {}
-
         self.row_height = row_height
         self.min_rows = min_rows
         self.initial_rows = initial_rows
-        self.field_selection = field_selection
-
-        if self.field_selection:
+        self.dtype = dtype
+        
+        if field_selection:
             self.labels = ["Layer", "Selection", "Add", "Delete"]
         else:
             self.labels = ["Layer", "Add", "Delete"]
 
         self.setColumnCount(len(self.labels))
         self.setHorizontalHeaderLabels(self.labels)
+        self.setColumnWidth(0, 150)
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-
-        if self.field_selection:
+        if field_selection:
             self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
 
         self.setColumnWidth(1, 50)
@@ -83,23 +91,41 @@ class LayerDataTable(QTableWidget):
         self.clearSelection()
 
 
-    def add_row_widgets(self, row_index: int):
+    def add_row_widgets(self, row_index):
         add_btn, remove_btn = self.create_buttons()
 
         layer_selection = QgsMapLayerComboBox()
-        if self.field_selection:
-            field_selection = QComboBox()
+        if self.dtype == QgsRasterLayer:
+            layer_selection.setFilters(QgsMapLayerProxyModel.RasterLayer)
+
+        elif self.dtype == QgsVectorLayer:
+            layer_selection.setFilters(QgsMapLayerProxyModel.VectorLayer)
+
+        selection = QComboBox()
+        field_selection = QgsFieldComboBox()
+        field_selection.setFilters(QgsFieldProxyModel.Filter.Numeric)
+        band_selection = QgsRasterBandComboBox()
+
+        if field_selection:
             self.setCellWidget(row_index, 0, layer_selection)
-            self.setCellWidget(row_index, 1, field_selection)
+            self.setCellWidget(row_index, 1, selection)
             self.setCellWidget(row_index, 2, add_btn)
             self.setCellWidget(row_index, 3, remove_btn)
+            
+            layer_selection.layerChanged.connect(
+                lambda new_layer: (
+                    field_selection.setLayer(new_layer) if new_layer.type() == QgsMapLayer.VectorLayer else
+                    band_selection.setLayer(new_layer),
+                    self.setCellWidget(row_index, 1, 
+                        field_selection if new_layer.type() == QgsMapLayer.VectorLayer else
+                        band_selection
+                    )
+                )
+            )
         else:
             self.setCellWidget(row_index, 0, layer_selection)
             self.setCellWidget(row_index, 1, add_btn)
             self.setCellWidget(row_index, 2, remove_btn)
-        
-        self.map_layers[row_index] = layer_selection
-
 
 
     def remove_row(self):
@@ -113,8 +139,6 @@ class LayerDataTable(QTableWidget):
         # Remove row and set table size
         self.removeRow(row_index)
         self.setMinimumHeight(self.minimumHeight() - self.row_height)
-
-        del self.map_layers[row_index]
 
         # Reset selection
         self.clearSelection()

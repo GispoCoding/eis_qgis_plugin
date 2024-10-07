@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from qgis.core import Qgis, QgsMapLayer, QgsRasterLayer, QgsVectorLayer
-from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton
+from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QSizePolicy, QWidget
 from qgis.utils import iface
 
@@ -14,7 +14,7 @@ class EISPlot(QWidget):
     def __init__(self, parent) -> None:
 
         # DELCARE TYPES
-        # self.layer: QgsMapLayerComboBox
+        self.layer: QgsMapLayerComboBox
         self.parameter_box: QgsCollapsibleGroupBox
         self.color: QgsColorButton
         self.collapsed_height: int
