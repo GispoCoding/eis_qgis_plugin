@@ -68,6 +68,13 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
         self.plot_layout = QVBoxLayout()
         self.plot_container.setLayout(self.plot_layout)
 
+        # TODO: Refactor
+        self.pages[-1].data_layer_table.size_changed.connect(
+            lambda change: self.plot_parameters_container.setMinimumHeight(
+                self.plot_parameters_container.minimumHeight() + change
+            )
+        )
+        
 
     def resize_parameter_container(self, index):
         """Resize the QStackedWidget that contains plot parameters according to the needed size."""

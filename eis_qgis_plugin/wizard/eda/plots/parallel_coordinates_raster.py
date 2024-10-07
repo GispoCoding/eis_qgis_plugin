@@ -13,7 +13,6 @@ from qgis.PyQt.QtWidgets import (
     QGroupBox,
     QLabel,
     QSpinBox,
-    QVBoxLayout,
     QWidget,
 )
 from qgis.utils import iface
@@ -38,7 +37,6 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
         
         # DECLARE TYPES
         self.data_box: QGroupBox
-        self.data_layout: QVBoxLayout
 
         self.color_selection: QgsMapLayerComboBox
         self.color_field_type: QComboBox
@@ -52,7 +50,7 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
         super().__init__(parent)
 
         self.data_layer_table = LayerDataTable(self, dtype=QgsRasterLayer)
-        self.data_layout.addWidget(self.data_layer_table)
+        self.data_box.layout().addWidget(self.data_layer_table)
 
         self.color_selection.setFilters(QgsMapLayerProxyModel.RasterLayer)
         self.color_selection.setAllowEmptyLayer(True)
@@ -61,8 +59,14 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
         self.n_categories.hide()
         self.n_categories_label.hide()
         self.color_field_type.currentIndexChanged.connect(self.update_categorical_color_selection)
+        self.data_layer_table.size_changed.connect(self._update_size)
 
         self.data_layer_table.add_row()
+
+
+    def _update_size(self, size_change: int):
+        self.setMinimumHeight(self.minimumHeight() + size_change)
+        self.setMaximumHeight(self.maximumHeight() + size_change)
 
 
     def update_categorical_color_selection(self):

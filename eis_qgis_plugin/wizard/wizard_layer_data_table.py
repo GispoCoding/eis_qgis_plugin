@@ -9,6 +9,7 @@ from qgis.core import (
     QgsVectorLayer,
 )
 from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox, QgsRasterBandComboBox
+from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QComboBox, QHeaderView, QPushButton, QTableWidget
 
@@ -19,6 +20,8 @@ class LayerDataTable(QTableWidget):
     
     This table has "add" or "remove" buttons to control how many rows are used.
     """
+
+    size_changed = pyqtSignal(int)
 
     def __init__(
         self,
@@ -83,6 +86,7 @@ class LayerDataTable(QTableWidget):
         self.insertRow(row_index)
         self.setRowHeight(row_index, self.row_height)
         self.setMinimumHeight(self.minimumHeight() + self.row_height)
+        self.size_changed.emit(self.row_height)
 
         # Add widgets
         self.add_row_widgets(row_index)
@@ -139,6 +143,7 @@ class LayerDataTable(QTableWidget):
         # Remove row and set table size
         self.removeRow(row_index)
         self.setMinimumHeight(self.minimumHeight() - self.row_height)
+        self.size_changed.emit(-self.row_height)
 
         # Reset selection
         self.clearSelection()
