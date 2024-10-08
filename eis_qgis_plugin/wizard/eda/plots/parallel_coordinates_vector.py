@@ -1,24 +1,19 @@
-from typing import Tuple
 
 import matplotlib.colors as mcolors
-import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.cm import ScalarMappable
-from matplotlib.path import Path
 from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
-from qgis.gui import QgsColorButton, QgsFieldComboBox
-from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
-from qgis.utils import iface
+from qgis.gui import QgsFieldComboBox
+from qgis.PyQt.QtWidgets import QListWidget, QPushButton, QWidget
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
+from eis_qgis_plugin.wizard.eda.plots.parallel_coordinates import EISWizardParallelCoordinatesPlot
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_parallel_coordinates_vector.ui")
 
 
-class EISWizardParallelCoordinatesVectorPlot(EISPlot, FORM_CLASS):
+class EISWizardParallelCoordinatesVectorPlot(EISWizardParallelCoordinatesPlot, FORM_CLASS):
     """
     Class for EIS parallel coordinate plots.
 
@@ -29,11 +24,7 @@ class EISWizardParallelCoordinatesVectorPlot(EISPlot, FORM_CLASS):
     def __init__(self, parent=None) -> None:
         
         self.fields: QListWidget
-
         self.color_field: QgsFieldComboBox
-        self.color_field_type: QComboBox
-        self.line_type: QComboBox
-        self.color: QgsColorButton
 
         self.select_all_btn: QPushButton
         self.deselect_all_btn: QPushButton
@@ -41,6 +32,8 @@ class EISWizardParallelCoordinatesVectorPlot(EISPlot, FORM_CLASS):
         # Initialize
         self.collapsed_height = 270
         super().__init__(parent)
+        
+        self.dtype = QgsVectorLayer
 
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
         self.select_all_btn.clicked.connect(self.fields.selectAll)
@@ -67,38 +60,6 @@ class EISWizardParallelCoordinatesVectorPlot(EISPlot, FORM_CLASS):
         super().reset()
 
         self.color_field.setField("")
-        self.line_type.setCurrentIndex(0)
-
-
-    def plot(self, ax, fig):
-        # 1 Prepare and check data
-        data, field_names, y_min, y_max = self.prepare_data()
-        color_data, color_labels, color_field_type, cmap, norm = self.prepare_color_data()
-        if not self.perform_checks(field_names, color_data, color_field_type):
-            return
-
-        # 2 Prepare plot
-        self.prepare_plot(ax, data, y_min, y_max, field_names)
-        if color_data is not None:
-            self.prepare_legend(ax, color_data, color_labels, color_field_type, cmap, norm)
-
-        # 3 Draw
-        self.draw(ax, data, color_data, cmap, norm)
-
-
-    def perform_checks(self, fields, color_data, color_field_type) -> bool:
-        ok = True
-        if len(fields) > 15:
-            iface.messageBar().pushCritical("Error: ", "Cannot select more than 15 fields.")
-            ok = False
-        n_categories = len(np.unique(color_data))
-        if n_categories > 15 and color_field_type == "categorical":
-            iface.messageBar().pushCritical(
-                "Error: ",
-                f"Categorical color column can have at most 15 unique values, {n_categories} categories detected."
-            )
-            ok = False
-        return ok
 
 
     def prepare_data(self):
@@ -111,21 +72,6 @@ class EISWizardParallelCoordinatesVectorPlot(EISPlot, FORM_CLASS):
         data, y_min, y_max = self._normalize_data(data)
 
         return data, fields, y_min, y_max
-
-
-    def _normalize_data(self, data: np.ndarray) -> Tuple[np.ndarray, float, float]:
-        y_min = np.nanmin(data, axis=0)
-        y_max = np.nanmax(data, axis=0)
-        dy = y_max - y_min
-        y_min -= dy * 0.05
-        y_max += dy * 0.05
-        dy = y_max - y_min
-
-        normalized_data = np.zeros_like(data)
-        normalized_data[:, 0] = data[:, 0]
-        normalized_data[:, 1:] = (data[:, 1:] - y_min[1:]) / dy[1:] * dy[0] + y_min[0]
-
-        return normalized_data, y_min, y_max
 
 
     def prepare_color_data(self):
@@ -160,87 +106,3 @@ class EISWizardParallelCoordinatesVectorPlot(EISPlot, FORM_CLASS):
             cmap = mcolors.LinearSegmentedColormap.from_list("custom_colormap", colors)
 
         return color_data, color_labels, color_field_type, cmap, norm
-
-
-    def _encode_data(self, color_data: list) -> np.ndarray:
-        unique_values = list(dict.fromkeys(color_data))
-        encoding = {value: i for i, value in enumerate(unique_values)}
-        color_data_encoded = [encoding[value] for value in color_data]
-        return unique_values, color_data_encoded
-
-
-    def prepare_plot(self, ax, data, y_min, y_max, data_labels):
-        axes_list = [ax] + [ax.twinx() for _ in range(data.shape[1] - 1)]
-        for i, axis in enumerate(axes_list):
-            axis.set_ylim(y_min[i], y_max[i])
-            axis.spines["top"].set_visible(False)
-            axis.spines["bottom"].set_visible(False)
-            if axis != ax:
-                axis.spines["right"].set_visible(False)
-                axis.yaxis.set_ticks_position("left")
-                axis.spines["left"].set_position(("axes", i / (data.shape[1] - 1)))
-
-        ax.set_xlim(0, data.shape[1] - 1)
-        ax.set_xticks(range(data.shape[1]))
-        ax.set_xticklabels(data_labels, fontsize=10)
-        ax.tick_params(axis="x", which="major", pad=7)
-        ax.spines["right"].set_visible(False)
-        ax.xaxis.tick_top()
-    
-
-    def prepare_legend(self, ax, color_data, color_labels, color_field_type, cmap, norm):
-        color_column_name = self.color_field.currentField()
-        if color_field_type == "categorical":
-            # Create legend for categorical color data
-            legend_handles = [
-                patches.Patch(color=cmap(norm(i)), label=category) for i, category in enumerate(color_labels)
-            ]
-            ax.legend(handles=legend_handles, title=color_column_name, bbox_to_anchor=(1.05, 1), loc='upper left')
-        else:
-            # Create colorbar for continuous color data
-            scalar_mappable = ScalarMappable(norm=norm, cmap=cmap)
-            scalar_mappable.set_array(color_data)
-            colorbar = plt.colorbar(scalar_mappable, ax=ax, orientation='vertical')
-            colorbar.set_label(color_column_name)
-
-            # scalar_mappable = ScalarMappable(norm=norm, cmap=cmap)
-            # scalar_mappable.set_array(color_data)  # Use original color data here
-            # colorbar = fig.colorbar(scalar_mappable, ax=ax, orientation='vertical', fraction=0.046, pad=0.04)
-            # colorbar.set_label(color_column_name)
-            # colorbar.set_ticks([norm(color_min), norm(color_max)])
-            # colorbar.set_ticklabels([f"{color_min:.2f}", f"{color_max:.2f}"])
-
-            # divider = make_axes_locatable(ax)
-            # cax = divider.append_axes("right", size="5%", pad=0.25)
-
-            # # Create and display the colorbar in the newly added axes
-            # scalar_mappable = ScalarMappable(norm=norm, cmap=cmap)
-            # scalar_mappable.set_array([])
-            # cbar = plt.colorbar(scalar_mappable, cax=cax)
-            # cbar.set_label(color_column_name)
-            # cbar.set_ticks([norm(color_min), norm(color_max)])
-            # cbar.set_ticklabels([f"{color_min:.2f}", f"{color_max:.2f}"])
-
-
-    def draw(self, ax, data, color_data, cmap, norm):
-        curved_lines = self.line_type.currentIndex() == 0
-
-        for i in range(data.shape[0]):
-            if color_data is None:
-                color = cmap  # Static color
-            else:
-                color = cmap(norm(color_data[i]))
-            if curved_lines:
-                x = np.linspace(0, len(data) - 1, len(data) * 3 - 2, endpoint=True)
-                y = np.repeat(data[i, :], 3)[1:-1]
-
-                control_points = list(zip(x, y))
-                codes = [Path.MOVETO] + [Path.CURVE4 for _ in range(len(control_points) - 1)]
-                path = Path(control_points, codes)
-
-                curve_patch = patches.PathPatch(path, facecolor="none", edgecolor=color, lw=1, alpha=0.5)
-                ax.add_patch(curve_patch)
-            else:
-                ax.plot(range(data.shape[1]), data[i, :], c=color, lw=1, alpha=0.5)
-
-        plt.tight_layout()
