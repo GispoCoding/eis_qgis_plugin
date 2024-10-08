@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from qgis.core import QgsMapLayerProxyModel, QgsRasterLayer
 from qgis.gui import QgsMapLayerComboBox
-from qgis.PyQt.QtWidgets import QComboBox, QGroupBox, QSizePolicy, QWidget
+from qgis.PyQt.QtWidgets import QGroupBox, QSizePolicy, QWidget
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -31,8 +31,6 @@ class EISWizardPairplotRaster(EISPlot, FORM_CLASS):
         self.data_box = QGroupBox
 
         self.color_selection: QgsMapLayerComboBox
-        self.kind: QComboBox
-        self.diagonal_kind: QComboBox
         
         # Initialize
         self.collapsed_height = 270
@@ -100,23 +98,8 @@ class EISWizardPairplotRaster(EISPlot, FORM_CLASS):
         return grid.figure
     
 
-    def plot_example(self, ax):
-        """Produce example plot using SNS data."""
-        penguins = sns.load_dataset("penguins")
-
-        grid = sns.pairplot(
-            data=penguins,
-            hue="species",
-            palette="dark",
-        )
-
-        return grid.figure
-    
-
     def reset(self):
         """Reset parameters to defaults."""
         super().reset()
 
         self.color_selection.setCurrentIndex(0)
-        self.kind.setCurrentIndex(0)
-        self.diagonal_kind.setCurrentIndex(0)

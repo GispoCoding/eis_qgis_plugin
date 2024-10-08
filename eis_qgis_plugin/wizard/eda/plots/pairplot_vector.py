@@ -1,10 +1,10 @@
 from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
 from qgis.gui import QgsFieldComboBox
-from qgis.PyQt.QtWidgets import QComboBox, QListWidget, QPushButton, QWidget
+from qgis.PyQt.QtWidgets import QListWidget, QPushButton, QWidget
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
+from eis_qgis_plugin.wizard.eda.plots.pairplot import EISWizardPairplot
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_pairplot_vector.ui")
 
@@ -12,7 +12,7 @@ KIND_MAPPING = {"histogram": "hist", "scatterplot": "scatter", "kde": "kde", "re
 DIAG_KIND_MAPPING = {"auto": "auto", "histogram": "hist", "kde": "kde", "none": "None"}
 
 
-class EISWizardPairplotVector(EISPlot, FORM_CLASS):
+class EISWizardPairplotVector(EISWizardPairplot, FORM_CLASS):
     """
     Class for EIS-Seaborn pairplots with vector layers.
 
@@ -26,8 +26,6 @@ class EISWizardPairplotVector(EISPlot, FORM_CLASS):
         self.fields: QListWidget
 
         self.color_field: QgsFieldComboBox
-        self.kind: QComboBox
-        self.diagonal_kind: QComboBox
 
         self.select_all_btn: QPushButton
         self.deselect_all_btn: QPushButton
@@ -80,23 +78,8 @@ class EISWizardPairplotVector(EISPlot, FORM_CLASS):
         return grid.figure
 
 
-    def plot_example(self, ax):
-        """Produce example plot using SNS data."""
-        penguins = sns.load_dataset("penguins")
-
-        grid = sns.pairplot(
-            data=penguins,
-            hue="species",
-            palette="dark",
-        )
-
-        return grid.figure
-
-
     def reset(self):
         """Reset parameters to defaults."""
         super().reset()
 
         self.color_field.setField("")
-        self.kind.setCurrentIndex(0)
-        self.diagonal_kind.setCurrentIndex(0)
