@@ -4,8 +4,6 @@ import matplotlib.colors as mcolors
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
-import rasterio
-import rasterio.profiles
 from matplotlib.cm import ScalarMappable
 from matplotlib.path import Path
 from qgis.core import QgsMapLayerProxyModel, QgsRasterLayer
@@ -114,13 +112,8 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
         rasters = self.get_layers()
         raster_names = [raster.name() for raster in rasters]
 
-        raster_profiles = []
-        for raster in rasters:
-            path = raster.dataProvider().dataSourceUri()
-            with rasterio.open(path) as r:
-                raster_profiles.append(r.profile)
-
-        check_raster_grids(raster_profiles)
+        # Check matching raster CRSs, cell sizes, pixel alignments, and bounds
+        check_raster_grids(rasters)
             
         # Get data as Numpy array
         height = rasters[0].height()
