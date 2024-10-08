@@ -17,11 +17,6 @@ class EISWizardPairplot(EISPlot):
         # Initialize
         super().__init__(parent)
 
-    
-    def plot(self, ax):
-        """Plot to given axis."""
-        raise NotImplementedError("Plot needs to be defined in child class.")
-    
 
     def plot_example(self, ax):
         """Produce example plot using SNS data."""
