@@ -8,19 +8,13 @@ from matplotlib.cm import ScalarMappable
 from matplotlib.path import Path
 from qgis.core import QgsMapLayerProxyModel, QgsRasterLayer
 from qgis.gui import QgsColorButton, QgsMapLayerComboBox
-from qgis.PyQt.QtWidgets import (
-    QComboBox,
-    QGroupBox,
-    QLabel,
-    QSpinBox,
-    QWidget,
-)
+from qgis.PyQt.QtWidgets import QComboBox, QGroupBox, QSizePolicy, QWidget
 from qgis.utils import iface
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.layer_data_table import LayerDataTable
 from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
-from eis_qgis_plugin.wizard.wizard_layer_data_table import LayerDataTable
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_parallel_coordinates_raster.ui")
 
@@ -40,14 +34,14 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
 
         self.color_selection: QgsMapLayerComboBox
         self.color_field_type: QComboBox
-        self.n_categories: QSpinBox
-        self.n_categories_label: QLabel
         self.line_type: QComboBox
         self.color: QgsColorButton
 
         # Initialize
         self.collapsed_height = 270
         super().__init__(parent)
+
+        self.data_box.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
 
         self.data_layer_table = LayerDataTable(self, dtype=QgsRasterLayer)
         self.data_box.layout().addWidget(self.data_layer_table)
@@ -56,9 +50,6 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
         self.color_selection.setAllowEmptyLayer(True)
         self.color_selection.setCurrentIndex(0)
 
-        self.n_categories.hide()
-        self.n_categories_label.hide()
-        self.color_field_type.currentIndexChanged.connect(self.update_categorical_color_selection)
         self.data_layer_table.size_changed.connect(self._update_size)
 
         self.data_layer_table.add_row()
@@ -69,24 +60,12 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
         self.setMaximumHeight(self.maximumHeight() + size_change)
 
 
-    def update_categorical_color_selection(self):
-        if self.color_field_type.currentText().lower() == "categorical":
-            self.n_categories_label.show()
-            self.n_categories.show()
-            self.n_categories.setValue(3)
-        else:
-            self.n_categories_label.hide()
-            self.n_categories.hide()        
-
-
     def reset(self):
         """Reset parameters to defaults."""
         super().reset()
         self.color_selection.setCurrentIndex(0)
         self.color_field_type.setCurrentIndex(0)
-        self.n_categories.setValue(3)
         self.line_type.setCurrentIndex(0)
-
 
 
     def get_layers(self) -> List[QgsRasterLayer]:
@@ -196,15 +175,11 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
         return color_data, color_labels, color_field_type, cmap, norm
 
 
-    def _encode_data(self, data: np.ndarray) -> np.ndarray:
-        n_categories = self.n_categories.value()
-        categories = np.round(np.linspace(np.min(data), np.max(data), n_categories), 3)
-        color_data = np.digitize(data, categories) - 1
-        return categories, color_data
-        # unique_values = list(dict.fromkeys(color_data))
-        # encoding = {value: i for i, value in enumerate(unique_values)}
-        # color_data_encoded = [encoding[value] for value in color_data]
-        # return unique_values, color_data_encoded
+    def _encode_data(self, color_data: list) -> np.ndarray:
+        unique_values = list(dict.fromkeys(color_data))
+        encoding = {value: i for i, value in enumerate(unique_values)}
+        color_data_encoded = [encoding[value] for value in color_data]
+        return unique_values, color_data_encoded
 
 
     def prepare_plot(self, ax, data, y_min, y_max, data_labels):
