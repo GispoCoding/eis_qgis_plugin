@@ -4,6 +4,8 @@ import matplotlib.colors as mcolors
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
+import rasterio
+import rasterio.profiles
 from matplotlib.cm import ScalarMappable
 from matplotlib.path import Path
 from qgis.core import QgsMapLayerProxyModel, QgsRasterLayer
@@ -14,6 +16,7 @@ from qgis.utils import iface
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.layer_data_table import LayerDataTable
+from eis_qgis_plugin.utils.misc_utils import check_raster_grids
 from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_parallel_coordinates_raster.ui")
@@ -111,17 +114,17 @@ class EISWizardParallelCoordinatesRasterPlot(EISPlot, FORM_CLASS):
         rasters = self.get_layers()
         raster_names = [raster.name() for raster in rasters]
 
-        height = rasters[0].height()
-        width = rasters[0].width()
+        raster_profiles = []
+        for raster in rasters:
+            path = raster.dataProvider().dataSourceUri()
+            with rasterio.open(path) as r:
+                raster_profiles.append(r.profile)
 
-        # Check that all raster dimensions match
-        for raster in rasters[1:]:
-            height_n = raster.height()
-            width_n = raster.width()
-            if height_n != height or width_n != width:
-                raise ValueError("All rasters must have the same dimensions.")
+        check_raster_grids(raster_profiles)
             
         # Get data as Numpy array
+        height = rasters[0].height()
+        width = rasters[0].width()
         raster_data = np.empty((height * width, 0), dtype=np.float32)
         for raster in rasters:
             data = self.raster_layer_to_array(raster)

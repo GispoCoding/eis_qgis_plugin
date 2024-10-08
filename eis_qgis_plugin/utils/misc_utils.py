@@ -1,8 +1,9 @@
 import os
 import re
 from enum import Enum
-from typing import Any, Dict, Literal, Optional
+from typing import Any, Dict, Literal, Optional, Sequence
 
+import rasterio
 from qgis.core import (
     QgsColorRamp,
     QgsColorRampShader,
@@ -156,3 +157,38 @@ def parse_string_list_parameter_and_run_command(
     feedback.setProgress(100)
 
     return results
+
+
+def check_raster_grids(raster_profiles: Sequence[rasterio.profiles.Profile]):
+    """Adapted from EIS Toolkit."""
+    # Check matching CRS
+    epsg_list = []
+    for profile in raster_profiles:
+        if "crs" in profile:
+            epsg_list.append(profile["crs"])
+    
+    if len(set(epsg_list)) != 1:
+        raise ValueError("CRSs do not match.")
+
+
+    # Check matching cell size
+    pixel_size = [raster_profiles[0]["transform"][0], raster_profiles[0]["transform"][4]]
+    for profile in raster_profiles:
+        if [profile["transform"][0], profile["transform"][4]] != pixel_size:
+            raise ValueError("Cell sizes do not match.")
+    
+    # Check matching pixel alignment
+    pixel_size_x, pixel_size_y = raster_profiles[0]["transform"][0], abs(raster_profiles[0]["transform"][4])
+    left_pixel, top_pixel = raster_profiles[0]["transform"][2], raster_profiles[0]["transform"][5]
+    for profile in raster_profiles:
+        if (
+            abs(left_pixel - profile["transform"][2]) % pixel_size_x != 0
+            or abs(top_pixel - profile["transform"][5]) % pixel_size_y != 0
+        ):
+            raise ValueError("Pixel alignments do not match.")
+
+    # Check mathing bounds
+    bounds = (raster_profiles[0]["transform"][2], raster_profiles[0]["transform"][5])
+    for profile in raster_profiles:
+        if (profile["transform"][2], profile["transform"][5]) != bounds:
+            raise ValueError("Raster bounds do not match.")
