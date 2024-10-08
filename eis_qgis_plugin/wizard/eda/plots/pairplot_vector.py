@@ -6,15 +6,15 @@ import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
 
-FORM_CLASS: QWidget = load_ui("eda/wizard_plot_pairplot.ui")
+FORM_CLASS: QWidget = load_ui("eda/wizard_plot_pairplot_vector.ui")
 
 KIND_MAPPING = {"histogram": "hist", "scatterplot": "scatter", "kde": "kde", "regression": "reg"}
 DIAG_KIND_MAPPING = {"auto": "auto", "histogram": "hist", "kde": "kde", "none": "None"}
 
 
-class EISWizardPairplot(EISPlot, FORM_CLASS):
+class EISWizardPairplotVector(EISPlot, FORM_CLASS):
     """
-    Class for EIS-Seaborn pairplots.
+    Class for EIS-Seaborn pairplots with vector layers.
 
     Initialized from a UI file. Responsible for updating widgets and
     producing the plot.

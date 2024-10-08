@@ -89,7 +89,12 @@
            </item>
            <item>
             <property name="text">
-             <string>Pairplot</string>
+             <string>Pairplot (Vector)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Pairplot (Raster)</string>
             </property>
            </item>
            <item>
