@@ -192,3 +192,11 @@ def check_raster_grids(rasters: Sequence[QgsRasterLayer]) -> bool:
             return False
 
     return True
+
+
+def check_raster_size(raster: QgsRasterLayer, limit: int) -> bool:
+    if raster.height() * raster.width() > limit:
+        iface.messageBar().pushMessage(f"Raster pixel count limit {limit} exceeded.", level=Qgis.Critical)
+        return False
+    
+    return True

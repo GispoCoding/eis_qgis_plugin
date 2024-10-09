@@ -30,7 +30,6 @@ class EISWizardParallelCoordinatesPlot(EISPlot):
         # Initialize
         super().__init__(parent)
 
-
     
     def reset(self):
         """Reset parameters to defaults."""
@@ -40,7 +39,11 @@ class EISWizardParallelCoordinatesPlot(EISPlot):
 
     def plot(self, ax, fig):
         # 1 Prepare and check data
-        data, field_names, y_min, y_max = self.prepare_data()
+        result = self.prepare_data()
+        if result is not None:
+            data, field_names, y_min, y_max = result
+        else:
+            return
         
         color_data, color_labels, color_field_type, cmap, norm = self.prepare_color_data()
         if not self.perform_checks(field_names, color_data, color_field_type):

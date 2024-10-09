@@ -10,7 +10,7 @@ from qgis.PyQt.QtWidgets import QGroupBox, QSizePolicy, QWidget
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.layer_data_table import LayerDataTable
-from eis_qgis_plugin.utils.misc_utils import check_raster_grids
+from eis_qgis_plugin.utils.misc_utils import check_raster_grids, check_raster_size
 from eis_qgis_plugin.wizard.eda.plots.parallel_coordinates import EISWizardParallelCoordinatesPlot
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_parallel_coordinates_raster.ui")
@@ -78,8 +78,12 @@ class EISWizardParallelCoordinatesRasterPlot(EISWizardParallelCoordinatesPlot, F
             return
             
         # Initialize with first raster
+        if not check_raster_size(rasters[0], limit=10000):
+            return
         raster_data = self.raster_layer_to_array(rasters[0]).reshape(-1, 1)
         for raster in rasters[1:]:
+            if not check_raster_size(raster, limit=10000):
+                return
             data = self.raster_layer_to_array(raster)
             raster_data = np.hstack((raster_data, data.reshape(-1, 1)))
         data, y_min, y_max = self._normalize_data(raster_data)
