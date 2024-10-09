@@ -9,7 +9,7 @@ from qgis.PyQt.QtWidgets import QGroupBox, QSizePolicy, QWidget
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.layer_data_table import LayerDataTable
-from eis_qgis_plugin.utils.misc_utils import check_raster_grids, check_raster_size
+from eis_qgis_plugin.utils.misc_utils import check_duplicate_names, check_raster_grids, check_raster_size
 from eis_qgis_plugin.wizard.eda.plots.plot_template import EISPlot
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_pairplot_raster.ui")
@@ -85,7 +85,8 @@ class EISWizardPairplotRaster(EISPlot, FORM_CLASS):
         else:
             color_field_name = None
 
-
+        # Replace duplicate raster names
+        raster_names = check_duplicate_names(raster_names)
         df = pd.DataFrame(raster_data, columns=raster_names)
 
         # if color_field_name:

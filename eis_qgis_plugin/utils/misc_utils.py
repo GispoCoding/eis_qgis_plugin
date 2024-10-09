@@ -200,3 +200,19 @@ def check_raster_size(raster: QgsRasterLayer, limit: int) -> bool:
         return False
     
     return True
+
+
+def check_duplicate_names(names: list) -> list:
+    name_count = {}
+    unique_names = []
+    for name in names:
+        if name in name_count:
+            name_count[name] += 1
+            new_name = f"{name}_{name_count[name]}"
+        else:
+            name_count[name] = 1
+            new_name = name
+        
+        unique_names.append(new_name)
+    
+    return unique_names
