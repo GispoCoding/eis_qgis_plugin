@@ -38,6 +38,7 @@ class EISWizardPairplotVector(EISWizardPairplot, FORM_CLASS):
         self.select_all_btn.clicked.connect(self.fields.selectAll)
         self.deselect_all_btn.clicked.connect(self.fields.clearSelection)
 
+        self.layer.layerChanged.connect(self.update_layer)
         self.update_layer(self.layer.currentLayer())
 
 

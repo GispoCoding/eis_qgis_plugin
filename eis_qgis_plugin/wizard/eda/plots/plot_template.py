@@ -25,10 +25,6 @@ class EISPlot(QWidget):
 
         self.original_height = self.height()
 
-        # Connect layer change updates and populate initial layer
-        # self.layer.layerChanged.connect(self.update_layer)
-        # self.update_layer(self.layer.currentLayer())
-
         # Save original widget size and connect groupbox collapse signal to resizing
         self.parameter_box.collapsedStateChanged.connect(self.resize_parameter_box)
 
