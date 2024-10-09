@@ -1,9 +1,10 @@
 import os
 import re
 from enum import Enum
-from typing import Any, Dict, Literal, Optional
+from typing import Any, Dict, Literal, Optional, Sequence
 
 from qgis.core import (
+    Qgis,
     QgsColorRamp,
     QgsColorRampShader,
     QgsProcessingContext,
@@ -16,6 +17,7 @@ from qgis.core import (
 )
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QLayout, QLineEdit
+from qgis.utils import iface
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
 from eis_qgis_plugin.eis_processing.eis_toolkit_invoker import EISToolkitInvoker
@@ -156,3 +158,61 @@ def parse_string_list_parameter_and_run_command(
     feedback.setProgress(100)
 
     return results
+
+
+def check_raster_grids(rasters: Sequence[QgsRasterLayer]) -> bool:
+    ref_raster = rasters[0]
+    ref_crs = ref_raster.crs()
+    ref_res_x = ref_raster.rasterUnitsPerPixelX()
+    ref_res_y = ref_raster.rasterUnitsPerPixelY()
+    ref_extent = ref_raster.extent()
+    ref_x_min, ref_y_max = ref_extent.xMinimum(), ref_extent.yMaximum()
+
+    for _, raster in enumerate(rasters[1:]):
+        crs = raster.crs()
+        res_x = raster.rasterUnitsPerPixelX()
+        res_y = raster.rasterUnitsPerPixelY()
+        extent = raster.extent()
+        x_min, y_max = extent.xMinimum(), extent.yMaximum()
+
+        if ref_crs != crs:
+            iface.messageBar().pushMessage("CRSs do not match.", level=Qgis.Critical)
+            return False
+        
+        if ref_res_x != res_x or ref_res_y != res_y:
+            iface.messageBar().pushMessage("Cell sizes do not match.", level=Qgis.Critical)
+            return False
+        
+        if ref_x_min != x_min or ref_y_max != y_max:
+            iface.messageBar().pushMessage("Pixel alignments do not match.", level=Qgis.Critical)
+            return False
+        
+        if ref_extent != extent:
+            iface.messageBar().pushMessage("Raster bounds do not match.", level=Qgis.Critical)
+            return False
+
+    return True
+
+
+def check_raster_size(raster: QgsRasterLayer, limit: int) -> bool:
+    if raster.height() * raster.width() > limit:
+        iface.messageBar().pushMessage(f"Raster pixel count limit {limit} exceeded.", level=Qgis.Critical)
+        return False
+    
+    return True
+
+
+def check_duplicate_names(names: list) -> list:
+    name_count = {}
+    unique_names = []
+    for name in names:
+        if name in name_count:
+            name_count[name] += 1
+            new_name = f"{name}_{name_count[name]}"
+        else:
+            name_count[name] = 1
+            new_name = name
+        
+        unique_names.append(new_name)
+    
+    return unique_names
