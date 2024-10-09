@@ -69,11 +69,9 @@ class EISWizardPairplotRaster(EISPlot, FORM_CLASS):
         if not check_raster_grids(rasters):
             return
 
-        # Get data as Numpy array
-        height = rasters[0].height()
-        width = rasters[0].width()
-        raster_data = np.empty((height * width, 0), dtype=np.float32)
-        for raster in rasters:
+        # Initialize with first raster
+        raster_data = self.raster_layer_to_array(rasters[0]).reshape(-1, 1)
+        for raster in rasters[1:]:
             data = self.raster_layer_to_array(raster)
             raster_data = np.hstack((raster_data, data.reshape(-1, 1)))
 
