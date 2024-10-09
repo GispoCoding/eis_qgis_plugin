@@ -130,7 +130,7 @@ class Plugin:
             "",
             text="Set EIS Toolkit env",
             parent=self.iface.mainWindow(),
-            callback=lambda: self.open_wizard(4),
+            callback=lambda: self.open_wizard(5),
             add_to_toolbar=False,
             add_to_menu=True,
         )
