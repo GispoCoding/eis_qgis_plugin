@@ -71,11 +71,12 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
         self.plot_container.setLayout(self.plot_layout)
 
         # TODO: Refactor
-        self.pages[-1].data_layer_table.size_changed.connect(
-            lambda change: self.plot_parameters_container.setMinimumHeight(
-                self.plot_parameters_container.minimumHeight() + change
+        for idx in (-1, -3):
+            self.pages[idx].data_layer_table.size_changed.connect(
+                lambda change: self.plot_parameters_container.setMinimumHeight(
+                    self.plot_parameters_container.minimumHeight() + change
+                )
             )
-        )
         
 
     def resize_parameter_container(self, index):
