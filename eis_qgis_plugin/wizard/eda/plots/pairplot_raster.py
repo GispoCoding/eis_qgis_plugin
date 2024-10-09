@@ -66,7 +66,8 @@ class EISWizardPairplotRaster(EISPlot, FORM_CLASS):
         raster_names = [raster.name() for raster in rasters]
 
         # Check matching raster CRSs, cell sizes, pixel alignments, and bounds
-        check_raster_grids(rasters)
+        if not check_raster_grids(rasters):
+            return
 
         # Get data as Numpy array
         height = rasters[0].height()
