@@ -9,6 +9,7 @@ from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
+from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.define_proxy import EISWizardDefineProxy
 from eis_qgis_plugin.wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem, ProxyImportance
 
 FORM_CLASS = load_ui("mineral_proxies/proxy_view3.ui")
@@ -138,7 +139,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         print("EXPORT TEST")
 
     def _on_define_proxy_clicked(self):
-        print("DEFINE TEST")
+        dlg = EISWizardDefineProxy(self)
+        dlg.show()
 
     def _on_import_proxy_clicked(self):
         print("IMPORT PROXY TEST")
