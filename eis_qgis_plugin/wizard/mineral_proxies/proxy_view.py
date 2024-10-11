@@ -1,11 +1,14 @@
+import os
 from typing import List, Optional
 
 from qgis.core import QgsApplication
-from qgis.PyQt.QtGui import QFont
-from qgis.PyQt.QtWidgets import QComboBox, QGridLayout, QLabel, QLineEdit, QMenu, QPushButton, QSizePolicy, QWidget
+from qgis.gui import QgsFilterLineEdit
+from qgis.PyQt.QtGui import QFont, QIcon
+from qgis.PyQt.QtWidgets import QComboBox, QGridLayout, QLabel, QMenu, QPushButton, QSizePolicy, QWidget
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
 from eis_qgis_plugin.wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem, ProxyImportance
 
 FORM_CLASS = load_ui("mineral_proxies/proxy_view3.ui")
@@ -33,12 +36,10 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         # DELCARE TYPES
         self.scale_selection: QComboBox
         self.mineral_system_selection: QComboBox
-        self.mineral_system_conf_btn: QPushButton
+        self.configure_mineral_systems_btn: QPushButton
 
-        self.add_proxy_btn: QPushButton
-        self.edit_proxy_btn: QPushButton
-        self.delete_proxy_btn: QPushButton
-        self.search_bar: QLineEdit
+        self.configure_proxies_btn: QPushButton
+        self.search_bar: QgsFilterLineEdit
 
         self.source_grid_layout: QGridLayout
         self.pathway_grid_layout: QGridLayout
@@ -69,6 +70,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.bold_font = QFont()
         self.bold_font.setBold(True)
 
+        self.conf_icon = QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg"))
+
         # Mineral system configuration menu
         conf_mineral_systems_menu = QMenu()
         self.new_action = conf_mineral_systems_menu.addAction(
@@ -83,17 +86,25 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.export_action = conf_mineral_systems_menu.addAction(
             QgsApplication.getThemeIcon('mActionFileSaveAs.svg'), "Export"
         )
-        self.mineral_system_conf_btn.setMenu(conf_mineral_systems_menu)
-        self.mineral_system_conf_btn.setIcon(QgsApplication.getThemeIcon('mIconProperties.svg'))
+        self.configure_mineral_systems_btn.setMenu(conf_mineral_systems_menu)
+        self.configure_mineral_systems_btn.setIcon(self.conf_icon)
 
         # Proxies menu
-        add_proxy_menu = QMenu()
-        self.define_proxy_action = add_proxy_menu.addAction("Define new proxy")
-        self.import_proxy_action = add_proxy_menu.addAction("Add proxy from another mineral system")
-        self.add_proxy_btn.setMenu(add_proxy_menu)
-        self.add_proxy_btn.setIcon(QgsApplication.getThemeIcon("symbologyAdd.svg"))
-        self.edit_proxy_btn.setIcon(QgsApplication.getThemeIcon("mActionToggleEditing.svg"))
-        self.delete_proxy_btn.setIcon(QgsApplication.getThemeIcon("symbologyRemove.svg"))
+        configure_proxy_menu = QMenu()
+        self.define_proxy_action = configure_proxy_menu.addAction(
+            QgsApplication.getThemeIcon('symbologyAdd.svg'), "Define new proxy"
+        )
+        self.import_proxy_action = configure_proxy_menu.addAction(
+            QgsApplication.getThemeIcon('mActionFileOpen.svg'), "Add proxy from another mineral system"
+        )
+        self.edit_proxy_action = configure_proxy_menu.addAction(
+            QgsApplication.getThemeIcon("mActionToggleEditing.svg"), "Edit custom proxies"
+        )
+        self.delete_proxy_action = configure_proxy_menu.addAction(
+            QgsApplication.getThemeIcon("mActionDeleteSelected.svg"), "Delete custom proxies"
+        )
+        self.configure_proxies_btn.setMenu(configure_proxy_menu)
+        self.configure_proxies_btn.setIcon(self.conf_icon)
 
         # Proxy view itself
         self.create_view()
@@ -110,8 +121,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
         self.define_proxy_action.triggered.connect(self._on_define_proxy_clicked)
         self.import_proxy_action.triggered.connect(self._on_import_proxy_clicked)
-        self.edit_proxy_btn.clicked.connect(self._on_edit_proxy_clicked)
-        self.delete_proxy_btn.clicked.connect(self._on_delete_proxy_clicked)
+        self.edit_proxy_action.triggered.connect(self._on_edit_proxy_clicked)
+        self.delete_proxy_action.triggered.connect(self._on_delete_proxy_clicked)
 
 
     def _on_new_mineral_system_clicked(self):
