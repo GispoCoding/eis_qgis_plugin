@@ -7,17 +7,21 @@ from qgis.PyQt.QtWidgets import QLineEdit, QPushButton, QWidget
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.wizard.eda.exploratory_analysis.exploratory_analysis_template import EISExploratoryAnalysis
 
-FORM_CLASS: QWidget = load_ui("eda/wizard_statistics.ui")
+FORM_CLASS: QWidget = load_ui("eda/wizard_descriptive_statistics.ui")
 
 
-class EISWizardStatistics(QWidget, FORM_CLASS):
+class EISWizardDescritiveStatistics(EISExploratoryAnalysis, FORM_CLASS):
+    """
+    Class for descriptive statistics.
+    """
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setupUi(self)
 
         # DECLARE TYPES
+        self.descriptive_statistics_page: QWidget
         self.layer: QgsMapLayer
         self.band: QgsRasterBandComboBox
         self.field: QgsFieldComboBox
