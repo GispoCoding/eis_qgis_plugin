@@ -17,13 +17,18 @@
    <item>
     <widget class="QTabWidget" name="eda_tabs">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="plot_page">
       <attribute name="title">
        <string>Plots</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout"/>
+     </widget>
+     <widget class="QWidget" name="exploratory_page">
+      <attribute name="title">
+       <string>Exploratory analysis</string>
+      </attribute>
      </widget>
      <widget class="QWidget" name="statistics_page">
       <attribute name="title">
