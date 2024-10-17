@@ -1,6 +1,5 @@
 from qgis.core import QgsMapLayer
-from qgis.gui import QgsMapLayerComboBox
-from qgis.PyQt.QtWidgets import QSizePolicy, QWidget
+from qgis.PyQt.QtWidgets import QWidget
 
 
 class EISExploratoryAnalysis(QWidget):
@@ -8,14 +7,9 @@ class EISExploratoryAnalysis(QWidget):
 
     def __init__(self, parent) -> None:
 
-        # DECLARE TYPES
-        self.layer: QgsMapLayerComboBox
-        
         # Initialize
         super().__init__(parent)
         self.setupUi(self)
-
-        self.original_height = self.height()
 
     
     def update_layer(self, layer: QgsMapLayer):
@@ -24,16 +18,4 @@ class EISExploratoryAnalysis(QWidget):
     
     def reset(self):
         """Reset plot parameters to defaults."""
-        raise NotImplementedError("Update layer needs to be defined in child class.")
-
-    def resize_parameter_box(self, collapsed: bool):
-        """Resize self and the parent widget (QStackedWidget) according to collapse signal."""
-        if collapsed:
-            self.setMinimumHeight(self.collapsed_height)
-            self.setMaximumHeight(self.collapsed_height)
-        else:
-            self.setMinimumHeight(self.original_height)
-            self.setMaximumHeight(self.original_height)
-        container = self.parentWidget()
-        container.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        container.setMinimumHeight(self.height())
+        raise NotImplementedError("Reset needs to be defined in child class.")

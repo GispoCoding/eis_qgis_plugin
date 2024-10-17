@@ -3,8 +3,10 @@ from qgis.PyQt.QtWidgets import QComboBox, QSizePolicy, QStackedWidget, QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.wizard.eda.exploratory_analysis.descriptive_statistics import EISWizardDescritiveStatistics
+from eis_qgis_plugin.wizard.eda.exploratory_analysis.normality_test_raster import EISWizardNormalityTestRaster
+from eis_qgis_plugin.wizard.eda.exploratory_analysis.normality_test_vector import EISWizardNormalityTestVector
 
-FORM_CLASS: QWidget = load_ui("eda/wizard_statistics.ui")
+FORM_CLASS: QWidget = load_ui("eda/wizard_exploratory_analysis.ui")
 
 
 class EISWizardExploratoryAnalysis(QWidget, FORM_CLASS):
@@ -23,6 +25,8 @@ class EISWizardExploratoryAnalysis(QWidget, FORM_CLASS):
         # Create pages for parameters
         self.pages = [
             EISWizardDescritiveStatistics(self),
+            EISWizardNormalityTestVector(self),
+            EISWizardNormalityTestRaster(self),
         ]
 
         for i, page in enumerate(self.pages):

@@ -57,6 +57,16 @@
              <string>Descriptive statistics</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>Normality test (vector)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Normality test (raster)</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>

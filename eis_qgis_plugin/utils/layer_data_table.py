@@ -38,8 +38,9 @@ class LayerDataTable(QTableWidget):
         self.min_rows = min_rows
         self.initial_rows = initial_rows
         self.dtype = dtype
+        self.field_selection = field_selection
         
-        if field_selection:
+        if self.field_selection:
             self.labels = ["Layer", "Selection", "Add", "Delete"]
         else:
             self.labels = ["Layer", "Add", "Delete"]
@@ -48,7 +49,7 @@ class LayerDataTable(QTableWidget):
         self.setHorizontalHeaderLabels(self.labels)
         self.setColumnWidth(0, 150)
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-        if field_selection:
+        if self.field_selection:
             self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
 
         self.setColumnWidth(1, 50)
@@ -110,7 +111,7 @@ class LayerDataTable(QTableWidget):
         field_selection.setFilters(QgsFieldProxyModel.Filter.Numeric)
         band_selection = QgsRasterBandComboBox()
 
-        if field_selection:
+        if self.field_selection:
             self.setCellWidget(row_index, 0, layer_selection)
             self.setCellWidget(row_index, 1, selection)
             self.setCellWidget(row_index, 2, add_btn)
