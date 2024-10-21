@@ -139,8 +139,14 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.mineral_system_selection.addItem(new_mineral_system.name)
             self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
 
+
     def _on_delete_mineral_system_clicked(self):
-        print("DEL TEST")
+        i = self.mineral_system_selection.currentIndex()
+        self.mineral_systems.pop(i)
+        self.mineral_system_selection.setCurrentIndex(0)  # IOCG default
+        self.mineral_system_selection.removeItem(i)
+        self._on_settings_changed()
+
 
     def _on_import_mineral_system_clicked(self):
         print("IMPORT TEST")
@@ -181,8 +187,17 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         # Cannot delete mineral system if predefined (= not custom)
         if self.selected_mineral_system.custom is True:
             self.delete_mineral_system_action.setEnabled(True)
+            self.configure_proxies_btn.setEnabled(True)
+            self.configure_proxies_btn.setToolTip(
+                "Configure mineral system proxies."
+            )
         else:
             self.delete_mineral_system_action.setEnabled(False)
+            self.configure_proxies_btn.setEnabled(False)
+            self.configure_proxies_btn.setToolTip(
+                "Cannot configure proxies of a predefined mineral system. Create or select a new custom " +
+                "mineral system to configure."
+            )
 
         self.clear_view()
         self.create_view()
