@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Sequence
+from typing import List, Optional, Sequence
 
 
 @dataclass
@@ -17,13 +17,16 @@ class ProxyImportance:
             return ProxyImportance(text, 2, "orange", "Importance: Moderate")
         elif text == "Low":
             return ProxyImportance(text, 3, "green", "Importance: Low")
-        elif text == "-":
-            return ProxyImportance(text, 4, "black", "Importance: Undefined")
+        elif text == "-" or text == "Undefined":
+            return ProxyImportance("Undefined", 4, "black", "Importance: Undefined")
         else:
             raise Exception(
                 f"Unrecognized proxy importance definition found in JSON: {text}. Importance should be either \
-                    'High', 'Moderate', 'Low' or '-'."
+                    'High', 'Moderate', 'Low' or '-'/'Undefined'."
             )
+        
+    def __str__(self) -> str:
+        return self.description
 
 
 @dataclass
@@ -66,7 +69,7 @@ class MineralProxy:
 class MineralSystem:
     name: str
     custom: bool
-    proxies: Sequence[MineralProxy]
+    proxies: List[MineralProxy]
 
     @classmethod
     def new(
@@ -87,6 +90,9 @@ class MineralSystem:
                 proxies.append(proxy)
 
         return MineralSystem(proxies=proxies, **source_dict)
+
+    def add_proxy(self, proxy: MineralProxy):
+        self.proxies.append(proxy)
 
     def to_json():
         pass
