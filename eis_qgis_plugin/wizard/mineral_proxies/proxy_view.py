@@ -13,6 +13,7 @@ from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.define_proxy i
 from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.delete_proxy import EISWizardDeleteProxy
 from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.import_proxy import EISWizardImportProxy
 from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.modify_proxy import EISWizardModifyProxy
+from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.new_mineral_system import EISWizardNewMineralSystem
 from eis_qgis_plugin.wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem, ProxyImportance
 
 FORM_CLASS = load_ui("mineral_proxies/proxy_view3.ui")
@@ -131,7 +132,12 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
 
     def _on_new_mineral_system_clicked(self):
-        print("NEW TEST")
+        dlg = EISWizardNewMineralSystem(self.mineral_systems, self)
+        if dlg.exec():
+            new_mineral_system = dlg.new_mineral_system
+            self.mineral_systems.append(new_mineral_system)
+            self.mineral_system_selection.addItem(new_mineral_system.name)
+            self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
 
     def _on_delete_mineral_system_clicked(self):
         print("DEL TEST")
