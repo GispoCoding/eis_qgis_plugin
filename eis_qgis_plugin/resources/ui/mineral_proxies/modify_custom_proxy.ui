@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>451</width>
-    <height>351</height>
+    <height>384</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,10 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Define custom proxy</string>
+   <string>Modify custom proxy</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -40,9 +43,23 @@
       </font>
      </property>
      <property name="text">
-      <string>Define custom proxy</string>
+      <string>Modify custom proxy</string>
      </property>
     </widget>
+   </item>
+   <item>
+    <layout class="QFormLayout" name="formLayout_3">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_23">
+       <property name="text">
+        <string>Proxy name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="modify_proxy_selection"/>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QFrame" name="frame">
@@ -349,7 +366,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
      </property>
      <property name="centerButtons">
       <bool>false</bool>
@@ -368,11 +385,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>225</x>
-     <y>329</y>
+     <y>362</y>
     </hint>
     <hint type="destinationlabel">
      <x>225</x>
-     <y>175</y>
+     <y>191</y>
     </hint>
    </hints>
   </connection>

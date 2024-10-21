@@ -1,7 +1,6 @@
 from typing import Optional
 
 from qgis.core import QgsApplication
-from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QComboBox,
@@ -23,8 +22,6 @@ WORKFLOW_STEPS = ["Distance to features", "Distance to anomaly", "Interpolate"]
 
 
 class EISWizardDefineProxy(QDialog, FORM_CLASS):
-
-    proxy_created = pyqtSignal(MineralProxy)
 
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
@@ -54,7 +51,8 @@ class EISWizardDefineProxy(QDialog, FORM_CLASS):
         self.remove_workflow_step_btn.clicked.connect(self.remove_workflow_step)
 
         self.button_box.accepted.connect(self._on_accept)
-        self.button_box.rejected.connect(self.reject)
+
+        self.proxy = None
 
 
     def add_workflow_step(self):
@@ -72,10 +70,11 @@ class EISWizardDefineProxy(QDialog, FORM_CLASS):
             self.workflow_steps_layout.removeRow(rows-1)
             self.resize(1, 1)
 
+
     def _on_accept(self):
         # If form ok
         if self.validate_form():
-            proxy = MineralProxy(
+            self.proxy = MineralProxy(
                 name=self.name.text(),
                 custom=True,
                 mineral_system_component=self.mineral_system_component.currentText().lower(),
@@ -91,7 +90,6 @@ class EISWizardDefineProxy(QDialog, FORM_CLASS):
                     self.deposit_scale_importance.currentText()
                 ),
             )
-            self.proxy_created.emit(proxy)
             self.accept()
         else:
             print("Could not create new proxy, inputs wrong")

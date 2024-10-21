@@ -10,6 +10,9 @@ from qgis.utils import iface
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
 from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.define_proxy import EISWizardDefineProxy
+from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.delete_proxy import EISWizardDeleteProxy
+from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.import_proxy import EISWizardImportProxy
+from eis_qgis_plugin.wizard.mineral_proxies.configuration_dialogs.modify_proxy import EISWizardModifyProxy
 from eis_qgis_plugin.wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem, ProxyImportance
 
 FORM_CLASS = load_ui("mineral_proxies/proxy_view3.ui")
@@ -60,9 +63,10 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         for mineral_system in self.mineral_systems:
             self.mineral_system_selection.addItem(mineral_system.name)
         self.mineral_system_selection.setCurrentIndex(0)
+        
         self.selected_mineral_system = self.mineral_systems[0]
-
         self.selected_scale = self.scale_selection.currentText().lower()
+        self.proxies = self.selected_mineral_system.proxies
 
         self.widgets_per_proxy = {}
 
@@ -75,16 +79,16 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
         # Mineral system configuration menu
         conf_mineral_systems_menu = QMenu()
-        self.new_action = conf_mineral_systems_menu.addAction(
+        self.new_mineral_system_action = conf_mineral_systems_menu.addAction(
             QgsApplication.getThemeIcon('symbologyAdd.svg'), "New"
         )
-        self.delete_action = conf_mineral_systems_menu.addAction(
+        self.delete_mineral_system_action = conf_mineral_systems_menu.addAction(
             QgsApplication.getThemeIcon('mActionDeleteSelected.svg'), "Delete"
         )
-        self.import_action = conf_mineral_systems_menu.addAction(
+        self.import_mineral_system_action = conf_mineral_systems_menu.addAction(
             QgsApplication.getThemeIcon('mActionFileOpen.svg'), "Import"
         )
-        self.export_action = conf_mineral_systems_menu.addAction(
+        self.export_mineral_system_action = conf_mineral_systems_menu.addAction(
             QgsApplication.getThemeIcon('mActionFileSaveAs.svg'), "Export"
         )
         self.configure_mineral_systems_btn.setMenu(conf_mineral_systems_menu)
@@ -107,18 +111,18 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.configure_proxies_btn.setMenu(configure_proxy_menu)
         self.configure_proxies_btn.setIcon(self.conf_icon)
 
-        # Proxy view itself
-        self.create_view()
+        # Proxy view initialization
+        self._on_settings_changed()
 
         # Connect signals
         self.search_bar.textChanged.connect(self.filter_proxies)
         self.scale_selection.currentTextChanged.connect(self._on_settings_changed)
         self.mineral_system_selection.currentTextChanged.connect(self._on_settings_changed)
 
-        self.new_action.triggered.connect(self._on_new_mineral_system_clicked)
-        self.delete_action.triggered.connect(self._on_delete_mineral_system_clicked)
-        self.import_action.triggered.connect(self._on_import_mineral_system_clicked)
-        self.export_action.triggered.connect(self._on_export_mineral_system_clicked)
+        self.new_mineral_system_action.triggered.connect(self._on_new_mineral_system_clicked)
+        self.delete_mineral_system_action.triggered.connect(self._on_delete_mineral_system_clicked)
+        self.import_mineral_system_action.triggered.connect(self._on_import_mineral_system_clicked)
+        self.export_mineral_system_action.triggered.connect(self._on_export_mineral_system_clicked)
 
         self.define_proxy_action.triggered.connect(self._on_define_proxy_clicked)
         self.import_proxy_action.triggered.connect(self._on_import_proxy_clicked)
@@ -140,21 +144,39 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
     def _on_define_proxy_clicked(self):
         dlg = EISWizardDefineProxy(self)
-        dlg.show()
+        if dlg.exec():
+            proxy = dlg.proxy
+            self.selected_mineral_system.add_proxy(proxy)
+            self._on_settings_changed()
 
     def _on_import_proxy_clicked(self):
-        print("IMPORT PROXY TEST")
+        dlg = EISWizardImportProxy(self.mineral_systems, self)
+        if dlg.exec():
+            proxy = dlg.proxy
+            self.selected_mineral_system.add_proxy(proxy)
+            self._on_settings_changed()
 
     def _on_edit_proxy_clicked(self):
-        print("EDIT TEST")
+        dlg = EISWizardModifyProxy(self.selected_mineral_system, self)
+        if dlg.exec():
+            dlg.proxy
+            self._on_settings_changed()
 
     def _on_delete_proxy_clicked(self):
-        print("DEL PROXY TEST")
-
+        dlg = EISWizardDeleteProxy(self.selected_mineral_system, self)
+        if dlg.exec():
+            pass
 
     def _on_settings_changed(self):
         self.selected_mineral_system = self.mineral_systems[self.mineral_system_selection.currentIndex()]
         self.selected_scale = self.scale_selection.currentText().lower()
+        self.proxies = self.sort_proxies(self.selected_mineral_system.proxies)
+
+        # Cannot delete mineral system if predefined (= not custom)
+        if self.selected_mineral_system.custom is True:
+            self.delete_mineral_system_action.setEnabled(True)
+        else:
+            self.delete_mineral_system_action.setEnabled(False)
 
         self.clear_view()
         self.create_view()
@@ -197,8 +219,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             layout.addWidget(category_label, 0, 2)
 
         # Create proxy entries
-        proxies = self.sort_proxies(self.selected_mineral_system.proxies)
-        for i, proxy in enumerate(proxies):
+        for i, proxy in enumerate(self.proxies):
             proxy.mineral_system_component
             self.create_proxy_row(proxy=proxy, row=i)
 
