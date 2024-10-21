@@ -85,14 +85,39 @@ class MineralSystem:
                 found for source dict {source_dict}")
         for component in components:
             proxy_details_for_component = components_dict.get(component)
+            if not proxy_details_for_component:
+                continue
             for proxy_details in proxy_details_for_component:
                 proxy = MineralProxy.new(proxy_details, component)
                 proxies.append(proxy)
 
-        return MineralSystem(proxies=proxies, **source_dict)
+        name = source_dict["name"]
+        custom = source_dict["custom"].lower() == "true"
+        return MineralSystem(name=name, custom=custom, proxies=proxies)
 
     def add_proxy(self, proxy: MineralProxy):
         self.proxies.append(proxy)
 
-    def to_json():
-        pass
+    def to_json_dict(self) -> dict:
+        data = {
+            "name": self.name,
+            "custom": str(self.custom).lower(),
+            "mineral_system_components": {}
+        }
+
+        for proxy in self.proxies:
+            if proxy.mineral_system_component not in data["mineral_system_components"]:
+                data["mineral_system_components"][proxy.mineral_system_component] = []
+            
+            data["mineral_system_components"][proxy.mineral_system_component].append({
+                "name": proxy.name,
+                "category": proxy.category,
+                "workflow": proxy.workflow,
+                "importance": {
+                    "regional": str(proxy.regional_scale_importance),
+                    "camp": str(proxy.camp_scale_importance),
+                    "deposit": str(proxy.deposit_scale_importance)
+                }
+            })
+
+        return data

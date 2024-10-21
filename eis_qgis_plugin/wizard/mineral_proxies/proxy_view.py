@@ -1,10 +1,11 @@
+import json
 import os
 from typing import List, Optional
 
 from qgis.core import QgsApplication
 from qgis.gui import QgsFilterLineEdit
 from qgis.PyQt.QtGui import QFont, QIcon
-from qgis.PyQt.QtWidgets import QComboBox, QGridLayout, QLabel, QMenu, QPushButton, QSizePolicy, QWidget
+from qgis.PyQt.QtWidgets import QComboBox, QFileDialog, QGridLayout, QLabel, QMenu, QPushButton, QSizePolicy, QWidget
 from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -130,7 +131,6 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.edit_proxy_action.triggered.connect(self._on_edit_proxy_clicked)
         self.delete_proxy_action.triggered.connect(self._on_delete_proxy_clicked)
 
-
     def _on_new_mineral_system_clicked(self):
         dlg = EISWizardNewMineralSystem(self.mineral_systems, self)
         if dlg.exec():
@@ -139,7 +139,6 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.mineral_system_selection.addItem(new_mineral_system.name)
             self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
 
-
     def _on_delete_mineral_system_clicked(self):
         i = self.mineral_system_selection.currentIndex()
         self.mineral_systems.pop(i)
@@ -147,12 +146,37 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.mineral_system_selection.removeItem(i)
         self._on_settings_changed()
 
-
     def _on_import_mineral_system_clicked(self):
-        print("IMPORT TEST")
+        fp = QFileDialog.getOpenFileName(self,
+            "Import mineral system library from a JSON file", filter="JSON Files (*.json)"
+        )[0]
+        if fp:
+            with open(fp, "r") as file:
+                mineral_system_dict = json.loads(file.read())
+            imported_mineral_system = MineralSystem.new(mineral_system_dict)
+            self.mineral_systems.append(imported_mineral_system)
+            self.mineral_system_selection.addItem(imported_mineral_system.name)
+            self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
+            iface.messageBar().pushSuccess(
+                "Success: ", f"Imported mineral system {imported_mineral_system.name}."
+            )
 
     def _on_export_mineral_system_clicked(self):
-        print("EXPORT TEST")
+        fp = QFileDialog.getSaveFileName(
+            self, "Export mineral system library to a JSON file", filter="JSON Files (*.json)"
+        )[0]
+        if fp:
+            if not fp.endswith(".json"):
+                fp += ".json"
+            i = self.mineral_system_selection.currentIndex()
+            mineral_system = self.mineral_systems[i]
+            mineral_system.custom = True  # Force to be custom even if exportng predefined system
+            json_dict = mineral_system.to_json_dict()
+            with open(fp, "w") as out_file:
+                json.dump(json_dict, out_file, indent=4)
+            iface.messageBar().pushSuccess(
+                "Success: ", f"Exported mineral system {mineral_system.name} to {fp}."
+            )
 
     def _on_define_proxy_clicked(self):
         dlg = EISWizardDefineProxy(self)
