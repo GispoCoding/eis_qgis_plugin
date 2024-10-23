@@ -138,13 +138,21 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.mineral_systems.append(new_mineral_system)
             self.mineral_system_selection.addItem(new_mineral_system.name)
             self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
+            iface.messageBar().pushSuccess(
+                "Success: ",
+                f"Added new mineral system {new_mineral_system.name}."
+            )
 
     def _on_delete_mineral_system_clicked(self):
         i = self.mineral_system_selection.currentIndex()
-        self.mineral_systems.pop(i)
+        mineral_system = self.mineral_systems.pop(i)
         self.mineral_system_selection.setCurrentIndex(0)  # IOCG default
         self.mineral_system_selection.removeItem(i)
         self._on_settings_changed()
+        iface.messageBar().pushSuccess(
+            "Success: ",
+            f"Deleted mineral system {mineral_system.name}."
+        )
 
     def _on_import_mineral_system_clicked(self):
         fp = QFileDialog.getOpenFileName(self,
@@ -184,6 +192,10 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             proxy = dlg.proxy
             self.selected_mineral_system.add_proxy(proxy)
             self._on_settings_changed()
+            iface.messageBar().pushSuccess(
+                "Success: ",
+                f"Added custom proxy {proxy.name} to mineral system {self.selected_mineral_system.name}."
+            )
 
     def _on_import_proxy_clicked(self):
         dlg = EISWizardImportProxy(self.mineral_systems, self)
@@ -191,17 +203,20 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             proxy = dlg.proxy
             self.selected_mineral_system.add_proxy(proxy)
             self._on_settings_changed()
+            iface.messageBar().pushSuccess(
+                "Success: ",
+                f"Imported proxy {proxy.name} to mineral system {self.selected_mineral_system.name}."
+            )
 
     def _on_edit_proxy_clicked(self):
         dlg = EISWizardModifyProxy(self.selected_mineral_system, self)
         if dlg.exec():
-            dlg.proxy
             self._on_settings_changed()
 
     def _on_delete_proxy_clicked(self):
         dlg = EISWizardDeleteProxy(self.selected_mineral_system, self)
         if dlg.exec():
-            pass
+            self._on_settings_changed()
 
     def _on_settings_changed(self):
         self.selected_mineral_system = self.mineral_systems[self.mineral_system_selection.currentIndex()]

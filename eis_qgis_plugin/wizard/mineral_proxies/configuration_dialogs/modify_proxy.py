@@ -12,6 +12,7 @@ from qgis.PyQt.QtWidgets import (
     QPushButton,
     QWidget,
 )
+from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.misc_utils import find_index_for_text_combobox
@@ -126,21 +127,27 @@ class EISWizardModifyProxy(QDialog, FORM_CLASS):
 
 
     def _on_reset(self):
-        self.configure_widgets_from_proxy(self.proxy)
-
-
-    def validate_form(self):
-        # TODO
-        return True
+        if self.proxy:
+            self.configure_widgets_from_proxy(self.proxy)
 
 
     def _on_accept(self):
-        # If form ok
-        if self.validate_form():
+        workflow_steps = []
+        for i in range(self.workflow_steps_layout.count()):
+            widget = self.workflow_steps_layout.itemAt(i).widget()
+            if isinstance(widget, QComboBox):
+                step_txt = widget.currentText().replace(" ", "_").lower()
+                workflow_steps.append(step_txt)
+
+        if self.name.text().strip() == "":
+            print("Proxy needs a valid name!")
+            return
+
+        if self.proxy:
             self.proxy.name = self.name.text()
             self.proxy.mineral_system_component=self.mineral_system_component.currentText().lower()
             self.proxy.category=self.category.currentText().lower()
-            self.proxy.workflow=["distance_to_features"]  # TODO
+            self.proxy.workflow=workflow_steps
             self.proxy.regional_scale_importance=ProxyImportance.from_description(
                 self.regional_scale_importance.currentText()
             )
@@ -150,6 +157,8 @@ class EISWizardModifyProxy(QDialog, FORM_CLASS):
             self.proxy.deposit_scale_importance=ProxyImportance.from_description(
                 self.deposit_scale_importance.currentText()
             )
+            iface.messageBar().pushSuccess(
+                "Success: ",
+                f"Modified proxy {self.proxy.name}."
+            )
             self.accept()
-        else:
-            print("Could not create new proxy, inputs wrong")

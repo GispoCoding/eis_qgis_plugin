@@ -72,14 +72,20 @@ class EISWizardDefineProxy(QDialog, FORM_CLASS):
 
 
     def _on_accept(self):
-        # If form ok
-        if self.validate_form():
+        workflow_steps = []
+        for i in range(self.workflow_steps_layout.count()):
+            widget = self.workflow_steps_layout.itemAt(i).widget()
+            if isinstance(widget, QComboBox):
+                step_txt = widget.currentText().replace(" ", "_").lower()
+                workflow_steps.append(step_txt)
+
+        if self.name.text().strip() != "":
             self.proxy = MineralProxy(
                 name=self.name.text(),
                 custom=True,
                 mineral_system_component=self.mineral_system_component.currentText().lower(),
                 category=self.category.currentText().lower(),
-                workflow=["distance_to_features"],  # TODO
+                workflow=workflow_steps,
                 regional_scale_importance=ProxyImportance.from_description(
                     self.regional_scale_importance.currentText()
                 ),
@@ -93,7 +99,3 @@ class EISWizardDefineProxy(QDialog, FORM_CLASS):
             self.accept()
         else:
             print("Could not create new proxy, inputs wrong")
-
-    
-    def validate_form(self):
-        return True
