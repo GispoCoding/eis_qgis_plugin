@@ -1,4 +1,4 @@
-import processing
+from qgis import processing
 from qgis.PyQt.QtWidgets import QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
