@@ -41,6 +41,9 @@ class EISWizardKde(EISPlot, FORM_CLASS):
         super().__init__(parent)
         self.vector_X.setFilters(QgsFieldProxyModel.Filter.Numeric)
 
+        self.layer.layerChanged.connect(self.update_layer)
+        self.update_layer(self.layer.currentLayer())
+
 
     def update_layer(self, layer):
         """Update (set/show/hide) widgets based on selected layer."""

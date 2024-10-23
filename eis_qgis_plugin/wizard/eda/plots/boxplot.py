@@ -32,6 +32,7 @@ class EISWizardBoxplot(EISPlot, FORM_CLASS):
         super().__init__(parent)
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
 
+        self.layer.layerChanged.connect(self.update_layer)
         self.update_layer(self.layer.currentLayer())
 
 

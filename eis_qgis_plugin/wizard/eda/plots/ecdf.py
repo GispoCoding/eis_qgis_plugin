@@ -36,6 +36,8 @@ class EISWizardEcdf(EISPlot, FORM_CLASS):
         self.collapsed_height = 170
         super().__init__(parent)
 
+        self.layer.layerChanged.connect(self.update_layer)
+        self.update_layer(self.layer.currentLayer())
 
     def update_layer(self, layer):
         """Update (set/show/hide) widgets based on selected layer."""

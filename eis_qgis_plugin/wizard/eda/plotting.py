@@ -10,8 +10,10 @@ from eis_qgis_plugin.wizard.eda.plots.ecdf import EISWizardEcdf
 from eis_qgis_plugin.wizard.eda.plots.histogram import EISWizardHistogram
 from eis_qgis_plugin.wizard.eda.plots.kde import EISWizardKde
 from eis_qgis_plugin.wizard.eda.plots.lineplot import EISWizardLineplot
-from eis_qgis_plugin.wizard.eda.plots.pairplot import EISWizardPairplot
-from eis_qgis_plugin.wizard.eda.plots.parallel_coordinates import EISWizardParallelCoordinatesPlot
+from eis_qgis_plugin.wizard.eda.plots.pairplot_raster import EISWizardPairplotRaster
+from eis_qgis_plugin.wizard.eda.plots.pairplot_vector import EISWizardPairplotVector
+from eis_qgis_plugin.wizard.eda.plots.parallel_coordinates_raster import EISWizardParallelCoordinatesRasterPlot
+from eis_qgis_plugin.wizard.eda.plots.parallel_coordinates_vector import EISWizardParallelCoordinatesVectorPlot
 from eis_qgis_plugin.wizard.eda.plots.scatterplot import EISWizardScatterplot
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot.ui")
@@ -55,8 +57,10 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
             EISWizardLineplot(self),
             EISWizardBarplot(self),
             EISWizardBoxplot(self),
-            EISWizardPairplot(self),
-            EISWizardParallelCoordinatesPlot(self)
+            EISWizardPairplotVector(self),
+            EISWizardPairplotRaster(self),
+            EISWizardParallelCoordinatesVectorPlot(self),
+            EISWizardParallelCoordinatesRasterPlot(self),
         ]
 
         for i, page in enumerate(self.pages):
@@ -66,6 +70,14 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
         self.plot_layout = QVBoxLayout()
         self.plot_container.setLayout(self.plot_layout)
 
+        # TODO: Refactor
+        for idx in (-1, -3):
+            self.pages[idx].data_layer_table.size_changed.connect(
+                lambda change: self.plot_parameters_container.setMinimumHeight(
+                    self.plot_parameters_container.minimumHeight() + change
+                )
+            )
+        
 
     def resize_parameter_container(self, index):
         """Resize the QStackedWidget that contains plot parameters according to the needed size."""
@@ -81,9 +93,9 @@ class EISWizardPlotting(QWidget, FORM_CLASS):
         page = self.pages[self.plot_parameters_container.currentIndex()]
 
         fig, ax = plt.subplots()
-        if isinstance(page, EISWizardPairplot):
+        if isinstance(page, (EISWizardPairplotVector, EISWizardPairplotRaster)):
             fig = page.plot(ax)
-        elif isinstance(page, EISWizardParallelCoordinatesPlot):
+        elif isinstance(page, (EISWizardParallelCoordinatesVectorPlot, EISWizardParallelCoordinatesRasterPlot)):
             page.plot(ax, fig)
         else:
             page.plot(ax)

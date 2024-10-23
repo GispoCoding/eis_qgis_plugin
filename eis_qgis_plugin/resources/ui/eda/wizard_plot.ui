@@ -89,12 +89,22 @@
            </item>
            <item>
             <property name="text">
-             <string>Pairplot</string>
+             <string>Pairplot (Vector)</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Parallel coordinates</string>
+             <string>Pairplot (Raster)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Parallel coordinates (Vector)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Parallel coordinates (Raster)</string>
             </property>
            </item>
           </widget>
