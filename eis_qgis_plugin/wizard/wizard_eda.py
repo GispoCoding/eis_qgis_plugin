@@ -1,5 +1,6 @@
 from qgis.PyQt.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
+from eis_qgis_plugin.wizard.eda.exploratory_analysis import EISExploratoryAnalysis
 from eis_qgis_plugin.wizard.eda.plotting import EISWizardPlotting
 from eis_qgis_plugin.wizard.eda.statistics import EISWizardStatistics
 
@@ -21,3 +22,7 @@ class EISWizardEDA(QWidget):
         # 2. Statistics page
         self.stats_page = EISWizardStatistics(self)
         self.eda_tabs.addTab(self.stats_page, "Statistics")
+
+        # 3. Exploratory analysis page
+        self.exploratory_page = EISExploratoryAnalysis(self)
+        self.eda_tabs.addTab(self.exploratory_page, "Exploratory analysis")
