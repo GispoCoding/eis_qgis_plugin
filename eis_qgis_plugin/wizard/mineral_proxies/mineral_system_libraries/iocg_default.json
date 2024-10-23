@@ -1,0 +1,434 @@
+{
+    "name": "IOCG",
+    "custom": "false",
+    "mineral_system_components": {
+        "source": [
+            {
+                "name": "Distance to albitized country rocks",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "Moderate"
+                }
+            },
+            {
+                "name": "Distance to felsic (meta)volcanic rocks and subvolcanic rocks",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                }
+            },
+            {
+                "name": "Distance to high concentrations of Na, K or Mg+-Fe",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "Low",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to high conductivity anomalies",
+                "category": "geophysics",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to high Fe concentrations",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Distance to Fe-oxides mapped from high density anomalies",
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "Low"
+                },
+                "category": "geophysics",
+                "workflow": ["interpolate", "distance_to_anomaly"]
+            },
+            {
+                "name": "Distance to Fe-oxides (magnetite and hematite minerals; or any other Fe-oxides related minerals of interest)",
+                "category": "geophysics",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Distance to magmatic intrusion of the relevant age (age from geology and radiometric data; distance from geophysical data)",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Distance to rock units displaying alkaline magma signature",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "Low",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Greenschist to mid-Amphibolite facies metamorphosed host rocks",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Syn- to late-orogenic back arc closure related intrusions",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "Low",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Distance to high Fe3O4 concentration",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Distance to high concentrations of Co-REEs",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "High",
+                    "deposit": "-"
+                }
+            },
+            {
+                "name": "Distance to magmatism contemporary with mineralisation (within 5 km buffer)",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "-",
+                    "deposit": "-"
+                }
+            }
+        ],
+        "pathway": [
+            {
+                "name": "Distance to structures",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "High",
+                    "deposit": "Moderate"
+                }
+            },
+            {
+                "name": "Distance to high order structures, interpretated from gravity worms",
+                "category": "geophysics",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "High",
+                    "deposit": "Moderate"
+                }
+            },
+            {
+                "name": "Distance to lower order structures",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to lower order structures, interpretated from pseudo gravity worms",
+                "category": "geophysics",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Low",
+                    "camp": "Moderate",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to kinks, offsets and breaks (interpretation from magnetic data, e.g. gradient)",
+                "category": "geophysics",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to high density structure (interpretation of high density structures derived from geological map or airborne VLF)",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional":"Moderate",
+                    "camp": "Moderate",
+                    "deposit": "Moderate"
+                }
+            },
+            {
+                "name": "Distance to crustal boundary (interpretation from solid geology, seismic reflection, passive seismic, granity, magnetic data)",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "Moderate",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Distance to intensity of structure",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            }
+        ],
+        "depositional": [
+            {
+                "name": "Distance to altered rocks",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "Moderate"
+                }
+            },
+            {
+                "name": "K-anomalies in till",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Magnetic highs",
+                "category": "geophysics",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Elevated V in till",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance":{
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "Moderate"
+                }
+            },
+            {
+                "name": "Elevated Ba, Co, Cu, P, Au in till",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "-",
+                    "camp": "-",
+                    "deposit": "Moderate"
+                }
+            },
+            {
+                "name": "Elevated Au, Ba, Co, Cu, La, P in till",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "-"
+                }
+            },
+            {
+                "name": "Radiometric U and/or Th anomalies",
+                "category": "geophysics",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "Moderate",
+                    "deposit": "Moderate"
+                }
+            },
+            {
+                "name": "Distance to high-magnetic field anomalies",
+                "category": "geophysics",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Presence of carbonate horizons in metavolcanic rocks",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to high concentrations of REE, Fe",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "-",
+                    "camp": "Moderate",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Massive magnetite",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "-",
+                    "camp": "Low",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Massive magnetite and vonsenite",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "-",
+                    "deposit": "-"
+                }
+            },
+            {
+                "name": "Ca-Fe metasomatism, Distance high Ca-Fe molar proportions relative to Na, K, and Mg",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "-",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to rock units displaying -sodic alteration signature -potassic and/or calcic alteration signature",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Moderate",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Low Ti signature in Fe-oxides",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Low",
+                    "camp": "Low",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to (Sub) economic Cu-Au concentrations",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Low",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to (Sub) economic Cu-Au concentrations 2",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "Low",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            }
+        ], 
+        "mineralisation": [
+            {
+                "name": "Distance to kinks, offsets and breaks in magnetic data",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "Low",
+                    "camp": "Moderate",
+                    "deposit": "High"
+                }
+            },
+            {
+                "name": "Distance to structures of high density/intensity",
+                "category": "geology",
+                "workflow": ["distance_to_features"],
+                "importance": {
+                    "regional": "-",
+                    "camp": "-",
+                    "deposit": "Low"
+                }
+            },
+            {
+                "name": "Distance to elevated REE, Fe, Cu, Co, Au, Bi, Mo anomalies",
+                "category": "geochemistry",
+                "workflow": ["interpolate", "distance_to_anomaly"],
+                "importance": {
+                    "regional": "High",
+                    "camp": "High",
+                    "deposit": "High"
+                }
+            }
+        ] 
+    }
+}

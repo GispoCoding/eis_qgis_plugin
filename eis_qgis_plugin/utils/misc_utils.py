@@ -16,7 +16,7 @@ from qgis.core import (
     QgsSingleBandPseudoColorRenderer,
 )
 from qgis.gui import QgsFileWidget
-from qgis.PyQt.QtWidgets import QLayout, QLineEdit
+from qgis.PyQt.QtWidgets import QComboBox, QFormLayout, QLayout, QLayoutItem, QLineEdit
 from qgis.utils import iface
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -158,6 +158,30 @@ def parse_string_list_parameter_and_run_command(
     feedback.setProgress(100)
 
     return results
+
+
+def clear_form_layout(form_layout: QFormLayout):
+    while form_layout.count():
+        item = form_layout.takeAt(0)
+        widget = item.widget()
+
+        if widget is not None:
+            widget.deleteLater()
+        elif isinstance(item, QLayoutItem):
+            clear_form_layout(item.layout())
+
+
+def find_index_for_text_combobox(
+    combo_box: QComboBox, text: str, case_sensitive: bool = False
+) -> Optional[int]:
+    for index in range(combo_box.count()):
+        if case_sensitive:
+            if combo_box.itemText(index) == text:
+                return index
+        else:
+            if combo_box.itemText(index).lower() == text.lower():
+                return index
+    return None
 
 
 def check_raster_grids(rasters: Sequence[QgsRasterLayer]) -> bool:

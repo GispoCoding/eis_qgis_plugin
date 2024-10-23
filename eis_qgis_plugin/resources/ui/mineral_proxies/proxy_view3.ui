@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>746</width>
-    <height>752</height>
+    <width>619</width>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,21 +15,61 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Mineral system</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <layout class="QFormLayout" name="proxy_view_settings_layout">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="1">
+        <widget class="QComboBox" name="mineral_system_selection">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
-        <widget class="QLabel" name="mineral_system_selection_label">
+        <widget class="QLabel" name="scale_selection_label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string>Mineral system</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="mineral_system_selection"/>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="scale_selection_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string>Study scale</string>
          </property>
@@ -37,6 +77,18 @@
        </item>
        <item row="1" column="1">
         <widget class="QComboBox" name="scale_selection">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -57,6 +109,19 @@
          </item>
         </widget>
        </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="configure_mineral_systems_btn">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Configure mineral system</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -75,18 +140,42 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="search_label">
-       <property name="text">
-        <string>Search proxy</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="search_bar"/>
-     </item>
-    </layout>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Mineral system proxies</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="configure_proxies_btn">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Configure proxies</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QgsFilterLineEdit" name="search_bar">
+     <property name="showSearchIcon">
+      <bool>true</bool>
+     </property>
+     <property name="qgisRelation" stdset="0">
+      <string notr="true"/>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="tabs_layout">
@@ -113,8 +202,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>702</width>
-              <height>582</height>
+              <width>575</width>
+              <height>326</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -129,7 +218,7 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>40</height>
+                 <height>1</height>
                 </size>
                </property>
               </spacer>
@@ -155,8 +244,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>702</width>
-              <height>582</height>
+              <width>180</width>
+              <height>70</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -171,7 +260,7 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>40</height>
+                 <height>5</height>
                 </size>
                </property>
               </spacer>
@@ -197,8 +286,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>702</width>
-              <height>582</height>
+              <width>180</width>
+              <height>70</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -213,7 +302,7 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>40</height>
+                 <height>5</height>
                 </size>
                </property>
               </spacer>
@@ -239,8 +328,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>702</width>
-              <height>582</height>
+              <width>180</width>
+              <height>70</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -255,7 +344,7 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>40</height>
+                 <height>5</height>
                 </size>
                </property>
               </spacer>
@@ -272,6 +361,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsFilterLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qgsfilterlineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
