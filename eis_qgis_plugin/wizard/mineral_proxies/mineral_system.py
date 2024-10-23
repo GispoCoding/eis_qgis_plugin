@@ -1,5 +1,9 @@
+import json
+import os
 from dataclasses import dataclass
 from typing import List, Optional, Sequence
+
+MINERAL_SYSTEMS_DIR = os.path.join(os.path.dirname(__file__), "mineral_system_libraries")
 
 
 @dataclass
@@ -24,7 +28,7 @@ class ProxyImportance:
                 f"Unrecognized proxy importance definition found in JSON: {text}. Importance should be either \
                     'High', 'Moderate', 'Low' or '-'/'Undefined'."
             )
-        
+
     def __str__(self) -> str:
         return self.description
 
@@ -121,3 +125,20 @@ class MineralSystem:
             })
 
         return data
+
+    def export(self, fp: str):
+        json_dict = self.to_json_dict()
+        json_dict["custom"] = "true"  # Force to be custom even if exportng predefined system
+        with open(fp, "w") as out_file:
+            json.dump(json_dict, out_file, indent=4)
+
+    def save(self):        
+        fp = os.path.join(MINERAL_SYSTEMS_DIR, f"{self.name}.json")
+        json_dict = self.to_json_dict()
+        with open(fp, "w") as out_file:
+            json.dump(json_dict, out_file, indent=4)
+
+    def delete(self):
+        fp = os.path.join(MINERAL_SYSTEMS_DIR, f"{self.name}.json")  
+        if os.path.exists(fp):
+            os.remove(fp)

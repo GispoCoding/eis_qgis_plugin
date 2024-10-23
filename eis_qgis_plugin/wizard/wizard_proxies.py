@@ -8,7 +8,7 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
-from eis_qgis_plugin.wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem
+from eis_qgis_plugin.wizard.mineral_proxies.mineral_system import MINERAL_SYSTEMS_DIR, MineralProxy, MineralSystem
 from eis_qgis_plugin.wizard.mineral_proxies.proxy_view import EISWizardProxyView
 from eis_qgis_plugin.wizard.mineral_proxies.workflows.distance_to_anomaly import EISWizardProxyDistanceToAnomaly
 from eis_qgis_plugin.wizard.mineral_proxies.workflows.distance_to_features import EISWizardProxyDistanceToFeatures
@@ -22,8 +22,6 @@ class EISWizardProxies(QWidget):
         "interpolate": EISWizardProxyInterpolate,
         "distance_to_anomaly": EISWizardProxyDistanceToAnomaly,
     }
-
-    MINERAL_SYSTEMS_DIR = os.path.join(os.path.dirname(__file__), "mineral_proxies/mineral_system_libraries")
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -45,7 +43,7 @@ class EISWizardProxies(QWidget):
     def initialize_mineral_systems(self) -> Sequence[MineralSystem]:
         mineral_systems = []
         # Find all JSON files in the folder dedicated to mineral system libraries
-        for file_name in os.listdir(self.MINERAL_SYSTEMS_DIR):
+        for file_name in os.listdir(MINERAL_SYSTEMS_DIR):
             if file_name.endswith(".json"):
                 mineral_system_dict = self._read_mineral_system_json(file_name)
                 mineral_system = MineralSystem.new(mineral_system_dict)
@@ -54,7 +52,7 @@ class EISWizardProxies(QWidget):
 
 
     def _read_mineral_system_json(self, file_name) -> dict:
-        fp = os.path.join(self.MINERAL_SYSTEMS_DIR, file_name)
+        fp = os.path.join(MINERAL_SYSTEMS_DIR, file_name)
         with open(fp, "r") as file:
             mineral_system_dict = json.loads(file.read())
         return mineral_system_dict

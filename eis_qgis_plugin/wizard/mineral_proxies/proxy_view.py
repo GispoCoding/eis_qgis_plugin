@@ -138,6 +138,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.mineral_systems.append(new_mineral_system)
             self.mineral_system_selection.addItem(new_mineral_system.name)
             self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
+            self._on_settings_changed()
+            new_mineral_system.save()
             iface.messageBar().pushSuccess(
                 "Success: ",
                 f"Added new mineral system {new_mineral_system.name}."
@@ -149,6 +151,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.mineral_system_selection.setCurrentIndex(0)  # IOCG default
         self.mineral_system_selection.removeItem(i)
         self._on_settings_changed()
+        mineral_system.delete()
         iface.messageBar().pushSuccess(
             "Success: ",
             f"Deleted mineral system {mineral_system.name}."
@@ -165,6 +168,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.mineral_systems.append(imported_mineral_system)
             self.mineral_system_selection.addItem(imported_mineral_system.name)
             self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
+            self._on_settings_changed()
+            imported_mineral_system.save()
             iface.messageBar().pushSuccess(
                 "Success: ", f"Imported mineral system {imported_mineral_system.name}."
             )
@@ -178,10 +183,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
                 fp += ".json"
             i = self.mineral_system_selection.currentIndex()
             mineral_system = self.mineral_systems[i]
-            mineral_system.custom = True  # Force to be custom even if exportng predefined system
-            json_dict = mineral_system.to_json_dict()
-            with open(fp, "w") as out_file:
-                json.dump(json_dict, out_file, indent=4)
+            mineral_system.export(fp)
             iface.messageBar().pushSuccess(
                 "Success: ", f"Exported mineral system {mineral_system.name} to {fp}."
             )
@@ -192,6 +194,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             proxy = dlg.proxy
             self.selected_mineral_system.add_proxy(proxy)
             self._on_settings_changed()
+            self.selected_mineral_system.save()
             iface.messageBar().pushSuccess(
                 "Success: ",
                 f"Added custom proxy {proxy.name} to mineral system {self.selected_mineral_system.name}."
@@ -203,6 +206,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             proxy = dlg.proxy
             self.selected_mineral_system.add_proxy(proxy)
             self._on_settings_changed()
+            self.selected_mineral_system.save()
             iface.messageBar().pushSuccess(
                 "Success: ",
                 f"Imported proxy {proxy.name} to mineral system {self.selected_mineral_system.name}."
@@ -211,11 +215,13 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
     def _on_edit_proxy_clicked(self):
         dlg = EISWizardModifyProxy(self.selected_mineral_system, self)
         if dlg.exec():
+            self.selected_mineral_system.save()
             self._on_settings_changed()
 
     def _on_delete_proxy_clicked(self):
         dlg = EISWizardDeleteProxy(self.selected_mineral_system, self)
         if dlg.exec():
+            self.selected_mineral_system.save()
             self._on_settings_changed()
 
     def _on_settings_changed(self):
