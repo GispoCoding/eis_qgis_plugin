@@ -1,0 +1,10 @@
+{
+    "name": "Li-Pegmatites",
+    "custom": "false",
+    "mineral_system_components": {
+        "source": [],
+        "pathway": [],
+        "depositional": [],
+        "mineralisation": []
+    }
+}
