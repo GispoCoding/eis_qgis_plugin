@@ -12,6 +12,7 @@ from qgis.core import QgsProcessingFeedback, QgsProject, QgsRasterLayer
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
+REQUIRED_EIS_TOOLKIT_VERSION = "1.0.2"
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +134,7 @@ class EISToolkitInvoker:
 
     def verify_toolkit(self) -> Tuple[bool, str]:
         """Checks if EIS Toolkit can be found in the selected environment."""
-        return self.environment_handler.verify_toolkit(self.python_free_environment)
+        return self.environment_handler.verify_toolkit(REQUIRED_EIS_TOOLKIT_VERSION, self.python_free_environment)
 
     
     def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> Dict:
@@ -272,7 +273,7 @@ class EnvironmentHandler:
     def verify_environment() -> Tuple[bool, str]:
         raise NotImplementedError
     
-    def verify_toolkit(env) -> Tuple[bool, str]:
+    def verify_toolkit(required_version: str, env) -> Tuple[bool, str]:
         raise NotImplementedError
 
 
@@ -377,19 +378,51 @@ class DockerEnvironmentHandler(EnvironmentHandler):
             return False, f"Docker image '{self.image_name}' not found."
 
 
-    def verify_toolkit(self, env) -> Tuple[bool, str]:
+    def verify_toolkit(self, required_version: str, env) -> Tuple[bool, str]:
+        """
+        Verifies if EIS Toolkit is installed and checks if the installed version matches the required version.
+        
+        Args:
+            required_version: The version of EIS Toolkit required by the plugin.
+            env: The environment variables to pass to the subprocess (to avoid QGIS interference).
+
+        Returns:
+            A tuple where the first element is a boolean indicating success, and
+            the second element is a message describing the result.
+        """
         try:
             cmd = [
-                self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-c", "import eis_toolkit"
+                self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-m",
+                "pip", "show", "eis_toolkit"
             ]
-            subprocess.run(
+            result = subprocess.run(
                 cmd,
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 env=env
             )
-            return True, f"EIS Toolkit is installed in the Docker image '{self.image_name}'."
+
+            if result.returncode != 0:
+                return False, f"EIS Toolkit is not installed in the Docker image '{self.image_name}."
+
+            # Parse the output to extract the version of EIS Toolkit
+            version = None
+            for line in result.stdout.splitlines():
+                if line.startswith("Version:"):
+                    version = line.split("Version:")[1].strip()
+
+            if version is None:
+                return False, "EIS Toolkit version information could not be retrieved."
+
+            if version != required_version:
+                return (
+                    False,
+                    f"EIS Toolkit version {version} is installed, but version {required_version} is required."
+                )
+
+            return True, f"EIS Toolkit version {version} is correctly installed."
+
         except subprocess.CalledProcessError as e:
             return False, f"EIS Toolkit is not installed in the Docker image '{self.image_name}'. Error: {e.stderr}"
 
@@ -437,13 +470,24 @@ class VenvEnvironmentHandler(EnvironmentHandler):
             return False, "Venv directory is invalid."
 
 
-    def verify_toolkit(self, env) -> Tuple[bool, str]:
+    def verify_toolkit(self, required_version: str, env) -> Tuple[bool, str]:
+        """
+        Verifies if EIS Toolkit is installed and checks if the installed version matches the required version.
+        
+        Args:
+            required_version: The version of EIS Toolkit required by the plugin.
+            env: The environment variables to pass to the subprocess (to avoid QGIS interference).
+
+        Returns:
+            A tuple where the first element is a boolean indicating success, and
+            the second element is a message describing the result.
+        """
         try:
-            cmd = [self.python_path, "-c", "import eis_toolkit"]
+            cmd = [self.python_path, "-m", "pip", "show", "eis_toolkit"]
             creationflags = 0
             if os.name == 'nt':  # If Windows, prevent process window creation
                 creationflags = subprocess.CREATE_NO_WINDOW
-            subprocess.run(
+            result = subprocess.run(
                 cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -451,6 +495,26 @@ class VenvEnvironmentHandler(EnvironmentHandler):
                 creationflags=creationflags,
                 env=env
             )
-            return True, "EIS Toolkit is installed in the specified venv."
+
+            if result.returncode != 0:
+                return False, "EIS Toolkit is not installed in the specified venv."
+
+            # Parse the output to extract the version of EIS Toolkit
+            version = None
+            for line in result.stdout.splitlines():
+                if line.startswith("Version:"):
+                    version = line.split("Version:")[1].strip()
+
+            if version is None:
+                return False, "EIS Toolkit version information could not be retrieved."
+
+            if version != required_version:
+                return (
+                    False,
+                    f"EIS Toolkit version {version} is installed, but version {required_version} is required."
+                )
+
+            return True, f"EIS Toolkit version {version} is correctly installed."
+
         except subprocess.CalledProcessError as e:
             return False, f"EIS Toolkit is not installed in the specified venv. Error: {e.stderr}"
