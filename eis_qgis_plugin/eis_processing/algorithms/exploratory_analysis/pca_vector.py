@@ -43,7 +43,7 @@ class EISPcaVector(EISProcessingAlgorithm):
         nr_of_components_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[1],
             description="Number of components",
-            defaultValue=3,
+            optional=True,
             minValue=2
         )
         nr_of_components_param.setHelp(
