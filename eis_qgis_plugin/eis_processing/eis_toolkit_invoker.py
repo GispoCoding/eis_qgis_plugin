@@ -12,7 +12,7 @@ from qgis.core import QgsProcessingFeedback, QgsProject, QgsRasterLayer
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
-REQUIRED_EIS_TOOLKIT_VERSION = "1.0.2"
+REQUIRED_EIS_TOOLKIT_VERSION = "1.0.3"
 
 logger = logging.getLogger(__name__)
 
