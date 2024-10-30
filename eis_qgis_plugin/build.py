@@ -21,7 +21,7 @@ locales = ["fi"]
 profile = "EIS"
 ui_files = list(glob.glob("**/*.ui", recursive=True))
 resources = list(glob.glob("**/*.qrc", recursive=True))
-extra_dirs = ["resources", "wizard/mineral_proxies/mineral_system_libraries"]
+extra_dirs = ["resources", "eis_wizard/mineral_proxies/mineral_system_libraries"]
 compiled_resources: List[str] = []
 
 PluginMaker(
