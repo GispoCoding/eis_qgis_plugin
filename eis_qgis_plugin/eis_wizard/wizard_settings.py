@@ -14,7 +14,7 @@ from qgis.PyQt.QtWidgets import (
 )
 from qgis.utils import iface
 
-from eis_qgis_plugin.eis_processing.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 

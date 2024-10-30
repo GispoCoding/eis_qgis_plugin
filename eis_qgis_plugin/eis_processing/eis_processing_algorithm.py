@@ -30,7 +30,7 @@ from qgis.core import (
     QgsProcessingParameterVectorLayer,
 )
 
-from .eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
 
 
 class EISProcessingAlgorithm(QgsProcessingAlgorithm):
