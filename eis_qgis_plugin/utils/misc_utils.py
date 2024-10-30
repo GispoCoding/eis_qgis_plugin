@@ -20,7 +20,7 @@ from qgis.PyQt.QtWidgets import QComboBox, QFormLayout, QLayout, QLayoutItem, QL
 from qgis.utils import iface
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
-from eis_qgis_plugin.eis_processing.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
 
 TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
 CLASSIFIER_METRICS = ["Accuracy", "Precision", "Recall", "F1"]

@@ -14,7 +14,7 @@ from qgis.core import (
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
-from eis_qgis_plugin.eis_processing.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
 
 
 class EISCellBasedAssociation(EISProcessingAlgorithm):
