@@ -4,7 +4,7 @@ import os
 from qgis.core import QgsProcessingProvider
 
 PLUGIN_PATH = os.path.dirname(__file__)
-ICON_PATH = os.path.join(PLUGIN_PATH, "../resources/icons/plugin_icon.png")
+ICON_PATH = os.path.join(PLUGIN_PATH, "../resources/icons/eis_logo.png")
 
 
 class EISProvider(QgsProcessingProvider):

@@ -17,5 +17,8 @@ class EISWizardAbout(QWidget, FORM_CLASS):
         super().__init__(parent)
         self.setupUi(self)
 
+        eis_pixmap = QPixmap(os.path.join(PLUGIN_PATH, "resources/icons/eis_logo_smaller.png"))
+        self.eis_logo_label.setPixmap(eis_pixmap)
+
         gnu_pixmap = QPixmap(os.path.join(PLUGIN_PATH, "resources/icons/gnu_logo.png"))
         self.gnu_logo_label.setPixmap(gnu_pixmap)
