@@ -264,16 +264,6 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
     def create_view(self):
         """Create new tables for each tab with selected mineral system and scale."""    
-        # 2 mineral systems not implemented yet, display messages
-        if self.selected_mineral_system.name == "Li-Pegmatites":
-            iface.messageBar().pushWarning(
-                "Error: ", "Li-Pegmatites proxies are not implemented in EIS QGIS plugin yet."
-            )
-            return
-        elif self.mineral_system_selection.currentText() == "Co-VMS":
-            iface.messageBar().pushWarning("Error: ", "Co-VMS proxies are not implemented in EIS QGIS plugin yet.")
-            return
-
         # Create header rows
         for _, layout in self.grid_layouts.items():
             name_label = QLabel("Proxy")
