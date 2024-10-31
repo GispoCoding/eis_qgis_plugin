@@ -1,7 +1,7 @@
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsColorButton, QgsColorRampButton, QgsMapLayerComboBox
 from qgis.PyQt.QtCore import pyqtSignal
-from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDialog, QPushButton, QTabWidget, QVBoxLayout, QWidget
+from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDialog, QDialogButtonBox, QTabWidget, QVBoxLayout, QWidget
 from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.wizard_eis_toolkit_conf import EISWizardToolkitConfiguration
@@ -32,12 +32,13 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.continuous_palette_selection: QComboBox
         self.default_color_selection: QgsColorButton
 
-        self.save_settings_btn: QPushButton
-        self.reset_settings_btn: QPushButton
+        self.settings_button_box: QDialogButtonBox
 
         # Connect signals
-        self.save_settings_btn.clicked.connect(self.save_settings)
-        self.reset_settings_btn.clicked.connect(self.reset_settings_to_default)
+        self.settings_button_box.button(QDialogButtonBox.Save).clicked.connect(self.save_settings)
+        self.settings_button_box.button(
+            QDialogButtonBox.RestoreDefaults
+        ).clicked.connect(self.reset_settings_to_default)
 
         # Initialize
         self.configuration_page = EISWizardToolkitConfiguration()
@@ -47,6 +48,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.raster_color_ramp_selection = QgsColorRampButton()
         self.color_ramp_layout.addWidget(self.raster_color_ramp_selection)
         self.load_settings()  # Initialize UI from settings
+
 
     def load_settings(self):
         """Load settings and set selections accordingly."""
