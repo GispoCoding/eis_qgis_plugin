@@ -16,13 +16,6 @@ from eis_qgis_plugin.utils.misc_utils import (
 from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
-MINERAL_SYSTEM_GROUP_NAMES = {
-    "iocg": "Mineral system proxies — IOCG",
-    "li-pegmatite": "Mineral system proxies — Li-Pegmatites",
-    "co-vms": "Mineral system proxies — Co-VMS",
-    "custom": "Mineral system proxies — Custom"
-}
-
 
 class EISWizardProxyProcess(QWidget):
 
@@ -122,7 +115,7 @@ class EISWizardProxyProcess(QWidget):
         if EISSettingsManager.get_layer_group_selection():
             add_output_layer_to_group(
                 output_layer,
-                MINERAL_SYSTEM_GROUP_NAMES[self.mineral_system],
+                f"Mineral system proxies — {self.mineral_system}",
                 self.mineral_system_component.capitalize()
             )
         else:
