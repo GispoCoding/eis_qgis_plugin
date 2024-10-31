@@ -41,21 +41,22 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
         self.docker_temp_folder_label: QLabel
         self.docker_temp_folder: QgsFileWidget
 
-        self.toolkit_conf_button_box: QDialogButtonBox
+        self.environment_status_line: QLineEdit
+        self.python_version_line: QLineEdit
+        self.eis_toolkit_status_line: QLineEdit
+        
         self.environment_status_button_box: QDialogButtonBox
-
-        # self.toolkit_validity_label: QLabel
-        # self.environment_validity_label: QLabel
-
-        # self.check_for_toolkit_btn: QPushButton
-
-        # self.save_settings_btn: QPushButton
+        self.toolkit_conf_button_box: QDialogButtonBox
 
         # Connect signals
-        # self.save_settings_btn.clicked.connect(self.save_settings)
-
+        self.toolkit_conf_button_box.button(QDialogButtonBox.Save).clicked.connect(self.save_settings)
         self.docker_selection.toggled.connect(self._on_environment_type_changed)
-        # self.check_for_toolkit_btn.clicked.connect(self._on_check_for_toolkit_btn_clicked)
+
+        self.verify_env_btn = self.environment_status_button_box.addButton(
+            "Verify environment status", QDialogButtonBox.ActionRole
+        )
+        self.verify_env_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionRefresh.svg")))
+        self.verify_env_btn.clicked.connect(self._on_verify_env_btn_clicked)
 
         self.docker_image_name.textChanged.connect(self.reset_verification_labels)
         self.venv_directory.fileChanged.connect(self.reset_verification_labels)
@@ -68,30 +69,17 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
         )
         self.install_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionStart.svg")))
 
-        self.verify_btn = self.environment_status_button_box.addButton(
-            "Verify environment status", QDialogButtonBox.ActionRole
-        )
-        self.verify_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionRefresh.svg")))
-
         self._on_environment_type_changed(self.docker_selection.isChecked())
         self.load_settings()  # Initialize UI from settings
 
 
-    def initialize_toolkit_configuration(self):
-        """Initialize toolkit"""
-        self.docker_selection.toggled.connect(self._on_environment_type_changed)
-        # self.check_for_toolkit_btn.clicked.connect(self._on_check_for_toolkit_btn_clicked)
-
-        self.docker_image_name.textChanged.connect(self.reset_verification_labels)
-        self.venv_directory.fileChanged.connect(self.reset_verification_labels)
-
-
     def reset_verification_labels(self, text = None):
-        """Reset verification label widgets."""
-        # self.environment_validity_label.setText("-")
-        # self.environment_validity_label.setStyleSheet("color: black;")
+        """Reset verification widgets."""
+        self.environment_status_line.clear()
+        self.python_version_line.clear()
+        self.eis_toolkit_status_line.clear()
 
-        # self.toolkit_validity_label.setText("-")
+        # self.environment_validity_label.setStyleSheet("color: black;")
         # self.toolkit_validity_label.setStyleSheet("color: black;")
 
 
@@ -101,7 +89,7 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
             self.conf_stack.setCurrentIndex(1)
             self.set_docker_selection()
             self.venv_conf_button_box.hide()
-            self.conf_stack.setMaximumHeight(16777215)
+            self.conf_stack.setMaximumHeight(16777215)  # Max height
         else:
             self.conf_stack.setCurrentIndex(0)
             self.set_venv_selection()
@@ -143,26 +131,26 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
         self.venv_directory_label.setEnabled(True)
 
 
-    def _on_check_for_toolkit_btn_clicked(self):        
+    def _on_verify_env_btn_clicked(self):        
         self.reset_verification_labels()
 
         toolkit_invoker = EISToolkitInvoker(
             self.env_type, self.venv_directory.filePath(), self.docker_path.filePath(), self.docker_image_name.text()
         )
         env_result, env_message = toolkit_invoker.verify_environment()
-        self.environment_validity_label.setText(env_message)
+        self.environment_status_line.setText(env_message)
         if env_result:
-            self.environment_validity_label.setStyleSheet("color: green;")
+            self.environment_status_line.setStyleSheet("color: green;")
             
             # Only try to verify toolkit installation if environment itself is OK
             toolkit_result, toolkit_message = toolkit_invoker.verify_toolkit()
-            self.toolkit_validity_label.setText(toolkit_message)
+            self.eis_toolkit_status_line.setText(toolkit_message)
             if toolkit_result:
-                self.toolkit_validity_label.setStyleSheet("color: green;")
+                self.eis_toolkit_status_line.setStyleSheet("color: green;")
             else:
-                self.toolkit_validity_label.setStyleSheet("color: red;")
+                self.eis_toolkit_status_line.setStyleSheet("color: red;")
         else:
-            self.environment_validity_label.setStyleSheet("color: red;")
+            self.environment_status_line.setStyleSheet("color: red;")
 
 
     def load_settings(self):
