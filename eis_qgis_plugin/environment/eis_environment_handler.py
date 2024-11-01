@@ -19,6 +19,9 @@ class EnvironmentHandler:
     
     def verify_toolkit(required_version: str, env) -> Tuple[bool, str]:
         raise NotImplementedError
+    
+    def upgrade_toolkit(self, env) -> Tuple[bool, str]:
+        raise NotImplementedError
 
 
 class DockerEnvironmentHandler(EnvironmentHandler):
@@ -174,6 +177,39 @@ class DockerEnvironmentHandler(EnvironmentHandler):
             return False, f"EIS Toolkit is not installed in the Docker image '{self.image_name}'. Error: {e.stderr}"
 
 
+    def upgrade_toolkit(self, env) -> Tuple[bool, str]:
+        """
+        Upgrades EIS Toolkit to the latest version in the specified Docker image.
+
+        Args:
+            env: Environment variables to pass to the subprocess (to avoid QGIS interference).
+
+        Returns:
+            A tuple where the first element is a boolean indicating success, and
+            the second element is a message describing the result.
+        """
+        try:
+            cmd = [
+                self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-m",
+                "pip", "install", "eis_toolkit", "--upgrade"
+            ]
+            result = subprocess.run(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                env=env
+            )
+
+            if result.returncode == 0:
+                return True, "EIS Toolkit was successfully upgraded in the Docker image."
+            else:
+                return False, f"Failed to upgrade EIS Toolkit in the Docker image: {result.stderr}"
+
+        except subprocess.CalledProcessError as e:
+            return False, f"Failed to upgrade EIS Toolkit in the Docker image: {e.stderr}"
+
+
 class VenvEnvironmentHandler(EnvironmentHandler):
     """Environment handler for Python virtual environments.
     
@@ -268,3 +304,37 @@ class VenvEnvironmentHandler(EnvironmentHandler):
 
         except subprocess.CalledProcessError as e:
             return False, f"EIS Toolkit is not installed in the specified venv. Error: {e.stderr}"
+
+
+    def upgrade_toolkit(self, env) -> Tuple[bool, str]:
+        """
+        Upgrades EIS Toolkit to the latest version in the specified virtual environment.
+
+        Args:
+            env: Environment variables to pass to the subprocess (to avoid QGIS interference).
+
+        Returns:
+            A tuple where the first element is a boolean indicating success, and
+            the second element is a message describing the result.
+        """
+        try:
+            cmd = [self.python_path, "-m", "pip", "install", "eis_toolkit", "--upgrade"]
+            creationflags = 0
+            if os.name == 'nt':  # If Windows, prevent process window creation
+                creationflags = subprocess.CREATE_NO_WINDOW
+            result = subprocess.run(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                creationflags=creationflags,
+                env=env
+            )
+
+            if result.returncode == 0:
+                return True, "EIS Toolkit was successfully upgraded."
+            else:
+                return False, f"Failed to upgrade EIS Toolkit: {result.stderr}"
+
+        except subprocess.CalledProcessError as e:
+            return False, f"Failed to upgrade EIS Toolkit: {e.stderr}"
