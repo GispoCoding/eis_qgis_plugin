@@ -262,19 +262,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="cancel_btn">
-       <property name="enabled">
-        <bool>true</bool>
+      <widget class="QDialogButtonBox" name="button_box">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="run_btn">
-       <property name="text">
-        <string>Run</string>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -298,14 +294,14 @@
      <item>
       <widget class="QPushButton" name="back_btn">
        <property name="text">
-        <string>Back</string>
+        <string>&lt; Back</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="next_btn">
        <property name="text">
-        <string>Next</string>
+        <string>Next &gt;</string>
        </property>
       </widget>
      </item>

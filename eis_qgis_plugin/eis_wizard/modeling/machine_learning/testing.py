@@ -1,15 +1,16 @@
 from typing import Iterable, List
 
-from qgis.core import QgsProject, QgsRasterLayer
+from qgis.core import QgsApplication, QgsProject, QgsRasterLayer
 from qgis.gui import QgsDoubleSpinBox, QgsFileWidget, QgsMapLayerComboBox
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QCheckBox,
     QComboBox,
+    QDialogButtonBox,
     QGroupBox,
     QLabel,
     QLineEdit,
     QProgressBar,
-    QPushButton,
     QStackedWidget,
     QTextEdit,
     QVBoxLayout,
@@ -72,9 +73,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         self.test_label_data_box: QGroupBox
         self.test_metrics_box: QGroupBox
         self.test_metrics_stack: QStackedWidget
-        self.test_reset_btn: QPushButton
-        self.test_run_btn: QPushButton
-        self.cancel_testing_btn: QPushButton
+        self.button_box: QDialogButtonBox
 
         self.test_parameter_box: QGroupBox
         self.test_classification_threshold: QgsDoubleSpinBox
@@ -92,9 +91,16 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         self.testing_progress_bar: QProgressBar
 
         # Connect signals
+        self.cancel_testing_btn = self.button_box.button(QDialogButtonBox.Cancel)
+        self.cancel_testing_btn.setText("Cancel")
+        self.test_run_btn = self.button_box.button(QDialogButtonBox.Ok)
+        self.test_run_btn.setText("Run")
+        self.test_run_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionStart.svg")))
+        self.button_box.button(QDialogButtonBox.RestoreDefaults).setAutoDefault(False)
+
         self.test_run_btn.clicked.connect(self.test_model)
         self.cancel_testing_btn.clicked.connect(self.cancel)
-        self.test_reset_btn.clicked.connect(self.reset_parameters)
+        self.button_box.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.reset_parameters)
         self.test_model_selection.currentTextChanged.connect(self._on_selected_model_changed)
 
         # Initialize

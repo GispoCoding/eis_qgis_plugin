@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from qgis.PyQt.QtWidgets import QComboBox, QFrame, QPushButton, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget
+from qgis.core import QgsApplication
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QComboBox, QDialogButtonBox, QFrame, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget
 
 from eis_qgis_plugin.eis_wizard.eda.plots.barplot import EISWizardBarplot
 from eis_qgis_plugin.eis_wizard.eda.plots.boxplot import EISWizardBoxplot
@@ -22,27 +24,31 @@ FORM_CLASS: QWidget = load_ui("eda/wizard_plot.ui")
 
 class EISWizardPlotting(QWidget, FORM_CLASS):
 
-    plot_type_selection: QComboBox
-    plot_container: QFrame
-    plot_parameters_container: QStackedWidget
-
-    create_plot_btn: QPushButton
-    open_plot_btn: QPushButton
-    clear_plot_btn: QPushButton
-    reset_btn: QPushButton
-
-
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
+        # DECLARE TYPES
+        self.plot_type_selection: QComboBox
+        self.plot_container: QFrame
+        self.plot_parameters_container: QStackedWidget
+        self.button_box: QDialogButtonBox
+
         self.latest_figure = None
 
         # Initialize buttons
-        self.create_plot_btn.clicked.connect(self.create_plot)
-        self.open_plot_btn.clicked.connect(self.open_plot)
+        self.button_box.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.reset_parameters)
+        self.button_box.button(QDialogButtonBox.RestoreDefaults).setAutoDefault(False)
+        self.clear_plot_btn = self.button_box.addButton("Clear plot", QDialogButtonBox.ActionRole)
+        self.clear_plot_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionDeleteSelected.svg")))
         self.clear_plot_btn.clicked.connect(self.close_and_remove_plot)
-        self.reset_btn.clicked.connect(self.reset_parameters)
+        self.open_plot_btn = self.button_box.addButton("Open plot in a new window", QDialogButtonBox.ActionRole)
+        self.open_plot_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionZoomToLayer.svg")))
+        self.open_plot_btn.clicked.connect(self.open_plot)
+        self.create_plot_btn = self.button_box.addButton("Create plot", QDialogButtonBox.ActionRole)
+        self.create_plot_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionStart.svg")))
+        self.create_plot_btn.clicked.connect(self.create_plot)
+        self.create_plot_btn.setDefault(True)
 
         self.plot_type_selection.currentIndexChanged['int'].connect(self.plot_parameters_container.setCurrentIndex)
 

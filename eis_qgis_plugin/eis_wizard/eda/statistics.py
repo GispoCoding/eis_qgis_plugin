@@ -1,8 +1,9 @@
 from typing import Tuple
 
 from qgis import processing
-from qgis.core import NULL, Qgis, QgsFieldProxyModel, QgsMapLayer
+from qgis.core import NULL, Qgis, QgsApplication, QgsFieldProxyModel, QgsMapLayer
 from qgis.gui import QgsFieldComboBox, QgsRasterBandComboBox, QgsSpinBox
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QLineEdit, QPushButton, QWidget
 from qgis.utils import iface
 
@@ -58,6 +59,8 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
         self._update_layer(self.layer.currentLayer())
         self.field.setFilters(QgsFieldProxyModel.Filter.Numeric)
 
+        self.compute_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionStart.svg")))
+        self.compute_btn.setDefault(True)
         self.compute_btn.clicked.connect(self.compute_statistics)
 
 

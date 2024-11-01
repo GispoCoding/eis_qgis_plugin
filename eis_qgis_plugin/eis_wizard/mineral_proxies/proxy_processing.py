@@ -1,8 +1,18 @@
 from typing import Any, Dict, Literal
 
-from qgis.core import QgsMapLayerProxyModel, QgsProject, QgsRasterLayer
+from qgis.core import QgsApplication, QgsMapLayerProxyModel, QgsProject, QgsRasterLayer
 from qgis.gui import QgsDoubleSpinBox, QgsExtentGroupBox, QgsFileWidget, QgsMapLayerComboBox
-from qgis.PyQt.QtWidgets import QComboBox, QLabel, QLayout, QProgressBar, QPushButton, QStackedWidget, QWidget
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import (
+    QComboBox,
+    QDialogButtonBox,
+    QLabel,
+    QLayout,
+    QProgressBar,
+    QPushButton,
+    QStackedWidget,
+    QWidget,
+)
 from qgis.utils import iface
 
 from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
@@ -38,10 +48,11 @@ class EISWizardProxyProcess(QWidget):
         self.extent: QgsExtentGroupBox
 
         self.navigation_btn_layout: QLayout
-        self.run_btn: QPushButton
+        # self.run_btn: QPushButton
+        # self.cancel_btn: QPushButton
+        self.button_box: QDialogButtonBox
         self.back_btn: QPushButton
         self.finish_btn: QPushButton
-        self.cancel_btn: QPushButton
         self.next_btn: QPushButton
 
 
@@ -71,7 +82,13 @@ class EISWizardProxyProcess(QWidget):
         self.executor.terminated.connect(self.on_algorithm_executor_terminated)
         self.executor.error.connect(self.on_algorithm_executor_error)
 
-        # Connect execution buttons
+        # Connect and initialize execution buttons
+        self.cancel_btn = self.button_box.button(QDialogButtonBox.Cancel)
+        self.cancel_btn.setText("Cancel")
+        self.run_btn = self.button_box.button(QDialogButtonBox.Ok)
+        self.run_btn.setText("Run")
+        self.run_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionStart.svg")))
+
         self.run_btn.clicked.connect(self.run)
         self.cancel_btn.clicked.connect(lambda: self.executor.cancel() if self.executor is not None else None)
         self.back_btn.clicked.connect(
@@ -92,16 +109,15 @@ class EISWizardProxyProcess(QWidget):
 
         # Configure page navigation buttons and name label based on process type
         if process_type == "single_step":
-            self.finish_btn.hide()
-            self.next_btn.hide()
-            self.process_step_label.hide()
+            self.next_btn.setEnabled(False)
+            self.process_step_label.setEnabled(False)
             self.default_output_name = self.proxy_name
         elif process_type == "multi_step":
-            self.finish_btn.hide()
+            self.finish_btn.setEnabled(False)
             self.process_step_label.setText(self.process_step_label.text() + "1/2")  # NOTE: 2 steps assumed for now
             self.default_output_name = self.WORKFLOW_NAME + " result ― " + self.proxy_name
         elif process_type == "multi_step_final":
-            self.next_btn.hide()
+            self.next_btn.setEnabled(False)
             self.process_step_label.setText(self.process_step_label.text() + "2/2")
             self.default_output_name = self.proxy_name
         else:

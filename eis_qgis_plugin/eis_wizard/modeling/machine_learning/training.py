@@ -3,10 +3,12 @@ from datetime import date
 from os import PathLike
 from typing import Any, Dict, Optional, Union
 
-from qgis.core import QgsMapLayer
+from qgis.core import QgsApplication, QgsMapLayer
 from qgis.gui import QgsCheckableComboBox, QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QComboBox,
+    QDialogButtonBox,
     QGroupBox,
     QLabel,
     QLineEdit,
@@ -53,9 +55,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.cv_folds: QgsSpinBox
         self.validation_metrics: QgsCheckableComboBox
 
-        self.start_training_btn: QPushButton
-        self.cancel_training_btn: QPushButton
-        self.reset_training_parameters_btn: QPushButton
+        self.button_box: QDialogButtonBox
         self.generate_tags_btn: QPushButton
 
         self.instance_name_warning_label: QLabel
@@ -81,11 +81,18 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         self.executor.terminated.connect(self.on_algorithm_executor_terminated)
         self.executor.error.connect(self.on_algorithm_executor_error)
 
+        self.cancel_training_btn = self.button_box.button(QDialogButtonBox.Cancel)
+        self.cancel_training_btn.setText("Cancel")
+        self.start_training_btn = self.button_box.button(QDialogButtonBox.Ok)
+        self.start_training_btn.setText("Start training")
+        self.start_training_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionStart.svg")))
+        self.button_box.button(QDialogButtonBox.RestoreDefaults).setAutoDefault(False)
+
         # Connect signals
         self.validation_method.currentTextChanged.connect(self.update_validation_settings)
         self.start_training_btn.clicked.connect(self.train_model)
         self.cancel_training_btn.clicked.connect(self.cancel)
-        self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
+        self.button_box.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.reset_parameters)
         self.generate_tags_btn.clicked.connect(self.train_evidence_data.generate_tags)
         self.train_model_instance_name.editingFinished.connect(self.check_model_instance_name)
 

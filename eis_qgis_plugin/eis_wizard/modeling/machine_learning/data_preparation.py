@@ -1,4 +1,6 @@
 from qgis import processing
+from qgis.core import QgsApplication
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QWidget
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -15,28 +17,58 @@ class EISMLModelDataPreparation(QWidget, FORM_CLASS):
         self.model_main = model_main
 
         self.open_unify_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:unify_rasters'))
+        self.open_unify_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_binarize_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:binarize'))
+        self.open_binarize_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_min_max_scale_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:min_max_scaling'))
+        self.open_min_max_scale_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_z_score_normalize_btn.clicked.connect(
             lambda _: processing.execAlgorithmDialog('eis:z_score_normalization')
         )
+        self.open_z_score_normalize_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_winsorize_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:winsorize_transform'))
+        self.open_winsorize_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_sigmoid_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:sigmoid_transform'))
+        self.open_sigmoid_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_logarithmic_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:log_transform'))
+        self.open_logarithmic_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
         # self.open_one_hot_encode_btn.clicked.connect(
             # lambda _: processing.execAlgorithmDialog('eis:one_hot_encode')
         # ) #TODO
+        self.open_one_hot_encode_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_alr_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:alr_transform'))
+        self.open_alr_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_inverse_alr_btn.clicked.connect(
             lambda _: processing.execAlgorithmDialog('eis:inverse_alr_transform')
         )
+        self.open_inverse_alr_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_clr_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:clr_transform'))
+        self.open_clr_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_inverse_clr_btn.clicked.connect(
             lambda _: processing.execAlgorithmDialog('eis:inverse_clr_transform')
         )
+        self.open_inverse_clr_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_pairwise_logratio_btn.clicked.connect(
             lambda _: processing.execAlgorithmDialog('eis:pairwise_logratio')
         )
+        self.open_pairwise_logratio_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_single_plr_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:single_plr_transform'))
+        self.open_single_plr_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_single_ilr_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:single_ilr_transform'))
-        # self.balance_data_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:balance_data'))
+        self.open_single_ilr_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
+        # self.open_balance_data_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:balance_data'))
+        self.open_balance_data_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))

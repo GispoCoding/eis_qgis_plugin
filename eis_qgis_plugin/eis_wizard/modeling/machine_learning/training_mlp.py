@@ -1,7 +1,7 @@
 from typing import Any, Dict
 
 from qgis.gui import QgsSpinBox
-from qgis.PyQt.QtWidgets import QLabel, QPushButton
+from qgis.PyQt.QtWidgets import QDialogButtonBox, QLabel
 
 from eis_qgis_plugin.eis_wizard.modeling.machine_learning.training import EISMLModelTraining
 
@@ -11,14 +11,13 @@ class EISMLModelTrainingMLP(EISMLModelTraining):
     def __init__(self, parent, model_main) -> None:
         super().__init__(parent, model_main)
 
-        self.reset_training_parameters_btn: QPushButton
-
         self.validation_method_label.deleteLater()
         self.validation_method.deleteLater()
         self.cv_folds_label.deleteLater()
         self.cv_folds.deleteLater()
 
-        self.reset_training_parameters_btn.clicked.connect(self.reset_parameters)
+        self.button_box.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.reset_parameters)
+        self.button_box.button(QDialogButtonBox.RestoreDefaults).setAutoDefault(False)
 
 
     def add_common_parameters(self):

@@ -39,6 +39,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.settings_button_box.button(
             QDialogButtonBox.RestoreDefaults
         ).clicked.connect(self.reset_settings_to_default)
+        self.settings_button_box.button(QDialogButtonBox.RestoreDefaults).setAutoDefault(False)
 
         # Initialize
         self.configuration_page = EISWizardToolkitConfiguration()

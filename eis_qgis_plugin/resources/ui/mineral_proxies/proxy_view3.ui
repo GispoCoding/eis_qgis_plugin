@@ -169,6 +169,12 @@
    </item>
    <item>
     <widget class="QgsFilterLineEdit" name="search_bar">
+     <property name="placeholderText">
+      <string/>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>false</bool>
+     </property>
      <property name="showSearchIcon">
       <bool>true</bool>
      </property>
@@ -244,8 +250,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>180</width>
-              <height>70</height>
+              <width>575</width>
+              <height>326</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -286,8 +292,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>180</width>
-              <height>70</height>
+              <width>575</width>
+              <height>326</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -328,8 +334,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>180</width>
-              <height>70</height>
+              <width>575</width>
+              <height>326</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
