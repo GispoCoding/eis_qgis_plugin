@@ -32,23 +32,18 @@ class EISToolkitInvoker:
     def __init__(self, env_type = None, venv_directory = None, docker_path = None, docker_image_name = None):
         """Initializes the EISToolkitInvoker."""
         env_type = EISSettingsManager.get_environment_selection() if env_type is None else env_type
-        venv_directory = EISSettingsManager.get_venv_directory() if venv_directory is None else venv_directory
-        docker_path = EISSettingsManager.get_docker_path() if docker_path is None else docker_path
-        docker_image_name = (
-            EISSettingsManager.get_docker_image_name() if docker_image_name is None else docker_image_name
-        )
-        host_folder = EISSettingsManager.get_docker_host_folder()
-        temp_folder = EISSettingsManager.get_docker_temp_folder()
 
         # Environment handler is needed for environment-specific communication
         if env_type == "venv":
-            self.environment_handler = VenvEnvironmentHandler(venv_directory)
+            self.environment_handler = VenvEnvironmentHandler(
+                EISSettingsManager.get_venv_directory() if venv_directory is None else venv_directory
+            )
         elif env_type == "docker":
             self.environment_handler = DockerEnvironmentHandler(
-                docker_path,
-                docker_image_name,
-                host_folder,
-                temp_folder
+                EISSettingsManager.get_docker_path() if docker_path is None else docker_path,
+                EISSettingsManager.get_docker_image_name() if docker_image_name is None else docker_image_name,
+                EISSettingsManager.get_docker_host_folder(),
+                EISSettingsManager.get_docker_temp_folder()
             )
         else:
             raise ValueError(f"Unsupported environment type: {env_type}")
