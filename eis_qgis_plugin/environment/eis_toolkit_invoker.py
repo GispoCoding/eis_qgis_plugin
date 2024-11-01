@@ -139,6 +139,10 @@ class EISToolkitInvoker:
         return self.environment_handler.verify_toolkit(REQUIRED_EIS_TOOLKIT_VERSION, self.python_free_environment)
 
     
+    def upgrade_toolkit(self) -> Tuple[bool, str]:
+        return self.environment_handler.upgrade_toolkit(self.python_free_environment)
+    
+
     def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> Dict:
         """Runs the toolkit command and captures the output."""
         if not self.cmd:
