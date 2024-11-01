@@ -1,14 +1,15 @@
 from typing import Iterable
 
-from qgis.core import QgsProject, QgsRasterLayer
+from qgis.core import QgsApplication, QgsProject, QgsRasterLayer
 from qgis.gui import QgsDoubleSpinBox, QgsFileWidget
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QComboBox,
+    QDialogButtonBox,
     QGroupBox,
     QLabel,
     QLineEdit,
     QProgressBar,
-    QPushButton,
     QTextEdit,
     QVBoxLayout,
     QWidget,
@@ -60,8 +61,7 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
 
         self.application_evidence_data_layout: QVBoxLayout
         self.application_evidence_data_box: QGroupBox
-        self.application_run_btn: QPushButton
-        self.cancel_application_btn: QPushButton
+        self.button_box: QDialogButtonBox
 
         self.application_parameter_box: QGroupBox
         self.application_classification_threshold: QgsDoubleSpinBox
@@ -70,6 +70,12 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
         self.application_progress_bar: QProgressBar
 
         # Connect signals
+        self.cancel_application_btn = self.button_box.button(QDialogButtonBox.Cancel)
+        self.cancel_application_btn.setText("Cancel")
+        self.application_run_btn = self.button_box.button(QDialogButtonBox.Ok)
+        self.application_run_btn.setText("Run")
+        self.application_run_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionStart.svg")))
+
         self.application_run_btn.clicked.connect(self.apply_model)
         self.cancel_application_btn.clicked.connect(self.cancel)
         self.application_model_selection.currentTextChanged.connect(self._on_selected_model_changed)

@@ -213,6 +213,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QDialogButtonBox" name="toolkit_conf_button_box">
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Save</set>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -224,13 +231,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="QDialogButtonBox" name="toolkit_conf_button_box">
-         <property name="standardButtons">
-          <set>QDialogButtonBox::Save</set>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>

@@ -1,13 +1,17 @@
 from typing import Optional
 
+from qgis.core import QgsApplication
 from qgis.gui import QgsFileWidget
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QComboBox,
     QDialog,
+    QDialogButtonBox,
     QFormLayout,
     QGroupBox,
     QLabel,
     QLineEdit,
+    QMessageBox,
     QPushButton,
     QVBoxLayout,
     QWidget,
@@ -52,21 +56,35 @@ class EISWizardHistory(QWidget, FORM_CLASS):
         self.label_layer_name: QLabel
         self.label_filepath: QLabel
 
+        self.button_box: QDialogButtonBox
         self.export_btn: QPushButton
         self.delete_btn: QPushButton
         self.delete_all_btn: QPushButton
 
         self.active_info: Optional[MLModelInfo]
 
-        # Connect signals
+        # Initialize and connect signals
         self.model_selection.currentTextChanged.connect(self.update_viewed_model)
         self.update_model_file_btn.clicked.connect(self.update_model_file)
-        self.export_btn.clicked.connect(self._on_export_clicked)
-        self.delete_btn.clicked.connect(self._on_delete_clicked)
-        self.delete_all_btn.clicked.connect(self._on_delete_all_clicked)
-        self.model_manager.models_updated.connect(self.update_list_of_models)
+        self.update_model_file_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionSaveAllEdits.svg")))
+        self.update_model_file_btn.setToolTip(
+            "If your model file name or path has changed, you can change and update it."
+        )
 
-        # Initialize
+        self.delete_all_btn = self.button_box.addButton("Delete all", QDialogButtonBox.ActionRole)
+        self.delete_all_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionDeleteSelected.svg")))
+        self.delete_all_btn.clicked.connect(self._on_delete_all_clicked)
+
+        self.delete_btn = self.button_box.addButton("Delete", QDialogButtonBox.ActionRole)
+        self.delete_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionDeleteSelected.svg")))
+        self.delete_btn.clicked.connect(self._on_delete_clicked)
+
+        self.export_btn = self.button_box.addButton("Export", QDialogButtonBox.ActionRole)
+        self.export_btn.setIcon(QIcon(QgsApplication.getThemeIcon('mActionFileSaveAs.svg')))
+        self.export_btn.clicked.connect(self._on_export_clicked)
+
+        self.model_manager.models_updated.connect(self.update_list_of_models)
+        
         self.evidence_data = ModelHistoryTable(self, self.ROW_HEIGHT)
         self.evidence_data_layout.addWidget(self.evidence_data)
         set_filter(self.model_file, "joblib")
@@ -159,14 +177,30 @@ class EISWizardHistory(QWidget, FORM_CLASS):
 
 
     def _on_delete_clicked(self):
-        model = self.model_selection.currentText()
-        new_index = min(self.model_selection.currentIndex(), self.model_selection.count() - 2)
-        self.model_manager.remove_model_info(model)
-        self.update_list_of_models(index=new_index)
-        iface.messageBar().pushSuccess("Success: ", f"Model {model} deleted.")
+        reply = QMessageBox.question(
+            self,
+            "Confirm deletion",
+            "Are you sure you want to delete the selected model history?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            model = self.model_selection.currentText()
+            new_index = min(self.model_selection.currentIndex(), self.model_selection.count() - 2)
+            self.model_manager.remove_model_info(model)
+            self.update_list_of_models(index=new_index)
+            iface.messageBar().pushSuccess("Success: ", f"Model {model} deleted.")
 
 
     def _on_delete_all_clicked(self):
-        self.model_manager.remove_model_info_all()
-        self.update_list_of_models()
-        iface.messageBar().pushSuccess("Success: ", "All models deleted.")
+        reply = QMessageBox.question(
+            self,
+            "Confirm deletion",
+            "Are you sure you want to delete ALL model histories?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            self.model_manager.remove_model_info_all()
+            self.update_list_of_models()
+            iface.messageBar().pushSuccess("Success: ", "All models deleted.")

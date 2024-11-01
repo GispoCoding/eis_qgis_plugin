@@ -25,7 +25,7 @@
         <x>0</x>
         <y>0</y>
         <width>635</width>
-        <height>840</height>
+        <height>838</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -128,61 +128,11 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="plot_parameters_page_button_layout">
-         <item>
-          <widget class="QPushButton" name="reset_btn">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Reset</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="clear_plot_btn">
-           <property name="text">
-            <string>Clear plot</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="create_plot_btn">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Create plot</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="open_plot_btn">
-           <property name="text">
-            <string>Open in new window</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QDialogButtonBox" name="button_box">
+         <property name="standardButtons">
+          <set>QDialogButtonBox::RestoreDefaults</set>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QFrame" name="plot_container">
