@@ -2,7 +2,16 @@
 from qgis.core import QgsApplication
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QLabel, QLineEdit, QRadioButton, QStackedWidget, QWidget
+from qgis.PyQt.QtWidgets import (
+    QDialog,
+    QDialogButtonBox,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QRadioButton,
+    QStackedWidget,
+    QWidget,
+)
 from qgis.utils import iface
 
 from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
@@ -135,14 +144,25 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
 
 
     def upgrade_eis_toolkit(self):
-        toolkit_invoker = EISToolkitInvoker(
-            self.env_type, self.venv_directory.filePath(), self.docker_path.filePath(), self.docker_image_name.text()
+        reply = QMessageBox.question(
+            self,
+            "Confirm EIS Toolkit upgrade",
+            "Do you want to upgrade EIS Toolkit to its latest version (in PyPI) in the selected environment?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
         )
-        env_result, env_message = toolkit_invoker.upgrade_toolkit()
-        if env_result:
-            iface.messageBar().pushSuccess("Success: ", env_message)
-        else:
-            iface.messageBar().pushCritical("Error: ", env_message)
+        if reply == QMessageBox.Yes:
+            toolkit_invoker = EISToolkitInvoker(
+                self.env_type,
+                self.venv_directory.filePath(),
+                self.docker_path.filePath(),
+                self.docker_image_name.text()
+            )
+            env_result, env_message = toolkit_invoker.upgrade_toolkit()
+            if env_result:
+                iface.messageBar().pushSuccess("Success: ", env_message)
+            else:
+                iface.messageBar().pushCritical("Error: ", env_message)
 
 
     # def create_venv(self):
