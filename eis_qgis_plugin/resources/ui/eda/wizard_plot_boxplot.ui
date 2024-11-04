@@ -69,6 +69,9 @@
         <property name="frame">
          <bool>true</bool>
         </property>
+        <property name="allowEmptyFieldName">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -81,6 +84,9 @@
       <item row="2" column="1">
        <widget class="QgsFieldComboBox" name="Y">
         <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="allowEmptyFieldName">
          <bool>true</bool>
         </property>
        </widget>

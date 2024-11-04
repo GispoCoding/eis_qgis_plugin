@@ -1,6 +1,7 @@
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsColorButton, QgsFieldComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QWidget
+from qgis.utils import iface
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.eis_wizard.eda.plots.plot_template import EISPlot
@@ -53,8 +54,12 @@ class EISWizardBoxplot(EISPlot, FORM_CLASS):
         X_field_name = self.X.currentField()
         Y_field_name = self.Y.currentField()
         color_field_name = self.color_field.currentField()
-        fields = [X_field_name, Y_field_name]
-        if color_field_name:
+        fields = []
+        if X_field_name != "":
+            fields.append(X_field_name)
+        if Y_field_name != "":
+            fields.append(Y_field_name)
+        if color_field_name != "":
             fields.append(color_field_name)
 
         df = self.vector_layer_to_df(layer, *fields)
@@ -62,14 +67,35 @@ class EISWizardBoxplot(EISPlot, FORM_CLASS):
         # if color_field_name:
         #     self.check_unique_values(df, color_field_name, 20)
 
-        sns.boxplot(
-            data=df,
-            x=X_field_name,
-            y=Y_field_name,
-            hue=color_field_name if color_field_name else None,
-            color=self.color.color().getRgbF(),
-            ax=ax
-        )
+        if X_field_name != "" and Y_field_name != "":
+            sns.boxplot(
+                data=df,
+                x=X_field_name,
+                y=Y_field_name,
+                hue=color_field_name if color_field_name else None,
+                color=self.color.color().getRgbF(),
+                ax=ax
+            )
+        elif X_field_name != "":
+            sns.boxplot(
+                data=df,
+                x=X_field_name,
+                y=None,
+                hue=color_field_name if color_field_name else None,
+                color=self.color.color().getRgbF(),
+                ax=ax
+            )
+        elif Y_field_name != "":
+            sns.boxplot(
+                data=df,
+                y=Y_field_name,
+                x=None,
+                hue=color_field_name if color_field_name else None,
+                color=self.color.color().getRgbF(),
+                ax=ax
+            )
+        else:
+            iface.messageBar().pushWarning("Error: ", "Specify X, Y, or both to produce boxplot.")       
 
 
     def plot_example(self, ax):
