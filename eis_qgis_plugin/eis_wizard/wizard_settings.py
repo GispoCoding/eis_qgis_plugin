@@ -2,10 +2,10 @@ from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsColorButton, QgsColorRampButton, QgsMapLayerComboBox
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDialog, QDialogButtonBox, QTabWidget, QVBoxLayout, QWidget
-from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.wizard_eis_toolkit_conf import EISWizardToolkitConfiguration
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS: QDialog = load_ui("wizard_settings.ui")
@@ -75,7 +75,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         EISSettingsManager.set_default_base_raster(self.default_base_raster.currentLayer())
         
         self.minimal_menu_setting_changed.emit(self.minimal_menu_selection.isChecked())
-        iface.messageBar().pushSuccess("Success: ", "Saved EIS QGIS plugin settings.")
+        EISMessageManager().show_message("Saved EIS QGIS plugin settings.", "success")
 
 
     def reset_settings_to_default(self):
@@ -91,4 +91,4 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         self.layer_group_selection.setChecked(defaults[EISSettingsManager.LAYER_GROUP_SETTING] == "true")
         self.default_base_raster.setLayer(defaults[EISSettingsManager.DEFAULT_BASE_RASTER])
 
-        iface.messageBar().pushInfo("Info: ", "EIS QGIS plugin settings reset.")
+        EISMessageManager().show_message("EIS QGIS plugin settings reset.", "info")

@@ -13,9 +13,9 @@ from qgis.PyQt.QtWidgets import (
     QStackedWidget,
     QWidget,
 )
-from qgis.utils import iface
 
 from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import (
     add_output_layer_to_group,
     apply_color_ramp_to_raster_layer,
@@ -172,7 +172,7 @@ class EISWizardProxyProcess(QWidget):
         if self.output_raster_settings.currentIndex() == 0:
             base_raster = self.base_raster.currentLayer()
             if base_raster is None:
-                iface.messageBar().pushWarning("Error: ", "Base raster not defined!")
+                EISMessageManager().show_message("Base raster not defined!", "error")
                 return None
             params = {
                 "base_raster": base_raster,
@@ -183,7 +183,7 @@ class EISWizardProxyProcess(QWidget):
             pixel_size = self.pixel_size.value()
             extent = self.get_extent()
             if pixel_size <= 0 or extent is None:
-                iface.messageBar().pushWarning("Error: ", "Pixel value and/or extent are not defined!")
+                EISMessageManager().show_message("Pixel value and/or extent are not defined!", "error")
                 return None
             params = {
                 "base_raster": None,
@@ -195,6 +195,6 @@ class EISWizardProxyProcess(QWidget):
 
     def check_if_executor_running(self) -> bool:
         if self.executor.is_running:
-            iface.messageBar().pushWarning("Error: ", "Cannot leave page when computation is running.")
+            EISMessageManager().show_message("Cannot leave page when computation is running!", "error")
             return True
         return False

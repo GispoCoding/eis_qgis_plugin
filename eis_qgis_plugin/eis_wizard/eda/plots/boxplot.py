@@ -1,11 +1,11 @@
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsColorButton, QgsFieldComboBox
 from qgis.PyQt.QtWidgets import QComboBox, QWidget
-from qgis.utils import iface
 
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.eis_wizard.eda.plots.plot_template import EISPlot
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_boxplot.ui")
 
@@ -95,7 +95,7 @@ class EISWizardBoxplot(EISPlot, FORM_CLASS):
                 ax=ax
             )
         else:
-            iface.messageBar().pushWarning("Error: ", "Specify X, Y, or both to produce boxplot.")       
+            EISMessageManager().show_message("Specify X, Y, or both to produce boxplot.", "error")
 
 
     def plot_example(self, ax):

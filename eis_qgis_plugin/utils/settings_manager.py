@@ -11,7 +11,8 @@ from qgis.core import (
     QgsStyle,
 )
 from qgis.PyQt.QtGui import QColor
-from qgis.utils import iface
+
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 
 
 class ColorRampEncoder(json.JSONEncoder):
@@ -146,8 +147,9 @@ class EISSettingsManager:
         # If error, reset
         except (TypeError, json.JSONDecodeError) as e:
             self.reset_color_ramp_selection()
-            iface.messageBar().pushWarning(
-                "Error: ", f"Failed to load default raster color ramp info. Color ramp setting reset. {e}"
+            EISMessageManager().show_message(
+                f"Failed to load default raster color ramp info. Color ramp setting reset. {e}",
+                "error"
             )
 
             serialized_items = QgsSettings().value(key, self.DEFAULTS[key])

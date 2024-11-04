@@ -4,7 +4,6 @@ from enum import Enum
 from typing import Any, Dict, Literal, Optional, Sequence
 
 from qgis.core import (
-    Qgis,
     QgsColorRamp,
     QgsColorRampShader,
     QgsProcessingContext,
@@ -17,10 +16,10 @@ from qgis.core import (
 )
 from qgis.gui import QgsFileWidget
 from qgis.PyQt.QtWidgets import QComboBox, QFormLayout, QLayout, QLayoutItem, QLineEdit
-from qgis.utils import iface
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
 from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 
 TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
 CLASSIFIER_METRICS = ["Accuracy", "Precision", "Recall", "F1"]
@@ -200,19 +199,19 @@ def check_raster_grids(rasters: Sequence[QgsRasterLayer]) -> bool:
         x_min, y_max = extent.xMinimum(), extent.yMaximum()
 
         if ref_crs != crs:
-            iface.messageBar().pushMessage("CRSs do not match.", level=Qgis.Critical)
+            EISMessageManager().show_message("CRSs do not match.", "error")
             return False
         
         if ref_res_x != res_x or ref_res_y != res_y:
-            iface.messageBar().pushMessage("Cell sizes do not match.", level=Qgis.Critical)
+            EISMessageManager().show_message("Cell sizes do not match.", "error")
             return False
         
         if ref_x_min != x_min or ref_y_max != y_max:
-            iface.messageBar().pushMessage("Pixel alignments do not match.", level=Qgis.Critical)
+            EISMessageManager().show_message("Pixel alignments do not match.", "error")
             return False
         
         if ref_extent != extent:
-            iface.messageBar().pushMessage("Raster bounds do not match.", level=Qgis.Critical)
+            EISMessageManager().show_message("Raster bounds do not match.", "error")
             return False
 
     return True
@@ -220,7 +219,7 @@ def check_raster_grids(rasters: Sequence[QgsRasterLayer]) -> bool:
 
 def check_raster_size(raster: QgsRasterLayer, limit: int) -> bool:
     if raster.height() * raster.width() > limit:
-        iface.messageBar().pushMessage(f"Raster pixel count limit {limit} exceeded.", level=Qgis.Critical)
+        EISMessageManager().show_message(f"Raster pixel count limit {limit} exceeded.", "error")
         return False
     
     return True

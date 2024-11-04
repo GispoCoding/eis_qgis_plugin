@@ -1,11 +1,11 @@
 import time
 from typing import Any, Dict
 
-import processing
+from qgis import processing
 from qgis.core import QgsProcessingFeedback
 from qgis.PyQt.QtCore import QObject, QThread, pyqtSignal
-from qgis.utils import iface
 
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
 
 
@@ -61,7 +61,7 @@ class AlgorithmExecutor(QObject):
 
 
     def on_error(self, error_message):
-        iface.messageBar().pushWarning("Error: ", error_message)
+        EISMessageManager().show_message(error_message, "error")
         self.error.emit(error_message)
         self._cleanup()
 

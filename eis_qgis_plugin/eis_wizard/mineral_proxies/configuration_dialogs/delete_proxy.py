@@ -1,10 +1,10 @@
 from typing import Optional
 
 from qgis.PyQt.QtWidgets import QComboBox, QDialog, QDialogButtonBox, QWidget
-from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 
 FORM_CLASS = load_ui("mineral_proxies/delete_proxy.ui")
 
@@ -25,7 +25,7 @@ class EISWizardDeleteProxy(QDialog, FORM_CLASS):
         if len(self.mineral_system.proxies) > 0:
             i = self.delete_proxy_selection.currentIndex()
             proxy = self.mineral_system.proxies.pop(i)
-            iface.messageBar().pushSuccess(
-                "Success: ", f"Removed proxy {proxy.name} from mineral system {self.mineral_system.name}."
+            EISMessageManager().show_message(
+                f"Removed proxy {proxy.name} from mineral system {self.mineral_system.name}.", "success"
             )
             self.accept()

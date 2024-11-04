@@ -8,9 +8,9 @@ from matplotlib.path import Path
 from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 from qgis.gui import QgsColorButton
 from qgis.PyQt.QtWidgets import QComboBox
-from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.eda.plots.plot_template import EISPlot
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 
 
 class EISWizardParallelCoordinatesPlot(EISPlot):
@@ -61,14 +61,14 @@ class EISWizardParallelCoordinatesPlot(EISPlot):
     def perform_checks(self, fields, color_data, color_field_type) -> bool:
         ok = True
         if len(fields) > 15:
-            iface.messageBar().pushCritical("Error: ", "Cannot select more than 15 fields.")
+            EISMessageManager.show_message("Cannot select more than 15 fields.", "error")
             ok = False
         n_categories = len(np.unique(color_data))
         if n_categories > 15 and color_field_type == "categorical":
-            iface.messageBar().pushCritical(
-                "Error: ",
-                f"Categorical color column can have at most 15 unique values, {n_categories} categories detected."
-            )
+            EISMessageManager.show_message(
+                f"Categorical color column can have at most 15 unique values, {n_categories} categories detected.",
+                "error"
+                )
             ok = False
         return ok
     

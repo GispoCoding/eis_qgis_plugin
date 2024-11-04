@@ -1,8 +1,9 @@
 import os
 
-from qgis.gui import QgsDockWidget
+from qgis.gui import QgsDockWidget, QgsMessageBar
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QListWidget, QListWidgetItem, QStackedWidget, QVBoxLayout, QWidget
+from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.eis_wizard.wizard_about import EISWizardAbout
@@ -12,6 +13,7 @@ from eis_qgis_plugin.eis_wizard.wizard_modeling import EISWizardModeling
 from eis_qgis_plugin.eis_wizard.wizard_proxies import EISWizardProxies
 from eis_qgis_plugin.eis_wizard.wizard_settings import EISWizardSettings
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
@@ -24,7 +26,7 @@ class EISWizardDialog(QDialog):
         # Default size
         self.resize(1000, 850)
 
-        self.content = EISWizard()
+        self.content = EISWizard(with_message_bar = True)
 
         layout = QVBoxLayout()
         layout.addWidget(self.content)
@@ -50,38 +52,47 @@ FORM_CLASS: QWidget = load_ui("wizard.ui")
 
 class EISWizard(QWidget, FORM_CLASS):
 
-    menu_widget: QListWidget
-    pages_widget: QStackedWidget
-
-    menu_items = [
-        # Icon: <a href="https://icons8.com/icon/9FSQ5judlnAN/rock">Rock</a>
-        # icon by <a target="_blank" href="https://icons8.com">Icons8</a>
-        ("Mineral system proxies", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/rock1.png"))),
-        
-        # Icon: <a href="https://www.flaticon.com/free-icons/data-analysis"
-        # title="data analysis icons">Data analysis icons created by HAJICON - Flaticon</a>
-        ("EDA", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/eda.png"))),
-
-        # Icon by Icons8
-        ("Modeling", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png"))),
-
-        # Icon 2: <a href="https://www.flaticon.com/free-icons/history" title="history icons">
-        # History icons created by Irfansusanto20 - Flaticon</a>
-        ("History", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/history2.png"))),
-
-        # Icon by Icons8
-        ("Settings", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg"))),
-
-        # Icon by Icons8
-        ("About", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/about.svg"))),
-    ]
-
-    def __init__(self) -> None:
+    def __init__(self, with_message_bar: bool = False) -> None:
         super().__init__()
         self.setupUi(self)
 
+        self.menu_widget: QListWidget
+        self.pages_widget: QStackedWidget
+        self.content_area_layout: QVBoxLayout
+
+        self.menu_items = [
+            # Icon: <a href="https://icons8.com/icon/9FSQ5judlnAN/rock">Rock</a>
+            # icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            ("Mineral system proxies", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/rock1.png"))),
+            
+            # Icon: <a href="https://www.flaticon.com/free-icons/data-analysis"
+            # title="data analysis icons">Data analysis icons created by HAJICON - Flaticon</a>
+            ("EDA", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/eda.png"))),
+
+            # Icon by Icons8
+            ("Modeling", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png"))),
+
+            # Icon 2: <a href="https://www.flaticon.com/free-icons/history" title="history icons">
+            # History icons created by Irfansusanto20 - Flaticon</a>
+            ("History", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/history2.png"))),
+
+            # Icon by Icons8
+            ("Settings", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/settings.svg"))),
+
+            # Icon by Icons8
+            ("About", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/about.svg"))),
+        ]
+
         self.create_menu(EISSettingsManager.get_minimal_menu_selection())
 
+        if with_message_bar:
+            self.message_bar = QgsMessageBar(self)
+            self.content_area_layout.insertWidget(0, self.message_bar)
+        else:
+            self.message_bar = iface.messageBar()
+
+        self.message_manager = EISMessageManager()
+        self.message_manager.set_message_bar(self.message_bar)
         self.model_manager = ModelManager()
 
         # Add pages
