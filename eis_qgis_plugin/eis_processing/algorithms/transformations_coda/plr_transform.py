@@ -6,15 +6,17 @@ from qgis.core import (
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
 
 
-class EISClrTransform(EISProcessingAlgorithm):
+class EISPlrTransform(EISProcessingAlgorithm):
     def __init__(self) -> None:
         super().__init__()
 
-        self._name = "clr_transform"
-        self._display_name = "CLR transform"
-        self._group = "Transformations"
-        self._group_id = "transformations"
-        self._short_help_string = "Perform a centered logratio transformation on the data."
+        self._name = "plr_transform"
+        self._display_name = "Pivot logratio transform"
+        self._group = "Transformations — CoDA"
+        self._group_id = "transformations_coda"
+        self._short_help_string = """
+            Perform a pivot logratio transformation on the dataframe, returning the full set of transforms.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_vector", "output_vector"]
@@ -29,5 +31,5 @@ class EISClrTransform(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Output vector",
         )
-        output_vector_param.setHelp("Output vector with the CLR transformed data.")
+        output_vector_param.setHelp("Output vector with the transformed data.")
         self.addParameter(output_vector_param)

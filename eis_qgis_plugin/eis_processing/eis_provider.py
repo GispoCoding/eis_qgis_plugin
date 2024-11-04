@@ -33,6 +33,7 @@ class EISProvider(QgsProcessingProvider):
         exploratory_analysis = self.load_algorithms_from_directory("exploratory_analysis")
         prediction = self.load_algorithms_from_directory("prediction")
         transformations = self.load_algorithms_from_directory("transformations")
+        transformations_coda = self.load_algorithms_from_directory("transformations_coda")
         utilities = self.load_algorithms_from_directory("utilities")
         filtering = self.load_algorithms_from_directory("filtering")
 
@@ -40,7 +41,7 @@ class EISProvider(QgsProcessingProvider):
         for algorithm in (
             evaluation + vector_processing + raster_processing +
             exploratory_analysis + prediction + transformations + utilities +
-            filtering
+            filtering + transformations_coda
         ):
             self.addAlgorithm(algorithm)
 

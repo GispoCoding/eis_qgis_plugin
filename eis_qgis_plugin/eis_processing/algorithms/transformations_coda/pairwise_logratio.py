@@ -13,8 +13,8 @@ class EISPairwiseLogratio(EISProcessingAlgorithm):
 
         self._name = "pairwise_logratio"
         self._display_name = "Pairwise logratio transform"
-        self._group = "Transformations"
-        self._group_id = "transformations"
+        self._group = "Transformations — CoDA"
+        self._group_id = "transformations_coda"
         self._short_help_string = "Perform a pairwise logratio transformation on the given columns."
 
     def initAlgorithm(self, config=None):
