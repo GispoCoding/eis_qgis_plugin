@@ -120,9 +120,14 @@ class EISWizardHistory(QWidget, FORM_CLASS):
 
 
     def update_model_file(self):
+        index = self.model_selection.currentIndex()
+        model_name = self.model_selection.currentText()
         if self.active_info is not None:
             self.active_info.update(model_file=self.model_file.filePath())
             self.model_manager.save_model_info(self.active_info)
+        # Make sure the viewed model does not change after model file update
+        self.update_list_of_models(index)
+        iface.messageBar().pushSuccess("Success: ", f"Model file path for {model_name} updated.")
 
 
     def load_summary_data(self, info: MLModelInfo):

@@ -119,7 +119,7 @@
             <item>
              <widget class="QPushButton" name="update_model_file_btn">
               <property name="text">
-               <string>Update</string>
+               <string>Update model file path</string>
               </property>
              </widget>
             </item>
