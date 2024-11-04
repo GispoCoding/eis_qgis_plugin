@@ -18,7 +18,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.misc_utils import get_output_path
 
 FORM_CLASS = load_ui("mineral_proxies/proxy_workflow2_interpolation.ui")
-
+STACKED_WIDGET_SMALL_HEIGHT = 50
 
 class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
 
@@ -68,6 +68,7 @@ class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
         self.vector_layer.layerChanged.connect(self.attribute.setLayer)
         self.interpolation_method.currentIndexChanged.connect(self.on_interpolation_method_changed)
         self.attribute.setLayer(self.vector_layer.currentLayer())
+        self.interpolation_method_pages.setMaximumHeight(50)  # IDW is the default
 
         super().initialize(self.process_type)
 
@@ -95,6 +96,10 @@ class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
 
     def on_interpolation_method_changed(self, i):
         self.interpolation_method_pages.setCurrentIndex(i)
+        if self.interpolation_method.currentText().lower() == "idw":
+            self.interpolation_method_pages.setMaximumHeight(50)
+        else:
+            self.interpolation_method_pages.setMaximumHeight(16777215)  # Unrestricted
 
 
     def run(self):
