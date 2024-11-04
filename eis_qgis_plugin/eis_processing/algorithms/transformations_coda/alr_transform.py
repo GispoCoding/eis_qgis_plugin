@@ -14,8 +14,8 @@ class EISAlrTransform(EISProcessingAlgorithm):
 
         self._name = "alr_transform"
         self._display_name = "ALR transform"
-        self._group = "Transformations"
-        self._group_id = "transformations"
+        self._group = "Transformations — CoDA"
+        self._group_id = "transformations_coda"
         self._short_help_string = "Perform an additive logratio transformation on the data."
 
     def initAlgorithm(self, config=None):

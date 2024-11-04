@@ -13,8 +13,8 @@ class EISSingleIlrTransform(EISProcessingAlgorithm):
 
         self._name = "single_ilr_transform"
         self._display_name = "Single ILR transform"
-        self._group = "Transformations"
-        self._group_id = "transformations"
+        self._group = "Transformations — CoDA"
+        self._group_id = "transformations_coda"
         self._short_help_string = """
             Perform a single isometric logratio transformation on the provided subcompositions.
 
