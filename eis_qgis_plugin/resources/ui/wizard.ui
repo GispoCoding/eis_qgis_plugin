@@ -115,7 +115,11 @@ QListWidget::item::selected {
     </widget>
    </item>
    <item>
-    <widget class="QStackedWidget" name="pages_widget"/>
+    <layout class="QVBoxLayout" name="content_area_layout">
+     <item>
+      <widget class="QStackedWidget" name="pages_widget"/>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

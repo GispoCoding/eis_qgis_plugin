@@ -1,13 +1,13 @@
 from typing import Tuple
 
 from qgis import processing
-from qgis.core import NULL, Qgis, QgsApplication, QgsFieldProxyModel, QgsMapLayer
+from qgis.core import NULL, QgsApplication, QgsFieldProxyModel, QgsMapLayer
 from qgis.gui import QgsFieldComboBox, QgsRasterBandComboBox, QgsSpinBox
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QLineEdit, QPushButton, QWidget
-from qgis.utils import iface
 
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_statistics.ui")
 
@@ -91,7 +91,7 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
 
     def _check_valid_layer_type(self, layer: QgsMapLayer) -> bool:
         if layer.type() not in [QgsMapLayer.VectorLayer, QgsMapLayer.RasterLayer]:
-            iface.messageBar().pushMessage("Error", f"Unsupported layer type: {layer.type()}", level=Qgis.Critical)
+            EISMessageManager().show_message(f"Unsupported layer type: {layer.type()}", "error")
             return False
         return True
 
@@ -158,7 +158,7 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
 
         # Check if dictionary is empty = processing failed
         if not descriptive_statistics_results:
-            iface.messageBar().pushMessage("Error", "Computing descriptive statistics failed.", level=Qgis.Critical)
+            EISMessageManager().show_message("Computing descriptive statistics failed.", "error")
         else:
             # Calculate variance 
             descriptive_statistics_results["variance"] = pow(descriptive_statistics_results["standard_deviation"], 2)

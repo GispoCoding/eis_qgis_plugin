@@ -16,12 +16,12 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.eis_wizard.modeling.model_data_table import ModelHistoryTable
 from eis_qgis_plugin.eis_wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import clear_layout, set_filter
 
 FORM_CLASS: QDialog = load_ui("results/wizard_model_history.ui")
@@ -127,7 +127,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
             self.model_manager.save_model_info(self.active_info)
         # Make sure the viewed model does not change after model file update
         self.update_list_of_models(index)
-        iface.messageBar().pushSuccess("Success: ", f"Model file path for {model_name} updated.")
+        EISMessageManager().show_message(f"Model file path for {model_name} updated.", "success")
 
 
     def load_summary_data(self, info: MLModelInfo):
@@ -178,7 +178,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
 
 
     def _on_export_clicked(self):
-        iface.messageBar().pushWarning("Warning: ", "Model history exporting not implemented yet!")
+        EISMessageManager().show_message("Model history exporting not implemented yet!", "warning")
 
 
     def _on_delete_clicked(self):
@@ -194,7 +194,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
             new_index = min(self.model_selection.currentIndex(), self.model_selection.count() - 2)
             self.model_manager.remove_model_info(model)
             self.update_list_of_models(index=new_index)
-            iface.messageBar().pushSuccess("Success: ", f"Model {model} deleted.")
+            EISMessageManager().show_message(f"Model {model} deleted.", "success")
 
 
     def _on_delete_all_clicked(self):
@@ -208,4 +208,4 @@ class EISWizardHistory(QWidget, FORM_CLASS):
         if reply == QMessageBox.Yes:
             self.model_manager.remove_model_info_all()
             self.update_list_of_models()
-            iface.messageBar().pushSuccess("Success: ", "All models deleted.")
+            EISMessageManager().show_message("All models deleted.", "success")

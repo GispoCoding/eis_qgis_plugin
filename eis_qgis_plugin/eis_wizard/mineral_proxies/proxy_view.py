@@ -6,7 +6,6 @@ from qgis.core import QgsApplication
 from qgis.gui import QgsFilterLineEdit
 from qgis.PyQt.QtGui import QFont, QIcon
 from qgis.PyQt.QtWidgets import QComboBox, QFileDialog, QGridLayout, QLabel, QMenu, QPushButton, QSizePolicy, QWidget
-from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.mineral_proxies.configuration_dialogs.define_proxy import EISWizardDefineProxy
 from eis_qgis_plugin.eis_wizard.mineral_proxies.configuration_dialogs.delete_proxy import EISWizardDeleteProxy
@@ -17,6 +16,7 @@ from eis_qgis_plugin.eis_wizard.mineral_proxies.configuration_dialogs.new_minera
 )
 from eis_qgis_plugin.eis_wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem, ProxyImportance
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import PLUGIN_PATH
 
 FORM_CLASS = load_ui("mineral_proxies/proxy_view3.ui")
@@ -142,10 +142,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
             self._on_settings_changed()
             new_mineral_system.save()
-            iface.messageBar().pushSuccess(
-                "Success: ",
-                f"Added new mineral system {new_mineral_system.name}."
-            )
+            EISMessageManager().show_message(f"Added new mineral system {new_mineral_system.name}.", "success")
+
 
     def _on_delete_mineral_system_clicked(self):
         i = self.mineral_system_selection.currentIndex()
@@ -154,10 +152,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         self.mineral_system_selection.removeItem(i)
         self._on_settings_changed()
         mineral_system.delete()
-        iface.messageBar().pushSuccess(
-            "Success: ",
-            f"Deleted mineral system {mineral_system.name}."
-        )
+        EISMessageManager().show_message(f"Deleted mineral system {mineral_system.name}.", "success")
+
 
     def _on_import_mineral_system_clicked(self):
         fp = QFileDialog.getOpenFileName(self,
@@ -172,9 +168,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.mineral_system_selection.setCurrentIndex(self.mineral_system_selection.count()-1)
             self._on_settings_changed()
             imported_mineral_system.save()
-            iface.messageBar().pushSuccess(
-                "Success: ", f"Imported mineral system {imported_mineral_system.name}."
-            )
+            EISMessageManager().show_message(f"Imported mineral system {imported_mineral_system.name}.", "success")
+
 
     def _on_export_mineral_system_clicked(self):
         fp = QFileDialog.getSaveFileName(
@@ -186,9 +181,8 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             i = self.mineral_system_selection.currentIndex()
             mineral_system = self.mineral_systems[i]
             mineral_system.export(fp)
-            iface.messageBar().pushSuccess(
-                "Success: ", f"Exported mineral system {mineral_system.name} to {fp}."
-            )
+            EISMessageManager().show_message(f"Exported mineral system {mineral_system.name} to {fp}.", "success")
+
 
     def _on_define_proxy_clicked(self):
         dlg = EISWizardDefineProxy(self)
@@ -197,10 +191,11 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.selected_mineral_system.add_proxy(proxy)
             self._on_settings_changed()
             self.selected_mineral_system.save()
-            iface.messageBar().pushSuccess(
-                "Success: ",
-                f"Added custom proxy {proxy.name} to mineral system {self.selected_mineral_system.name}."
+            EISMessageManager().show_message(
+                f"Added custom proxy {proxy.name} to mineral system {self.selected_mineral_system.name}.",
+                "success"
             )
+
 
     def _on_import_proxy_clicked(self):
         dlg = EISWizardImportProxy(self.mineral_systems, self)
@@ -209,10 +204,11 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
             self.selected_mineral_system.add_proxy(proxy)
             self._on_settings_changed()
             self.selected_mineral_system.save()
-            iface.messageBar().pushSuccess(
-                "Success: ",
-                f"Imported proxy {proxy.name} to mineral system {self.selected_mineral_system.name}."
+            EISMessageManager().show_message(
+                f"Imported proxy {proxy.name} to mineral system {self.selected_mineral_system.name}.",
+                "success"
             )
+
 
     def _on_edit_proxy_clicked(self):
         dlg = EISWizardModifyProxy(self.selected_mineral_system, self)

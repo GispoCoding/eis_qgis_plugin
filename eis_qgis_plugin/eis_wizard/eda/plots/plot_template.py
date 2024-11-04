@@ -3,8 +3,8 @@ import pandas as pd
 from qgis.core import Qgis, QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 from qgis.gui import QgsCollapsibleGroupBox, QgsColorButton, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import QSizePolicy, QWidget
-from qgis.utils import iface
 
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 
@@ -81,9 +81,9 @@ class EISPlot(QWidget):
         values = df[field_name]
         nr_of_values = np.unique(values).size
         if nr_of_values > threshold:
-            iface.messageBar().pushCritical(
-                "Error: ",
-                f"Too many unique values in selected field '{field_name}'. ({nr_of_values} > {threshold})"
+            EISMessageManager.show_message(
+                f"Too many unique values in selected field '{field_name}'. ({nr_of_values} > {threshold})",
+                "error"
             )
 
     @staticmethod

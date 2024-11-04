@@ -12,10 +12,10 @@ from qgis.PyQt.QtWidgets import (
     QPushButton,
     QWidget,
 )
-from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem, ProxyImportance
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import find_index_for_text_combobox
 
 FORM_CLASS = load_ui("mineral_proxies/modify_custom_proxy.ui")
@@ -157,8 +157,5 @@ class EISWizardModifyProxy(QDialog, FORM_CLASS):
             self.proxy.deposit_scale_importance=ProxyImportance.from_description(
                 self.deposit_scale_importance.currentText()
             )
-            iface.messageBar().pushSuccess(
-                "Success: ",
-                f"Modified proxy {self.proxy.name}."
-            )
+            EISMessageManager().show_message(f"Modified proxy {self.proxy.name}.", "success")
             self.accept()

@@ -16,12 +16,12 @@ from qgis.PyQt.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from qgis.utils import iface
 
 from eis_qgis_plugin.eis_wizard.modeling.model_data_table import ModelDataTable
 from eis_qgis_plugin.eis_wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import (
     add_output_layer_to_group,
     apply_color_ramp_to_raster_layer,
@@ -198,15 +198,15 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
 
     def check_model_info(self) -> bool:
         if self.model_info is None:
-            warning = "Error: ", "Model instance not defined!"
-            iface.messageBar().pushWarning("Error: ", warning)
-            self.testing_feedback.text_edit.append("Error: " + warning)
+            error = "Model instance needs to be defined!"
+            EISMessageManager().show_message(error, "error")
+            self.testing_feedback.text_edit.append("Error: " + error)
             return False
         if not self.model_info.check_model_file():
-            warning = f"Model file not found for model instance {self.model_info.model_instance_name}! \
+            error = f"Model file not found for model instance {self.model_info.model_instance_name}! \
                 Check model filepath in History."
-            iface.messageBar().pushWarning("Error: ", warning)
-            self.testing_feedback.text_edit.append("Error: " + warning)
+            EISMessageManager().show_message(error, "error")
+            self.testing_feedback.text_edit.append("Error: " + error)
             return False
         return True
 
@@ -218,7 +218,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         if self.model_info.model_kind == "classifier":
             metrics = self.get_classifier_metrics()
             if len(metrics) == 0:
-                iface.messageBar().pushWarning("Error: ", "No metrics were selected!")
+                EISMessageManager().show_message("No metrics selected!", "error")
                 return
 
             params = {
@@ -240,7 +240,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         elif self.model_info.model_kind == "regressor":
             metrics = self.get_classifier_metrics()
             if len(metrics) == 0:
-                iface.messageBar().pushWarning("Error: ", "No metrics were selected!")
+                EISMessageManager().show_message("No metrics selected!", "error")
                 return
 
             params = {
@@ -255,7 +255,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
             self.executor.run(params)
 
         else:
-            iface.messageBar().pushCritical("Error: ", f"Unknown model kind: {self.model_info.model_kind}")
+            EISMessageManager().show_message(f"Unknown model kind: {self.model_info.model_kind}", "error")
             return
 
 

@@ -12,10 +12,10 @@ from qgis.PyQt.QtWidgets import (
     QStackedWidget,
     QWidget,
 )
-from qgis.utils import iface
 
 from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS: QDialog = load_ui("wizard_toolkit_conf.ui")
@@ -160,9 +160,9 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
             )
             env_result, env_message = toolkit_invoker.upgrade_toolkit()
             if env_result:
-                iface.messageBar().pushSuccess("Success: ", env_message)
+                EISMessageManager().show_message(env_message, "success")
             else:
-                iface.messageBar().pushCritical("Error: ", env_message)
+                EISMessageManager().show_message(env_message, "error")
 
 
     # def create_venv(self):
@@ -213,4 +213,4 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
         EISSettingsManager.set_docker_host_folder(self.docker_host_folder.filePath())
         EISSettingsManager.set_docker_temp_folder(self.docker_temp_folder.filePath())
         
-        iface.messageBar().pushSuccess("Success: ", "Saved EIS Toolkit configuration.")
+        EISMessageManager().show_message("Saved EIS Toolkit configuration.", "success")
