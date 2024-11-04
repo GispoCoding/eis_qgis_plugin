@@ -108,26 +108,6 @@ EIS QGIS Plugin is a graphical user interface for EIS Toolkit, a comprehensive m
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>84</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Help</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2"/>
-        </widget>
-       </item>
-       <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -136,20 +116,24 @@ EIS QGIS Plugin is a graphical user interface for EIS Toolkit, a comprehensive m
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Sources</string>
+          <string>Sources and help</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_20">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label">
             <property name="text">
-             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/GispoCoding/eis_qgis_plugin&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/GispoCoding/eis_qgis_plugin&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="openExternalLinks">
-             <bool>true</bool>
+             <string>EIS QGIS Plugin GitHub repository</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>EIS Toolkit GitHub repository</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
            <widget class="QLabel" name="label_21">
             <property name="text">
              <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/GispoCoding/eis_toolkit&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/GispoCoding/eis_toolkit&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -159,17 +143,30 @@ EIS QGIS Plugin is a graphical user interface for EIS Toolkit, a comprehensive m
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_3">
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>EIS Toolkit GitHub repository</string>
+             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/GispoCoding/eis_qgis_plugin&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/GispoCoding/eis_qgis_plugin&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="openExternalLinks">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="label_7">
             <property name="text">
-             <string>EIS QGIS Plugin GitHub repository</string>
+             <string>User manual / guide</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/GispoCoding/eis_qgis_plugin/wiki&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/GispoCoding/eis_qgis_plugin/wiki&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="openExternalLinks">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
