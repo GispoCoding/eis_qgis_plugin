@@ -3,6 +3,8 @@ import os
 from dataclasses import dataclass
 from typing import List, Optional, Sequence
 
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
+
 MINERAL_SYSTEMS_DIR = os.path.join(os.path.dirname(__file__), "mineral_system_libraries")
 
 
@@ -24,10 +26,12 @@ class ProxyImportance:
         elif text == "-" or text == "Undefined":
             return ProxyImportance("Undefined", 4, "black", "Importance: Undefined")
         else:
-            raise Exception(
+            EISMessageManager().show_message(
                 f"Unrecognized proxy importance definition found in JSON: {text}. Importance should be either \
-                    'High', 'Moderate', 'Low' or '-'/'Undefined'."
+                'High', 'Moderate', 'Low' or '-'/'Undefined'.",
+                "error"
             )
+            return None
 
     def __str__(self) -> str:
         return self.description

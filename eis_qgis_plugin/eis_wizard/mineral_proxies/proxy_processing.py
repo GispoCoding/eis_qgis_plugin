@@ -172,7 +172,7 @@ class EISWizardProxyProcess(QWidget):
         if self.output_raster_settings.currentIndex() == 0:
             base_raster = self.base_raster.currentLayer()
             if base_raster is None:
-                EISMessageManager().show_message("Base raster not defined!", "error")
+                EISMessageManager().show_message("Base raster is not defined", "invalid")
                 return None
             params = {
                 "base_raster": base_raster,
@@ -183,7 +183,7 @@ class EISWizardProxyProcess(QWidget):
             pixel_size = self.pixel_size.value()
             extent = self.get_extent()
             if pixel_size <= 0 or extent is None:
-                EISMessageManager().show_message("Pixel value and/or extent are not defined!", "error")
+                EISMessageManager().show_message("Pixel value and/or extent are not defined", "invalid")
                 return None
             params = {
                 "base_raster": None,

@@ -100,7 +100,9 @@ class ModelHistoryTable(QTableWidget):
     def load_model(self, tags: List[str], evidence_data: List[Tuple[str, str]]):
         """Load information about the selected model (number of rows/layers and corresponding tags)."""
         if len(tags) != len(evidence_data):
-            EISMessageManager().show_message("Length of evidence data should match the number of given tags!", "error")
+            EISMessageManager().show_message(
+                "Length of evidence data should match the number of given tags!", "invalid"
+            )
             return
 
         # Remove all previous rows

@@ -95,7 +95,7 @@ class EISWizardBoxplot(EISPlot, FORM_CLASS):
                 ax=ax
             )
         else:
-            EISMessageManager().show_message("Specify X, Y, or both to produce boxplot.", "error")
+            EISMessageManager().show_message("Specify X, Y, or both to produce boxplot.", "invalid")
 
 
     def plot_example(self, ax):

@@ -199,19 +199,19 @@ def check_raster_grids(rasters: Sequence[QgsRasterLayer]) -> bool:
         x_min, y_max = extent.xMinimum(), extent.yMaximum()
 
         if ref_crs != crs:
-            EISMessageManager().show_message("CRSs do not match.", "error")
+            EISMessageManager().show_message("CRSs do not match.", "invalid")
             return False
         
         if ref_res_x != res_x or ref_res_y != res_y:
-            EISMessageManager().show_message("Cell sizes do not match.", "error")
+            EISMessageManager().show_message("Cell sizes do not match.", "invalid")
             return False
         
         if ref_x_min != x_min or ref_y_max != y_max:
-            EISMessageManager().show_message("Pixel alignments do not match.", "error")
+            EISMessageManager().show_message("Pixel alignments do not match.", "invalid")
             return False
         
         if ref_extent != extent:
-            EISMessageManager().show_message("Raster bounds do not match.", "error")
+            EISMessageManager().show_message("Raster bounds do not match.", "invalid")
             return False
 
     return True
@@ -219,7 +219,7 @@ def check_raster_grids(rasters: Sequence[QgsRasterLayer]) -> bool:
 
 def check_raster_size(raster: QgsRasterLayer, limit: int) -> bool:
     if raster.height() * raster.width() > limit:
-        EISMessageManager().show_message(f"Raster pixel count limit {limit} exceeded.", "error")
+        EISMessageManager().show_message(f"Raster pixel count limit {limit} exceeded.", "invalid")
         return False
     
     return True

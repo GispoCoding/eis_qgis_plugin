@@ -83,7 +83,7 @@ class EISPlot(QWidget):
         if nr_of_values > threshold:
             EISMessageManager.show_message(
                 f"Too many unique values in selected field '{field_name}'. ({nr_of_values} > {threshold})",
-                "error"
+                "invalid"
             )
 
     @staticmethod

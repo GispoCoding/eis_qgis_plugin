@@ -255,7 +255,7 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
         elif self.selected_scale == "deposit":
             return sorted(proxies, key=lambda proxy: (proxy.deposit_scale_importance.value, proxy.name))
         else:
-            raise Exception(f"Sorting proxies but unrecognized scale: {self.selected_scale}.")
+            raise Exception(f"Unrecognized scale: {self.selected_scale}.")
 
 
     def create_view(self):

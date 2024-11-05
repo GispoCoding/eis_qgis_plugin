@@ -18,11 +18,11 @@ class EISMessageManager:
     def show_message(
         self,
         text: str,
-        level: Literal["success", "info", "warning", "error"] = "info", 
+        level: Literal["success", "info", "warning", "invalid", "error"] = "info", 
         duration: Optional[int] = None
     ):
         if not self.message_bar:
-            raise ValueError("Message bar not set for MessageHandlerSingleton.")
+            raise ValueError("Message bar not set for EISMessageManager.")
 
         if not duration:
             duration = -1
@@ -33,5 +33,7 @@ class EISMessageManager:
             self.message_bar.pushMessage("Info", text, Qgis.MessageLevel.Info, duration)
         elif level == "warning":
             self.message_bar.pushMessage("Warning", text, Qgis.MessageLevel.Warning, duration)
+        elif level == "invalid":
+            self.message_bar.pushMessage(text, Qgis.MessageLevel.Warning, duration)
         elif level == "error":
             self.message_bar.pushMessage("Error", text, Qgis.MessageLevel.Critical, duration)

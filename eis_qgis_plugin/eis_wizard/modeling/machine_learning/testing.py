@@ -199,13 +199,13 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
     def check_model_info(self) -> bool:
         if self.model_info is None:
             error = "Model instance needs to be defined!"
-            EISMessageManager().show_message(error, "error")
+            EISMessageManager().show_message(error, "invalid")
             self.testing_feedback.text_edit.append("Error: " + error)
             return False
         if not self.model_info.check_model_file():
             error = f"Model file not found for model instance {self.model_info.model_instance_name}! \
                 Check model filepath in History."
-            EISMessageManager().show_message(error, "error")
+            EISMessageManager().show_message(error, "invalid")
             self.testing_feedback.text_edit.append("Error: " + error)
             return False
         return True
@@ -218,7 +218,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         if self.model_info.model_kind == "classifier":
             metrics = self.get_classifier_metrics()
             if len(metrics) == 0:
-                EISMessageManager().show_message("No metrics selected!", "error")
+                EISMessageManager().show_message("No metrics selected!", "invalid")
                 return
 
             params = {
@@ -240,7 +240,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         elif self.model_info.model_kind == "regressor":
             metrics = self.get_classifier_metrics()
             if len(metrics) == 0:
-                EISMessageManager().show_message("No metrics selected!", "error")
+                EISMessageManager().show_message("No metrics selected!", "invalid")
                 return
 
             params = {
@@ -255,7 +255,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
             self.executor.run(params)
 
         else:
-            EISMessageManager().show_message(f"Unknown model kind: {self.model_info.model_kind}", "error")
+            EISMessageManager().show_message(f"Unrecognized model kind: {self.model_info.model_kind}", "error")
             return
 
 
