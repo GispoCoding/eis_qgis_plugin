@@ -213,4 +213,4 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
         EISSettingsManager.set_docker_host_folder(self.docker_host_folder.filePath())
         EISSettingsManager.set_docker_temp_folder(self.docker_temp_folder.filePath())
         
-        EISMessageManager().show_message("Saved EIS Toolkit configuration.", "success")
+        EISMessageManager().show_message("EIS Toolkit environment configuration saved.", "success")

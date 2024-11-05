@@ -75,7 +75,7 @@ class EISWizardSettings(QWidget, FORM_CLASS):
         EISSettingsManager.set_default_base_raster(self.default_base_raster.currentLayer())
         
         self.minimal_menu_setting_changed.emit(self.minimal_menu_selection.isChecked())
-        EISMessageManager().show_message("Saved EIS QGIS Plugin settings.", "success")
+        EISMessageManager().show_message("EIS QGIS Plugin settings saved.", "success")
 
 
     def reset_settings_to_default(self):
