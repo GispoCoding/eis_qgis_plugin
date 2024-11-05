@@ -58,23 +58,37 @@
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="vector_layer_label">
+        <property name="toolTip">
+         <string>Input dataset with features to calculate distances to</string>
+        </property>
         <property name="text">
          <string>Input vector layer</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QgsMapLayerComboBox" name="vector_layer"/>
+       <widget class="QgsMapLayerComboBox" name="vector_layer">
+        <property name="toolTip">
+         <string>Input dataset with features to calculate distances to</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="attribute_label">
+        <property name="toolTip">
+         <string>Target attribute for interpolation.</string>
+        </property>
         <property name="text">
          <string>Attribute</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QgsFieldComboBox" name="attribute"/>
+       <widget class="QgsFieldComboBox" name="attribute">
+        <property name="toolTip">
+         <string>Target attribute for interpolation.</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -89,6 +103,9 @@
        <layout class="QFormLayout" name="interpolation_method_layout">
         <item row="0" column="0">
          <widget class="QLabel" name="interpolation_method_label">
+          <property name="toolTip">
+           <string/>
+          </property>
           <property name="text">
            <string>Interpolation method</string>
           </property>

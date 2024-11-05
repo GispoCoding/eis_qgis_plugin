@@ -61,13 +61,20 @@
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="vector_layer_label">
+        <property name="toolTip">
+         <string>Input dataset with features to calculate distances to</string>
+        </property>
         <property name="text">
          <string>Input vector layer</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QgsMapLayerComboBox" name="vector_layer"/>
+       <widget class="QgsMapLayerComboBox" name="vector_layer">
+        <property name="toolTip">
+         <string>Input dataset with features to calculate distances to</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="selection_label">
@@ -75,7 +82,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Selection</string>
+         <string>Selection (WIP)</string>
         </property>
        </widget>
       </item>
@@ -88,6 +95,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QgsDoubleSpinBox" name="max_distance">
+        <property name="toolTip">
+         <string>Maximum distance (optional). All pixels beyond max distance will be assigned value equal to max distance.</string>
+        </property>
         <property name="specialValueText">
          <string>Not set</string>
         </property>
@@ -101,8 +111,11 @@
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label">
+        <property name="toolTip">
+         <string>Maximum distance (optional). All pixels beyond max distance will be assigned value equal to max distance.</string>
+        </property>
         <property name="text">
-         <string>Max distance</string>
+         <string>Max distance (optional)</string>
         </property>
        </widget>
       </item>
