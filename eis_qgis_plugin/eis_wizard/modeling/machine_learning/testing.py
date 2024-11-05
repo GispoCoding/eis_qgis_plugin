@@ -218,7 +218,9 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         if self.model_info.model_kind == "classifier":
             metrics = self.get_classifier_metrics()
             if len(metrics) == 0:
-                EISMessageManager().show_message("No metrics selected!", "invalid")
+                EISMessageManager().show_message(
+                    "No metrics selected! To run without metrics, use the 'Application' tab.", "invalid"
+                )
                 return
 
             params = {
@@ -240,7 +242,9 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         elif self.model_info.model_kind == "regressor":
             metrics = self.get_classifier_metrics()
             if len(metrics) == 0:
-                EISMessageManager().show_message("No metrics selected!", "invalid")
+                EISMessageManager().show_message(
+                    "No metrics selected! To run without metrics, use the 'Application' tab.", "invalid"
+                )
                 return
 
             params = {

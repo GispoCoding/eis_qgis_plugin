@@ -101,7 +101,7 @@ class ModelHistoryTable(QTableWidget):
         """Load information about the selected model (number of rows/layers and corresponding tags)."""
         if len(tags) != len(evidence_data):
             EISMessageManager().show_message(
-                "Length of evidence data should match the number of given tags!", "invalid"
+                "Number of evidence datasets should match the number of given tags!", "invalid"
             )
             return
 
