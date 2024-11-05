@@ -11,6 +11,7 @@ from qgis.PyQt.QtWidgets import (
     QProgressBar,
     QPushButton,
     QStackedWidget,
+    QTextEdit,
     QWidget,
 )
 
@@ -35,6 +36,7 @@ class EISWizardProxyProcess(QWidget):
         self.proxy_name_label: QLabel
         self.process_step_label: QLabel
 
+        self.log: QTextEdit
         self.progress_bar: QProgressBar
         self.executor: AlgorithmExecutor
         self.mineral_system_component: str
@@ -74,7 +76,7 @@ class EISWizardProxyProcess(QWidget):
             self.base_raster.setLayer(default_base_raster)
 
         # Create feedback
-        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
+        self.feedback = EISProcessingFeedback(text_edit= self.log, progress_bar=self.progress_bar)
 
         # Create executor and connect signals
         self.executor = AlgorithmExecutor()
