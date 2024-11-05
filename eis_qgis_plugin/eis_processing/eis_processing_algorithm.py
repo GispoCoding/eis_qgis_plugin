@@ -276,6 +276,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 param_value = os.path.normpath(
                     self.parameterAsFileOutput(parameters, name, context)
                 )
+                output_paths[param.name()] = param_value
 
             elif isinstance(param, QgsProcessingParameterFolderDestination):
                 param_value = os.path.normpath(
