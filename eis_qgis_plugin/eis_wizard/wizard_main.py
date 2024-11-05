@@ -74,7 +74,8 @@ class EISWizard(QWidget, FORM_CLASS):
             ("Modeling", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png"))),
 
             # Icon by Freepik
-            # <a href="https://www.freepik.com/icons/evaluation#uuid=6eb06c0e-fec2-480e-b519-6a6c47e0a2b0">Icon by Dewi Sari</a>
+            # <a href="https://www.freepik.com/icons/evaluation#uuid=6eb06c0e-fec2-480e-b519-6a6c47e0a2b0">
+            # Icon by Dewi Sari</a>
             ("Evaluation", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/evaluation2.png"))),
 
             # Icon 2: <a href="https://www.flaticon.com/free-icons/history" title="history icons">
