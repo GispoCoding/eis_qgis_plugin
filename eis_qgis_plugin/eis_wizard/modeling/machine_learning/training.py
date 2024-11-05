@@ -24,6 +24,7 @@ from eis_qgis_plugin.eis_wizard.modeling.ml_model_info import MLModelInfo
 from eis_qgis_plugin.eis_wizard.modeling.model_data_table import ModelTrainingDataTable
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import set_filter
 from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
 
@@ -223,11 +224,11 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
         if self.model_main.model_type == "Logistic regression":
             self.model_main.check_solver_penalties()
         if not self.train_model_instance_name.text():
-            raise Exception("No name specified")
+            EISMessageManager().show_message("Model instance name is missing", "invalid")
         for row in range(self.train_evidence_data.rowCount()):
             tag = self.train_evidence_data.cellWidget(row, 0).text()
             if not tag:
-                raise Exception("Tag(s) missing for evidence layers")
+                EISMessageManager().show_message("Evidence layer tags are missing", "invalid")
 
 
     def train_model(self):

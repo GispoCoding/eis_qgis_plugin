@@ -91,7 +91,7 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
 
     def _check_valid_layer_type(self, layer: QgsMapLayer) -> bool:
         if layer.type() not in [QgsMapLayer.VectorLayer, QgsMapLayer.RasterLayer]:
-            EISMessageManager().show_message(f"Unsupported layer type: {layer.type()}", "error")
+            EISMessageManager().show_message(f"Unsupported layer type: {layer.type()}", "invalid")
             return False
         return True
 

@@ -219,7 +219,7 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         elif self.gamma_method.isChecked():
             overlay_method_index = 4  # Gamma
         else:
-            raise Exception("No overlay method selected, cannot run fuzzy ovelay.")
+            raise ValueError("No overlay method selected, cannot run fuzzy ovelay.")
 
         processing.runAndLoadResults(
             "eis:fuzzy_overlay",

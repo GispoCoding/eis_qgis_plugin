@@ -10,6 +10,7 @@ from typing import Dict, List, TextIO, Tuple
 from qgis.core import QgsProcessingFeedback, QgsProject, QgsRasterLayer
 
 from eis_qgis_plugin.environment.eis_environment_handler import DockerEnvironmentHandler, VenvEnvironmentHandler
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
@@ -141,7 +142,8 @@ class EISToolkitInvoker:
     def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> Dict:
         """Runs the toolkit command and captures the output."""
         if not self.cmd:
-            raise Exception("Assemble a CLI call before trying to run EIS Toolkit.")
+            EISMessageManager().show_message("Assemble a CLI call before trying to run EIS Toolkit.", "error")
+            return
 
         results = {}
         q = queue.Queue()

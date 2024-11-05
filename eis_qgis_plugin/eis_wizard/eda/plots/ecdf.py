@@ -8,6 +8,7 @@ from qgis.PyQt.QtWidgets import (
 import eis_qgis_plugin.libs.seaborn as sns
 from eis_qgis_plugin.eis_wizard.eda.plots.plot_template import EISPlot
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 
 FORM_CLASS: QWidget = load_ui("eda/wizard_plot_ecdf.ui")
 
@@ -90,7 +91,8 @@ class EISWizardEcdf(EISPlot, FORM_CLASS):
             }
 
         else:
-            raise Exception(f"Unexpected layer type: {layer.type()}")
+            EISMessageManager().show_message(f"Unsupported layer type: {layer.type()}", "invalid")
+            return
 
         sns.ecdfplot(
             **layer_specific_kwargs,

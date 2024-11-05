@@ -4,6 +4,7 @@ from qgis.gui import QgsSpinBox
 from qgis.PyQt.QtWidgets import QComboBox, QLabel
 
 from eis_qgis_plugin.eis_wizard.modeling.machine_learning.ml_model_main import EISMLModel
+from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import ModelKind
 
 
@@ -67,7 +68,10 @@ class EISWizardLogisticRegression(EISMLModel):
     def check_solver_penalties(self):
         valid_penalties = self.SOLVER_PENALTY_COMBINATIONS[self.solver.currentText()]
         if self.penalty.currentText() not in valid_penalties:
-            raise Exception("Chosen penalty is not supported for the chosen solver!")
+            EISMessageManager().show_message(
+                f"Penalty {self.penalty.currentText()} is not supported for solver {self.solver.currentText()}",
+                "invalid"
+            )
 
 
     def reset_parameters(self):

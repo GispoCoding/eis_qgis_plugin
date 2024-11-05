@@ -51,4 +51,4 @@ class EISProcessingFeedback(QgsProcessingFeedback):
 
     def report_failed_run(self):
         if self.text_edit is not None:
-            self.text_signal.emit("Model training failed, not saving to database")
+            self.text_signal.emit("Model training failed, not saving to history")

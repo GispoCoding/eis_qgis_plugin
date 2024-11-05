@@ -61,13 +61,13 @@ class EISWizardParallelCoordinatesPlot(EISPlot):
     def perform_checks(self, fields, color_data, color_field_type) -> bool:
         ok = True
         if len(fields) > 15:
-            EISMessageManager.show_message("Cannot select more than 15 fields.", "error")
+            EISMessageManager.show_message("Cannot select more than 15 fields.", "invalid")
             ok = False
         n_categories = len(np.unique(color_data))
         if n_categories > 15 and color_field_type == "categorical":
             EISMessageManager.show_message(
                 f"Categorical color column can have at most 15 unique values, {n_categories} categories detected.",
-                "error"
+                "invalid"
                 )
             ok = False
         return ok

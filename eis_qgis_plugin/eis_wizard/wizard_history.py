@@ -178,7 +178,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
 
 
     def _on_export_clicked(self):
-        EISMessageManager().show_message("Model history exporting not implemented yet!", "warning")
+        EISMessageManager().show_message("Model history exporting not implemented yet!", "invalid")
 
 
     def _on_delete_clicked(self):
