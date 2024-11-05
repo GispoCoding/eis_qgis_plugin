@@ -58,13 +58,20 @@
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="raster_layer_label">
+        <property name="toolTip">
+         <string>Input raster dataset with anomalies to calculate distances to</string>
+        </property>
         <property name="text">
          <string>Input raster layer</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QgsMapLayerComboBox" name="raster_layer"/>
+       <widget class="QgsMapLayerComboBox" name="raster_layer">
+        <property name="toolTip">
+         <string>Input raster dataset with anomalies to calculate distances to</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -77,6 +84,9 @@
      <layout class="QFormLayout" name="formLayout_2">
       <item row="1" column="0">
        <widget class="QLabel" name="threshold_label_1">
+        <property name="toolTip">
+         <string>Threshold value to define anomalous pixels.</string>
+        </property>
         <property name="text">
          <string>Threshold value</string>
         </property>
@@ -84,6 +94,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QgsDoubleSpinBox" name="threshold_1">
+        <property name="toolTip">
+         <string>Threshold value to define anomalous pixels.</string>
+        </property>
         <property name="decimals">
          <number>3</number>
         </property>
@@ -97,6 +110,9 @@
       </item>
       <item row="2" column="1">
        <widget class="QgsDoubleSpinBox" name="threshold_2">
+        <property name="toolTip">
+         <string>Second threshold value to define anomalous pixels. Only needed when threshold criteria is either 'in-between' or 'outside'.</string>
+        </property>
         <property name="decimals">
          <number>3</number>
         </property>
@@ -110,13 +126,34 @@
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="threshold_label_2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Second threshold value to define anomalous pixels. Only needed when threshold criteria is either 'in-between' or 'outside'.</string>
+        </property>
         <property name="text">
          <string>Threshold value higher</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="threshold_criteria_label">
+        <property name="toolTip">
+         <string>Threshold criteria to define anomalous pixels.</string>
+        </property>
         <property name="text">
          <string>Threshold criteria</string>
         </property>
@@ -124,6 +161,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="threshold_criteria">
+        <property name="toolTip">
+         <string>Threshold criteria to define anomalous pixels.</string>
+        </property>
         <item>
          <property name="text">
           <string>Higher</string>
@@ -148,13 +188,19 @@
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label">
+        <property name="toolTip">
+         <string>Maximum distance (optional). All pixels beyond max distance will be assigned value equal to max distance.</string>
+        </property>
         <property name="text">
-         <string>Max distance</string>
+         <string>Max distance (optional)</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
        <widget class="QgsDoubleSpinBox" name="max_distance">
+        <property name="toolTip">
+         <string>Maximum distance (optional). All pixels beyond max distance will be assigned value equal to max distance.</string>
+        </property>
         <property name="specialValueText">
          <string>Not set</string>
         </property>
