@@ -99,6 +99,11 @@ QListWidget::item::selected {
      </item>
      <item>
       <property name="text">
+       <string>Evaluation</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>History</string>
       </property>
      </item>

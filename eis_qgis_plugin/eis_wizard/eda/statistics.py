@@ -167,7 +167,11 @@ class EISWizardStatistics(QWidget, FORM_CLASS):
         decimals = self.decimals.value()
         for dict_key, widget in self.descriptive_stats_widgets.items():
             value = descriptive_statistics_results.get(dict_key)
-            if value:
+            if str(value) == "0.0":
+                str_value = "0.0"
+            elif str(value) == "0":
+                str_value = "0"
+            elif value:
                 if decimals > 0:
                     str_value = str(round(value, decimals))
                 else:

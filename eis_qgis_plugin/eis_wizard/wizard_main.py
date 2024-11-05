@@ -8,6 +8,7 @@ from qgis.utils import iface
 from eis_qgis_plugin.eis_wizard.modeling.model_manager import ModelManager
 from eis_qgis_plugin.eis_wizard.wizard_about import EISWizardAbout
 from eis_qgis_plugin.eis_wizard.wizard_eda import EISWizardEDA
+from eis_qgis_plugin.eis_wizard.wizard_evaluation import EISWizardEvaluation
 from eis_qgis_plugin.eis_wizard.wizard_history import EISWizardHistory
 from eis_qgis_plugin.eis_wizard.wizard_modeling import EISWizardModeling
 from eis_qgis_plugin.eis_wizard.wizard_proxies import EISWizardProxies
@@ -72,6 +73,10 @@ class EISWizard(QWidget, FORM_CLASS):
             # Icon by Icons8
             ("Modeling", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/modeling.png"))),
 
+            # Icon by Freepik
+            # <a href="https://www.freepik.com/icons/evaluation#uuid=6eb06c0e-fec2-480e-b519-6a6c47e0a2b0">Icon by Dewi Sari</a>
+            ("Evaluation", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/evaluation2.png"))),
+
             # Icon 2: <a href="https://www.flaticon.com/free-icons/history" title="history icons">
             # History icons created by Irfansusanto20 - Flaticon</a>
             ("History", QIcon(os.path.join(PLUGIN_PATH, "resources/icons/history2.png"))),
@@ -99,7 +104,7 @@ class EISWizard(QWidget, FORM_CLASS):
 
         # Create Settings page first
         self.settings_page = EISWizardSettings(self)
-        self.pages_widget.insertWidget(4, self.settings_page)
+        self.pages_widget.insertWidget(5, self.settings_page)
 
         self.proxies_page = EISWizardProxies(self)
         self.pages_widget.insertWidget(0, self.proxies_page)
@@ -111,11 +116,14 @@ class EISWizard(QWidget, FORM_CLASS):
         self.pages_widget.insertWidget(2, self.model_page)
         # self.pages_widget.insertWidget(2, QWidget())
 
+        self.evaluation_page = EISWizardEvaluation(self)
+        self.pages_widget.insertWidget(3, self.evaluation_page)
+
         self.history_page = EISWizardHistory(self, self.model_manager)
-        self.pages_widget.insertWidget(3, self.history_page)
+        self.pages_widget.insertWidget(4, self.history_page)
 
         self.about_page = EISWizardAbout(self)
-        self.pages_widget.insertWidget(5, self.about_page)
+        self.pages_widget.insertWidget(6, self.about_page)
 
         # Set menu
         # self.menu_widget.setMinimumWidth(
