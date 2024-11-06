@@ -34,13 +34,13 @@ from matplotlib.axis import Axis
 from matplotlib.scale import ScaleBase
 from pandas import Series
 
-from seaborn._core.rules import categorical_order
-from seaborn._core.typing import Default, default
+from eis_qgis_plugin.libs.seaborn._core.rules import categorical_order
+from eis_qgis_plugin.libs.seaborn._core.typing import Default, default
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from seaborn._core.plot import Plot
-    from seaborn._core.properties import Property
+    from eis_qgis_plugin.libs.seaborn._core.plot import Plot
+    from eis_qgis_plugin.libs.seaborn._core.properties import Property
     from numpy.typing import ArrayLike, NDArray
 
     TransFuncs = Tuple[

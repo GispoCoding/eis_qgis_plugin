@@ -10,10 +10,10 @@ from matplotlib.colors import to_rgb, to_rgba, to_rgba_array
 from matplotlib.markers import MarkerStyle
 from matplotlib.path import Path
 
-from seaborn._core.scales import Scale, Boolean, Continuous, Nominal, Temporal
-from seaborn._core.rules import categorical_order, variable_type
-from seaborn.palettes import QUAL_PALETTES, color_palette, blend_palette
-from seaborn.utils import get_color_cycle
+from eis_qgis_plugin.libs.seaborn._core.scales import Scale, Boolean, Continuous, Nominal, Temporal
+from eis_qgis_plugin.libs.seaborn._core.rules import categorical_order, variable_type
+from eis_qgis_plugin.libs.seaborn.palettes import QUAL_PALETTES, color_palette, blend_palette
+from eis_qgis_plugin.libs.seaborn.utils import get_color_cycle
 
 from typing import Any, Callable, Tuple, List, Union, Optional
 

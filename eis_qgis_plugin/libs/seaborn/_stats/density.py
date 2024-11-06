@@ -10,12 +10,12 @@ try:
     from scipy.stats import gaussian_kde
     _no_scipy = False
 except ImportError:
-    from seaborn.external.kde import gaussian_kde
+    from eis_qgis_plugin.libs.seaborn.external.kde import gaussian_kde
     _no_scipy = True
 
-from seaborn._core.groupby import GroupBy
-from seaborn._core.scales import Scale
-from seaborn._stats.base import Stat
+from eis_qgis_plugin.libs.seaborn._core.groupby import GroupBy
+from eis_qgis_plugin.libs.seaborn._core.scales import Scale
+from eis_qgis_plugin.libs.seaborn._stats.base import Stat
 
 
 @dataclass

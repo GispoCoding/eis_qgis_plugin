@@ -5,14 +5,14 @@ from typing import ClassVar, Callable
 import pandas as pd
 from pandas import DataFrame
 
-from seaborn._core.scales import Scale
-from seaborn._core.groupby import GroupBy
-from seaborn._stats.base import Stat
-from seaborn._statistics import (
+from eis_qgis_plugin.libs.seaborn._core.scales import Scale
+from eis_qgis_plugin.libs.seaborn._core.groupby import GroupBy
+from eis_qgis_plugin.libs.seaborn._stats.base import Stat
+from eis_qgis_plugin.libs.seaborn._statistics import (
     EstimateAggregator,
     WeightedAggregator,
 )
-from seaborn._core.typing import Vector
+from eis_qgis_plugin.libs.seaborn._core.typing import Vector
 
 
 @dataclass

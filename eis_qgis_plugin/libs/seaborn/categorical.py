@@ -14,11 +14,11 @@ from matplotlib.markers import MarkerStyle
 from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 
-from seaborn._core.typing import default, deprecated
-from seaborn._base import VectorPlotter, infer_orient, categorical_order
-from seaborn._stats.density import KDE
-from seaborn import utils
-from seaborn.utils import (
+from eis_qgis_plugin.libs.seaborn._core.typing import default, deprecated
+from eis_qgis_plugin.libs.seaborn._base import VectorPlotter, infer_orient, categorical_order
+from eis_qgis_plugin.libs.seaborn._stats.density import KDE
+from eis_qgis_plugin.libs.seaborn import utils
+from eis_qgis_plugin.libs.seaborn.utils import (
     desaturate,
     _check_argument,
     _draw_figure,
@@ -28,14 +28,14 @@ from seaborn.utils import (
     _scatter_legend_artist,
     _version_predates,
 )
-from seaborn._compat import groupby_apply_include_groups
-from seaborn._statistics import (
+from eis_qgis_plugin.libs.seaborn._compat import groupby_apply_include_groups
+from eis_qgis_plugin.libs.seaborn._statistics import (
     EstimateAggregator,
     LetterValues,
     WeightedAggregator,
 )
-from seaborn.palettes import light_palette
-from seaborn.axisgrid import FacetGrid, _facet_docs
+from eis_qgis_plugin.libs.seaborn.palettes import light_palette
+from eis_qgis_plugin.libs.seaborn.axisgrid import FacetGrid, _facet_docs
 
 
 __all__ = [
