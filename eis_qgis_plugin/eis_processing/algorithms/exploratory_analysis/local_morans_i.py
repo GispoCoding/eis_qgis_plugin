@@ -41,7 +41,8 @@ class EISLocalMoransI(EISProcessingAlgorithm):
         column_param = QgsProcessingParameterField(
             name=self.alg_parameters[1],
             description="Column",
-            parentLayerParameterName=self.alg_parameters[0]
+            parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric
         )
         column_param.setHelp("The column to be used in the analysis.")
         self.addParameter(column_param)
