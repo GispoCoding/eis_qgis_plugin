@@ -142,8 +142,7 @@ class DockerEnvironmentHandler(EnvironmentHandler):
         """
         try:
             cmd = [
-                self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-m",
-                "pip", "show", "eis_toolkit"
+                self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-c", "import eis_toolkit"
             ]
             result = subprocess.run(
                 cmd,
@@ -155,59 +154,61 @@ class DockerEnvironmentHandler(EnvironmentHandler):
 
             if result.returncode != 0:
                 return False, f"EIS Toolkit is not installed in the Docker image '{self.image_name}."
+            
+            return True, f"EIS Toolkit is installed in the Docker image '{self.image_name}'."
 
             # Parse the output to extract the version of EIS Toolkit
-            version = None
-            for line in result.stdout.splitlines():
-                if line.startswith("Version:"):
-                    version = line.split("Version:")[1].strip()
+            # version = None
+            # for line in result.stdout.splitlines():
+            #     if line.startswith("Version:"):
+            #         version = line.split("Version:")[1].strip()
 
-            if version is None:
-                return False, "EIS Toolkit version information could not be retrieved."
+            # if version is None:
+            #     return False, "EIS Toolkit version information could not be retrieved."
 
-            if version != required_version:
-                return (
-                    False,
-                    f"EIS Toolkit version {version} is installed, but version {required_version} is required."
-                )
+            # if version != required_version:
+            #     return (
+            #         False,
+            #         f"EIS Toolkit version {version} is installed, but version {required_version} is required."
+            #     )
 
-            return True, f"EIS Toolkit version {version} is correctly installed."
+            # return True, f"EIS Toolkit version {version} is correctly installed."
 
         except subprocess.CalledProcessError as e:
             return False, f"EIS Toolkit is not installed in the Docker image '{self.image_name}'. Error: {e.stderr}"
 
 
-    def upgrade_toolkit(self, env) -> Tuple[bool, str]:
-        """
-        Upgrades EIS Toolkit to the latest version in the specified Docker image.
+    # def upgrade_toolkit(self, env) -> Tuple[bool, str]:
+    #     """
+    #     Upgrades EIS Toolkit to the latest version in the specified Docker image.
 
-        Args:
-            env: Environment variables to pass to the subprocess (to avoid QGIS interference).
+    #     Args:
+    #         env: Environment variables to pass to the subprocess (to avoid QGIS interference).
 
-        Returns:
-            A tuple where the first element is a boolean indicating success, and
-            the second element is a message describing the result.
-        """
-        try:
-            cmd = [
-                self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-m",
-                "pip", "install", "eis_toolkit", "--upgrade"
-            ]
-            result = subprocess.run(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True,
-                env=env
-            )
+    #     Returns:
+    #         A tuple where the first element is a boolean indicating success, and
+    #         the second element is a message describing the result.
+    #     """
+    #     try:
+    #         cmd = [
+    #             self.docker_path, "run", "--rm", self.image_name, "poetry", "run", "python", "-m",
+    #             "pip", "install", "eis_toolkit", "--upgrade"
+    #         ]
+    #         result = subprocess.run(
+    #             cmd,
+    #             stdout=subprocess.PIPE,
+    #             stderr=subprocess.PIPE,
+    #             universal_newlines=True,
+    #             env=env
+    #         )
 
-            if result.returncode == 0:
-                return True, "EIS Toolkit was successfully upgraded in the Docker image."
-            else:
-                return False, f"Failed to upgrade EIS Toolkit in the Docker image: {result.stderr}"
+    #         if result.returncode == 0:
+    #             return True, "EIS Toolkit was successfully upgraded in the Docker image."
+    #         else:
+    #             return False, f"Failed to upgrade EIS Toolkit in the Docker image: {result.stderr}"
 
-        except subprocess.CalledProcessError as e:
-            return False, f"Failed to upgrade EIS Toolkit in the Docker image: {e.stderr}"
+    #     except subprocess.CalledProcessError as e:
+    #         return False, f"Failed to upgrade EIS Toolkit in the Docker image: {e.stderr}"
 
 
 class VenvEnvironmentHandler(EnvironmentHandler):

@@ -101,10 +101,12 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
             self.conf_stack.setCurrentIndex(1)
             self.set_docker_selection()
             self.conf_stack.setMaximumHeight(16777215)  # Max height
+            self.upgrade_btn.setEnabled(False)
         else:
             self.conf_stack.setCurrentIndex(0)
             self.set_venv_selection()
             self.conf_stack.setMaximumHeight(CONF_BOX_VENV_HEIGHT)
+            self.upgrade_btn.setEnabled(True)
 
 
     def set_docker_selection(self):
