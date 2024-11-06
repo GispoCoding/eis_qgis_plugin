@@ -10,10 +10,10 @@ except ImportError:
 import numpy as np
 from pandas import DataFrame
 
-from eis_qgis_plugin.libs.seaborn._core.scales import Scale
-from eis_qgis_plugin.libs.seaborn._core.groupby import GroupBy
-from eis_qgis_plugin.libs.seaborn._stats.base import Stat
-from eis_qgis_plugin.libs.seaborn.utils import _version_predates
+from seaborn._core.scales import Scale
+from seaborn._core.groupby import GroupBy
+from seaborn._stats.base import Stat
+from seaborn.utils import _version_predates
 
 
 # From https://github.com/numpy/numpy/blob/main/numpy/lib/function_base.pyi

@@ -34,13 +34,13 @@ from matplotlib.axis import Axis
 from matplotlib.scale import ScaleBase
 from pandas import Series
 
-from eis_qgis_plugin.libs.seaborn._core.rules import categorical_order
-from eis_qgis_plugin.libs.seaborn._core.typing import Default, default
+from seaborn._core.rules import categorical_order
+from seaborn._core.typing import Default, default
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from eis_qgis_plugin.libs.seaborn._core.plot import Plot
-    from eis_qgis_plugin.libs.seaborn._core.properties import Property
+    from seaborn._core.plot import Plot
+    from seaborn._core.properties import Property
     from numpy.typing import ArrayLike, NDArray
 
     TransFuncs = Tuple[
@@ -278,8 +278,6 @@ class Nominal(Scale):
         # major_formatter = new._get_formatter(major_locator, **new._label_params)
 
         class CatScale(mpl.scale.LinearScale):
-            name = None  # To work around mpl<3.4 compat issues
-
             def set_default_locators_and_formatters(self, axis):
                 ...
                 # axis.set_major_locator(major_locator)

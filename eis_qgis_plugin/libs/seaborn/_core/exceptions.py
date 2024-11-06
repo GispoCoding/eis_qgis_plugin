@@ -9,7 +9,7 @@ from __future__ import annotations
 
 class PlotSpecError(RuntimeError):
     """
-    Error class raised from eis_qgis_plugin.libs.seaborn.objects.Plot for compile-time failures.
+    Error class raised from seaborn.objects.Plot for compile-time failures.
 
     In the declarative Plot interface, exceptions may not be triggered immediately
     by bad user input (and validation at input time may not be possible). This class

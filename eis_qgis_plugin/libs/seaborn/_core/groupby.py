@@ -5,7 +5,7 @@ from typing import cast, Iterable
 
 import pandas as pd
 
-from eis_qgis_plugin.libs.seaborn._core.rules import categorical_order
+from seaborn._core.rules import categorical_order
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:

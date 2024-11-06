@@ -26,24 +26,24 @@ See the documentation for other :class:`Plot` methods to learn about the many
 ways that a plot can be enhanced and customized.
 
 """
-from eis_qgis_plugin.libs.seaborn._core.plot import Plot  # noqa: F401
+from seaborn._core.plot import Plot  # noqa: F401
 
-from eis_qgis_plugin.libs.seaborn._marks.base import Mark  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._marks.area import Area, Band  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._marks.bar import Bar, Bars  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._marks.dot import Dot, Dots  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._marks.line import Dash, Line, Lines, Path, Paths, Range  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._marks.text import Text  # noqa: F401
+from seaborn._marks.base import Mark  # noqa: F401
+from seaborn._marks.area import Area, Band  # noqa: F401
+from seaborn._marks.bar import Bar, Bars  # noqa: F401
+from seaborn._marks.dot import Dot, Dots  # noqa: F401
+from seaborn._marks.line import Dash, Line, Lines, Path, Paths, Range  # noqa: F401
+from seaborn._marks.text import Text  # noqa: F401
 
-from eis_qgis_plugin.libs.seaborn._stats.base import Stat  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._stats.aggregation import Agg, Est  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._stats.counting import Count, Hist  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._stats.density import KDE  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._stats.order import Perc  # noqa: F401
-from eis_qgis_plugin.libs.seaborn._stats.regression import PolyFit  # noqa: F401
+from seaborn._stats.base import Stat  # noqa: F401
+from seaborn._stats.aggregation import Agg, Est  # noqa: F401
+from seaborn._stats.counting import Count, Hist  # noqa: F401
+from seaborn._stats.density import KDE  # noqa: F401
+from seaborn._stats.order import Perc  # noqa: F401
+from seaborn._stats.regression import PolyFit  # noqa: F401
 
-from eis_qgis_plugin.libs.seaborn._core.moves import Dodge, Jitter, Norm, Shift, Stack, Move  # noqa: F401
+from seaborn._core.moves import Dodge, Jitter, Norm, Shift, Stack, Move  # noqa: F401
 
-from eis_qgis_plugin.libs.seaborn._core.scales import (  # noqa: F401
+from seaborn._core.scales import (  # noqa: F401
     Boolean, Continuous, Nominal, Temporal, Scale
 )
