@@ -66,7 +66,7 @@ class EISToolkitInvoker:
         index = stdout.find("%")
         if index == -1:
             return
-        progress = stdout[index-3:index].strip()
+        progress = stdout.split()[-1][:-1].strip()
         feedback.setProgress(int(progress))
         feedback.pushInfo(f"Progress: {progress}%")
 
