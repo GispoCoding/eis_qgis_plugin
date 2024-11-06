@@ -48,7 +48,6 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
         self.docker_temp_folder: QgsFileWidget
 
         self.environment_status_line: QLineEdit
-        self.python_version_line: QLineEdit
         self.eis_toolkit_status_line: QLineEdit
         
         self.environment_button_box: QDialogButtonBox
@@ -90,7 +89,6 @@ class EISWizardToolkitConfiguration(QWidget, FORM_CLASS):
     def reset_verification_labels(self, text = None):
         """Reset verification widgets."""
         self.environment_status_line.clear()
-        self.python_version_line.clear()
         self.eis_toolkit_status_line.clear()
 
         # self.environment_validity_label.setStyleSheet("color: black;")
