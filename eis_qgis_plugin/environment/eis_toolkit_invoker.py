@@ -10,7 +10,6 @@ from typing import Dict, List, TextIO, Tuple
 from qgis.core import QgsProcessingFeedback, QgsProject, QgsRasterLayer
 
 from eis_qgis_plugin.environment.eis_environment_handler import DockerEnvironmentHandler, VenvEnvironmentHandler
-from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
@@ -21,6 +20,10 @@ logger = logging.getLogger(__name__)
 
 class TerminationException(Exception):
     """Exception error class raised if process is terminated by user."""
+
+
+class EnvironmentException(Exception):
+    """Exception error class raised if environment configuration is invalid."""
 
 
 class EISToolkitInvoker:
@@ -118,9 +121,18 @@ class EISToolkitInvoker:
             typer_args: List of arguments for the Typer CLI.
             typer_options: List of options for the Typer CLI.
         """
+        if isinstance(self.environment_handler, VenvEnvironmentHandler) and not self.environment_handler.venv_directory:
+            raise EnvironmentException(
+                "EIS Toolkit environment has not been set, cannot execute EIS tools! Configure EIS Toolkit " +
+                "in Settings page of EIS Wizard.")
+        if isinstance(self.environment_handler, DockerEnvironmentHandler) and not self.environment_handler.docker_path:
+            raise EnvironmentException(
+                "EIS Toolkit environment has not been set, cannot execute EIS tools! Configure EIS Toolkit " +
+                "in Settings page of EIS Wizard.")
+
         formatted_alg_name = self._format_algorithm_name(alg_name)
         self.cmd = self.environment_handler.assemble_cli_cmd(formatted_alg_name, typer_args, typer_options)
-        
+
         if DEBUG:
             print(f"Assembled command: {self.cmd}")
             logging.debug("Assembled CLI command: %s", self.cmd)
@@ -143,7 +155,6 @@ class EISToolkitInvoker:
     def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> Dict:
         """Runs the toolkit command and captures the output."""
         if not self.cmd:
-            EISMessageManager().show_message("Assemble a CLI call before trying to run EIS Toolkit.", "error")
             return
 
         results = {}
