@@ -10,8 +10,8 @@ import warnings
 import pandas as pd
 from pandas import DataFrame
 
-from eis_qgis_plugin.libs.seaborn._core.typing import DataSource, VariableSpec, ColumnName
-from eis_qgis_plugin.libs.seaborn.utils import _version_predates
+from seaborn._core.typing import DataSource, VariableSpec, ColumnName
+from seaborn.utils import _version_predates
 
 
 class PlotData:
