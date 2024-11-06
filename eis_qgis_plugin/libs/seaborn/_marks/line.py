@@ -5,7 +5,7 @@ from typing import ClassVar
 import numpy as np
 import matplotlib as mpl
 
-from seaborn._marks.base import (
+from eis_qgis_plugin.libs.seaborn._marks.base import (
     Mark,
     Mappable,
     MappableFloat,

@@ -23,27 +23,27 @@ from matplotlib.figure import Figure
 import numpy as np
 from PIL import Image
 
-from seaborn._marks.base import Mark
-from seaborn._stats.base import Stat
-from seaborn._core.data import PlotData
-from seaborn._core.moves import Move
-from seaborn._core.scales import Scale
-from seaborn._core.subplots import Subplots
-from seaborn._core.groupby import GroupBy
-from seaborn._core.properties import PROPERTIES, Property
-from seaborn._core.typing import (
+from eis_qgis_plugin.libs.seaborn._marks.base import Mark
+from eis_qgis_plugin.libs.seaborn._stats.base import Stat
+from eis_qgis_plugin.libs.seaborn._core.data import PlotData
+from eis_qgis_plugin.libs.seaborn._core.moves import Move
+from eis_qgis_plugin.libs.seaborn._core.scales import Scale
+from eis_qgis_plugin.libs.seaborn._core.subplots import Subplots
+from eis_qgis_plugin.libs.seaborn._core.groupby import GroupBy
+from eis_qgis_plugin.libs.seaborn._core.properties import PROPERTIES, Property
+from eis_qgis_plugin.libs.seaborn._core.typing import (
     DataSource,
     VariableSpec,
     VariableSpecList,
     OrderSpec,
     Default,
 )
-from seaborn._core.exceptions import PlotSpecError
-from seaborn._core.rules import categorical_order
-from seaborn._compat import get_layout_engine, set_layout_engine
-from seaborn.utils import _version_predates
-from seaborn.rcmod import axes_style, plotting_context
-from seaborn.palettes import color_palette
+from eis_qgis_plugin.libs.seaborn._core.exceptions import PlotSpecError
+from eis_qgis_plugin.libs.seaborn._core.rules import categorical_order
+from eis_qgis_plugin.libs.seaborn._compat import get_layout_engine, set_layout_engine
+from eis_qgis_plugin.libs.seaborn.utils import _version_predates
+from eis_qgis_plugin.libs.seaborn.rcmod import axes_style, plotting_context
+from eis_qgis_plugin.libs.seaborn.palettes import color_palette
 
 from typing import TYPE_CHECKING, TypedDict
 if TYPE_CHECKING:

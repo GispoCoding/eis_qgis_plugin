@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import matplotlib as mpl
 from matplotlib.figure import Figure
-from seaborn.utils import _version_predates
+from eis_qgis_plugin.libs.seaborn.utils import _version_predates
 
 
 def norm_from_scale(scale, norm):

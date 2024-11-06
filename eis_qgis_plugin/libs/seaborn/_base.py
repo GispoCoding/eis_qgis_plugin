@@ -11,12 +11,12 @@ import numpy as np
 import pandas as pd
 import matplotlib as mpl
 
-from seaborn._core.data import PlotData
-from seaborn.palettes import (
+from eis_qgis_plugin.libs.seaborn._core.data import PlotData
+from eis_qgis_plugin.libs.seaborn.palettes import (
     QUAL_PALETTES,
     color_palette,
 )
-from seaborn.utils import (
+from eis_qgis_plugin.libs.seaborn.utils import (
     _check_argument,
     _version_predates,
     desaturate,

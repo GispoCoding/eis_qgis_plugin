@@ -14,9 +14,9 @@ from matplotlib.colors import to_rgb
 import matplotlib.pyplot as plt
 from matplotlib.cbook import normalize_kwargs
 
-from seaborn._core.typing import deprecated
-from seaborn.external.version import Version
-from seaborn.external.appdirs import user_cache_dir
+from eis_qgis_plugin.libs.seaborn._core.typing import deprecated
+from eis_qgis_plugin.libs.seaborn.external.version import Version
+from eis_qgis_plugin.libs.seaborn.external.appdirs import user_cache_dir
 
 __all__ = ["desaturate", "saturate", "set_hls_values", "move_legend",
            "despine", "get_dataset_names", "get_data_home", "load_dataset"]
@@ -408,7 +408,7 @@ def move_legend(obj, loc, **kwargs):
     # upstream improvements to matplotlib legends that make them easier to
     # modify after creation.
 
-    from seaborn.axisgrid import Grid  # Avoid circular import
+    from eis_qgis_plugin.libs.seaborn.axisgrid import Grid  # Avoid circular import
 
     # Locate the legend object and a method to recreate the legend
     if isinstance(obj, Grid):
@@ -433,7 +433,7 @@ def move_legend(obj, loc, **kwargs):
 
     # Extract the components of the legend we need to reuse
     # Import here to avoid a circular import
-    from seaborn._compat import get_legend_handles
+    from eis_qgis_plugin.libs.seaborn._compat import get_legend_handles
     handles = get_legend_handles(old_legend)
     labels = [t.get_text() for t in old_legend.get_texts()]
 

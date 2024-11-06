@@ -12,15 +12,15 @@ from numpy import ndarray
 from pandas import DataFrame
 from matplotlib.artist import Artist
 
-from seaborn._core.scales import Scale
-from seaborn._core.properties import (
+from eis_qgis_plugin.libs.seaborn._core.scales import Scale
+from eis_qgis_plugin.libs.seaborn._core.properties import (
     PROPERTIES,
     Property,
     RGBATuple,
     DashPattern,
     DashPatternWithOffset,
 )
-from seaborn._core.exceptions import PlotSpecError
+from eis_qgis_plugin.libs.seaborn._core.exceptions import PlotSpecError
 
 
 class Mappable:

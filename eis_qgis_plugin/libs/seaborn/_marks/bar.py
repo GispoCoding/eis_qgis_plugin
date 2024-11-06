@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import numpy as np
 import matplotlib as mpl
 
-from seaborn._marks.base import (
+from eis_qgis_plugin.libs.seaborn._marks.base import (
     Mark,
     Mappable,
     MappableBool,
@@ -21,7 +21,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Any
     from matplotlib.artist import Artist
-    from seaborn._core.scales import Scale
+    from eis_qgis_plugin.libs.seaborn._core.scales import Scale
 
 
 class BarBase(Mark):

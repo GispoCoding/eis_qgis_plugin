@@ -9,7 +9,7 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:  # TODO move to seaborn._core.typing?
-    from seaborn._core.plot import FacetSpec, PairSpec
+    from eis_qgis_plugin.libs.seaborn._core.plot import FacetSpec, PairSpec
     from matplotlib.figure import SubFigure
 
 

@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
-from seaborn._core.groupby import GroupBy
-from seaborn._core.scales import Scale
-from seaborn._stats.base import Stat
+from eis_qgis_plugin.libs.seaborn._core.groupby import GroupBy
+from eis_qgis_plugin.libs.seaborn._core.scales import Scale
+from eis_qgis_plugin.libs.seaborn._stats.base import Stat
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
