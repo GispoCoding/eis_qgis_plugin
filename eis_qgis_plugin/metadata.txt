@@ -22,6 +22,6 @@ tracker=https://github.com/GispoCoding/eis_qgis_plugin/issues
 homepage=https://github.com/GispoCoding/eis_qgis_plugin
 icon=resources/icons/icon4.png
 category=Plugins
-experimental=True
+experimental=False
 deprecated=False
 hasProcessingProvider=yes
