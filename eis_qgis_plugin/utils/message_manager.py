@@ -1,6 +1,7 @@
 from typing import Literal, Optional
 
-from qgis.gui import Qgis, QgsMessageBar
+from qgis.core import Qgis
+from qgis.gui import QgsMessageBar
 
 
 class EISMessageManager:
