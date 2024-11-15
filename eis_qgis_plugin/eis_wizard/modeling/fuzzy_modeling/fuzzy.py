@@ -4,18 +4,19 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from qgis import processing
-from qgis.core import QgsMapLayerProxyModel, QgsRasterLayer
+from qgis.core import QgsApplication, QgsMapLayerProxyModel, QgsProject, QgsRasterLayer
 from qgis.gui import QgsDoubleSpinBox, QgsFileWidget, QgsMapLayerComboBox
 from qgis.PyQt.QtWidgets import (
     QCheckBox,
     QComboBox,
+    QDialogButtonBox,
     QFrame,
     QGroupBox,
-    QPushButton,
+    QProgressBar,
     QSizePolicy,
     QStackedWidget,
     QTabWidget,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -33,11 +34,16 @@ from eis_qgis_plugin.eis_wizard.modeling.fuzzy_modeling.fuzzy_memberships import
 from eis_qgis_plugin.eis_wizard.modeling.machine_learning.data_preparation import EISMLModelDataPreparation
 from eis_qgis_plugin.eis_wizard.modeling.model_data_table import ModelTrainingDataTable
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
-from eis_qgis_plugin.utils.misc_utils import get_output_path, set_placeholder_text
-
-# from eis_qgis_plugin.eis_processing.algorithms.prediction.fuzzy_overlay import (
-
-# )
+from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
+from eis_qgis_plugin.utils.misc_utils import (
+    add_output_layer_to_group,
+    apply_color_ramp_to_raster_layer,
+    get_output_layer_name,
+    get_output_path,
+    set_placeholder_text,
+)
+from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
+from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 FORM_CLASS: QWidget = load_ui("modeling/wizard_fuzzy_modeling.ui")
 
@@ -79,10 +85,8 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
 
         self.small_function_midpoint: QgsDoubleSpinBox
         self.small_function_spread: QgsDoubleSpinBox
-
-        self.reset_btn: QPushButton
-        self.preview_btn: QPushButton
-        self.run_membership_btn: QPushButton
+        
+        self.button_box_memberships: QDialogButtonBox
 
         self.membership_plot_container: QFrame
 
@@ -101,11 +105,17 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         self.output_raster_overlay_box: QGroupBox
         self.output_raster_overlay: QgsFileWidget
 
-        self.run_overlay_btn: QPushButton
+        self.button_box_overlay: QDialogButtonBox
+
+        self.overlay_log: QTextEdit
+        self.overlay_progress_bar: QProgressBar
 
         self.data_preparation = EISMLModelDataPreparation(parent=self.fuzzy_modeling_tabs, model_main=self)
         self.fuzzy_modeling_tabs.insertTab(0, self.data_preparation, "Data preparation")
         self.fuzzy_modeling_tabs.setCurrentIndex(0)
+
+        self.overlay_feedback = EISProcessingFeedback(self.overlay_log, self.overlay_progress_bar)
+        self.executor = AlgorithmExecutor()
 
         # INITIALIZE MEMBERSHIPS AND LINK WIDGETS
         self.initialize_memberships()
@@ -115,6 +125,28 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
 
         # CONNECT SIGNALS
         self.connect_signals()
+
+
+    def on_algorithm_executor_finished(self, result, _):
+        if self.overlay_feedback.no_errors:
+            for (layer_name, output_layer, output_path) in self.output_layers:
+                layer = QgsRasterLayer(result[output_layer], get_output_layer_name(output_path, layer_name))
+                if EISSettingsManager.get_layer_group_selection():
+                    add_output_layer_to_group(layer, "Modeling — Fuzzy")
+                else:
+                    QgsProject.instance().addMapLayer(layer, True)
+
+                apply_color_ramp_to_raster_layer(layer, EISSettingsManager.get_raster_color_ramp())
+
+
+    def on_algorithm_executor_error(self, error_message: str):
+        pass
+
+
+    def on_algorithm_executor_terminated(self):
+        self.overlay_feedback = EISProcessingFeedback(
+            text_edit=self.overlay_log, progress_bar=self.overlay_progress_bar
+        )
 
 
     def initialize_memberships(self):
@@ -169,12 +201,29 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
 
     def connect_signals(self):
         """Connect signals emitted by widgets to functions."""
-        self.reset_btn.clicked.connect(self._on_reset_clicked)
+        self.memberships_run_btn = self.button_box_memberships.button(QDialogButtonBox.Ok)
+        self.memberships_run_btn.setText("Run")
+        self.memberships_run_btn.setIcon(QgsApplication.getThemeIcon("mActionStart.svg"))
+        self.button_box_memberships.button(QDialogButtonBox.RestoreDefaults).setAutoDefault(False)
+        self.preview_btn = self.button_box_memberships.addButton("Preview", QDialogButtonBox.ActionRole)
+        self.preview_btn.setIcon(QgsApplication.getThemeIcon("mActionZoomTo.svg"))
+
+        self.cancel_overlay_btn = self.button_box_overlay.button(QDialogButtonBox.Cancel)
+        self.cancel_overlay_btn.setText("Cancel")
+        self.overlay_run_btn = self.button_box_overlay.button(QDialogButtonBox.Ok)
+        self.overlay_run_btn.setText("Run")
+        self.overlay_run_btn.setIcon(QgsApplication.getThemeIcon("mActionStart.svg"))
+
+        self.button_box_memberships.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self._on_reset_clicked)
         self.preview_btn.clicked.connect(self._on_preview_clicked)
-        self.run_membership_btn.clicked.connect(self._on_run_membership_clicked)
-        self.run_overlay_btn.clicked.connect(self._on_run_overlay_clicked)
+        self.memberships_run_btn.clicked.connect(self._on_run_membership_clicked)
+        self.overlay_run_btn.clicked.connect(self._on_run_overlay_clicked)
 
         self.membership_type.currentIndexChanged['int'].connect(self.membership_parameters_pages.setCurrentIndex)
+
+        self.executor.finished.connect(self.on_algorithm_executor_finished)
+        self.executor.terminated.connect(self.on_algorithm_executor_terminated)
+        self.executor.error.connect(self.on_algorithm_executor_error)
 
 
     def get_active_membership(self) -> Tuple[str, FuzzyMembership]:
@@ -221,15 +270,15 @@ class EISWizardFuzzyModeling(QWidget, FORM_CLASS):
         else:
             raise ValueError("No overlay method selected, cannot run fuzzy ovelay.")
 
-        processing.runAndLoadResults(
-            "eis:fuzzy_overlay",
-            {
-                'input_rasters': self.input_rasters_table.get_layers(),
-                'overlay_method': overlay_method_index,
-                'gamma': self.gamma_value.value(),
-                'output_raster': get_output_path(self.output_raster_overlay)
-            }
-        )
+        params = {
+            'input_rasters': self.input_rasters_table.get_layers(),
+            'overlay_method': overlay_method_index,
+            'gamma': self.gamma_value.value(),
+            'output_raster': get_output_path(self.output_raster_overlay)
+        }
+        self.output_layers = [("Output overlay raster", "output_raster", self.output_raster_overlay)]
+        self.executor.configure("eis:fuzzy_overlay", self.overlay_feedback)
+        self.executor.run(params)
 
 
     @staticmethod
