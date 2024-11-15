@@ -88,6 +88,7 @@ class AlgorithmExecutor(QObject):
             return
         
         self._cleanup()
+        self.feedback.no_errors = True
         self.is_running = True
         self.start_time = time.perf_counter()
 
