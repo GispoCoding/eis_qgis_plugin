@@ -92,14 +92,16 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
         self.alg_parameters.pop(1)  # Remove overlay method from delivered parameters
         if alg_name != "gamma_overlay":
             self.alg_parameters.pop(1)  # Remove gamma parameter (now at index 1)
-        typer_args, typer_options, output_path = self.prepare_arguments(parameters, context)
 
+        typer_args, typer_options, output_paths = self.prepare_arguments(parameters, context)
+        
         toolkit_invoker = EISToolkitInvoker()
         toolkit_invoker.assemble_cli_command(alg_name, typer_args, typer_options)
         results = toolkit_invoker.run_toolkit_command(feedback)
 
         self.get_results(results, parameters)
-        results["output_path"] = output_path
+        for param_name, output_path in output_paths.items():
+            results[param_name] = output_path
 
         feedback.setProgress(100)
 
