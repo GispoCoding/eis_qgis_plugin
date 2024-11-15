@@ -19,3 +19,8 @@ class EISWizardEvaluation(QWidget, FORM_CLASS):
         self.plotting_page = EISWizardEvaluationPlotting()
         self.evaluation_tabs.addTab(self.statistics_page, "Statistics")
         self.evaluation_tabs.addTab(self.plotting_page, "Plotting")
+
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.plotting_page.update_plot_pixmap(self.evaluation_tabs.width() - 75)
