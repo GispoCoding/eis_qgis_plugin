@@ -92,18 +92,21 @@ def get_output_layer_name(output_raster_path: QgsFileWidget, default_output_name
         return os.path.splitext(os.path.basename(output_raster_path.filePath()))[0]
 
 
-def add_output_layer_to_group(layer, group_name: str, subgroup_name: str):
+def add_output_layer_to_group(layer, group_name: str, subgroup_name: Optional[str] = None):
     QgsProject.instance().addMapLayer(layer, False)
     root = QgsProject.instance().layerTreeRoot()
     group = root.findGroup(group_name)
     if not group:
         group = root.addGroup(group_name)
-    
-    category_subgroup = group.findGroup(subgroup_name)
-    if not category_subgroup:
-        category_subgroup = group.addGroup(subgroup_name)
-    
-    category_subgroup.addLayer(layer)
+
+    if subgroup_name is not None:
+        subgroup = group.findGroup(subgroup_name)
+        if not subgroup:
+            subgroup = group.addGroup(subgroup_name)
+
+        subgroup.addLayer(layer)
+    else:
+        group.addLayer(layer)
 
 
 def apply_color_ramp_to_raster_layer(raster_layer: QgsRasterLayer, color_ramp: QgsColorRamp):
