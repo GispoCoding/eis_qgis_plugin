@@ -3,7 +3,7 @@ import os
 from qgis import processing
 from qgis.core import QgsApplication, QgsMapLayerProxyModel
 from qgis.gui import QgsFileWidget, QgsMapLayerComboBox, QgsSpinBox
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import QSize, Qt
 from qgis.PyQt.QtGui import QIcon, QPixmap
 from qgis.PyQt.QtWidgets import QComboBox, QDialogButtonBox, QGroupBox, QLabel, QWidget
 
@@ -39,6 +39,8 @@ class EISWizardEvaluationPlotting(QWidget, FORM_CLASS):
         self.button_box: QDialogButtonBox
 
         # INIT
+        self.plot_pixmap = None
+
         self.clear_plot_btn = self.button_box.addButton("Clear plot", QDialogButtonBox.ActionRole)
         self.clear_plot_btn.setIcon(QIcon(QgsApplication.getThemeIcon("mActionDeleteSelected.svg")))
         self.clear_plot_btn.clicked.connect(self.clear_plot)
@@ -108,15 +110,21 @@ class EISWizardEvaluationPlotting(QWidget, FORM_CLASS):
         plot_fp = result["output_file"]
         # self.plot_label.setScaledContents(True)
         if os.path.exists(plot_fp):
-            pixmap = QPixmap(plot_fp)
-            scaled_pixmap = pixmap.scaled(
-                self.plot_label.size(), 
-                aspectRatioMode=Qt.KeepAspectRatio,
-                transformMode=Qt.SmoothTransformation
-            )
-            self.plot_label.setPixmap(scaled_pixmap)
+            self.plot_pixmap = QPixmap(plot_fp)
+            self.update_plot_pixmap(self.plot_label.width())
         else:
             EISMessageManager().show_message("Failed to produce plot, check log messages for error details.", "error")
 
     def clear_plot(self):
         self.plot_label.clear()
+
+    def update_plot_pixmap(self, max_width: int):
+        """Scale the stored pixmap to fit the QLabel size."""
+        if self.plot_pixmap and not self.plot_pixmap.isNull():
+            max_size = QSize(max_width, self.plot_label.height())
+            scaled_pixmap = self.plot_pixmap.scaled(
+                max_size,
+                aspectRatioMode=Qt.KeepAspectRatio,
+                transformMode=Qt.SmoothTransformation
+            )
+            self.plot_label.setPixmap(scaled_pixmap)
