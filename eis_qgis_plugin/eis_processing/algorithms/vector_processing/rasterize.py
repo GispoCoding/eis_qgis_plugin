@@ -47,8 +47,8 @@ class EISRasterize(EISProcessingAlgorithm):
             description="Value column",
             optional=True,
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
         )
-        # value_column_param.setDataType(Qgis.ProcessingFieldParameterDataType.Numeric)
         value_column_param.setHelp(
             "Column to be used when burning values. If not given, default value is used for all geometries.")
         self.addParameter(value_column_param)

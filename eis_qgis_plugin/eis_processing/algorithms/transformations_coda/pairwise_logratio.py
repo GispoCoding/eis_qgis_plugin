@@ -30,6 +30,7 @@ class EISPairwiseLogratio(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Numerator column",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
         )
         numerator_column_param.setHelp("Name of the column to use as the numerator column.")
         self.addParameter(numerator_column_param)
@@ -38,6 +39,7 @@ class EISPairwiseLogratio(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Denominator column",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
         )
         denominator_column_param.setHelp("Name of the column to use as the denominator column.")
         self.addParameter(denominator_column_param)

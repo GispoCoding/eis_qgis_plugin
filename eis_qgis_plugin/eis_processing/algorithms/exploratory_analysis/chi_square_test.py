@@ -36,6 +36,7 @@ class EISChiSquareTest(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Target column",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
         )
         target_column_param.setHelp("Variable against which independence of other variables is tested.")
         self.addParameter(target_column_param)
@@ -45,7 +46,8 @@ class EISChiSquareTest(EISProcessingAlgorithm):
             description="Other columns",
             allowMultiple=True,
             parentLayerParameterName=self.alg_parameters[0],
-            optional=True
+            optional=True,
+            type=QgsProcessingParameterField.Numeric,
         )
         columns_param.setHelp(
             "Variables that are tested against the variable in target column. If not set, every column is used."

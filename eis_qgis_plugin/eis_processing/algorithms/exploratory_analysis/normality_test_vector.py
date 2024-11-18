@@ -32,6 +32,7 @@ class EISNormalityTestVector(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Columns",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             allowMultiple=True,
             optional=True
         )

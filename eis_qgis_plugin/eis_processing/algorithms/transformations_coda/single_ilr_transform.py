@@ -34,6 +34,7 @@ class EISSingleIlrTransform(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Subcomposition 1 (numerator part)",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             allowMultiple=True
         )
         subcomposition_1_param.setHelp("Names of the columns in the numerator part of the ratio.")
@@ -43,6 +44,7 @@ class EISSingleIlrTransform(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Subcomposition 2 (denominator part)",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             allowMultiple=True
         )
         subcomposition_2_param.setHelp("Names of the columns in the denominator part of the ratio.")

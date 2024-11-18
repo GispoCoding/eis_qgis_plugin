@@ -48,6 +48,7 @@ class EISParallelCoordinates(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Color column",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
         )
         color_column_param.setHelp("The column to use for color encoding.")
         self.addParameter(color_column_param)
