@@ -36,7 +36,8 @@ class EISSinglePlrTransform(EISProcessingAlgorithm):
         numerator_column = QgsProcessingParameterField(
             name=self.alg_parameters[1],
             description="Numerator column",
-            parentLayerParameterName=self.alg_parameters[0]
+            parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
         )
         numerator_column.setHelp("The name of the numerator column to use for the transformation.")
         self.addParameter(numerator_column)

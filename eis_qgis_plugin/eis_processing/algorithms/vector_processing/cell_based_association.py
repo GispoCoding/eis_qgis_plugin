@@ -80,6 +80,7 @@ class EISCellBasedAssociation(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Column",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             optional=True
         )
         column_param.setHelp(

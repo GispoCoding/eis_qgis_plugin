@@ -48,6 +48,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Interpolation attribute",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
         )
         target_column_param.setHelp("Attribute to interpolate.")
         self.addParameter(target_column_param)

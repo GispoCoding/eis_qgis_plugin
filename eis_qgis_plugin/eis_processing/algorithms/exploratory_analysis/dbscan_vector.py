@@ -63,8 +63,9 @@ class EISDbscanVector(EISProcessingAlgorithm):
             self.alg_parameters[2],
             description="Columns",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             allowMultiple=True,
-            optional=True
+            optional=True,
         )
         columns_param.setHelp(
             "Columns/attributes in the input vector to be included in the clustering process."
