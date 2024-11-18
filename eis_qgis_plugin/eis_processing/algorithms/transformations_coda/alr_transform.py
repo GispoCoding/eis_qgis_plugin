@@ -19,7 +19,9 @@ class EISAlrTransform(EISProcessingAlgorithm):
         self._short_help_string = "Perform an additive logratio transformation on the data."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_vector", "column", "keep_denominator_column", "output_vector"]
+        self.alg_parameters = [
+            "input_vector", "columns", "denominator_column", "keep_denominator_column", "output_vector"
+        ]
 
         input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[0], description="Input vector"
@@ -27,8 +29,18 @@ class EISAlrTransform(EISProcessingAlgorithm):
         input_vector_param.setHelp("Input vector with compositional data.")
         self.addParameter(input_vector_param)
 
-        denominator_column_param = QgsProcessingParameterField(
+        columns_param = QgsProcessingParameterField(
             name=self.alg_parameters[1],
+            description="Columns",
+            parentLayerParameterName=self.alg_parameters[0],
+            optional=True,
+            allowMultiple=True,
+        )
+        columns_param.setHelp("Columns to be transformed.")
+        self.addParameter(columns_param)
+
+        denominator_column_param = QgsProcessingParameterField(
+            name=self.alg_parameters[2],
             description="Denominator column",
             parentLayerParameterName=self.alg_parameters[0],
             type=QgsProcessingParameterField.Numeric,
@@ -38,7 +50,7 @@ class EISAlrTransform(EISProcessingAlgorithm):
         self.addParameter(denominator_column_param)
 
         keep_denominator_column_param = QgsProcessingParameterBoolean(
-            name=self.alg_parameters[2],
+            name=self.alg_parameters[3],
             description="Keep denominator column",
             defaultValue=False
         )
@@ -48,7 +60,7 @@ class EISAlrTransform(EISProcessingAlgorithm):
         self.addParameter(keep_denominator_column_param)
 
         output_vector_param = QgsProcessingParameterVectorDestination(
-            name=self.alg_parameters[3],
+            name=self.alg_parameters[4],
             description="Output vector",
         )
         output_vector_param.setHelp("Output vector with the ALR transformed data.")

@@ -25,7 +25,7 @@ class EISSinglePlrTransform(EISProcessingAlgorithm):
         """
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_vector", "column", "output_vector"]
+        self.alg_parameters = ["input_vector", "numerator", "denominator", "output_vector"]
 
         input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[0], description="Input vector"
@@ -42,8 +42,18 @@ class EISSinglePlrTransform(EISProcessingAlgorithm):
         numerator_column.setHelp("The name of the numerator column to use for the transformation.")
         self.addParameter(numerator_column)
 
-        output_vector_param = QgsProcessingParameterVectorDestination(
+        denominator_columns = QgsProcessingParameterField(
             name=self.alg_parameters[2],
+            description="Denominator columns",
+            parentLayerParameterName=self.alg_parameters[0],
+            optional=True,
+            allowMultiple=True,
+        )
+        denominator_columns.setHelp("The name(s) of the denominator column(s) to use for transformation.")
+        self.addParameter(denominator_columns)
+
+        output_vector_param = QgsProcessingParameterVectorDestination(
+            name=self.alg_parameters[3],
             description="Output vector",
         )
         output_vector_param.setHelp("Output vector with the transformed data.")
