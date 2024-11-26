@@ -1,7 +1,7 @@
 from qgis.core import (
-    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterVectorDestination,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -32,7 +32,7 @@ class EISExtractValuesFromRaster(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterFeatureSource(
+            QgsProcessingParameterVectorLayer(
                 name=self.alg_parameters[1], description="Extraction locations"
             )
         )

@@ -1,6 +1,6 @@
 from qgis.core import (
-    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterVectorDestination,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -21,7 +21,7 @@ class EISPlrTransform(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_vector", "output_vector"]
 
-        input_vector_param = QgsProcessingParameterFeatureSource(
+        input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[0], description="Input vector"
         )
         input_vector_param.setHelp("Input vector with compositional data.")

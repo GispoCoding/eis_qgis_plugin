@@ -1,7 +1,7 @@
 from qgis.core import (
-    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterNumber,
     QgsProcessingParameterVectorDestination,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -20,7 +20,7 @@ class EISInverseClrTransform(EISProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_vector", "scale", "output_vector"]  # NOTE: Colnames param omitted
 
-        input_vector_param = QgsProcessingParameterFeatureSource(
+        input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[0], description="Input vector"
         )
         input_vector_param.setHelp("Input vector with CLR transformed compositional data.")
