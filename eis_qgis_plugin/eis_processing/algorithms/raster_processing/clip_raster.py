@@ -1,8 +1,8 @@
 from qgis.core import (
     QgsProcessing,
-    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -27,7 +27,7 @@ class EISClipRaster(EISProcessingAlgorithm):
         input_raster_param.setHelp("Input raster to be clipped.")
         self.addParameter(input_raster_param)
 
-        input_vector_param = QgsProcessingParameterFeatureSource(
+        input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[1],
             description="Input vector",
             types=[QgsProcessing.TypeVectorPolygon]

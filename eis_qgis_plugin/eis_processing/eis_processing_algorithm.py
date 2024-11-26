@@ -13,7 +13,6 @@ from qgis.core import (
     QgsProcessingParameterEnum,
     QgsProcessingParameterExtent,
     QgsProcessingParameterFeatureSink,
-    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
     QgsProcessingParameterFile,
     QgsProcessingParameterFileDestination,
@@ -187,12 +186,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
 
             elif isinstance(param, QgsProcessingParameterRasterLayer):
                 layer = self.parameterAsRasterLayer(parameters, name, context)
-                if not layer:
-                    continue
-                param_value = os.path.normpath(layer.source())
-
-            elif isinstance(param, QgsProcessingParameterFeatureSource):
-                layer = self.parameterAsVectorLayer(parameters, name, context)
                 if not layer:
                     continue
                 param_value = os.path.normpath(layer.source())

@@ -6,11 +6,11 @@ from qgis.core import (
     QgsProcessingContext,
     QgsProcessingFeedback,
     QgsProcessingParameterDefinition,
-    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterField,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
     QgsProcessingParameterString,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -60,7 +60,7 @@ class EISCellBasedAssociation(EISProcessingAlgorithm):
             "output_raster"
         ]
 
-        input_vector_param = QgsProcessingParameterFeatureSource(
+        input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[0],
             description="Input vector",
             types=[QgsProcessing.TypeVectorPolygon, QgsProcessing.TypeVectorLine]

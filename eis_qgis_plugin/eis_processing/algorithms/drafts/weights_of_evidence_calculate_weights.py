@@ -1,10 +1,10 @@
 from qgis.core import (
     QgsProcessingParameterEnum,
-    QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFileDestination,
     QgsProcessingParameterFolderDestination,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -39,7 +39,7 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterFeatureSource(
+            QgsProcessingParameterVectorLayer(
                 name=self.alg_parameters[1], description="Mineral deposits"
             )
         )
