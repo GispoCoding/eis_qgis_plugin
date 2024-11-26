@@ -70,5 +70,5 @@ class EISMLModelDataPreparation(QWidget, FORM_CLASS):
         self.open_single_ilr_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:single_ilr_transform'))
         self.open_single_ilr_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
 
-        # self.open_balance_data_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:balance_data'))
+        self.open_balance_data_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:balance_data'))
         self.open_balance_data_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
