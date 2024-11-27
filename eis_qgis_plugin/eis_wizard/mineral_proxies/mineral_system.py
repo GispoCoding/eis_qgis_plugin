@@ -4,8 +4,7 @@ from dataclasses import dataclass
 from typing import List, Optional, Sequence
 
 from eis_qgis_plugin.utils.message_manager import EISMessageManager
-
-MINERAL_SYSTEMS_DIR = os.path.join(os.path.dirname(__file__), "mineral_system_libraries")
+from eis_qgis_plugin.utils.misc_utils import get_user_mineral_systems_directory
 
 
 @dataclass
@@ -137,12 +136,12 @@ class MineralSystem:
             json.dump(json_dict, out_file, indent=4)
 
     def save(self):        
-        fp = os.path.join(MINERAL_SYSTEMS_DIR, f"{self.name}.json")
+        fp = os.path.join(get_user_mineral_systems_directory(), f"{self.name}.json")
         json_dict = self.to_json_dict()
         with open(fp, "w") as out_file:
             json.dump(json_dict, out_file, indent=4)
 
     def delete(self):
-        fp = os.path.join(MINERAL_SYSTEMS_DIR, f"{self.name}.json")  
+        fp = os.path.join(get_user_mineral_systems_directory(), f"{self.name}.json")  
         if os.path.exists(fp):
             os.remove(fp)
