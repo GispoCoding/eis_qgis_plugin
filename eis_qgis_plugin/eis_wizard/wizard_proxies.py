@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Optional, Sequence
+from typing import Optional
 
 from qgis.PyQt.QtWidgets import (
     QStackedWidget,
@@ -8,11 +8,12 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
-from eis_qgis_plugin.eis_wizard.mineral_proxies.mineral_system import MINERAL_SYSTEMS_DIR, MineralProxy, MineralSystem
+from eis_qgis_plugin.eis_wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem
 from eis_qgis_plugin.eis_wizard.mineral_proxies.proxy_view import EISWizardProxyView
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.distance_to_anomaly import EISWizardProxyDistanceToAnomaly
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.distance_to_features import EISWizardProxyDistanceToFeatures
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.interpolate import EISWizardProxyInterpolate
+from eis_qgis_plugin.utils.misc_utils import get_plugin_mineral_system_directory, get_user_mineral_systems_directory
 
 
 class EISWizardProxies(QWidget):
@@ -40,19 +41,21 @@ class EISWizardProxies(QWidget):
         self.active_proxy_name: Optional[str] = None
 
 
-    def initialize_mineral_systems(self) -> Sequence[MineralSystem]:
+    def initialize_mineral_systems(self) -> list[MineralSystem]:
         mineral_systems = []
-        # Find all JSON files in the folder dedicated to mineral system libraries
-        for file_name in os.listdir(MINERAL_SYSTEMS_DIR):
-            if file_name.endswith(".json"):
-                mineral_system_dict = self._read_mineral_system_json(file_name)
-                mineral_system = MineralSystem.new(mineral_system_dict)
-                mineral_systems.append(mineral_system)
+        # Find all JSON files in the folders dedicated to mineral system libraries
+        directories = [get_plugin_mineral_system_directory(), get_user_mineral_systems_directory()]
+        for directory in directories:
+            for file_name in os.listdir(directory):
+                if file_name.endswith(".json"):
+                    mineral_system_dict = self._read_mineral_system_json(directory, file_name)
+                    mineral_system = MineralSystem.new(mineral_system_dict)
+                    mineral_systems.append(mineral_system)
         return mineral_systems
 
 
-    def _read_mineral_system_json(self, file_name) -> dict:
-        fp = os.path.join(MINERAL_SYSTEMS_DIR, file_name)
+    def _read_mineral_system_json(self, directory: str, file_name: str) -> dict:
+        fp = os.path.join(directory, file_name)
         with open(fp, "r") as file:
             mineral_system_dict = json.loads(file.read())
         return mineral_system_dict

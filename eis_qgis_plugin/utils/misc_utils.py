@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Any, Dict, Literal, Optional, Sequence
 
 from qgis.core import (
+    QgsApplication,
     QgsColorRamp,
     QgsColorRampShader,
     QgsProcessingContext,
@@ -19,6 +20,7 @@ from qgis.PyQt.QtWidgets import QComboBox, QFormLayout, QLayout, QLayoutItem, QL
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
 from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.qgis_plugin_tools.tools.resources import resources_path
 from eis_qgis_plugin.utils.message_manager import EISMessageManager
 
 TEMPORARY_OUTPUT = 'TEMPORARY_OUTPUT'
@@ -243,3 +245,37 @@ def check_duplicate_names(names: list) -> list:
         unique_names.append(new_name)
     
     return unique_names
+
+
+def get_user_data_directory() -> str:
+    """
+    Returns the directory path where user-defined data is stored.
+    Ensures the directory exists.
+    """
+    # Use QGIS settings directory to store persistent data
+    user_data_dir = os.path.join(QgsApplication.qgisSettingsDirPath(), "eis_plugin_user_data")
+    # Ensure the directory exists
+    if not os.path.exists(user_data_dir):
+        os.makedirs(user_data_dir)
+
+    return user_data_dir
+
+def get_user_mineral_systems_directory() -> str:
+    """
+    Returns the directory path where user-defined mineral systems are stored.
+    Ensures the directory exists.
+    """
+    user_data_dir = get_user_data_directory()
+    mineral_systems_dir = os.path.join(user_data_dir, "mineral_systems")
+    # Ensure the directory exists
+    if not os.path.exists(mineral_systems_dir):
+        os.makedirs(mineral_systems_dir)
+
+    return mineral_systems_dir
+
+
+def get_plugin_mineral_system_directory() -> str:
+    """
+    Returns the directory path where the default mineral systems shipped with the plugin are stored.
+    """
+    return resources_path("default_mineral_systems")
