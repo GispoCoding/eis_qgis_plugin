@@ -23,6 +23,11 @@ class EISExploratoryAnalysis(QWidget, FORM_CLASS):
         self.open_dbscan_raster_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:dbscan_raster'))
         self.open_dbscan_raster_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
 
+        self.open_feature_importance_btn.clicked.connect(
+            lambda _: processing.execAlgorithmDialog('eis:feature_importance')
+        )
+        self.open_feature_importance_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_k_means_vector_btn.clicked.connect(
             lambda _: processing.execAlgorithmDialog('eis:k_means_clustering_vector')
         )
