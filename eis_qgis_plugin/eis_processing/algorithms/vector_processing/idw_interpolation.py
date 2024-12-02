@@ -32,6 +32,7 @@ class EISIdwInterpolation(EISProcessingAlgorithm):
             "pixel_size",
             "extent",
             "power",
+            "search_radius",
             "output_raster",
         ]
 
@@ -80,8 +81,16 @@ class EISIdwInterpolation(EISProcessingAlgorithm):
             As power increases, the weights for distant points decrease rapidly.")
         self.addParameter(power_param)
 
+        search_radius_param = QgsProcessingParameterNumber(
+            name=self.alg_parameters[6], description="Search radius", minValue=0.0, optional=True
+        )
+        search_radius_param.setHelp(
+            "The search radius within which to consider points for interpolation. If left empty, all points are used."
+            )
+        self.addParameter(search_radius_param)
+
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[6], description="Output raster"
+            name=self.alg_parameters[7], description="Output raster"
         )
         output_raster_param.setHelp("Output interpolation raster.")
         self.addParameter(output_raster_param)
