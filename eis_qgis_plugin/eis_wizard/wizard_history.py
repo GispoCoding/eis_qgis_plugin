@@ -52,6 +52,8 @@ class EISWizardHistory(QWidget, FORM_CLASS):
         self.label_data_box: QGroupBox
         self.parameters_box: QGroupBox
         self.parameters_layout: QFormLayout
+        self.validation_metrics_box: QGroupBox
+        self.validation_metrics_layout: QFormLayout
 
         self.label_layer_name: QLabel
         self.label_filepath: QLabel
@@ -108,6 +110,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
             self.clear_evidence_data()
             self.clear_label_data()
             self.clear_parameter_data()
+            self.clear_validation_metrics_data()
         else:
             if not info.check_model_file():
                 self.model_file_label.setText("Model file (MISSING!)")
@@ -117,6 +120,7 @@ class EISWizardHistory(QWidget, FORM_CLASS):
             self.load_evidence_data(info)
             self.load_label_data(info)
             self.load_parameter_data(info)
+            self.load_validation_metrics_data(info)
 
 
     def update_model_file(self):
@@ -145,16 +149,28 @@ class EISWizardHistory(QWidget, FORM_CLASS):
         self.label_layer_name.setText(info.label_data[0])
         self.label_filepath.setText(info.label_data[1])
 
+    
+    def _create_label_and_value_widgets(self, name: str, value: int) -> tuple[QLabel, QLineEdit]:
+        name_label = QLabel()
+        name_label.setText(name)
+        value_widget = QLineEdit()
+        value_widget.setText(str(value))
+        value_widget.setReadOnly(True)
+        return name_label, value_widget
+
 
     def load_parameter_data(self, info: MLModelInfo):
         self.clear_parameter_data()
         for parameter_name, parameter_value in info.parameters.items():
-            name_label = QLabel()
-            name_label.setText(parameter_name)
-            value_widget = QLineEdit()
-            value_widget.setText(str(parameter_value))
-            value_widget.setReadOnly(True)
-            self.parameters_layout.addRow(name_label, value_widget)
+            self.parameters_layout.addRow(*self._create_label_and_value_widgets(parameter_name, parameter_value))
+
+
+    def load_validation_metrics_data(self, info: MLModelInfo):
+        self.clear_validation_metrics_data()
+        if not info.validation_metrics:
+            return
+        for metric_name, metric_value in info.validation_metrics.items():
+            self.validation_metrics_layout.addRow(*self._create_label_and_value_widgets(metric_name, metric_value))
 
 
     def clear_summary_data(self):
@@ -175,6 +191,10 @@ class EISWizardHistory(QWidget, FORM_CLASS):
 
     def clear_parameter_data(self):
         clear_layout(self.parameters_layout)
+
+
+    def clear_validation_metrics_data(self):
+        clear_layout(self.validation_metrics_layout)
 
 
     def _on_export_clicked(self):
