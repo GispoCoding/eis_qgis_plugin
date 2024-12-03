@@ -226,6 +226,18 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="validation_metrics_box">
+         <property name="title">
+          <string>Validation metrics</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <layout class="QFormLayout" name="validation_metrics_layout"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QDialogButtonBox" name="button_box">
          <property name="standardButtons">
           <set>QDialogButtonBox::NoButton</set>

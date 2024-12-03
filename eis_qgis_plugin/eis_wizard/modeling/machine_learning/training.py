@@ -125,7 +125,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
                 **self.get_common_parameter_values(),
                 **self.get_validation_settings(as_str = True)
             }
-            self.save_info(model_parameters_as_str, execution_time)
+            self.save_info(result, model_parameters_as_str, execution_time)
             self.training_feedback.pushInfo(f"\nTraining time: {execution_time}")
         else:
             self.training_feedback.report_failed_run()
@@ -260,7 +260,7 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             self.executor.cancel()
 
 
-    def save_info(self, model_parameters: dict, execution_time: Optional[float] = None):
+    def save_info(self, results: dict, model_parameters: dict, execution_time: Optional[float] = None):
         """Save model info with ModelManager."""
         model_info = MLModelInfo(
             model_instance_name=self.train_model_instance_name.text(),
@@ -273,6 +273,10 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             evidence_data=[(layer.name(), layer.source()) for layer in self.train_evidence_data.get_layers()],
             label_data=(self.get_training_label_layer().name(), self.get_training_label_layer().source()),
             parameters=model_parameters,
+            validation_metrics={
+                key: float(value) for key, value in results.items()
+                if key.capitalize() in self.model_main.get_valid_metrics()
+            }
         )
         self.model_main.get_model_manager().save_model_info(model_info)
 
