@@ -24,7 +24,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import clear_layout, set_filter
 
-FORM_CLASS: QDialog = load_ui("results/wizard_model_history.ui")
+FORM_CLASS: QDialog = load_ui("wizard_model_history.ui")
 
 
 class EISWizardHistory(QWidget, FORM_CLASS): 
