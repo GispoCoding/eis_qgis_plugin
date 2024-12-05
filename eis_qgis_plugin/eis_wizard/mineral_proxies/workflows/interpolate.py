@@ -69,6 +69,7 @@ class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
         self.vector_layer.layerChanged.connect(self.attribute.setLayer)
         self.interpolation_method.currentIndexChanged.connect(self.on_interpolation_method_changed)
         self.attribute.setLayer(self.vector_layer.currentLayer())
+        self.search_radius.setMaximum(99999)
 
         super().initialize(self.process_type)
 
