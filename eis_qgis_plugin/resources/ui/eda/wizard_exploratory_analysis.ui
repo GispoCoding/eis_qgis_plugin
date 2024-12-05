@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>491</width>
-        <height>378</height>
+        <width>477</width>
+        <height>401</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -81,99 +81,113 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item row="4" column="0">
                <widget class="QLabel" name="label_4">
                 <property name="text">
                  <string>K-means (vector)</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
+              <item row="4" column="1">
                <widget class="QPushButton" name="open_k_means_vector_btn">
                 <property name="text">
                  <string>Open</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
+              <item row="5" column="0">
                <widget class="QLabel" name="label_5">
                 <property name="text">
                  <string>K-means (raster)</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
+              <item row="5" column="1">
                <widget class="QPushButton" name="open_k_means_raster_btn">
                 <property name="text">
                  <string>Open</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
+              <item row="6" column="0">
                <widget class="QLabel" name="label_6">
                 <property name="text">
                  <string>Local Morans' I</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
+              <item row="6" column="1">
                <widget class="QPushButton" name="open_local_morans_btn">
                 <property name="text">
                  <string>Open</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
+              <item row="7" column="0">
                <widget class="QLabel" name="label_7">
                 <property name="text">
                  <string>Normality test (vector)</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="1">
+              <item row="7" column="1">
                <widget class="QPushButton" name="open_normality_vector_btn">
                 <property name="text">
                  <string>Open</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="0">
+              <item row="8" column="0">
                <widget class="QLabel" name="label_8">
                 <property name="text">
                  <string>Normality test (raster)</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="1">
+              <item row="8" column="1">
                <widget class="QPushButton" name="open_normality_raster_btn">
                 <property name="text">
                  <string>Open</string>
                 </property>
                </widget>
               </item>
-              <item row="8" column="0">
+              <item row="9" column="0">
                <widget class="QLabel" name="label_9">
                 <property name="text">
                  <string>PCA (vector)</string>
                 </property>
                </widget>
               </item>
-              <item row="8" column="1">
+              <item row="9" column="1">
                <widget class="QPushButton" name="open_pca_vector_btn">
                 <property name="text">
                  <string>Open</string>
                 </property>
                </widget>
               </item>
-              <item row="9" column="0">
+              <item row="10" column="0">
                <widget class="QLabel" name="label_10">
                 <property name="text">
                  <string>PCA (raster)</string>
                 </property>
                </widget>
               </item>
-              <item row="9" column="1">
+              <item row="10" column="1">
                <widget class="QPushButton" name="open_pca_raster_btn">
+                <property name="text">
+                 <string>Open</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_11">
+                <property name="text">
+                 <string>Feature importance</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QPushButton" name="open_feature_importance_btn">
                 <property name="text">
                  <string>Open</string>
                 </property>
