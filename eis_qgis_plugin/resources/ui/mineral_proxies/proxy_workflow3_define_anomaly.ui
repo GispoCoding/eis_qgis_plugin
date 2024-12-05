@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>747</width>
-    <height>844</height>
+    <height>853</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,408 +15,445 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="proxy_name_label">
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-      </font>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
      </property>
-     <property name="text">
-      <string>Proxy: </string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="workflow_label">
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Workflow: Distance to anomaly</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="process_step_label">
-     <property name="font">
-      <font>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Step: </string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="input_box">
-     <property name="title">
-      <string>Input</string>
-     </property>
-     <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="raster_layer_label">
-        <property name="toolTip">
-         <string>Input raster dataset with anomalies to calculate distances to</string>
-        </property>
-        <property name="text">
-         <string>Input raster layer</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QgsMapLayerComboBox" name="raster_layer">
-        <property name="toolTip">
-         <string>Input raster dataset with anomalies to calculate distances to</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="method_box">
-     <property name="title">
-      <string>Method settings</string>
-     </property>
-     <layout class="QFormLayout" name="formLayout_2">
-      <item row="1" column="0">
-       <widget class="QLabel" name="threshold_label_1">
-        <property name="toolTip">
-         <string>Threshold value to define anomalous pixels.</string>
-        </property>
-        <property name="text">
-         <string>Threshold value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QgsDoubleSpinBox" name="threshold_1">
-        <property name="toolTip">
-         <string>Threshold value to define anomalous pixels.</string>
-        </property>
-        <property name="decimals">
-         <number>3</number>
-        </property>
-        <property name="minimum">
-         <double>-99999.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QgsDoubleSpinBox" name="threshold_2">
-        <property name="toolTip">
-         <string>Second threshold value to define anomalous pixels. Only needed when threshold criteria is either 'in-between' or 'outside'.</string>
-        </property>
-        <property name="decimals">
-         <number>3</number>
-        </property>
-        <property name="minimum">
-         <double>-99999.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="threshold_label_2">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Second threshold value to define anomalous pixels. Only needed when threshold criteria is either 'in-between' or 'outside'.</string>
-        </property>
-        <property name="text">
-         <string>Threshold value higher</string>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="threshold_criteria_label">
-        <property name="toolTip">
-         <string>Threshold criteria to define anomalous pixels.</string>
-        </property>
-        <property name="text">
-         <string>Threshold criteria</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="threshold_criteria">
-        <property name="toolTip">
-         <string>Threshold criteria to define anomalous pixels.</string>
-        </property>
-        <item>
-         <property name="text">
-          <string>Higher</string>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>727</width>
+        <height>784</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="proxy_name_label">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+          </font>
          </property>
-        </item>
-        <item>
          <property name="text">
-          <string>Lower</string>
+          <string>Proxy: </string>
          </property>
-        </item>
-        <item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="workflow_label">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>In-between</string>
+          <string>Workflow: Distance to anomaly</string>
          </property>
-        </item>
-        <item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="process_step_label">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>Outside</string>
+          <string>Step: </string>
          </property>
-        </item>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label">
-        <property name="toolTip">
-         <string>Maximum distance (optional). All pixels beyond max distance will be assigned value equal to max distance.</string>
-        </property>
-        <property name="text">
-         <string>Max distance (optional)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QgsDoubleSpinBox" name="max_distance">
-        <property name="toolTip">
-         <string>Maximum distance (optional). All pixels beyond max distance will be assigned value equal to max distance.</string>
-        </property>
-        <property name="specialValueText">
-         <string>Not set</string>
-        </property>
-        <property name="decimals">
-         <number>3</number>
-        </property>
-        <property name="maximum">
-         <double>99999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="output_box">
-     <property name="title">
-      <string>Output</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <layout class="QFormLayout" name="output_raster_settings_layout">
-        <item row="1" column="0">
-         <widget class="QLabel" name="output_raster_settings_label">
-          <property name="text">
-           <string>Output raster settings</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QComboBox" name="output_raster_settings">
-          <item>
-           <property name="text">
-            <string>Input raster</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="output_raster_path_label">
-          <property name="text">
-           <string>Output raster path</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QgsFileWidget" name="output_raster_path">
-          <property name="storageMode">
-           <enum>QgsFileWidget::SaveFile</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QStackedWidget" name="output_raster_settings_pages">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QWidget" name="input_raster_page"/>
-        <widget class="QWidget" name="base_raster_page">
-         <layout class="QFormLayout" name="formLayout_4">
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="input_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Input</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
-           <widget class="QLabel" name="base_raster_label">
+           <widget class="QLabel" name="raster_layer_label">
+            <property name="toolTip">
+             <string>Input raster dataset with anomalies to calculate distances to</string>
+            </property>
             <property name="text">
-             <string>Base raster</string>
+             <string>Input raster layer</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QgsMapLayerComboBox" name="base_raster"/>
+           <widget class="QgsMapLayerComboBox" name="raster_layer">
+            <property name="toolTip">
+             <string>Input raster dataset with anomalies to calculate distances to</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="define_manually_page">
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+       </item>
+       <item>
+        <widget class="QGroupBox" name="method_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Method settings</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="1" column="0">
+           <widget class="QLabel" name="threshold_label_1">
+            <property name="toolTip">
+             <string>Threshold value to define anomalous pixels.</string>
+            </property>
+            <property name="text">
+             <string>Threshold value</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QgsDoubleSpinBox" name="threshold_1">
+            <property name="toolTip">
+             <string>Threshold value to define anomalous pixels.</string>
+            </property>
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="minimum">
+             <double>-99999.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>99999.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QgsDoubleSpinBox" name="threshold_2">
+            <property name="toolTip">
+             <string>Second threshold value to define anomalous pixels. Only needed when threshold criteria is either 'in-between' or 'outside'.</string>
+            </property>
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="minimum">
+             <double>-99999.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>99999.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="threshold_label_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Second threshold value to define anomalous pixels. Only needed when threshold criteria is either 'in-between' or 'outside'.</string>
+            </property>
+            <property name="text">
+             <string>Threshold value higher</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="threshold_criteria_label">
+            <property name="toolTip">
+             <string>Threshold criteria to define anomalous pixels.</string>
+            </property>
+            <property name="text">
+             <string>Threshold criteria</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="threshold_criteria">
+            <property name="toolTip">
+             <string>Threshold criteria to define anomalous pixels.</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Higher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Lower</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>In-between</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Outside</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label">
+            <property name="toolTip">
+             <string>Maximum distance (optional). All pixels beyond max distance will be assigned value equal to max distance.</string>
+            </property>
+            <property name="text">
+             <string>Max distance (optional)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QgsDoubleSpinBox" name="max_distance">
+            <property name="toolTip">
+             <string>Maximum distance (optional). All pixels beyond max distance will be assigned value equal to max distance.</string>
+            </property>
+            <property name="specialValueText">
+             <string>Not set</string>
+            </property>
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="maximum">
+             <double>99999.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="output_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Output</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <layout class="QFormLayout" name="define_manually_layout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="pixel_size_label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>62</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Pixel size</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QgsDoubleSpinBox" name="pixel_size">
-              <property name="maximum">
-               <double>10000.000000000000000</double>
-              </property>
-              <property name="value">
-               <double>10.000000000000000</double>
-              </property>
-             </widget>
-            </item>
+           <layout class="QFormLayout" name="output_raster_settings_layout">
             <item row="1" column="0">
-             <widget class="QLabel" name="extent_label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>62</width>
-                <height>0</height>
-               </size>
-              </property>
+             <widget class="QLabel" name="output_raster_settings_label">
               <property name="text">
-               <string>Extent</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+               <string>Output raster settings</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QgsExtentGroupBox" name="extent"/>
+             <widget class="QComboBox" name="output_raster_settings">
+              <item>
+               <property name="text">
+                <string>Input raster</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="output_raster_path_label">
+              <property name="text">
+               <string>Output raster path</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QgsFileWidget" name="output_raster_path">
+              <property name="storageMode">
+               <enum>QgsFileWidget::SaveFile</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
+          <item>
+           <widget class="QStackedWidget" name="output_raster_settings_pages">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="input_raster_page"/>
+            <widget class="QWidget" name="base_raster_page">
+             <layout class="QFormLayout" name="formLayout_4">
+              <item row="0" column="0">
+               <widget class="QLabel" name="base_raster_label">
+                <property name="text">
+                 <string>Base raster</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QgsMapLayerComboBox" name="base_raster"/>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="define_manually_page">
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <layout class="QFormLayout" name="define_manually_layout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="pixel_size_label">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>62</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Pixel size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QgsDoubleSpinBox" name="pixel_size">
+                  <property name="maximum">
+                   <double>10000.000000000000000</double>
+                  </property>
+                  <property name="value">
+                   <double>10.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="extent_label">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>62</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Extent</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QgsExtentGroupBox" name="extent"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
          </layout>
         </widget>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="button_box">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_18">
-     <item>
-      <widget class="QTextEdit" name="log">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>200</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="autoFormatting">
-        <set>QTextEdit::AutoNone</set>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+       </item>
+       <item>
+        <widget class="QDialogButtonBox" name="button_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_18">
+         <item>
+          <widget class="QTextEdit" name="log">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>200</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="autoFormatting">
+            <set>QTextEdit::AutoNone</set>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="progress_layout">
-       <item>
-        <widget class="QLabel" name="progress_label">
-         <property name="text">
-          <string>Progress</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QProgressBar" name="progress_bar">
-         <property name="value">
-          <number>0</number>
-         </property>
-        </widget>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="progress_layout">
+           <item>
+            <widget class="QLabel" name="progress_label">
+             <property name="text">
+              <string>Progress</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QProgressBar" name="progress_bar">
+             <property name="value">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
       </layout>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
    <item>
     <widget class="Line" name="line">
@@ -468,19 +505,6 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <spacer name="form_spacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>1000</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
