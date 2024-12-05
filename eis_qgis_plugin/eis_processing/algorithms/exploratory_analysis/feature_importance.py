@@ -40,7 +40,8 @@ class EISFeatureImportance(EISProcessingAlgorithm):
             name=self.alg_parameters[1], description="Feature data", layerType=QgsProcessing.TypeRaster
         )
         evidence_data_param.setHelp(
-            "Data on which feature importance will be computed."
+            "Data on which feature importance will be computed. The data and order of rasters need to match the data \
+                used in training."
         )
         self.addParameter(evidence_data_param)
 
@@ -54,8 +55,8 @@ class EISFeatureImportance(EISProcessingAlgorithm):
             name=self.alg_parameters[3],
             description="N repeats",
             type=QgsProcessingParameterNumber.Integer,
-            optional=True,
-            defaultValue=10
+            defaultValue=10,
+            minValue=1,
         )
         n_repeats_param.setHelp("Number of iterations used when calculating feature importance.")
         self.addParameter(n_repeats_param)
