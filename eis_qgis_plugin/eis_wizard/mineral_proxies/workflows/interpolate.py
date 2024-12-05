@@ -52,6 +52,7 @@ class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
         self.interpolation_method: QComboBox
         self.interpolation_method_pages: QComboBox
         self.power: QgsDoubleSpinBox
+        self.search_radius: QgsDoubleSpinBox
         self.kriging_method: QComboBox
         self.variogram_model: QComboBox
         self.coordinates_type: QComboBox
@@ -68,7 +69,7 @@ class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
         self.vector_layer.layerChanged.connect(self.attribute.setLayer)
         self.interpolation_method.currentIndexChanged.connect(self.on_interpolation_method_changed)
         self.attribute.setLayer(self.vector_layer.currentLayer())
-        self.interpolation_method_pages.setMaximumHeight(50)  # IDW is the default
+        self.search_radius.setMaximum(99999)
 
         super().initialize(self.process_type)
 
@@ -76,7 +77,8 @@ class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
     def get_interpolation_alg_and_parameters(self):
         if self.interpolation_method.currentIndex() == 0:  # IDW
             params = {
-                "power": self.power.value()
+                "power": self.power.value(),
+                "search_radius": self.search_radius.value() if self.search_radius.value() > 0 else None,
             }
             return self.IDW_ALG_NAME, params
         else:  # Kriging
@@ -96,10 +98,6 @@ class EISWizardProxyInterpolate(EISWizardProxyProcess, FORM_CLASS):
 
     def on_interpolation_method_changed(self, i):
         self.interpolation_method_pages.setCurrentIndex(i)
-        if self.interpolation_method.currentText().lower() == "idw":
-            self.interpolation_method_pages.setMaximumHeight(50)
-        else:
-            self.interpolation_method_pages.setMaximumHeight(16777215)  # Unrestricted
 
 
     def run(self):
