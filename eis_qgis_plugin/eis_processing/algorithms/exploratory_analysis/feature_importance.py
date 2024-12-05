@@ -23,21 +23,15 @@ class EISFeatureImportance(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "model_file",
             "input_rasters",
             "target_labels",
+            "model_file",
             "n_repeats",
             "random_state",
         ]
 
-        model_file_param = QgsProcessingParameterFile(
-            name=self.alg_parameters[0], description="Model file", fileFilter='.joblib (*.joblib)'
-        )
-        model_file_param.setHelp("The model file.")
-        self.addParameter(model_file_param)
-
         evidence_data_param = QgsProcessingParameterMultipleLayers(
-            name=self.alg_parameters[1], description="Feature data", layerType=QgsProcessing.TypeRaster
+            name=self.alg_parameters[0], description="Feature data", layerType=QgsProcessing.TypeRaster
         )
         evidence_data_param.setHelp(
             "Data on which feature importance will be computed. The data and order of rasters need to match the data \
@@ -46,10 +40,16 @@ class EISFeatureImportance(EISProcessingAlgorithm):
         self.addParameter(evidence_data_param)
 
         target_labels = QgsProcessingParameterRasterLayer(
-            name=self.alg_parameters[2], description="Target labels"
+            name=self.alg_parameters[1], description="Target labels"
         )
         target_labels.setHelp("Target labels.")
         self.addParameter(target_labels)
+
+        model_file_param = QgsProcessingParameterFile(
+            name=self.alg_parameters[2], description="Model file", fileFilter='.joblib (*.joblib)'
+        )
+        model_file_param.setHelp("The model file.")
+        self.addParameter(model_file_param)
 
         n_repeats_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
