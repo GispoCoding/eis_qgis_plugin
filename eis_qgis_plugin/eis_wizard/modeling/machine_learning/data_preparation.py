@@ -64,6 +64,11 @@ class EISMLModelDataPreparation(QWidget, FORM_CLASS):
         )
         self.open_pairwise_logratio_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
 
+        self.open_pivot_logratio_btn.clicked.connect(
+            lambda _: processing.execAlgorithmDialog('eis:plr_transform')
+        )
+        self.open_pivot_logratio_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
+
         self.open_single_plr_btn.clicked.connect(lambda _: processing.execAlgorithmDialog('eis:single_plr_transform'))
         self.open_single_plr_btn.setIcon(QIcon(QgsApplication.getThemeIcon("processingAlgorithm.svg")))
 
