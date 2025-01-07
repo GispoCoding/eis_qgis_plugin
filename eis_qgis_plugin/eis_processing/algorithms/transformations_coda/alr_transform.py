@@ -1,6 +1,7 @@
 from qgis.core import (
     QgsProcessingParameterBoolean,
     QgsProcessingParameterField,
+    QgsProcessingParameterNumber,
     QgsProcessingParameterVectorDestination,
     QgsProcessingParameterVectorLayer,
 )
@@ -20,13 +21,13 @@ class EISAlrTransform(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "input_vector", "columns", "denominator_column", "keep_denominator_column", "output_vector"
+            "input_vector", "columns", "denominator_column", "keep_denominator_column", "scale", "output_vector"
         ]
 
         input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[0], description="Input vector"
         )
-        input_vector_param.setHelp("Input vector with compositional data.")
+        input_vector_param.setHelp("Input data.")
         self.addParameter(input_vector_param)
 
         columns_param = QgsProcessingParameterField(
@@ -59,8 +60,20 @@ class EISAlrTransform(EISProcessingAlgorithm):
         )
         self.addParameter(keep_denominator_column_param)
 
-        output_vector_param = QgsProcessingParameterVectorDestination(
+        scale_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[4],
+            description="Scale",
+            optional=True
+        )
+        scale_param.setHelp(
+            "The value to which each composition should be normalized. \
+            Eg., if the composition is expressed as percentages, scale=100. \
+            Leave empty if data is already closed."
+        )
+        self.addParameter(scale_param)
+
+        output_vector_param = QgsProcessingParameterVectorDestination(
+            name=self.alg_parameters[5],
             description="Output vector",
         )
         output_vector_param.setHelp("Output vector with the ALR transformed data.")
