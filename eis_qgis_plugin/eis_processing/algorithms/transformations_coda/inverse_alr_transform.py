@@ -31,6 +31,7 @@ class EISInverseAlrTransform(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Denominator column",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
         )
         denominator_column_name_param.setHelp("The name of the denominator column.")
         self.addParameter(denominator_column_name_param)
@@ -39,6 +40,7 @@ class EISInverseAlrTransform(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Columns",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             optional=True,
             allowMultiple=True,
         )

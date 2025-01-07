@@ -31,6 +31,7 @@ class EISInverseClrTransform(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Columns",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             optional=True,
             allowMultiple=True,
         )

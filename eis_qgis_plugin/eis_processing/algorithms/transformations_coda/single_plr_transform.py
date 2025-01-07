@@ -26,7 +26,7 @@ class EISSinglePlrTransform(EISProcessingAlgorithm):
         """
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_vector", "numerator", "denominator", "scale", "output_vector"]
+        self.alg_parameters = ["input_vector", "numerator", "denominator_columns", "scale", "output_vector"]
 
         input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[0], description="Input vector"
@@ -47,6 +47,7 @@ class EISSinglePlrTransform(EISProcessingAlgorithm):
             name=self.alg_parameters[2],
             description="Denominator columns",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             optional=True,
             allowMultiple=True,
         )
