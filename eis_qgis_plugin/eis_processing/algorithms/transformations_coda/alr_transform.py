@@ -34,6 +34,7 @@ class EISAlrTransform(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Columns",
             parentLayerParameterName=self.alg_parameters[0],
+            type=QgsProcessingParameterField.Numeric,
             optional=True,
             allowMultiple=True,
         )
@@ -45,7 +46,6 @@ class EISAlrTransform(EISProcessingAlgorithm):
             description="Denominator column",
             parentLayerParameterName=self.alg_parameters[0],
             type=QgsProcessingParameterField.Numeric,
-            optional=True,
         )
         denominator_column_param.setHelp("The column to be used as the denominator column.")
         self.addParameter(denominator_column_param)
