@@ -10,19 +10,21 @@ from qgis.PyQt.QtWidgets import (
 
 from eis_qgis_plugin.eis_wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem
 from eis_qgis_plugin.eis_wizard.mineral_proxies.proxy_view import EISWizardProxyView
+from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.binarize import EISWizardProxyBinarize
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.distance_to_anomaly import EISWizardProxyDistanceToAnomaly
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.distance_to_features import EISWizardProxyDistanceToFeatures
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.interpolate import EISWizardProxyInterpolate
 from eis_qgis_plugin.utils.misc_utils import get_plugin_mineral_system_directory, get_user_mineral_systems_directory
 
+WORKFLOW_WIDGETS = {
+    "distance_to_features": EISWizardProxyDistanceToFeatures,
+    "interpolate": EISWizardProxyInterpolate,
+    "distance_to_anomaly": EISWizardProxyDistanceToAnomaly,
+    "binarize": EISWizardProxyBinarize
+}
+
 
 class EISWizardProxies(QWidget):
-
-    WORKFLOW_WIDGETS = {
-        "distance_to_features": EISWizardProxyDistanceToFeatures,
-        "interpolate": EISWizardProxyInterpolate,
-        "distance_to_anomaly": EISWizardProxyDistanceToAnomaly,
-    }
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -74,7 +76,7 @@ class EISWizardProxies(QWidget):
         if steps > 1:
             last_i = steps - 1
             for i, workflow_step_name in enumerate(proxy.workflow):
-                widget_cls = self.WORKFLOW_WIDGETS[workflow_step_name]
+                widget_cls = WORKFLOW_WIDGETS[workflow_step_name]
                 processing_page = widget_cls(
                     proxy_manager=self,
                     mineral_system=mineral_system_name,
@@ -85,7 +87,7 @@ class EISWizardProxies(QWidget):
                 )
                 self.proxy_pages.addWidget(processing_page)
         else:
-            processing_page = self.WORKFLOW_WIDGETS[proxy.workflow[0]](
+            processing_page = WORKFLOW_WIDGETS[proxy.workflow[0]](
                 proxy_manager=self,
                 mineral_system=mineral_system_name,
                 category=proxy.category,

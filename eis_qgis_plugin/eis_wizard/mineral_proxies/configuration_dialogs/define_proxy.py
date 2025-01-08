@@ -18,7 +18,7 @@ from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 
 FORM_CLASS = load_ui("mineral_proxies/define_custom_proxy.ui")
 
-WORKFLOW_STEPS = ["Distance to features", "Distance to anomaly", "Interpolate"]
+WORKFLOW_STEPS = ["Distance to features", "Distance to anomaly", "Interpolate", "Binarize"]
 
 
 class EISWizardDefineProxy(QDialog, FORM_CLASS):
@@ -53,6 +53,7 @@ class EISWizardDefineProxy(QDialog, FORM_CLASS):
         self.button_box.accepted.connect(self._on_accept)
 
         self.proxy = None
+        self.add_workflow_step()
 
 
     def add_workflow_step(self):
