@@ -1,5 +1,6 @@
 from qgis.core import (
     QgsProcessingParameterField,
+    QgsProcessingParameterNumber,
     QgsProcessingParameterVectorDestination,
     QgsProcessingParameterVectorLayer,
 )
@@ -22,7 +23,7 @@ class EISSingleIlrTransform(EISProcessingAlgorithm):
         """
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_vector", "subcomposition_1", "subcomposition_2", "output_vector"]
+        self.alg_parameters = ["input_vector", "subcomposition_1", "subcomposition_2", "scale", "output_vector"]
 
         input_vector_param = QgsProcessingParameterVectorLayer(
             name=self.alg_parameters[0], description="Input vector"
@@ -50,8 +51,20 @@ class EISSingleIlrTransform(EISProcessingAlgorithm):
         subcomposition_2_param.setHelp("Names of the columns in the denominator part of the ratio.")
         self.addParameter(subcomposition_2_param)
 
-        output_vector_param =  QgsProcessingParameterVectorDestination(
+        scale_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
+            description="Scale",
+            optional=True
+        )
+        scale_param.setHelp(
+            "The value to which each composition should be normalized. \
+            Eg., if the composition is expressed as percentages, scale=100. \
+            Leave empty if data is already closed."
+        )
+        self.addParameter(scale_param)
+
+        output_vector_param =  QgsProcessingParameterVectorDestination(
+            name=self.alg_parameters[4],
             description="Output vector",
         )
         output_vector_param.setHelp("Output vector with the transformed data.")

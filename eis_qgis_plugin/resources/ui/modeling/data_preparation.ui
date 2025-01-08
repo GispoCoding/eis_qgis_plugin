@@ -277,29 +277,43 @@
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
+            <item row="6" column="0">
              <widget class="QLabel" name="label_5">
               <property name="text">
                <string>Single PLR</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
+            <item row="6" column="1">
              <widget class="QPushButton" name="open_single_plr_btn">
               <property name="text">
                <string>Open</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="7" column="0">
              <widget class="QLabel" name="label_3">
               <property name="text">
                <string>Single ILR</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
+            <item row="7" column="1">
              <widget class="QPushButton" name="open_single_ilr_btn">
+              <property name="text">
+               <string>Open</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Pivot logratio</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QPushButton" name="open_pivot_logratio_btn">
               <property name="text">
                <string>Open</string>
               </property>
