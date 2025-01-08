@@ -203,7 +203,9 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 if not layers:
                     continue
                 if self.multiple_layers_as_typer_option:
-                    [typer_options.append(os.path.normpath(layer.source())) for layer in layers]
+                    for layer in layers:
+                        typer_options.append(param_name)
+                        typer_options.append(os.path.normpath(layer.source()))
                 else:
                     [typer_args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
