@@ -15,6 +15,7 @@ from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.distance_to_anomaly im
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.distance_to_features import EISWizardProxyDistanceToFeatures
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.interpolate import EISWizardProxyInterpolate
 from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.proximity_to_anomaly import EISWizardProxyProximityToAnomaly
+from eis_qgis_plugin.eis_wizard.mineral_proxies.workflows.proximity_to_features import EISWizardProxyProximityToFeatures
 from eis_qgis_plugin.utils.misc_utils import get_plugin_mineral_system_directory, get_user_mineral_systems_directory
 
 WORKFLOW_WIDGETS = {
@@ -22,7 +23,8 @@ WORKFLOW_WIDGETS = {
     "interpolate": EISWizardProxyInterpolate,
     "distance_to_anomaly": EISWizardProxyDistanceToAnomaly,
     "binarize": EISWizardProxyBinarize,
-    "proximity_to_anomaly": EISWizardProxyProximityToAnomaly
+    "proximity_to_anomaly": EISWizardProxyProximityToAnomaly,
+    "proximity_to_features": EISWizardProxyProximityToFeatures
 }
 
 
