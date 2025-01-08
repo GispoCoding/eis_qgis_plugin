@@ -13,14 +13,13 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
+from eis_qgis_plugin.eis_wizard.mineral_proxies.configuration_dialogs.define_proxy import WORKFLOW_STEPS
 from eis_qgis_plugin.eis_wizard.mineral_proxies.mineral_system import MineralProxy, MineralSystem, ProxyImportance
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import find_index_for_text_combobox
 
 FORM_CLASS = load_ui("mineral_proxies/modify_custom_proxy.ui")
-
-WORKFLOW_STEPS = ["Distance to features", "Distance to anomaly", "Interpolate"]
 
 
 class EISWizardModifyProxy(QDialog, FORM_CLASS):
