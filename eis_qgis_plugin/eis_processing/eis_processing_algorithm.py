@@ -43,6 +43,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self._short_help_string = ""
 
         self.alg_parameters: List[str] = []
+        self.multiple_layers_as_typer_option: bool = False
 
     def name(self):
         """
@@ -201,7 +202,10 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 layers = self.parameterAsLayerList(parameters, name, context)
                 if not layers:
                     continue
-                [typer_args.append(os.path.normpath(layer.source())) for layer in layers]
+                if self.multiple_layers_as_typer_option:
+                    [typer_options.append(os.path.normpath(layer.source())) for layer in layers]
+                else:
+                    [typer_args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
 
             # TODO check if works
