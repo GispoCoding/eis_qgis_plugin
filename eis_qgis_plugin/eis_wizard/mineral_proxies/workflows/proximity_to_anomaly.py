@@ -18,14 +18,14 @@ from eis_qgis_plugin.eis_wizard.mineral_proxies.proxy_processing import EISWizar
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.misc_utils import get_output_path
 
-FORM_CLASS = load_ui("mineral_proxies/proxy_workflow3_define_anomaly.ui")
+FORM_CLASS = load_ui("mineral_proxies/proxy_workflow_proximity_to_anomaly.ui")
 
 
 
-class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
+class EISWizardProxyProximityToAnomaly(EISWizardProxyProcess, FORM_CLASS):
 
-    ALG_NAME = "eis:distance_to_anomaly"
-    WORKFLOW_NAME = "Distance to anomaly"
+    ALG_NAME = "eis:proximity_to_anomaly"
+    WORKFLOW_NAME = "Proximity to anomaly"
 
     def __init__(self,
         proxy_manager: QWidget,
@@ -56,6 +56,8 @@ class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
         self.threshold_2: QgsDoubleSpinBox
         self.threshold_label_2: QLabel
         self.max_distance: QgsDoubleSpinBox
+        self.max_distance_value: QgsDoubleSpinBox
+        self.anomaly_value: QgsDoubleSpinBox
 
         self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
@@ -105,7 +107,9 @@ class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
             "threshold_criteria": self.threshold_criteria.currentIndex(),
             "first_threshold_criteria_value": self.threshold_1.value(),
             "second_threshold_criteria_value": anomaly_threshold_2,
-            "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
+            "max_distance": self.max_distance.value(),
+            "max_distance_value": self.max_distance_value.value(),
+            "anomaly_value": self.anomaly_value.value(),
             "output_raster": get_output_path(self.output_raster_path)
         }
         self.executor.configure(self.ALG_NAME, self.feedback)

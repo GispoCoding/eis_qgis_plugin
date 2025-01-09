@@ -18,14 +18,14 @@ from eis_qgis_plugin.eis_wizard.mineral_proxies.proxy_processing import EISWizar
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.misc_utils import get_output_path
 
-FORM_CLASS = load_ui("mineral_proxies/proxy_workflow3_define_anomaly.ui")
+FORM_CLASS = load_ui("mineral_proxies/proxy_workflow_binarize.ui")
 
 
 
-class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
+class EISWizardProxyBinarize(EISWizardProxyProcess, FORM_CLASS):
 
-    ALG_NAME = "eis:distance_to_anomaly"
-    WORKFLOW_NAME = "Distance to anomaly"
+    ALG_NAME = "eis:binarize"
+    WORKFLOW_NAME = "Binarize"
 
     def __init__(self,
         proxy_manager: QWidget,
@@ -50,12 +50,8 @@ class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
         self.raster_layer: QgsMapLayerComboBox
 
         self.method_box: QGroupBox
-        self.threshold_criteria: QComboBox
-        self.threshold_1: QgsDoubleSpinBox
-        self.threshold_label_1: QLabel
-        self.threshold_2: QgsDoubleSpinBox
-        self.threshold_label_2: QLabel
-        self.max_distance: QgsDoubleSpinBox
+        self.binarizing_threshold_label: QLabel
+        self.binarizing_threshold: QgsDoubleSpinBox
 
         self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
@@ -66,9 +62,6 @@ class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
 
     def initialize(self):
         self.raster_layer.setFilters(QgsMapLayerProxyModel.RasterLayer)
-        self.threshold_criteria.currentTextChanged.connect(self.on_threshold_criteria_changed)
-        self.on_threshold_criteria_changed("higher")
-
         super().initialize(self.process_type)
 
 
@@ -82,30 +75,10 @@ class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
         self.output_raster_settings_pages.setCurrentIndex(i)
 
 
-    def on_threshold_criteria_changed(self, text: str):
-        text = text.lower()
-        if text == "higher" or text == "lower":
-            self.threshold_label_1.setText("Threshold value")
-            self.threshold_label_2.hide()
-            self.threshold_2.hide()
-        else:
-            self.threshold_label_1.setText("Threshold value lower")           
-            self.threshold_label_2.show()
-            self.threshold_2.show()
-
-
     def run(self):
-        threshold_criteria = self.threshold_criteria.currentIndex()
-        anomaly_threshold_2 = self.threshold_2.value()
-        if threshold_criteria == 0 or threshold_criteria == 1:
-            anomaly_threshold_2 = None
-
         params = {
             "input_raster": self.raster_layer.currentLayer(),
-            "threshold_criteria": self.threshold_criteria.currentIndex(),
-            "first_threshold_criteria_value": self.threshold_1.value(),
-            "second_threshold_criteria_value": anomaly_threshold_2,
-            "max_distance": self.max_distance.value() if self.max_distance.value() > 0 else None,
+            "threshold": self.binarizing_threshold.value(),
             "output_raster": get_output_path(self.output_raster_path)
         }
         self.executor.configure(self.ALG_NAME, self.feedback)

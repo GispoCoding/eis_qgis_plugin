@@ -98,7 +98,7 @@ class EISProximityToAnomaly(EISProcessingAlgorithm):
             name=self.alg_parameters[5],
             description="Max distance value",
             type=QgsProcessingParameterNumber.Double,
-            minValue=0.0
+            defaultValue=0.0
         )
         max_distance_value_param.setHelp(
             "Value at and beyond given max distance. Used for scaling the output raster values."
@@ -109,7 +109,7 @@ class EISProximityToAnomaly(EISProcessingAlgorithm):
             name=self.alg_parameters[6],
             description="Anomaly value",
             type=QgsProcessingParameterNumber.Double,
-            minValue=1.0
+            defaultValue=1.0
         )
         anomaly_value_param.setHelp("Value at anomaly. Used for scaling the output raster values.")
         self.addParameter(anomaly_value_param)
