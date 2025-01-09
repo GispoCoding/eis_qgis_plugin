@@ -48,7 +48,6 @@ class EISWizardProxyDistanceToAnomaly(EISWizardProxyProcess, FORM_CLASS):
 
         # DECLARE TYPES
         self.raster_layer: QgsMapLayerComboBox
-        # self.band: QgsRasterBandComboBox
 
         self.method_box: QGroupBox
         self.threshold_criteria: QComboBox
