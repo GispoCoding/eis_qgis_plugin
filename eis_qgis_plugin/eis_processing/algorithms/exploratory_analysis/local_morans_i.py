@@ -76,7 +76,7 @@ class EISLocalMoransI(EISProcessingAlgorithm):
 
         output_vector_param = QgsProcessingParameterVectorDestination(
             name=self.alg_parameters[5],
-            description="Output geometries"
+            description="Local Moran's I output"
         )
         output_vector_param.setHelp(
             "Output vector file with attributes for Local Moran's I statistic and p-value for the statistic."

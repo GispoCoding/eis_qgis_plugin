@@ -44,7 +44,7 @@ class EISSinglePlrTransform(EISProcessingAlgorithm):
 
         output_vector_param = QgsProcessingParameterVectorDestination(
             name=self.alg_parameters[2],
-            description="Output vector",
+            description="Single PLR transform output",
         )
         output_vector_param.setHelp("Output vector with the transformed data.")
         self.addParameter(output_vector_param)

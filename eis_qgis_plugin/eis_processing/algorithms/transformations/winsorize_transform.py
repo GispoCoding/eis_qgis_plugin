@@ -79,7 +79,7 @@ class EISWinsorizeTransform(EISProcessingAlgorithm):
         self.addParameter(inside_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[4], description="Output raster"
+            name=self.alg_parameters[4], description="Winsorized raster"
         )
         output_raster_param.setHelp("Output raster with the transformed data.")
         self.addParameter(output_raster_param)

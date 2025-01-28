@@ -71,7 +71,7 @@ class EISFocalFilter(EISProcessingAlgorithm):
         self.addParameter(shape_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[4], description="Output raster"
+            name=self.alg_parameters[4], description="Focal filter ouput"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)

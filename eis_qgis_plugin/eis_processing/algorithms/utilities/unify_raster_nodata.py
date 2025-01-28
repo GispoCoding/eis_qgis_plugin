@@ -48,7 +48,7 @@ class EISUnifyRasterNodata(EISProcessingAlgorithm):
 
         output_folder_param = QgsProcessingParameterFolderDestination(
             name=self.alg_parameters[2],
-            description="Output raster"
+            description="Unify raster nodata output"
         )
         output_folder_param.setHelp("Output folder where the unified rasters will be saved.")
         self.addParameter(output_folder_param)

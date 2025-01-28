@@ -72,7 +72,7 @@ class EISCreateConstantRasterManually(EISProcessingAlgorithm):
         self.addParameter(nodata_value_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[5], description="Output raster"
+            name=self.alg_parameters[5], description="Constant raster output (manual)"
         )
         output_raster_param.setHelp("The output constant raster.")
         self.addParameter(output_raster_param)

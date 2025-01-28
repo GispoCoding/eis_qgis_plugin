@@ -70,7 +70,7 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
     
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[3],
-            description="Output raster",
+            description="Fuzzy overlay output",
         )
         output_raster_param.setHelp("Output overlay raster.")
         self.addParameter(output_raster_param)

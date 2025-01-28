@@ -37,7 +37,7 @@ class EISUniqueCombinations(EISProcessingAlgorithm):
 
         output_raster = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[1],
-            description="Output raster"
+            description="Unique combinations output"
         )
         output_raster.setHelp("The output combination raster.")
         self.addParameter(output_raster)

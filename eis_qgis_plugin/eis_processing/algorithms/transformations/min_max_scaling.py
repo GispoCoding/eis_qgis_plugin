@@ -50,7 +50,7 @@ class EISMinMaxScaling(EISProcessingAlgorithm):
         self.addParameter(max_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[3], description="Output raster"
+            name=self.alg_parameters[3], description="Min-max scaled raster"
         )
         output_raster_param.setHelp("Output raster with transformed data.")
         self.addParameter(output_raster_param)

@@ -40,7 +40,7 @@ class EISInverseClrTransform(EISProcessingAlgorithm):
 
         output_vector_param = QgsProcessingParameterVectorDestination(
             name=self.alg_parameters[2],
-            description="Output vector",
+            description="Inverse CLR transform output",
         )
         output_vector_param.setHelp("Output vector with inverse transformed data.")
         self.addParameter(output_vector_param)

@@ -74,7 +74,7 @@ class EISVectorDensity(EISProcessingAlgorithm):
 
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[6],
-            description="Output raster",
+            description="Vector density output",
         )
         output_raster_param.setHelp("Output density raster.")
         self.addParameter(output_raster_param)
