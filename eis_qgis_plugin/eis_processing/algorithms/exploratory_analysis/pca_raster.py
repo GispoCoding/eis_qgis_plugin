@@ -58,7 +58,7 @@ class EISPcaRaster(EISProcessingAlgorithm):
         self.addParameter(nodata_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[3], description="Output raster"
+            name=self.alg_parameters[3], description="PCA output"
         )
         output_raster_param.setHelp(
             "Output multiband raster where each band has data of the corresponding principal component.")

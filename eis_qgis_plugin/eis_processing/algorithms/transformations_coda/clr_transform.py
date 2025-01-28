@@ -27,7 +27,7 @@ class EISClrTransform(EISProcessingAlgorithm):
 
         output_vector_param = QgsProcessingParameterVectorDestination(
             name=self.alg_parameters[1],
-            description="Output vector",
+            description="CLR transform output",
         )
         output_vector_param.setHelp("Output vector with the CLR transformed data.")
         self.addParameter(output_vector_param)

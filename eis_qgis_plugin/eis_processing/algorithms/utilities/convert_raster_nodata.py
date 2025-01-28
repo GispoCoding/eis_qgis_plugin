@@ -58,7 +58,7 @@ class EISConvertRasterNodata(EISProcessingAlgorithm):
 
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[3],
-            description="Output raster"
+            description="Convert raster nodata output"
         )
         output_raster_param.setHelp("Output raster with nodata values converted.")
         self.addParameter(output_raster_param)

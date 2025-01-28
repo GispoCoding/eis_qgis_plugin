@@ -43,7 +43,7 @@ class EISSetRasterNodata(EISProcessingAlgorithm):
 
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[2],
-            description="Output raster"
+            description="Set raster nodata output"
         )
         output_raster_param.setHelp("Output raster with nodata value in its metadata.")
         self.addParameter(output_raster_param)

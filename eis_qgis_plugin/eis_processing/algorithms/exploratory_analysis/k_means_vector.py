@@ -88,7 +88,7 @@ class EISKMeansVector(EISProcessingAlgorithm):
         self.addParameter(random_state_param)
 
         output_vector_param = QgsProcessingParameterVectorDestination(
-            name=self.alg_parameters[5], description="Output vector"
+            name=self.alg_parameters[5], description="K-means output"
         )
         output_vector_param.setHelp("Output vector file with new cluster label column.")
         self.addParameter(output_vector_param)

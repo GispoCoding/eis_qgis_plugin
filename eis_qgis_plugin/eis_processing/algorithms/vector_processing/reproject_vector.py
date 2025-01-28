@@ -33,7 +33,7 @@ class EISReprojectVector(EISProcessingAlgorithm):
         self.addParameter(target_crs_param )
 
         output_vector_param = QgsProcessingParameterVectorDestination(
-            name=self.alg_parameters[2], description="Output vector"
+            name=self.alg_parameters[2], description="Reprojected vector"
         )
         output_vector_param.setHelp("Output reprojected vector.")
         self.addParameter(output_vector_param)
