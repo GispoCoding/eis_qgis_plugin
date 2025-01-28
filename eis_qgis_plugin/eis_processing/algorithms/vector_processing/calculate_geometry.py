@@ -25,7 +25,7 @@ class EISCalculateGeometry(EISProcessingAlgorithm):
         self.addParameter(input_vector_param)
 
         output_vector = QgsProcessingParameterVectorDestination(
-            name=self.alg_parameters[1], description="Output vector"
+            name=self.alg_parameters[1], description="Calculate geometry output"
         )
         output_vector.setHelp("Output vector with calculation results.")
         self.addParameter(output_vector)

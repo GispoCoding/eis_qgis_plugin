@@ -53,6 +53,6 @@ class EISExtractWindow(EISProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterRasterDestination(
-                name=self.alg_parameters[4], description="Output raster"
+                name=self.alg_parameters[4], description="Extracted window"
             )
         )

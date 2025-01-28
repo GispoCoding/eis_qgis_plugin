@@ -93,7 +93,7 @@ class EISProximityComputation(EISProcessingAlgorithm):
         self.addParameter(geometries_value_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[7], description="Output raster"
+            name=self.alg_parameters[7], description="Proximity computation output"
         )
         output_raster_param.setHelp("Output raster with proximities to closest geometries.")
         self.addParameter(output_raster_param)

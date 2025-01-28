@@ -59,7 +59,7 @@ class EISReprojectRaster(EISProcessingAlgorithm):
         self.addParameter(resampling_method_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[3], description="Output raster"
+            name=self.alg_parameters[3], description="Reprojected raster"
         )
         output_raster_param.setHelp("The output reprojected raster.")
         self.addParameter(output_raster_param)

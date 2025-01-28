@@ -57,7 +57,7 @@ class EISLeeAdditiveNoiseFilter(EISProcessingAlgorithm):
         self.addParameter(add_noise_var_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[3], description="Output raster"
+            name=self.alg_parameters[3], description="Lee additive noise filter output"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)

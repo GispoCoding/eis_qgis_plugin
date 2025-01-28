@@ -38,7 +38,7 @@ class EISClipRaster(EISProcessingAlgorithm):
         self.addParameter(input_vector_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[2], description="Output raster"
+            name=self.alg_parameters[2], description="Clipped raster"
         )
         output_raster_param.setHelp("The clipped output raster.")
         self.addParameter(output_raster_param)

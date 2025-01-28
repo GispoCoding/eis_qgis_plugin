@@ -115,7 +115,7 @@ class EISProximityToAnomaly(EISProcessingAlgorithm):
         self.addParameter(anomaly_value_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[7], description="Output raster"
+            name=self.alg_parameters[7], description="Proximity to anomaly output"
         )
         output_raster_param.setHelp("Output raster with proximities to closest anomalies.")
         self.addParameter(output_raster_param)

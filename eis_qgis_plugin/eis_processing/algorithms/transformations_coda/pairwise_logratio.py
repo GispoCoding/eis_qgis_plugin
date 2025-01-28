@@ -46,7 +46,7 @@ class EISPairwiseLogratio(EISProcessingAlgorithm):
 
         output_vector_param = QgsProcessingParameterVectorDestination(
             name=self.alg_parameters[3],
-            description="Output vector",
+            description="Pairwise logratio transform output",
         )
         output_vector_param.setHelp("Output vector with the transformed values.")
         self.addParameter(output_vector_param)

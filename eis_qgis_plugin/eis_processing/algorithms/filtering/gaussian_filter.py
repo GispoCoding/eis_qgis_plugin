@@ -74,7 +74,7 @@ class EISGaussianFilter(EISProcessingAlgorithm):
         self.addParameter(window_size_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[4], description="Output raster"
+            name=self.alg_parameters[4], description="Gaussian filter output"
         )
         output_raster_param.setHelp("The output raster data set.")
         self.addParameter(output_raster_param)

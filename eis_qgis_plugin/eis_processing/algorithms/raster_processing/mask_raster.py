@@ -37,7 +37,7 @@ class EISMaskRaster(EISProcessingAlgorithm):
         self.addParameter(base_raster_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[2], description="Output raster"
+            name=self.alg_parameters[2], description="Masked raster"
         )
         output_raster_param.setHelp("The masked output raster.")
         self.addParameter(output_raster_param)

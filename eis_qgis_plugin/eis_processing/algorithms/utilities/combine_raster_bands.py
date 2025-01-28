@@ -37,7 +37,7 @@ class EISCombineRasterBands(EISProcessingAlgorithm):
 
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[1],
-            description="Output raster"
+            description="Combined raster"
         )
         output_raster_param.setHelp("Output multiband raster that includes all bands of all input rasters.")
         self.addParameter(output_raster_param)

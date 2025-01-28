@@ -107,7 +107,7 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
 
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[8],
-            description="Output raster",
+            description="Kriging output",
         )
         output_raster_param.setHelp("Output interpolation raster.")
         self.addParameter(output_raster_param)

@@ -49,7 +49,7 @@ class EISReclassifyWithNaturalBreaks(EISProcessingAlgorithm):
         self.addParameter(bands_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[3], description="Output raster"
+            name=self.alg_parameters[3], description="Reclassified raster (natural breaks)"
         )
         output_raster_param.setHelp("The output reclassified raster.")
         self.addParameter(output_raster_param)

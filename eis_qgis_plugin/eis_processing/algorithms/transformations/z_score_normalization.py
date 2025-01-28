@@ -31,7 +31,7 @@ class EISZScoreNormalization(EISProcessingAlgorithm):
         self.addParameter(input_raster_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[1], description="Output raster"
+            name=self.alg_parameters[1], description="Z score normalized raster"
         )
         output_raster_param.setHelp("Output raster with the transformed data.")
         self.addParameter(output_raster_param)

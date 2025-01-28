@@ -62,7 +62,7 @@ class EISKMeansRaster(EISProcessingAlgorithm):
         self.addParameter(random_state_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[3], description="Output raster"
+            name=self.alg_parameters[3], description="K-means output"
         )
         output_raster_param.setHelp("Output singleband raster with cluster numbers as pixel values.")
         self.addParameter(output_raster_param)

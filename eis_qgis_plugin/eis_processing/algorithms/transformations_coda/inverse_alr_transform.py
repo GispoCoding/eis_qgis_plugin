@@ -48,7 +48,7 @@ class EISInverseAlrTransform(EISProcessingAlgorithm):
 
         output_vector_param = QgsProcessingParameterVectorDestination(
             name=self.alg_parameters[3],
-            description="Output vector",
+            description="Inverse ALR transform output",
         )
         output_vector_param.setHelp("Output vector with inverse transformed data.")
         self.addParameter(output_vector_param)

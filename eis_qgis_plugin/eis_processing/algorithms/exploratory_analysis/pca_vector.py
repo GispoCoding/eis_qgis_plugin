@@ -90,7 +90,7 @@ class EISPcaVector(EISProcessingAlgorithm):
         self.addParameter(nodata_param)
 
         output_vector_param = QgsProcessingParameterVectorDestination(
-            name=self.alg_parameters[5], description="Output vector"
+            name=self.alg_parameters[5], description="PCA output"
         )
         output_vector_param.setHelp(
             "Output vector file with columns for each principal component."

@@ -63,7 +63,7 @@ class EISDistanceComputation(EISProcessingAlgorithm):
         self.addParameter(max_distance_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[5], description="Output raster"
+            name=self.alg_parameters[5], description="Distance computation output"
         )
         output_raster_param.setHelp("Output distance raster.")
         self.addParameter(output_raster_param)

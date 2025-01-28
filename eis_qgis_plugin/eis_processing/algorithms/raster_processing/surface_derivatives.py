@@ -162,7 +162,7 @@ class EISSurfaceDerivatives(EISProcessingAlgorithm):
         self.addParameter(second_order_method_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[9], description="Output raster"
+            name=self.alg_parameters[9], description="Surface derivatives output"
         )
         output_raster_param.setHelp("The output surface derivative raster.")
         self.addParameter(output_raster_param)

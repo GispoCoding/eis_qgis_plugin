@@ -52,7 +52,7 @@ class EISSingleIlrTransform(EISProcessingAlgorithm):
 
         output_vector_param =  QgsProcessingParameterVectorDestination(
             name=self.alg_parameters[3],
-            description="Output vector",
+            description="Single ILR transform output",
         )
         output_vector_param.setHelp("Output vector with the transformed data.")
         self.addParameter(output_vector_param)

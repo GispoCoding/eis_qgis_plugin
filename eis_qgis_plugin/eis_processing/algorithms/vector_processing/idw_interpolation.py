@@ -90,7 +90,7 @@ class EISIdwInterpolation(EISProcessingAlgorithm):
         self.addParameter(search_radius_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[7], description="Output raster"
+            name=self.alg_parameters[7], description="IDW output"
         )
         output_raster_param.setHelp("Output interpolation raster.")
         self.addParameter(output_raster_param)

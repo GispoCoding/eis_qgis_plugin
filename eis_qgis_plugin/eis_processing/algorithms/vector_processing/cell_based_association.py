@@ -126,7 +126,7 @@ class EISCellBasedAssociation(EISProcessingAlgorithm):
         self.addParameter(add_buffer_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[6], description="Output raster"
+            name=self.alg_parameters[6], description="CBA output"
         )
         output_raster_param.setHelp("Output CBA raster.")
         self.addParameter(output_raster_param)

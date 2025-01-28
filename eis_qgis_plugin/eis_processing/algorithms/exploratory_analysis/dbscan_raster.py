@@ -66,7 +66,7 @@ class EISDbscanRaster(EISProcessingAlgorithm):
         self.addParameter(min_samples_param)
 
         output_raster_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[3], description="Output raster"
+            name=self.alg_parameters[3], description="DBSCAN output"
         )
         output_raster_param.setHelp("Output singleband raster with cluster numbers as pixel values.")
         self.addParameter(output_raster_param)

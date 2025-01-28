@@ -62,14 +62,14 @@ class EISClassifierPredict(EISProcessingAlgorithm):
         
         output_raster_probability_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[3],
-            description="Output probability raster",
+            description="Output probability raster (predict)",
         )
         output_raster_probability_param.setHelp("Output raster with label probabilities.")
         self.addParameter(output_raster_probability_param)
 
         output_raster_classified_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[4],
-            description="Output classified raster",
+            description="Output classified raster (predict)",
         )
         output_raster_classified_param.setHelp("Output raster with predicted labels.")
         self.addParameter(output_raster_classified_param)

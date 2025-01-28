@@ -41,7 +41,7 @@ class EISBinarize(EISProcessingAlgorithm):
 
         output_raster_param = QgsProcessingParameterRasterDestination(
             name=self.alg_parameters[2],
-            description="Output raster",
+            description="Binarized raster",
         )
         output_raster_param.setHelp("Output raster with transformed data.")
         self.addParameter(output_raster_param)

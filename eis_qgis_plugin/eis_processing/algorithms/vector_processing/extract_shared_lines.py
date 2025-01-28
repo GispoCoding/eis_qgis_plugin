@@ -25,7 +25,7 @@ class EISExtractSharedLines(EISProcessingAlgorithm):
         self.addParameter(input_vector_param)
 
         output_vector_param = QgsProcessingParameterVectorDestination(
-            name=self.alg_parameters[1], description="Output vector"
+            name=self.alg_parameters[1], description="Extract shared lines output"
         )
         output_vector_param.setHelp("Output vector layer with the shared lines.")
         self.addParameter(output_vector_param)
