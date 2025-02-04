@@ -27,6 +27,8 @@ from qgis.core import (
     QgsProcessingParameterString,
     QgsProcessingParameterVectorDestination,
     QgsProcessingParameterVectorLayer,
+    QgsProject,
+    QgsVectorLayer,
 )
 
 from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
@@ -343,6 +345,10 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self.get_results(results, parameters)
         for param_name, output_path in output_paths.items():
             results[param_name] = output_path
+
+            if output_path.endswith('.csv'):
+                output_layer = QgsVectorLayer(output_path, param_name)
+                QgsProject.instance().addMapLayer(output_layer)
 
         feedback.setProgress(100)
 
