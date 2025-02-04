@@ -1,9 +1,10 @@
 from qgis.core import (
     QgsProcessingParameterEnum,
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterFolderDestination,
+    QgsProcessingParameterMapLayer,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
-    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -21,13 +22,14 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
-            "input_raster",
-            "input_vector",
+            "evidential_raster",
+            "deposits",
             "raster_nodata",
             "weights_type",
             "studentized_contrast_threshold",
             "arrays_to_generate",
-            "output_dir",
+            "output_results_table",
+            "output_raster_dir",
         ]
 
         input_raster_param = QgsProcessingParameterRasterLayer(
@@ -35,10 +37,10 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
         )
         self.addParameter(input_raster_param)
 
-        input_vector_param = QgsProcessingParameterVectorLayer(
+        input_vector_param = QgsProcessingParameterMapLayer(
             name=self.alg_parameters[1], description="Deposits"
         )
-        input_vector_param.setHelp("Vector data representing the mineral deposits or occurences point data.")
+        input_vector_param.setHelp("Vector or raster data representing the mineral deposits or occurences point data.")
         self.addParameter(input_vector_param)
 
         raster_nodata_param = QgsProcessingParameterNumber(
@@ -106,9 +108,15 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
         )
         self.addParameter(arrays_to_generate_param)
 
-        output_dir_param = QgsProcessingParameterFolderDestination(
-            name=self.alg_parameters[6], description="Output folder"
+        output_results_table = QgsProcessingParameterFileDestination(
+            name=self.alg_parameters[6], description="Output CSV file", fileFilter="CSV files (*.csv)"
         )
-        output_dir_param.setHelp("Generated arrays and a CSV of the results are saved to folder.")
+        output_results_table.setHelp("CSV containing the results of weights of evidence calculations.")
+        self.addParameter(output_results_table)
+
+        output_dir_param = QgsProcessingParameterFolderDestination(
+            name=self.alg_parameters[7], description="Output raster"
+        )
+        output_dir_param.setHelp("Save directory for generated rasters.")
         self.addParameter(output_dir_param)
     
