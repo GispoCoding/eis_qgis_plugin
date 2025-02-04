@@ -81,7 +81,7 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
 
         arrays_to_generate_param = QgsProcessingParameterEnum(
             name=self.alg_parameters[5],
-            description="Arrays to generate",
+            description="Rasters to generate",
             options=["Class",
                      "Pixel count",
                      "Deposit count",
@@ -100,7 +100,7 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
             optional=True,
         )
         arrays_to_generate_param.setHelp("""
-            Arrays to generate from the computed weight metrics. Available column names for "unique" weights type are
+            Rasters to generate from the computed weight metrics. Available column names for "unique" weights type are
             "Class", "Pixel count", "Deposit count", "W+", "S_W+", "W-", "S_W-", "Contrast", "S_Contrast", and
             "Studentized contrast". For other weights types, additional available column names are "Generalized class",
             "Generalzed W+", and "Generalized S_W+". Defaults to ["Class", "W+", "S_W+] for "unique" weights_type and
