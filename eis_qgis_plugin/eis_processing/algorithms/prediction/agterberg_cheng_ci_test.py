@@ -1,4 +1,5 @@
 from qgis.core import (
+    QgsProcessingParameterFileDestination,
     QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
 )
@@ -17,7 +18,12 @@ class EISAgterbergChengCiTest(EISProcessingAlgorithm):
         self._short_help_string = "Perform the conditional independence test presented by Agterberg-Cheng (2002)."
 
     def initAlgorithm(self, config=None):
-        self.alg_parameters = ["input_posterior_probabilities", "input_posterior_probabilities_std", "nr_of_deposits"]
+        self.alg_parameters = [
+            "input_posterior_probabilities",
+            "input_posterior_probabilities_std",
+            "nr_of_deposits",
+            "save_summary"
+        ]
 
         posterior_probabilities_param = QgsProcessingParameterRasterLayer(
             name=self.alg_parameters[0], description="Posterior probabilities"
@@ -40,3 +46,9 @@ class EISAgterbergChengCiTest(EISProcessingAlgorithm):
             "Number of deposit pixels in the input data for weights of evidence calculations."
         )
         self.addParameter(nr_of_deposits_param)
+
+        save_summary_param = QgsProcessingParameterFileDestination(
+            name=self.alg_parameters[3], description="Save summary", optional=True
+        )
+        save_summary_param.setHelp("File path for saving the test results (summary) in a text file.")
+        self.addParameter(save_summary_param)
