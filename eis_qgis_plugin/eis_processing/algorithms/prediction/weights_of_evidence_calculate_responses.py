@@ -1,7 +1,7 @@
 from qgis.core import (
     QgsProcessing,
+    QgsProcessingParameterMapLayer,
     QgsProcessingParameterMultipleLayers,
-    QgsProcessingParameterNumber,
     QgsProcessingParameterRasterDestination,
 )
 
@@ -24,8 +24,7 @@ class EISWeightsOfEvidenceCalculateResponses(EISProcessingAlgorithm):
         self.alg_parameters = [
             "input_rasters_weights",
             "input_rasters_standard_deviations",
-            "nr_of_deposits",
-            "nr_of_pixels",
+            "input_weights_table",
             "output_probabilities",
             "output_probabilities_std",
             "output_confidence_array"
@@ -50,25 +49,19 @@ class EISWeightsOfEvidenceCalculateResponses(EISProcessingAlgorithm):
         )
         self.addParameter(input_rasters_std_param)
 
-        nr_of_deposits_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[2], description="Number of deposit pixels"
+        input_weights_file = QgsProcessingParameterMapLayer(
+            name=self.alg_parameters[2], description="Results table"
         )
-        nr_of_deposits_param.setHelp("Number of deposit pixels in the input data for weights of evidence calculations.")
-        self.addParameter(nr_of_deposits_param)
-
-        nr_of_pixels_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[3], description="Number of evidence pixels"
-        )
-        nr_of_pixels_param.setHelp("Number of evidence pixels in the input data for weights of evidence calculations.")
-        self.addParameter(nr_of_pixels_param)
+        input_weights_file.setHelp("CSV output of calculate weights algorithm.")
+        self.addParameter(input_weights_file)
 
         output_probabilities_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[4], description="Output posterior probabilities"
+            name=self.alg_parameters[3], description="Output posterior probabilities"
         )
         self.addParameter(output_probabilities_param)
 
         output_probabilities_std_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[5], description="Output standard deviations"
+            name=self.alg_parameters[4], description="Output standard deviations"
         )
         output_probabilities_std_param.setHelp("""
             Raster of standard deviations in the posterior probability calculations."""
@@ -76,7 +69,7 @@ class EISWeightsOfEvidenceCalculateResponses(EISProcessingAlgorithm):
         self.addParameter(output_probabilities_std_param)
 
         output_confidence_param = QgsProcessingParameterRasterDestination(
-            name=self.alg_parameters[6], description="Output confidence raster"
+            name=self.alg_parameters[5], description="Output confidence raster"
         )
         output_confidence_param.setHelp("""
             Raster of confidence of the prospectivity values obtained in the posterior probability raster."""
