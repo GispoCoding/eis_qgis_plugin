@@ -28,14 +28,14 @@ class EISAgterbergChengCiTest(EISProcessingAlgorithm):
         posterior_probabilities_param = QgsProcessingParameterRasterLayer(
             name=self.alg_parameters[0], description="Posterior probabilities"
         )
-        posterior_probabilities_param.setHelp("Array of posterior probabilites.")
+        posterior_probabilities_param.setHelp("Raster of posterior probabilites.")
         self.addParameter(posterior_probabilities_param)
 
         posterior_probabilities_std_param = QgsProcessingParameterRasterLayer(
             name=self.alg_parameters[1], description="Standard deviations"
         )
         posterior_probabilities_std_param.setHelp(
-            "Array of standard deviations in the posterior probability calculations."
+            "Raster of standard deviations in the posterior probability calculations."
         )
         self.addParameter(posterior_probabilities_std_param)
 
