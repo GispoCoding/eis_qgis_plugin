@@ -1,7 +1,8 @@
 from qgis.core import (
+    QgsProcessing,
     QgsProcessingParameterFileDestination,
-    QgsProcessingParameterNumber,
     QgsProcessingParameterRasterLayer,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -21,7 +22,7 @@ class EISAgterbergChengCiTest(EISProcessingAlgorithm):
         self.alg_parameters = [
             "input_posterior_probabilities",
             "input_posterior_probabilities_std",
-            "nr_of_deposits",
+            "input_weights_table",
             "save_summary"
         ]
 
@@ -39,13 +40,13 @@ class EISAgterbergChengCiTest(EISProcessingAlgorithm):
         )
         self.addParameter(posterior_probabilities_std_param)
 
-        nr_of_deposits_param = QgsProcessingParameterNumber(
-            name=self.alg_parameters[2], description="Number of deposits"
+        input_weights_file = QgsProcessingParameterVectorLayer(
+            name=self.alg_parameters[2], description="Results table", types=[QgsProcessing.SourceType.TypeVector]
         )
-        nr_of_deposits_param.setHelp(
-            "Number of deposit pixels in the input data for weights of evidence calculations."
+        input_weights_file.setHelp(
+            "CSV output of calculate weights algorithm. Needs to include columns 'Deposit count' and 'Pixel count'."
         )
-        self.addParameter(nr_of_deposits_param)
+        self.addParameter(input_weights_file)
 
         save_summary_param = QgsProcessingParameterFileDestination(
             name=self.alg_parameters[3], description="Save summary", optional=True
