@@ -27,6 +27,8 @@ from qgis.core import (
     QgsProcessingParameterString,
     QgsProcessingParameterVectorDestination,
     QgsProcessingParameterVectorLayer,
+    QgsProject,
+    QgsVectorLayer,
 )
 
 from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
@@ -43,6 +45,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self._short_help_string = ""
 
         self.alg_parameters: List[str] = []
+        self.multiple_layers_as_typer_option: bool = False
 
     def name(self):
         """
@@ -201,7 +204,12 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 layers = self.parameterAsLayerList(parameters, name, context)
                 if not layers:
                     continue
-                [typer_args.append(os.path.normpath(layer.source())) for layer in layers]
+                if self.multiple_layers_as_typer_option:
+                    for layer in layers:
+                        typer_options.append(param_name)
+                        typer_options.append(os.path.normpath(layer.source()))
+                else:
+                    [typer_args.append(os.path.normpath(layer.source())) for layer in layers]
                 continue
 
             # TODO check if works
@@ -337,6 +345,10 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         self.get_results(results, parameters)
         for param_name, output_path in output_paths.items():
             results[param_name] = output_path
+
+            if output_path.endswith('.csv'):
+                output_layer = QgsVectorLayer(output_path, param_name)
+                QgsProject.instance().addMapLayer(output_layer)
 
         feedback.setProgress(100)
 
