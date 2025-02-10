@@ -1,8 +1,8 @@
 from qgis.core import (
     QgsProcessing,
-    QgsProcessingParameterMapLayer,
     QgsProcessingParameterMultipleLayers,
     QgsProcessingParameterRasterDestination,
+    QgsProcessingParameterVectorLayer,
 )
 
 from eis_qgis_plugin.eis_processing.eis_processing_algorithm import EISProcessingAlgorithm
@@ -49,10 +49,12 @@ class EISWeightsOfEvidenceCalculateResponses(EISProcessingAlgorithm):
         )
         self.addParameter(input_rasters_std_param)
 
-        input_weights_file = QgsProcessingParameterMapLayer(
-            name=self.alg_parameters[2], description="Results table"
+        input_weights_file = QgsProcessingParameterVectorLayer(
+            name=self.alg_parameters[2], description="Results table", types=[QgsProcessing.SourceType.TypeVector]
         )
-        input_weights_file.setHelp("CSV output of calculate weights algorithm.")
+        input_weights_file.setHelp(
+            "CSV output of calculate weights algorithm. Needs to include columns 'Deposit count' and 'Pixel count'."
+        )
         self.addParameter(input_weights_file)
 
         output_probabilities_param = QgsProcessingParameterRasterDestination(
