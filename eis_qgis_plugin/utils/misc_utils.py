@@ -31,7 +31,8 @@ FILE_FILTERS = {
     "raster": "GeoTiff files (*.tif *.tiff)",
     "vector": "",
     "joblib": "Joblib files (*.joblib)",
-    "image": "Images (*.png *.jpeg)"
+    "image": "Images (*.png *.jpeg)",
+    "csv": "Comma-separated values (*.csv)",
 }
 
 class ModelKind(str, Enum):
@@ -50,7 +51,7 @@ def set_placeholder_text(
     return False
 
 
-def set_filter(file_widget: QgsFileWidget, filter: Literal["raster", "vector", "joblib", "image"]) -> bool:
+def set_filter(file_widget: QgsFileWidget, filter: Literal["raster", "vector", "joblib", "image", "csv"]) -> bool:
     "Tries to set set specified filter to a QgsFileWidget."
     if filter in FILE_FILTERS.keys():
         file_widget.setFilter(FILE_FILTERS[filter])
