@@ -28,10 +28,12 @@ from qgis.core import (
     QgsProcessingParameterVectorDestination,
     QgsProcessingParameterVectorLayer,
     QgsProject,
+    QgsRasterLayer,
     QgsVectorLayer,
 )
 
 from eis_qgis_plugin.environment.eis_toolkit_invoker import EISToolkitInvoker
+from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
 
 
 class EISProcessingAlgorithm(QgsProcessingAlgorithm):
@@ -332,7 +334,6 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         
         EISToolkitInvoker will handle the actual communication with EIS Toolkit.
         """
-
         if feedback is None:
             feedback = QgsProcessingFeedback()
 
@@ -346,10 +347,17 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         for param_name, output_path in output_paths.items():
             results[param_name] = output_path
 
-            if output_path.endswith('.csv'):
+            # Load output tables if the algorithm is not running in EIS QGIS plugin
+            if output_path.endswith('.csv') and type(feedback) != EISProcessingFeedback:
                 output_layer = QgsVectorLayer(output_path, param_name)
                 QgsProject.instance().addMapLayer(output_layer)
 
-        feedback.setProgress(100)
+        # Check whether the algorithm is running nested in EIS plugin or not
+        if type(feedback) != EISProcessingFeedback:
+            # If not running in plugin, check if there are extra output raster that should be loaded
+            if "output_folder_rasters" in results.keys():
+                for name, path in results["output_folder_rasters"].items():
+                    QgsProject.instance().addMapLayer(QgsRasterLayer(path, name))
 
+        feedback.setProgress(100)
         return results

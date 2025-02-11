@@ -7,7 +7,7 @@ import threading
 import time
 from typing import Dict, List, TextIO, Tuple
 
-from qgis.core import QgsProcessingFeedback, QgsProject, QgsRasterLayer
+from qgis.core import QgsProcessingFeedback
 
 from eis_qgis_plugin.environment.eis_environment_handler import DockerEnvironmentHandler, VenvEnvironmentHandler
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
@@ -93,7 +93,7 @@ class EISToolkitInvoker:
         results.update(output_dict)
 
 
-    def _update_out_rasters(self, stdout: str):
+    def _update_out_rasters(self, stdout: str, results: dict):
         """
         Updates the QGIS project with output rasters parsed from the stdout message.
 
@@ -106,10 +106,8 @@ class EISToolkitInvoker:
         # Deserialize the JSON-formatted string to a Python dict
         output_dict = json.loads(json_str)
 
-        for name, path in output_dict.items():
-            # TODO: Handle potential errors
-            output_raster_layer = QgsRasterLayer(path, name)
-            QgsProject.instance().addMapLayer(output_raster_layer)
+        # results.update(output_dict)
+        results["output_folder_rasters"] = output_dict
 
 
     def assemble_cli_command(self, alg_name: str, typer_args: List[str], typer_options: List[str]):
@@ -269,7 +267,7 @@ class EISToolkitInvoker:
             self._update_results(stdout_line, results, feedback)
 
         elif self.OUT_RASTERS_PREFIX in stdout_line:
-            self._update_out_rasters(stdout_line)
+            self._update_out_rasters(stdout_line, results)
 
         else:
             feedback.pushInfo(stdout_line)
