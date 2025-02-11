@@ -1,6 +1,5 @@
 from qgis.core import (
     QgsProcessing,
-    QgsProcessingParameterFileDestination,
     QgsProcessingParameterRasterLayer,
     QgsProcessingParameterVectorLayer,
 )
@@ -22,8 +21,7 @@ class EISAgterbergChengCiTest(EISProcessingAlgorithm):
         self.alg_parameters = [
             "input_posterior_probabilities",
             "input_posterior_probabilities_std",
-            "input_weights_table",
-            "save_summary"
+            "input_weights_table"
         ]
 
         posterior_probabilities_param = QgsProcessingParameterRasterLayer(
@@ -47,9 +45,3 @@ class EISAgterbergChengCiTest(EISProcessingAlgorithm):
             "CSV output of calculate weights algorithm. Needs to include columns 'Deposit count' and 'Pixel count'."
         )
         self.addParameter(input_weights_file)
-
-        save_summary_param = QgsProcessingParameterFileDestination(
-            name=self.alg_parameters[3], description="Save summary", optional=True
-        )
-        save_summary_param.setHelp("File path for saving the test results (summary) in a text file.")
-        self.addParameter(save_summary_param)
