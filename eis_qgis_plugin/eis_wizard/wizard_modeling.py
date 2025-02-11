@@ -11,6 +11,7 @@ from eis_qgis_plugin.eis_wizard.modeling.machine_learning.models.logistic_regres
 from eis_qgis_plugin.eis_wizard.modeling.machine_learning.models.mlp import EISWizardMLP
 from eis_qgis_plugin.eis_wizard.modeling.machine_learning.models.random_forest import EISWizardRandomForest
 from eis_qgis_plugin.eis_wizard.modeling.model_manager import ModelManager
+from eis_qgis_plugin.eis_wizard.modeling.weights_of_evidence.wofe_main import EISWizardWeightsOfEvidence
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
 from eis_qgis_plugin.utils.misc_utils import ModelKind
 
@@ -47,7 +48,8 @@ class EISWizardModeling(QWidget, FORM_CLASS):
             EISWizardGradientBoosting(self, ModelKind.REGRESSOR),
             EISWizardMLP(self, ModelKind.CLASSIFIER),
             EISWizardMLP(self, ModelKind.REGRESSOR),
-            EISWizardFuzzyModeling(self)
+            EISWizardFuzzyModeling(self),
+            EISWizardWeightsOfEvidence(self)
         ]
 
         for i, page in enumerate(self.pages):

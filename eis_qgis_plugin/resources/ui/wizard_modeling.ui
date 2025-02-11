@@ -77,6 +77,11 @@
          <string>Fuzzy overlay</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Weights of evidence</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
