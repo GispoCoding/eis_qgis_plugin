@@ -16,7 +16,11 @@ class EISReclassifyWithGeometricalIntervals(EISProcessingAlgorithm):
         self._display_name = "Reclassify with geometrical intervals"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Reclassify raster with geometrical intervals."
+        self._short_help_string = """
+        Reclassify raster with geometrical intervals.
+        
+        If bands are not given, all bands are used for classification.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
@@ -37,7 +41,7 @@ class EISReclassifyWithGeometricalIntervals(EISProcessingAlgorithm):
             description="The number of classes",
             minValue=2,
         )
-        breaks_param.setHelp("The number of classes used in reclassificatin.")
+        breaks_param.setHelp("The number of classes used in reclassification.")
         self.addParameter(breaks_param)
 
         bands_param = QgsProcessingParameterBand(

@@ -81,7 +81,7 @@ class EISProximityToAnomaly(EISProcessingAlgorithm):
         )
         second_threshold_criteria_value_param.setHelp(
             "The second value used to define anomalous cells. Needed when threshold criteria is either \
-            'in_between' or 'outside'.."
+            'in_between' or 'outside'."
         )
         self.addParameter(second_threshold_criteria_value_param)
 

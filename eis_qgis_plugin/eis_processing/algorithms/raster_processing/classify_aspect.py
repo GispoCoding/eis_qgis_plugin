@@ -21,9 +21,9 @@ class EISClassifyAspect(EISProcessingAlgorithm):
             Can classify an aspect raster into 8 or 16 equally spaced directions with \
             intervals of pi/4 and pi/8, respectively.
 
-            Exemplary for 8 classes, the center of the intervall for North direction is 0°/360° \
+            Exemplary for 8 classes, the center of the interval for North direction is 0°/360° \
             and edges are [337.5°, 22.5°], counting forward in clockwise direction. For 16 classes, \
-            the intervall-width is half with edges at [348,75°, 11,25°].
+            the interval-width is half with edges at [348,75°, 11,25°].
 
             Directions and interval for 8 classes: \
             N: (337.5, 22.5), NE: (22.5, 67.5), \

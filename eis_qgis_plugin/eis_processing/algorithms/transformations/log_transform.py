@@ -15,7 +15,11 @@ class EISLogTransform(EISProcessingAlgorithm):
         self._display_name = "Logarithmic transform"
         self._group = "Transformations"
         self._group_id = "transformations"
-        self._short_help_string = "Perform a logarithmic transformation on the provided data."
+        self._short_help_string = """
+        Perform a logarithmic transformation on the provided data.
+        
+        The supported logarithm types are 'log2', 'log10', and 'ln'.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_raster", "log_type", "output_raster"]

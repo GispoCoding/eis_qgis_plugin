@@ -21,6 +21,9 @@ class EISKrigingInterpolation(EISProcessingAlgorithm):
         self._group_id = "vector_processing"
         self._short_help_string = """
         Perform kriging interpolation on vector data.
+
+        Supports both 'ordinary' and 'universal' kriging. Available variogram models are 'linear', 'power', \
+        'gaussian', 'spherical' and 'exponential'.
         
         The output raster grid can be defined either using base raster or manually setting pixel size and extent.
         """

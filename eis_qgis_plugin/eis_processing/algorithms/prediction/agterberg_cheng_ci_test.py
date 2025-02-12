@@ -16,7 +16,10 @@ class EISAgterbergChengCiTest(EISProcessingAlgorithm):
         self._display_name = "Agterberg-Cheng CI test (weights of evidence)"
         self._group = "Prediction"
         self._group_id = "prediction"
-        self._short_help_string = "Perform the conditional independence test presented by Agterberg-Cheng (2002)."
+        self._short_help_string = """
+        Perform the conditional independence test presented by Agterberg-Cheng (2002).
+        The third step in the Weights of Evidence calculations.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

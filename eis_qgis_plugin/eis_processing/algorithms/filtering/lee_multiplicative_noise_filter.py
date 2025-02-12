@@ -15,7 +15,11 @@ class EISLeeMultiplicativeNoiseFilter(EISProcessingAlgorithm):
         self._display_name = "Lee multiplicative noise filter"
         self._group = "Filtering"
         self._group_id = "filtering"
-        self._short_help_string = "Apply a Lee filter considering multiplicative noise components to the input raster"
+        self._short_help_string = """
+        Apply a Lee filter considering multiplicative noise components to the input raster.
+        
+        Higher number of looks result in better edge preservation.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

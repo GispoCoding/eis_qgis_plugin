@@ -34,7 +34,11 @@ class EISFuzzyOverlay(EISProcessingAlgorithm):
         self._display_name = "Fuzzy overlay"
         self._group = "Prediction"
         self._group_id = "prediction"
-        self._short_help_string = "Combine fuzzy membership data with an overlay method."
+        self._short_help_string = """
+        Combine fuzzy membership data with an overlay method.
+        
+        The supported overlay methods are 'and', 'or', 'sum', 'product', and 'gamma'.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_rasters", "overlay_method", "gamma", "output_raster"]

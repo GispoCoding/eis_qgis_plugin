@@ -16,7 +16,11 @@ class EISReclassifyWithDefinedIntervals(EISProcessingAlgorithm):
         self._display_name = "Reclassify with defined intervals"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Reclassify raster with defined intervals."
+        self._short_help_string = """
+        Reclassify raster with defined intervals.
+        
+        If bands are not given, all bands are used for classification.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

@@ -18,7 +18,7 @@ class EISVectorDensity(EISProcessingAlgorithm):
         self._display_name = "Vector density"
         self._group = "Vector processing"
         self._group_id = "vector_processing"
-        self._short_help_string = "Compute density of geometries within raster"
+        self._short_help_string = "Compute density of geometries within raster."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

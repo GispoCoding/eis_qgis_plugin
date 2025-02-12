@@ -16,7 +16,11 @@ class EISReclassifyWithStandardDeviation(EISProcessingAlgorithm):
         self._display_name = "Reclassify with standard deviation"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Reclassify raster data set with standard deviation."
+        self._short_help_string = """
+        Reclassify raster data set with standard deviation.
+        
+        If bands are not given, all bands are used for classification.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

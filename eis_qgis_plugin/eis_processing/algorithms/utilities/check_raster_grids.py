@@ -29,13 +29,13 @@ class EISCheckRasterGrids(EISProcessingAlgorithm):
             )
         )
 
-        self.addParameter(
-            QgsProcessingParameterBoolean(
+        same_extent_param=QgsProcessingParameterBoolean(
                 name=self.alg_parameters[1],
                 description="Same extent",
                 defaultValue=True,
             )
-        )
+        same_extent_param.setHelp("Test rasters for matching bounds.")
+        self.addParameter(same_extent_param)
 
         self.addOutput(
             QgsProcessingOutputBoolean(name="result", description="Check result")

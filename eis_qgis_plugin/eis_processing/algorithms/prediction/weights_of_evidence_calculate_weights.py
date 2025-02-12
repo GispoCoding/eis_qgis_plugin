@@ -18,7 +18,10 @@ class EISWeightsOfEvidenceCalculateWeights(EISProcessingAlgorithm):
         self._display_name = "Weights of evidence calculate weights"
         self._group = "Prediction"
         self._group_id = "prediction"
-        self._short_help_string = "Calculate weights of spatial associations."
+        self._short_help_string = """
+        Calculate weights of spatial associations.
+        First step of the Weights of Evidence calculations.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

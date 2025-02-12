@@ -18,7 +18,7 @@ class EISDbscanVector(EISProcessingAlgorithm):
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
         self._short_help_string = """
-        Perform DBSCAN clustering on a Geodataframe.
+        Perform DBSCAN clustering on vector data.
 
         The attributes to include in clustering can be controlled with `include_coordinates` and \
         `columns` parameters. Coordinates will add spatial proximity and columns the selected \

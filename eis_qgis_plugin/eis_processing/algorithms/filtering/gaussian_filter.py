@@ -15,7 +15,7 @@ class EISGaussianFilter(EISProcessingAlgorithm):
         self._display_name = "Gaussian filter"
         self._group = "Filtering"
         self._group_id = "filtering"
-        self._short_help_string = "Apply a basic gaussian filter to the input raster"
+        self._short_help_string = "Apply a basic gaussian filter to the input raster."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

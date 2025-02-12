@@ -16,7 +16,11 @@ class EISReclassifyWithQuantiles(EISProcessingAlgorithm):
         self._display_name = "Reclassify with quantiles"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Reclassify raster with quantiles."
+        self._short_help_string = """
+        Reclassify raster with quantiles.
+        
+        If bands are not given, all bands are used for classification.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

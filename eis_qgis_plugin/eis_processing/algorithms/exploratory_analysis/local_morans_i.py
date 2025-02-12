@@ -18,7 +18,7 @@ class EISLocalMoransI(EISProcessingAlgorithm):
         self._group = "Exploratory analysis"
         self._group_id = "exploratory_analysis"
         self._short_help_string = """
-            Perform Local Moran's I global spatial autocorrelation analysis .
+            Perform Local Moran's I global spatial autocorrelation analysis.
         """
 
     def initAlgorithm(self, config=None):
@@ -53,12 +53,14 @@ class EISLocalMoransI(EISProcessingAlgorithm):
             options=["queen", "knn"],
             defaultValue="queen"
         )
-        weight_type_param.setHelp("The type of spatial weights matrix to be used.")
+        weight_type_param.setHelp(
+            "The type of spatial weights matrix to be used. The supported types are 'queen' and 'knn'."
+        )
         self.addParameter(weight_type_param)
 
         k_param = QgsProcessingParameterNumber(
             name=self.alg_parameters[3],
-            description="k",
+            description="Number of nearest neighbors",
             defaultValue=4,
             minValue=1
         )

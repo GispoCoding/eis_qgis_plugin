@@ -16,7 +16,7 @@ class EISReprojectRaster(EISProcessingAlgorithm):
         self._display_name = "Reproject raster"
         self._group = "Raster Processing"
         self._group_id = "raster_processing"
-        self._short_help_string = "Reproject raster to a target coordinate reference system."
+        self._short_help_string = "Reproject raster to a target coordinate reference system (EPSG)."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
@@ -36,7 +36,7 @@ class EISReprojectRaster(EISProcessingAlgorithm):
             name=self.alg_parameters[1],
             description="Target CRS",
         )
-        target_crs_param.setHelp("Target coordinate reference system.")
+        target_crs_param.setHelp("Target coordinate reference system (EPSG).")
         self.addParameter(target_crs_param)
 
         resampling_method_param = QgsProcessingParameterEnum(

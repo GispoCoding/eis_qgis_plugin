@@ -20,7 +20,7 @@ class EISDistanceToAnomaly(EISProcessingAlgorithm):
         Calculate distance from each raster cell to nearest anomaly cell.
 
         If 'in_between' or 'outside' is used for threshold criteria, both threshold criteria \
-        value need to be provided.
+        values need to be provided.
 
         Uses only the first band of the raster.
         """

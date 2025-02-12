@@ -18,7 +18,7 @@ class EISDescriptiveStatisticsVector(EISProcessingAlgorithm):
             - min
             - max
             - mean
-            - quantiles 25%
+            - quantile 25%
             - quantile 50% (median)
             - quantile 75%
             - standard deviation

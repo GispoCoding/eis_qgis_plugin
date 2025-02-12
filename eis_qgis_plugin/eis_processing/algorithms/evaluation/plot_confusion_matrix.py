@@ -17,7 +17,10 @@ class EISPlotConfusionMatrix(EISProcessingAlgorithm):
         self._group = "Evaluation"
         self._group_id = "evaluation"
         self._short_help_string = """
-        Plot confusion matrix to visualize classification results..
+        Plot confusion matrix.
+
+        A confusion matrix is a heatmap used to evaluate the classification results. It compares true labels (y-axis) \
+        with the predicted labels (x-axis) correctly predicted labels being on the diagonal.
         """
 
     def initAlgorithm(self, config=None):

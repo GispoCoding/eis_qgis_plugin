@@ -20,7 +20,7 @@ class EISDbscanRaster(EISProcessingAlgorithm):
         Perform DBSCAN clustering on raster data.
 
         If the raster datasets/bands have different scales and represent different phenomena, \
-        consider normalizing or standardizing data before running k-means to avoid biased clusters.
+        consider normalizing or standardizing data before running DBSCAN to avoid biased clusters.
 
         Note that the results depend heavily on the parameter values that might require careful tuning. \
         Note also that clustering can be computationally intesive for large datasets, for highly dimensional data \

@@ -15,7 +15,7 @@ class EISReprojectVector(EISProcessingAlgorithm):
         self._display_name = "Reproject vector"
         self._group = "Vector Processing"
         self._group_id = "vector_processing"
-        self._short_help_string = "Reproject a vector layer"
+        self._short_help_string = "Reproject a vector layer to match given coordinate reference system (EPSG)."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = ["input_vector", "target_crs", "output_vector"]
@@ -29,7 +29,7 @@ class EISReprojectVector(EISProcessingAlgorithm):
         target_crs_param = QgsProcessingParameterCrs(
             name=self.alg_parameters[1], description="Target CRS"
         )
-        target_crs_param.setHelp("The CRS of the reprojected vector.")
+        target_crs_param.setHelp("The CRS (EPSG) of the reprojected vector.")
         self.addParameter(target_crs_param )
 
         output_vector_param = QgsProcessingParameterVectorDestination(

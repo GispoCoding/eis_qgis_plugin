@@ -16,7 +16,13 @@ class EISMexicanHatFilter(EISProcessingAlgorithm):
         self._display_name = "Mexican hat filter"
         self._group = "Filtering"
         self._group_id = "filtering"
-        self._short_help_string = "Apply a Mexican hat filter to the input raster"
+        self._short_help_string = """
+        Apply a Mexican hat filter to the input raster.
+        
+        Support two directions of calculating the kernel values:
+        Circular: Lowpass filter for smoothing.
+        Rectangular: Highpass filter for edge detection. Results may need further normalization.
+        """
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [

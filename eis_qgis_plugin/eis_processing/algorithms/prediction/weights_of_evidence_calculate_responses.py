@@ -16,7 +16,10 @@ class EISWeightsOfEvidenceCalculateResponses(EISProcessingAlgorithm):
         self._display_name = "Weights of evidence calculate responses"
         self._group = "Prediction"
         self._group_id = "prediction"
-        self._short_help_string = "Calculate the posterior probabilities for the given generalized weight rasters."
+        self._short_help_string = """
+        Calculate the posterior probabilities for the given generalized weight rasters.
+        The second step in the Weights of Evidence calculations.
+        """
 
         self.multiple_layers_as_typer_option = True
 

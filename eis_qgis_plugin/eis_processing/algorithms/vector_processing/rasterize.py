@@ -20,7 +20,7 @@ class EISRasterize(EISProcessingAlgorithm):
         self._display_name = "Rasterize"
         self._group = "Vector Processing"
         self._group_id = "vector_processing"
-        self._short_help_string = "Rasterize a vector layer"
+        self._short_help_string = "Rasterize a vector layer."
 
     def initAlgorithm(self, config=None):
         self.alg_parameters = [
