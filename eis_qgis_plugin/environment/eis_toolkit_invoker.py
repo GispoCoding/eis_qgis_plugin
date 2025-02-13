@@ -13,7 +13,7 @@ from eis_qgis_plugin.environment.eis_environment_handler import DockerEnvironmen
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
-REQUIRED_EIS_TOOLKIT_VERSION = "1.1.2"
+REQUIRED_EIS_TOOLKIT_VERSION = "1.1.3"
 
 logger = logging.getLogger(__name__)
 

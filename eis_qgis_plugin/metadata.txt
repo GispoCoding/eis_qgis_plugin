@@ -10,7 +10,7 @@ about=EIS (Exploration Information System) QGIS Plugin is a tool for prospectivi
     instructions can be found in EIS QGIS Plugin GitHub repository
     (https://github.com/GispoCoding/eis_qgis_plugin) and EIS Toolkit GitHub repository
     (https://github.com/GispoCoding/eis_toolkit). 
-version=1.0.2
+version=1.0.3
 qgisMinimumVersion=3.16
 qgisMaximumVersion=3.40
 author=Gispo
