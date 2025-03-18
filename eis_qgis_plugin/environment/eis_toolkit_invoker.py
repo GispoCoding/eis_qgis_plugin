@@ -33,6 +33,13 @@ class EISToolkitInvoker:
     OUT_RASTERS_PREFIX = "Output rasters:"
     RESULTS_PREFIX = "Results:"
 
+    PREFIX_TO_PROGRESS_MAP = {
+        "Input files read": 25,
+        "Algorithm run succesfully": 75,
+        "Output file(s) saved": 90,
+        "Algorithm execution finished": 100
+    }
+
     def __init__(self, env_type = None, venv_directory = None, docker_path = None, docker_image_name = None):
         """Initializes the EISToolkitInvoker."""
         env_type = EISSettingsManager.get_environment_selection() if env_type is None else env_type
@@ -63,16 +70,23 @@ class EISToolkitInvoker:
         return (alg_name + "_cli").replace("_", "-")
 
 
-    @staticmethod
-    def _update_progress(stdout: str, feedback: QgsProcessingFeedback):
+    # @staticmethod
+    # def _update_progress(stdout: str, feedback: QgsProcessingFeedback):
+    #     """Updates the QGIS processing algorithm's progress based on the stdout message."""
+    #     index = stdout.find("%")
+    #     if index == -1:
+    #         return
+    #     progress = stdout[index-3:index].strip()
+    #     # progress = stdout.split()[-1][:-1].strip()
+    #     feedback.setProgress(int(progress))
+    #     feedback.pushInfo(f"Progress: {progress}%")
+
+
+    def _update_progress(self, stdout: str, feedback: QgsProcessingFeedback):
         """Updates the QGIS processing algorithm's progress based on the stdout message."""
-        index = stdout.find("%")
-        if index == -1:
-            return
-        progress = stdout[index-3:index].strip()
-        # progress = stdout.split()[-1][:-1].strip()
-        feedback.setProgress(int(progress))
-        feedback.pushInfo(f"Progress: {progress}%")
+        for prefix, progress in self.PREFIX_TO_PROGRESS_MAP.items():
+            if prefix in stdout:
+                feedback.setProgress(progress)
 
 
     def _update_results(self, stdout: str, results: dict, feedback: QgsProcessingFeedback):
@@ -84,11 +98,12 @@ class EISToolkitInvoker:
         json_str = json_str.replace("\'", "\"")
         output_dict = json.loads(json_str)
 
-        feedback.pushInfo("\n*** Results ***")
-        feedback.pushInfo("-----------------------")
+        # feedback.pushInfo("=============== Results ==============")
+        feedback.pushInfo("RESULTS")
         for key, value in output_dict.items():
             feedback.pushInfo(f"* {key}: {value}")
-        feedback.pushInfo("-----------------------\n ")
+        feedback.pushInfo(" ")
+        # feedback.pushInfo("===================================\n")
 
         results.update(output_dict)
 
@@ -174,6 +189,8 @@ class EISToolkitInvoker:
             if os.name == 'nt':  # If Windows, prevent process window creation
                 creationflags = subprocess.CREATE_NO_WINDOW
 
+            feedback.pushInfo("[OPENING EIS TOOLKIT]\n")
+
             self.process = subprocess.Popen(
                 self.cmd,   
                 stdout=subprocess.PIPE,
@@ -230,8 +247,8 @@ class EISToolkitInvoker:
                 feedback.reportError(
                     f"EIS Toolkit algorithm execution failed with error: {stderr}"
                 )
-            else:
-                feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
+            # else:
+            #     feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
 
         except TerminationException as e:
             feedback.reportError(str(e))
@@ -246,6 +263,8 @@ class EISToolkitInvoker:
             return {}
         
         finally:
+            feedback.pushInfo("[CLOSING EIS TOOLKIT]\n")
+
             # Ensure the subprocess is properly cleaned up in all cases
             if self.process and self.process.poll() is None:
                 self.process.terminate()
@@ -260,8 +279,9 @@ class EISToolkitInvoker:
 
 
     def _process_command_output(self, stdout_line: str, feedback: QgsProcessingFeedback, results: Dict) -> None:
-        if self.PROGRESS_PREFIX in stdout_line:
+        if any(prefix in stdout_line for prefix in self.PREFIX_TO_PROGRESS_MAP.keys()):
             self._update_progress(stdout_line, feedback)
+            feedback.pushInfo(stdout_line)
 
         elif self.RESULTS_PREFIX in stdout_line:
             self._update_results(stdout_line, results, feedback)
