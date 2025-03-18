@@ -71,6 +71,8 @@ class DockerEnvironmentHandler(EnvironmentHandler):
             "poetry",
             "run",
             "python",
+            "-W",
+            "ignore",
             "-m"
         ]
         return cmd
@@ -242,10 +244,10 @@ class VenvEnvironmentHandler(EnvironmentHandler):
             return os.path.join(venv_directory, python_executable)
         else:
             return os.path.join(venv_directory, exe_directory, python_executable)
-            
+
 
     def get_invocation_cmd(self) -> List[str]:
-        return [self.python_path, "-m"]
+        return [self.python_path, "-W", "ignore", "-m"]
 
 
     def verify_environment(self) -> Tuple[bool, str]:
