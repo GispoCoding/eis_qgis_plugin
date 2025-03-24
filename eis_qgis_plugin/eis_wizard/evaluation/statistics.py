@@ -61,10 +61,10 @@ class EISWizardEvaluationStatistics(QWidget, FORM_CLASS):
             "Precision": self.precision,
             "Recall": self.recall,
             "F1_score": self.f1,
-            "True_negatives": self.true_positives,
-            "False_negatives": self.false_positives,
-            "False_positives": self.false_negatives,
-            "True_positives": self.true_negatives
+            "True_negatives": self.true_negatives,
+            "False_negatives": self.false_negatives,
+            "False_positives": self.false_positives,
+            "True_positives": self.true_positives
         }
         self.probability_stats_widgets = {
             "roc_auc": self.roc_auc,
