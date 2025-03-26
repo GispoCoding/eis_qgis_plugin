@@ -2,7 +2,7 @@ from typing import Literal, Optional
 
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsFileWidget, QgsMapLayerComboBox
-from qgis.PyQt.QtWidgets import QComboBox, QGroupBox, QStackedWidget, QWidget
+from qgis.PyQt.QtWidgets import QComboBox, QGroupBox, QSpinBox, QStackedWidget, QWidget
 
 from eis_qgis_plugin.eis_wizard.mineral_proxies.proxy_processing import EISWizardProxyProcess
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -41,6 +41,7 @@ class EISWizardProxyVectorDensity(EISWizardProxyProcess, FORM_CLASS):
 
         self.method_settings_box: QGroupBox
         self.statistic: QComboBox
+        self.buffer_value: QSpinBox
 
         self.output_raster_path: QgsFileWidget
         self.output_raster_settings: QComboBox
@@ -65,9 +66,12 @@ class EISWizardProxyVectorDensity(EISWizardProxyProcess, FORM_CLASS):
         if output_raster_params is None or self.executor.is_running:
             return
         
+        buffer_value = self.buffer_value.value() or None
+        
         params = {
             "input_vector": self.vector_layer.currentLayer(),
             "statistic": self.statistic.currentIndex(),
+            "buffer_value": buffer_value, 
             **output_raster_params,
             "output_raster": get_output_path(self.output_raster_path)
         }
