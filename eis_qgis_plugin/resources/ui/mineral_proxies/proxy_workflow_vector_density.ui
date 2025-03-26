@@ -6,29 +6,35 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>711</width>
-    <height>993</height>
+    <width>754</width>
+    <height>913</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
+     <widget class="QWidget" name="scrollAreaWidgetContents_2">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>691</width>
-        <height>924</height>
+        <width>734</width>
+        <height>844</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QLabel" name="proxy_name_label">
          <property name="font">
@@ -37,7 +43,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Proxy:</string>
+          <string>Proxy: </string>
          </property>
         </widget>
        </item>
@@ -45,7 +51,7 @@
         <widget class="QLabel" name="workflow_label">
          <property name="font">
           <font>
-           <pointsize>16</pointsize>
+           <pointsize>15</pointsize>
           </font>
          </property>
          <property name="text">
@@ -57,11 +63,11 @@
         <widget class="QLabel" name="process_step_label">
          <property name="font">
           <font>
-           <pointsize>16</pointsize>
+           <pointsize>15</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>Step:</string>
+          <string>Step: </string>
          </property>
         </widget>
        </item>
@@ -78,20 +84,27 @@
          </property>
          <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
+           <widget class="QLabel" name="vector_layer_label">
+            <property name="toolTip">
+             <string>Input dataset with features to calculate distances to</string>
+            </property>
             <property name="text">
-             <string>Input vector</string>
+             <string>Input vector layer</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QgsMapLayerComboBox" name="vector_layer"/>
+           <widget class="QgsMapLayerComboBox" name="vector_layer">
+            <property name="toolTip">
+             <string>Input dataset with features to calculate distances to</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="method_settings_box">
+        <widget class="QGroupBox" name="method_box">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -101,11 +114,14 @@
          <property name="title">
           <string>Method settings</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <layout class="QFormLayout" name="formLayout_3">
+           <layout class="QFormLayout" name="statistic_layout">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_9">
+             <widget class="QLabel" name="statistic_label">
+              <property name="toolTip">
+               <string/>
+              </property>
               <property name="text">
                <string>Statistic</string>
               </property>
@@ -113,12 +129,6 @@
             </item>
             <item row="0" column="1">
              <widget class="QComboBox" name="statistic">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
               <item>
                <property name="text">
                 <string>density</string>
@@ -150,16 +160,6 @@
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <layout class="QFormLayout" name="output_raster_settings_layout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="output_raster_path_label">
-              <property name="text">
-               <string>Output raster</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QgsFileWidget" name="output_raster_path"/>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="output_raster_settings_label">
               <property name="text">
@@ -181,21 +181,35 @@
               </item>
              </widget>
             </item>
+            <item row="0" column="1">
+             <widget class="QgsFileWidget" name="output_raster_path">
+              <property name="storageMode">
+               <enum>QgsFileWidget::SaveFile</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="output_raster_path_label">
+              <property name="text">
+               <string>Output raster path</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
            <widget class="QStackedWidget" name="output_raster_settings_pages">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
             </property>
             <property name="currentIndex">
              <number>0</number>
             </property>
             <widget class="QWidget" name="base_raster_page">
-             <layout class="QFormLayout" name="formLayout_2">
+             <layout class="QFormLayout" name="formLayout_4">
               <item row="0" column="0">
                <widget class="QLabel" name="base_raster_label">
                 <property name="text">
@@ -209,11 +223,23 @@
              </layout>
             </widget>
             <widget class="QWidget" name="define_manually_page">
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
                <layout class="QFormLayout" name="define_manually_layout">
                 <item row="0" column="0">
                  <widget class="QLabel" name="pixel_size_label">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>62</width>
+                    <height>0</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>Pixel size</string>
                   </property>
@@ -221,6 +247,9 @@
                 </item>
                 <item row="0" column="1">
                  <widget class="QgsDoubleSpinBox" name="pixel_size">
+                  <property name="maximum">
+                   <double>10000.000000000000000</double>
+                  </property>
                   <property name="value">
                    <double>10.000000000000000</double>
                   </property>
@@ -228,8 +257,23 @@
                 </item>
                 <item row="1" column="0">
                  <widget class="QLabel" name="extent_label">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>62</width>
+                    <height>0</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>Extent</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                   </property>
                  </widget>
                 </item>
@@ -244,7 +288,7 @@
                  </widget>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QSpinBox" name="buffer"/>
+                 <widget class="QSpinBox" name="buffer_value"/>
                 </item>
                </layout>
               </item>
@@ -257,13 +301,19 @@
        </item>
        <item>
         <widget class="QDialogButtonBox" name="button_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="standardButtons">
           <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
          </property>
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout_18">
          <item>
           <widget class="QTextEdit" name="log">
            <property name="sizePolicy">
