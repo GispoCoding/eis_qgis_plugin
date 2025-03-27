@@ -24,7 +24,8 @@ WORKFLOW_STEPS = [
     "Interpolate",
     "Binarize",
     "Proximity to anomaly",
-    "Proximity to features"
+    "Proximity to features",
+    "Vector density"
 ]
 
 

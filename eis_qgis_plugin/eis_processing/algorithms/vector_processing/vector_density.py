@@ -24,7 +24,7 @@ class EISVectorDensity(EISProcessingAlgorithm):
         self.alg_parameters = [
             "input_vector",
             "base_raster",
-            "pixel_value",
+            "pixel_size",
             "extent",
             "buffer_value",
             "statistic",
