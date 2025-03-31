@@ -2,7 +2,7 @@ from typing import Literal, Optional
 
 from qgis.core import QgsMapLayerProxyModel
 from qgis.gui import QgsFileWidget, QgsMapLayerComboBox
-from qgis.PyQt.QtWidgets import QComboBox, QGroupBox, QSpinBox, QStackedWidget, QWidget
+from qgis.PyQt.QtWidgets import QComboBox, QSpinBox, QStackedWidget, QWidget
 
 from eis_qgis_plugin.eis_wizard.mineral_proxies.proxy_processing import EISWizardProxyProcess
 from eis_qgis_plugin.qgis_plugin_tools.tools.resources import load_ui
@@ -39,7 +39,6 @@ class EISWizardProxyVectorDensity(EISWizardProxyProcess, FORM_CLASS):
         # DECLARE TYPES
         self.vector_layer: QgsMapLayerComboBox
 
-        self.method_settings_box: QGroupBox
         self.statistic: QComboBox
         self.buffer_value: QSpinBox
 

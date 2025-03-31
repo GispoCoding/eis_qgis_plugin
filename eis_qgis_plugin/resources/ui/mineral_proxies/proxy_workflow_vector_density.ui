@@ -114,44 +114,44 @@
          <property name="title">
           <string>Method settings</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <layout class="QFormLayout" name="statistic_layout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="statistic_label">
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="text">
-               <string>Statistic</string>
-              </property>
-             </widget>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="statistic_label">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>Statistic</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="statistic">
+            <item>
+             <property name="text">
+              <string>density</string>
+             </property>
             </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="statistic">
-              <item>
-               <property name="text">
-                <string>density</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>count</string>
-               </property>
-              </item>
-             </widget>
+            <item>
+             <property name="text">
+              <string>count</string>
+             </property>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="buffer_label">
-              <property name="text">
-               <string>Buffer value</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="buffer_value"/>
-            </item>
-           </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="buffer_label">
+            <property name="text">
+             <string>Buffer value</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="buffer_value">
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
