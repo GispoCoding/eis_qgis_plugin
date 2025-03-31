@@ -76,7 +76,7 @@ class EISWizardProxyProcess(QWidget):
             self.base_raster.setLayer(default_base_raster)
 
         # Create feedback
-        self.feedback = EISProcessingFeedback(text_edit= self.log, progress_bar=self.progress_bar)
+        self.feedback = EISProcessingFeedback(text_edit=self.log, progress_bar=self.progress_bar)
 
         # Create executor and connect signals
         self.executor = AlgorithmExecutor()
@@ -147,7 +147,7 @@ class EISWizardProxyProcess(QWidget):
 
 
     def on_algorithm_executor_terminated(self):
-        self.feedback = EISProcessingFeedback(progress_bar=self.progress_bar)
+        self.feedback = EISProcessingFeedback(text_edit=self.log, progress_bar=self.progress_bar)
 
 
     def on_algorithm_executor_error(self, error_message: str):
