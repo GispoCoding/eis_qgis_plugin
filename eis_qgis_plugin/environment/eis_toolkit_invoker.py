@@ -10,6 +10,7 @@ from typing import Dict, List, TextIO, Tuple
 from qgis.core import QgsProcessingFeedback
 
 from eis_qgis_plugin.environment.eis_environment_handler import DockerEnvironmentHandler, VenvEnvironmentHandler
+from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
@@ -215,7 +216,7 @@ class EISToolkitInvoker:
                     process_event.set()
                     stdout_thread.join()
                     stderr_thread.join()
-                    raise TerminationException("Execution cancelled.")
+                    raise TerminationException("\n❌ Execution cancelled\n")
 
                 try:
                     line = q.get_nowait()
@@ -251,7 +252,11 @@ class EISToolkitInvoker:
             #     feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
 
         except TerminationException as e:
-            feedback.reportError(str(e))
+            if type(feedback) == EISProcessingFeedback:
+                feedback.report_terminated_execution(e)
+            else:
+                feedback.reportError(str(e))
+            return {}
 
         # Handle potential exceptions
         except Exception as e:

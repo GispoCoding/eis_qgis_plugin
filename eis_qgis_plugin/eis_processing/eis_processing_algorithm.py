@@ -336,12 +336,19 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         """
         if feedback is None:
             feedback = QgsProcessingFeedback()
+            is_eis_feedback = False
+        elif type(feedback) == EISProcessingFeedback:
+            is_eis_feedback = True
 
         typer_args, typer_options, output_paths = self.prepare_arguments(parameters, context)
-        
+
         toolkit_invoker = EISToolkitInvoker()
         toolkit_invoker.assemble_cli_command(self.name(), typer_args, typer_options)
         results = toolkit_invoker.run_toolkit_command(feedback)
+
+        if feedback.isCanceled() or (is_eis_feedback and not feedback.no_errors):
+            feedback.setProgress(100)
+            return {}
 
         self.get_results(results, parameters)
         for param_name, output_path in output_paths.items():
@@ -353,7 +360,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 QgsProject.instance().addMapLayer(output_layer)
 
         # Check whether the algorithm is running nested in EIS plugin or not
-        if type(feedback) != EISProcessingFeedback:
+        if is_eis_feedback:
             # If not running in plugin, check if there are extra output raster that should be loaded
             if "output_folder_rasters" in results.keys():
                 for name, path in results["output_folder_rasters"].items():
