@@ -5,7 +5,17 @@ from typing import List, Optional
 from qgis.core import QgsApplication
 from qgis.gui import QgsFilterLineEdit
 from qgis.PyQt.QtGui import QFont, QIcon
-from qgis.PyQt.QtWidgets import QComboBox, QFileDialog, QGridLayout, QLabel, QMenu, QPushButton, QSizePolicy, QWidget
+from qgis.PyQt.QtWidgets import (
+    QComboBox,
+    QFileDialog,
+    QGridLayout,
+    QLabel,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QSizePolicy,
+    QWidget,
+)
 
 from eis_qgis_plugin.eis_wizard.mineral_proxies.configuration_dialogs.define_proxy import EISWizardDefineProxy
 from eis_qgis_plugin.eis_wizard.mineral_proxies.configuration_dialogs.delete_proxy import EISWizardDeleteProxy
@@ -147,12 +157,19 @@ class EISWizardProxyView(QWidget, FORM_CLASS):
 
     def _on_delete_mineral_system_clicked(self):
         i = self.mineral_system_selection.currentIndex()
-        mineral_system = self.mineral_systems.pop(i)
-        self.mineral_system_selection.setCurrentIndex(0)  # IOCG default
-        self.mineral_system_selection.removeItem(i)
-        self._on_settings_changed()
-        mineral_system.delete()
-        EISMessageManager().show_message(f"Deleted mineral system {mineral_system.name}.", "success")
+        response = QMessageBox.question(
+            None,
+            "Delete custom mineral system",
+            f"Are you sure you want to delete mineral system '{self.mineral_systems[i].name}'?",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if response == QMessageBox.Yes:
+            mineral_system = self.mineral_systems.pop(i)
+            self.mineral_system_selection.setCurrentIndex(0)  # IOCG default
+            self.mineral_system_selection.removeItem(i)
+            self._on_settings_changed()
+            mineral_system.delete()
+            EISMessageManager().show_message(f"Deleted mineral system {mineral_system.name}.", "success")
 
 
     def _on_import_mineral_system_clicked(self):
