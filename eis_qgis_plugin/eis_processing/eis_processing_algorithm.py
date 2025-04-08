@@ -334,12 +334,12 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
         
         EISToolkitInvoker will handle the actual communication with EIS Toolkit.
         """
+        is_eis_feedback = False
         if feedback is None:
             feedback = QgsProcessingFeedback()
-            is_eis_feedback = False
         elif type(feedback) == EISProcessingFeedback:
-            is_eis_feedback = True
-
+            is_eis_feedback =True
+ 
         typer_args, typer_options, output_paths = self.prepare_arguments(parameters, context)
 
         toolkit_invoker = EISToolkitInvoker()
@@ -360,7 +360,7 @@ class EISProcessingAlgorithm(QgsProcessingAlgorithm):
                 QgsProject.instance().addMapLayer(output_layer)
 
         # Check whether the algorithm is running nested in EIS plugin or not
-        if is_eis_feedback:
+        if not is_eis_feedback:
             # If not running in plugin, check if there are extra output raster that should be loaded
             if "output_folder_rasters" in results.keys():
                 for name, path in results["output_folder_rasters"].items():
