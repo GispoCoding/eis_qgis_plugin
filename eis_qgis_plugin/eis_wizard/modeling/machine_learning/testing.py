@@ -61,7 +61,6 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
         # DECLARE TYPES
         self.test_model_selection: QComboBox
         self.model_file_testing: QLineEdit
-        self.test_run_name: QLineEdit
         self.test_output_raster_1: QgsFileWidget
         self.test_output_raster_label_1: QLabel
         self.test_output_raster_2: QgsFileWidget
