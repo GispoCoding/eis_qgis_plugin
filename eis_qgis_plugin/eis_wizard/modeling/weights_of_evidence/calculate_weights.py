@@ -51,7 +51,12 @@ class EISWofeCalculateWeights(QWidget, FORM_CLASS):
 
         # INIT
         self.evidential_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
-        self.deposits.setFilters(QgsMapLayerProxyModel.RasterLayer | QgsMapLayerProxyModel.PointLayer)
+        self.deposits.setFilters(
+            QgsMapLayerProxyModel.Filters(
+                QgsMapLayerProxyModel.RasterLayer | QgsMapLayerProxyModel.PointLayer
+            )
+        )
+        # self.deposits.setFilters(QgsMapLayerProxyModel.RasterLayer | QgsMapLayerProxyModel.PointLayer)
         set_filter(self.output_table, "csv")
         set_placeholder_text(self.output_table, "[Save to temporary file]")
         set_placeholder_text(self.output_directory, "[Save to temporary folder]")
