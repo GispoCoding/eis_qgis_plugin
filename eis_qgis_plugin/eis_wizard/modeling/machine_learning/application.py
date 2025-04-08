@@ -53,7 +53,6 @@ class EISMLModelApplication(QWidget, FORM_CLASS):
         # DECLARE TYPES
         self.application_model_selection: QComboBox
         self.model_file_application: QLineEdit
-        self.application_run_name: QLineEdit
         self.application_output_raster_1: QgsFileWidget
         self.application_output_raster_label_1: QLabel
         self.application_output_raster_2: QgsFileWidget
