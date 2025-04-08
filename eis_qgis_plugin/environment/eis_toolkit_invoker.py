@@ -14,7 +14,7 @@ from eis_qgis_plugin.utils.model_feedback import EISProcessingFeedback
 from eis_qgis_plugin.utils.settings_manager import EISSettingsManager
 
 DEBUG = True
-REQUIRED_EIS_TOOLKIT_VERSION = "1.1.3"
+REQUIRED_EIS_TOOLKIT_VERSION = "1.1.4"
 
 logger = logging.getLogger(__name__)
 
