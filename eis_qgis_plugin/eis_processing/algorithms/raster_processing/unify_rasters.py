@@ -56,12 +56,19 @@ class EISUnifyRasters(EISProcessingAlgorithm):
                 "Nearest",
                 "Bilinear",
                 "Cubic",
+                "Cubic_spline",
+                "Lanczos",
                 "Average",
-                "Gauss",
+                "Mode",
                 "Max",
                 "Min",
+                "Median",
+                "Q1",
+                "Q3",
+                "Sum",
+                "RMS",
             ],
-            defaultValue=0,
+            defaultValue=1,
         )
         resampling_method_param.setHelp(
             "The resampling method used if resampling is needed."
