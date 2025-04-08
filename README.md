@@ -25,8 +25,6 @@
   ·
   <a href="#getting-started">Usage</a>
   ·
-  <a href="#getting-started">Roadmap</a>
-  ·
   <a href="#getting-started">Contributing</a>
   ·
   <a href="#getting-started">License</a>
@@ -41,12 +39,9 @@ EIS QGIS Plugin is a product of the EIS Horizon EU project, which seeks to imple
 - EIS Wizard, a comprehensive GUI plugin with guided processes and workflows for mineral prospectivity mapping
 - EIS Processing Algorithms, the individual tools and algorithms available in QGIS Processing Toolbox
 
-> [!IMPORTANT]  
-> EIS QGIS Plugin is still in active development! See [roadmap](#roadmap) for more details.
-
 
 ## Getting started
-To use all features of EIS QGIS Plugin, you need to install both EIS QGIS Plugin and [EIS Toolkit](https://github.com/GispoCoding/eis_toolkit), the EIS computational backend. EIS Toolkit is separate from EIS QGIS Plugin to enable using large and complicated environment with machine learning and other heavy libraries. Currently, EIS Toolkit needs to be installed separately, but at a later stage EIS QGIS Plugin will incorporate EIS Toolkit installer.
+To use all features of EIS QGIS Plugin, you need to install both EIS QGIS Plugin and [EIS Toolkit](https://github.com/GispoCoding/eis_toolkit), the EIS computational backend. EIS Toolkit is separate from EIS QGIS Plugin to enable using large and complicated environment with machine learning and other heavy libraries. Currently, EIS Toolkit needs to be installed separately.
 
 ### Prerequisites
 - QGIS 3.X
@@ -73,7 +68,7 @@ In EIS Wizard, choose **Settings** page in the the menu. You can specify either 
 ![Screenshot from 2024-05-27 17-02-55](https://github.com/GispoCoding/eis_qgis_plugin/assets/113038549/dc02add4-5b9c-434a-881a-4ca07cb09723)
 
 > [!WARNING]  
-> Docker setup is still actively being developed and tested!
+> Docker setup is still being developed and tested!
 
 
 ## Usage
@@ -104,11 +99,6 @@ EIS Processing Algorithms can be launched by double-clicking an algorithm. In th
 
 > [!TIP]
 > EIS Processing Algorithms, like all algorithms in QGIS Processing Toolbox, can be used to create and save custom workflows in QGIS Model Designer. 
-
-## Roadmap
-- **Milestone 1**: Beta release 1 (May 2024). At this stage, the plugin should have the basic funtionalities required for a full MPM workflow implemented. Official testing phase begins. The plugin will be still under active development.
-- **Milestone 2**: Beta release 2 (October 2024). All features should be incorporated at this time and the plugin useful for actual MPM work. Testing will continue and potential bugs will be fixed and the user experience refined.
-- **Milestone 3**: Final release (April 2025). The plugin is considered complete and fully functional, and the EIS project ends. After this, the plugin will be maintained and bugs fixed, but majority of further work will lie on the shoulders of the open source community.
 
 
 ## Contributing
