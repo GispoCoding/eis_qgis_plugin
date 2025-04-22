@@ -273,13 +273,20 @@ class EISMLModelTraining(QWidget, FORM_CLASS):
             evidence_data=[(layer.name(), layer.source()) for layer in self.train_evidence_data.get_layers()],
             label_data=(self.get_training_label_layer().name(), self.get_training_label_layer().source()),
             parameters=model_parameters,
-            validation_metrics={
-                key: float(value) for key, value in results.items()
-                if key.capitalize() in self.model_main.get_valid_metrics()
-            }
+            validation_metrics=self.get_validation_metrics(results)
         )
         self.model_main.get_model_manager().save_model_info(model_info)
 
+    def get_validation_metrics(self, results: dict) -> dict:
+        valid_metrics = {}
+        for key, value in results.items():
+            if key.capitalize() in self.model_main.get_valid_metrics():
+                # This is needed only for MLP right now. Take metric value only for last epoch
+                if isinstance(value, list):
+                    valid_metrics[key] = float(value[-1])
+                else:
+                    valid_metrics[key] = float(value)
+        return valid_metrics
 
     def reset_parameters(self):
         """Reset common and validation parameters to defaults."""
