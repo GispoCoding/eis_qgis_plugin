@@ -61,6 +61,8 @@ class EISToolkitInvoker:
             raise ValueError(f"Unsupported environment type: {env_type}")
 
         self.python_free_environment = {key: value for key, value in os.environ.items() if not key.startswith("PYTHON")}
+        self.python_free_environment.pop("PROJ_LIB", None)
+        self.python_free_environment.pop("GDAL_DATA", None)
         self.cmd = []
         self.process = None
 
@@ -198,7 +200,8 @@ class EISToolkitInvoker:
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
                 env=self.python_free_environment,
-                creationflags=creationflags
+                creationflags=creationflags,
+                errors='replace'
             )
 
             process_event = threading.Event()
