@@ -5,7 +5,7 @@ import queue
 import subprocess
 import threading
 import time
-from typing import Dict, List, TextIO, Tuple
+from typing import List, TextIO, Tuple
 
 from qgis.core import QgsProcessingFeedback
 
@@ -168,7 +168,7 @@ class EISToolkitInvoker:
         return self.environment_handler.upgrade_toolkit(self.python_free_environment)
     
 
-    def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> Dict:
+    def run_toolkit_command(self, feedback: QgsProcessingFeedback) -> dict:
         """Runs the toolkit command and captures the output."""
         if not self.cmd:
             return
@@ -177,11 +177,13 @@ class EISToolkitInvoker:
         q = queue.Queue()
 
         def enqueue_output(pipe: TextIO, queue: queue.Queue, process_event: threading.Event) -> None:
-            for line in iter(pipe.readline, ''):
-                if process_event.is_set():
-                    break
-                queue.put(line)
-            pipe.close()
+            try:
+                for line in iter(pipe.readline, ''):
+                    if process_event.is_set():
+                        break
+                    queue.put(line)
+            finally:
+                pipe.close()
 
         # Execute EIS Toolkit through subprocess
         try:
@@ -214,11 +216,13 @@ class EISToolkitInvoker:
 
             while self.process.poll() is None:
                 if feedback.isCanceled():
+                    process_event.set()
                     self.process.terminate()
                     self.process.wait()
-                    process_event.set()
+
                     stdout_thread.join()
                     stderr_thread.join()
+
                     raise TerminationException("\n❌ Execution cancelled\n")
 
                 try:
@@ -240,17 +244,9 @@ class EISToolkitInvoker:
                 if line:
                     self._process_command_output(line.strip(), feedback, results)
 
-            stdout, stderr = self.process.communicate()
-            if stdout:
-                self._process_command_output(stdout.strip(), feedback, results)
-            if stderr:
-                feedback.reportError(stderr.strip())
-
             # Inform user whether execution was successful or not
             if self.process.returncode != 0:
-                feedback.reportError(
-                    f"EIS Toolkit algorithm execution failed with error: {stderr}"
-                )
+                feedback.reportError("EIS Toolkit algorithm execution failed.")
             # else:
             #     feedback.pushInfo("EIS Toolkit algorithm executed successfully!")
 
@@ -265,28 +261,31 @@ class EISToolkitInvoker:
         except Exception as e:
             feedback.reportError(f"Run failed. Error: {str(e)}")
             try:
-                self.process.terminate()
-            except UnboundLocalError:
-                pass
+                if self.process and self.process.poll() is None:
+                    process_event.set()
+                    self.process.terminate()
+                    self.process.wait()
+                    stdout_thread.join()
+                    stderr_thread.join()
+            except UnboundLocalError as ex:
+                logger.error(f"Error while trying to terminate process: {ex}")
             return {}
-        
+
         finally:
             feedback.pushInfo("[CLOSING EIS TOOLKIT]\n")
 
             # Ensure the subprocess is properly cleaned up in all cases
             if self.process and self.process.poll() is None:
+                process_event.set()
                 self.process.terminate()
-                self.process.wait()  # Ensure the process is reaped
-
-            if self.process.stdout:
-                self.process.stdout.close()
-            if self.process.stderr:
-                self.process.stderr.close()
+                self.process.wait()
+                stdout_thread.join()
+                stderr_thread.join()
 
         return results
 
 
-    def _process_command_output(self, stdout_line: str, feedback: QgsProcessingFeedback, results: Dict) -> None:
+    def _process_command_output(self, stdout_line: str, feedback: QgsProcessingFeedback, results: dict) -> None:
         if any(prefix in stdout_line for prefix in self.PREFIX_TO_PROGRESS_MAP.keys()):
             self._update_progress(stdout_line, feedback)
             feedback.pushInfo(stdout_line)

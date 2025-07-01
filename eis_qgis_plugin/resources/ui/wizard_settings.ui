@@ -115,6 +115,9 @@
               </item>
               <item row="2" column="0">
                <widget class="QLabel" name="label_3">
+                <property name="toolTip">
+                 <string>Setting not implemented</string>
+                </property>
                 <property name="text">
                  <string>Default continuous palette for plots</string>
                 </property>
@@ -124,6 +127,9 @@
                <widget class="QComboBox" name="categorical_palette_selection">
                 <property name="enabled">
                  <bool>false</bool>
+                </property>
+                <property name="toolTip">
+                 <string>Setting not implemented</string>
                 </property>
                 <item>
                  <property name="text">
@@ -185,6 +191,9 @@
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="label_2">
+                <property name="toolTip">
+                 <string>Setting not implemented</string>
+                </property>
                 <property name="text">
                  <string>Default categorical palette for plots</string>
                 </property>
@@ -201,6 +210,9 @@
                <widget class="QComboBox" name="continuous_palette_selection">
                 <property name="enabled">
                  <bool>false</bool>
+                </property>
+                <property name="toolTip">
+                 <string>Setting not implemented</string>
                 </property>
                 <item>
                  <property name="text">
@@ -276,6 +288,9 @@
               </item>
               <item row="0" column="0">
                <widget class="QLabel" name="label_7">
+                <property name="toolTip">
+                 <string>Setting disabled</string>
+                </property>
                 <property name="text">
                  <string>Default singleband raster color ramp</string>
                 </property>
