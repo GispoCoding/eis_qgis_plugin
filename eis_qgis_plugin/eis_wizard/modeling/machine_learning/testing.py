@@ -24,7 +24,7 @@ from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import (
     add_output_layer_to_group,
-    apply_color_ramp_to_raster_layer,
+    # apply_color_ramp_to_raster_layer,
     get_output_layer_name,
     get_output_path,
     set_filter,
@@ -130,7 +130,7 @@ class EISMLModelTesting(QWidget, FORM_CLASS):
                 else:
                     QgsProject.instance().addMapLayer(layer, True)
 
-                apply_color_ramp_to_raster_layer(layer, EISSettingsManager.get_raster_color_ramp())
+                # apply_color_ramp_to_raster_layer(layer, EISSettingsManager.get_raster_color_ramp())
 
 
     def on_algorithm_executor_error(self, error_message: str):

@@ -50,7 +50,7 @@ class AlgorithmExecutor(QObject):
                 self.worker_thread.wait()
 
 
-    def on_finished(self, result):
+    def on_finished(self, result: dict | None):
         end = time.perf_counter()
         execution_time = end - self.start_time
         if self.is_terminated:

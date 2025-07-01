@@ -47,6 +47,8 @@ class EISWizardSettings(QWidget, FORM_CLASS):
 
         self.default_base_raster.setFilters(QgsMapLayerProxyModel.RasterLayer)
         self.raster_color_ramp_selection = QgsColorRampButton()
+        self.raster_color_ramp_selection.setEnabled(False)
+        self.raster_color_ramp_selection.setToolTip("Setting disabled")
         self.color_ramp_layout.addWidget(self.raster_color_ramp_selection)
         self.load_settings()  # Initialize UI from settings
 

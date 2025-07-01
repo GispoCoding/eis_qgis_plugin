@@ -19,7 +19,7 @@ from eis_qgis_plugin.utils.algorithm_execution import AlgorithmExecutor
 from eis_qgis_plugin.utils.message_manager import EISMessageManager
 from eis_qgis_plugin.utils.misc_utils import (
     add_output_layer_to_group,
-    apply_color_ramp_to_raster_layer,
+    # apply_color_ramp_to_raster_layer,
     get_output_layer_name,
     set_file_widget_placeholder_text,
     set_filter,
@@ -127,23 +127,24 @@ class EISWizardProxyProcess(QWidget):
 
 
     def on_algorithm_executor_finished(self, result, _):
-        output_layer = QgsRasterLayer(
-            result["output_raster"], get_output_layer_name(self.output_raster_path, self.default_output_name)
-        )
-        if EISSettingsManager.get_layer_group_selection():
-            add_output_layer_to_group(
-                output_layer,
-                f"Mineral system proxies — {self.mineral_system}",
-                self.mineral_system_component.capitalize()
+        if self.feedback.no_errors:
+            output_layer = QgsRasterLayer(
+                result["output_raster"], get_output_layer_name(self.output_raster_path, self.default_output_name)
             )
-        else:
-            QgsProject.instance().addMapLayer(output_layer, True)
+            if EISSettingsManager.get_layer_group_selection():
+                add_output_layer_to_group(
+                    output_layer,
+                    f"Mineral system proxies — {self.mineral_system}",
+                    self.mineral_system_component.capitalize()
+                )
+            else:
+                QgsProject.instance().addMapLayer(output_layer, True)
 
-        if self.process_type == "multi_step":
-            i = self.proxy_manager.proxy_pages.currentIndex() + 1
-            self.proxy_manager.proxy_pages.widget(i).raster_layer.setLayer(output_layer)
+            if self.process_type == "multi_step":
+                i = self.proxy_manager.proxy_pages.currentIndex() + 1
+                self.proxy_manager.proxy_pages.widget(i).raster_layer.setLayer(output_layer)
 
-        apply_color_ramp_to_raster_layer(output_layer, EISSettingsManager.get_raster_color_ramp())
+            # apply_color_ramp_to_raster_layer(output_layer, EISSettingsManager.get_raster_color_ramp())
 
 
     def on_algorithm_executor_terminated(self):
